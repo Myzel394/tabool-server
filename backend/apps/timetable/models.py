@@ -12,7 +12,6 @@ from apps.utils.validators import validate_place
 from constants import maxlength
 from .constants import LESSON_ALLOWED_DAYS
 from .utils import create_designation_from_date
-from .validators import validate_lessons_dont_overlap
 from ..utils.models import AssociatedUserMixin, ColorMixin
 
 __all__ = [
@@ -163,7 +162,7 @@ class Lesson(RandomIDMixin):
         return int(difference.seconds / 60)
 
 
-class TimeTable(RandomIDMixin, AssociatedUserMixin):
+class TimeTable(RandomIDMixin, AssociatedUserMixin, LifecycleModel):
     class Meta:
         verbose_name = _("Stundenplan")
         verbose_name_plural = _("Stundenpläne")
@@ -184,11 +183,6 @@ class TimeTable(RandomIDMixin, AssociatedUserMixin):
     )
     
     @hook(BEFORE_CREATE)
-    @hook(BEFORE_UPDATE, when="lessons")
-    def _hook_validate_lessons(self):
-        validate_lessons_dont_overlap(self.lessons)
-    
-    @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="designation")
     def _hook_constrain_designation(self):
         self.designation = self.designation or create_designation_from_date()
@@ -200,6 +194,6 @@ class TimeTable(RandomIDMixin, AssociatedUserMixin):
         timetable = TimeTable.objects.create(
             **kwargs
         )
-        timetable.lessons.set(lessons)
+        timetable.lessons.add(lessons)
         
         return timetable

@@ -24,8 +24,8 @@ class ModelTest(UserCreationTestMixin, StartTimeEndTimeTestMixin):
         )
         
         self.lesson = Lesson.objects.create(
-            start_time=self.start_time,
-            end_time=self.end_time,
+            start_time=self.start_time(),
+            end_time=self.end_time(),
             teacher=self.teacher,
             room=self.room,
             subject=self.subject,

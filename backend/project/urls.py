@@ -2,10 +2,10 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 
-from apps.timetable.views import LessonViewSet
+from apps.timetable.views import TimeTableViewSet
 
 router = routers.DefaultRouter()
-router.register("timetable", LessonViewSet)
+router.register("timetable", TimeTableViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

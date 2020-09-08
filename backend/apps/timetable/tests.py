@@ -1,20 +1,21 @@
 import json
-from datetime import date, datetime, timedelta
+import random
 from abc import ABC
+from datetime import date, datetime, time, timedelta
 from typing import *
 
+import names
+from dateutil.rrule import MINUTELY, rrule
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
 from rest_framework import status
-import names
-import random
 
 from .models import Lesson, Room, Subject, Teacher, TimeTable
 from .serializers import LessonSerializer
 from .utils import create_designation_from_date
 from ..utils.fields.weekday import WeekdayChoices
-from ..utils.tests import StartTimeEndTimeTestMixin, UserCreationTestMixin, ClientTestMixin
+from ..utils.tests import ClientTestMixin, StartTimeEndTimeTestMixin, UserCreationTestMixin
 from ..utils.time import dummy_datetime_from_time
 
 
@@ -25,14 +26,16 @@ class TeacherTestMixin(TestCase, ABC):
         last_name = names.get_last_name()
         
         return Teacher.objects.create(
-            first_name=first_name,
-            last_name=last_name,
-            email=(
-                f"{first_name}.{last_name}@gmail.com"
-                if random.choice([True, False]) else
-                None
-            ),
-            **kwargs
+            **{
+                "first_name": first_name,
+                "last_name": last_name,
+                "email": (
+                    f"{first_name}.{last_name}@gmail.com"
+                    if random.choice([True, False]) else
+                    None
+                ),
+                **kwargs
+            }
         )
 
 
@@ -40,8 +43,10 @@ class RoomTestMixin(TestCase, ABC):
     @staticmethod
     def Create_room(**kwargs) -> Room:
         return Room.objects.create(
-            place=f"{random.choice(range(3 + 1))}{random.choice(10, 99 + 1)}",
-            **kwargs
+            **{
+                "place": f"{random.choice(range(3 + 1))}{random.choice(list(range(99)))}",
+                **kwargs
+            }
         )
 
 
@@ -49,28 +54,30 @@ class SubjectTestMixin(TestCase, ABC):
     @staticmethod
     def Create_subject(**kwargs) -> Subject:
         return Subject.objects.create(
-            name=random.choice([
-                "Mathe",
-                "Englisch",
-                "Deutsch",
-                "Physik",
-                "Biologie",
-                "Chemie",
-                "Geschichte",
-                "Informatik",
-                "Musik",
-                "Kunst",
-                "Sport",
-                "Ethik",
-                "Geschichte"
-            ]),
-            **kwargs
+            **{
+                "name": random.choice([
+                    "Mathe",
+                    "Englisch",
+                    "Deutsch",
+                    "Physik",
+                    "Biologie",
+                    "Chemie",
+                    "Geschichte",
+                    "Informatik",
+                    "Musik",
+                    "Kunst",
+                    "Sport",
+                    "Ethik",
+                    "Geschichte"
+                ]),
+                **kwargs
+            }
         )
 
 
 class RandomLessonTextMixin(
     TeacherTestMixin,
-    TeacherTestMixin,
+    SubjectTestMixin,
     RoomTestMixin,
     StartTimeEndTimeTestMixin,
     ABC
@@ -78,21 +85,51 @@ class RandomLessonTextMixin(
     @classmethod
     def Create_lesson(cls, **kwargs) -> Lesson:
         return Lesson.objects.create(
-            teacher=cls.Create_teacher(),
-            room=cls.Create_room(),
-            subject=cls.Create_subject(),
-            start_time=cls.start_time,
-            end_time=cls.end_time,
-            weekday=random.choice(WeekdayChoices.choices)[0],
-            **kwargs
+            **{
+                "teacher": cls.Create_teacher(),
+                "room": cls.Create_room(),
+                "subject": cls.Create_subject(),
+                "start_time": cls.start_time(),
+                "end_time": cls.end_time(),
+                "weekday": random.choice(WeekdayChoices.values),
+                **kwargs
+            }
         )
     
-    @staticmethod
-    def Create_lessons(amount: int) -> List[Lesson]:
+    @classmethod
+    def Create_lessons(
+            cls,
+            start_time: Optional[datetime] = None,
+            end_time: Optional[datetime] = None,
+            duration: int = 45,
+            **kwargs
+    ) -> List[Lesson]:
+        start_time = start_time or time(hour=7, minute=55)
+        end_time = end_time or (dummy_datetime_from_time(time(hour=13, minute=10)) - timedelta(minutes=duration)).time()
+        
         lessons = []
+        
+        for weekday in WeekdayChoices.values:
+            for current_time in rrule(
+                    MINUTELY,
+                    interval=duration,
+                    dtstart=dummy_datetime_from_time(start_time),
+                    until=dummy_datetime_from_time(end_time)
+            ):
+                lesson = cls.Create_lesson(
+                    **{
+                        "start_time": current_time,
+                        "end_time": (dummy_datetime_from_time(current_time) + timedelta(minutes=duration)).time(),
+                        "weekday": weekday,
+                        **kwargs
+                    }
+                )
+                lessons.append(lesson)
+        
+        return lessons
 
 
-class ModelTest(UserCreationTestMixin, StartTimeEndTimeTestMixin):
+class ModelTest(UserCreationTestMixin, RandomLessonTextMixin):
     def setUp(self) -> None:
         self.user = self.create_user()
         
@@ -108,14 +145,7 @@ class ModelTest(UserCreationTestMixin, StartTimeEndTimeTestMixin):
             place="A45"
         )
         
-        self.lesson = Lesson.objects.create(
-            start_time=self.start_time,
-            end_time=self.end_time,
-            subject=self.subject,
-            teacher=self.teacher,
-            room=self.room,
-            weekday=0,
-        )
+        self.lesson = self.Create_lesson()
     
     def test_room(self):
         Room.objects.create(
@@ -136,54 +166,12 @@ class ModelTest(UserCreationTestMixin, StartTimeEndTimeTestMixin):
         for element in should_raise:
             self.assertRaises(ValidationError, lambda: Room.objects.create(place=element))
     
-    def test_lesson(self):
-        assert self.lesson.duration == self.DURATION, "Duration is wrong"
-        
-        Lesson.objects.create(
-            start_time=self.start_time,
-            end_time=self.end_time,
-            subject=self.subject,
-            weekday=1
-        )
-    
     def test_lesson_relation(self):
         assert list(self.teacher.lessons) == list(self.room.lessons) == list(self.subject.lessons)
     
     def test_create_timetable(self):
-        WEEKDAY = WeekdayChoices.Friday
-        now = datetime.now()
-        lessons = []
-        
-        for index, subject in enumerate([
-            Subject.objects.create(
-                name="Mathe",
-                color="#ed3454",
-            ),
-            Subject.objects.create(
-                name="Musik",
-                color="#FEFF06"
-            ),
-            Subject.objects.create(
-                name="Deutsch",
-                color="#2861D4"
-            ),
-            Subject.objects.create(
-                name="Englisch",
-                color="#107CFF"
-            )
-        ]):
-            start_time = (now + timedelta(minutes=self.DURATION * index)).time()
-            end_time = (dummy_datetime_from_time(start_time) + timedelta(minutes=self.DURATION)).time()
-            lesson = Lesson.objects.create(
-                start_time=start_time,
-                end_time=end_time,
-                weekday=WEEKDAY,
-                teacher=self.teacher,
-                subject=subject,
-                room=self.room
-            )
-            
-            lessons.append(lesson)
+        lessons = self.Create_lessons()
+        lessons = set(lessons)
         
         timetable = TimeTable.Easy_create(
             lessons=lessons,
@@ -191,8 +179,9 @@ class ModelTest(UserCreationTestMixin, StartTimeEndTimeTestMixin):
         )
         
         timetable_lessons = timetable.lessons.all()
+        timetable_lessons = set(timetable_lessons)
         
-        print(timetable_lessons)
+        self.assertEqual(lessons, timetable_lessons, "Lessons are not equal")
 
 
 class ApiTest(TestCase):
@@ -205,8 +194,8 @@ class ApiTest(TestCase):
         self.user = User.objects.create(username="Myzel394", first_name="Miguel", last_name="Krasniqi")
         
         self.lesson = Lesson.objects.create(
-            start_time=self.start_time,
-            end_time=self.end_time,
+            start_time=self.start_time(),
+            end_time=self.end_time(),
             teacher=Teacher.objects.create(
                 first_name="Frank",
                 last_name="Marker"
@@ -242,8 +231,8 @@ class ApiTest(TestCase):
     
     def test_create_lesson(self):
         self.client.post(f"/api/timetable/", json.dumps({
-            "start_time": self.start_time.isoformat(),
-            "end_time": self.end_time.isoformat(),
+            "start_time": self.start_time().isoformat(),
+            "end_time": self.end_time().isoformat(),
             "teacher": {
                 "first_name": "Adrian",
                 "last_name": "Herbst"
@@ -255,7 +244,8 @@ class ApiTest(TestCase):
                 "name": "Musik"
             }
         }), content_type="application/json")
-        
+
+
 class ApiTest(UserCreationTestMixin, StartTimeEndTimeTestMixin, ClientTestMixin):
     def setUp(self):
         timetable = TimeTable.Easy_create(

@@ -1,10 +1,10 @@
 from rest_framework import viewsets
 
-from .models import Lesson
+from .models import Lesson, TimeTable
 from .serializers import TimeTableSerializer
 
 __all__ = [
-    "LessonViewSet"
+    "TimeTableViewSet"
 ]
 
 

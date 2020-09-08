@@ -3,7 +3,7 @@ from datetime import datetime, time, timedelta
 import names
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 
 from apps.utils.time import dummy_datetime_from_time
 
@@ -26,13 +26,13 @@ class UserCreationTestMixin(TestCase):
 class StartTimeEndTimeTestMixin(TestCase):
     DURATION = 45
     
-    @property
-    def start_time(self) -> time:
+    @staticmethod
+    def start_time() -> time:
         return datetime.now().time()
     
-    @property
-    def end_time(self) -> time:
-        return (dummy_datetime_from_time(self.start_time) + timedelta(minutes=self.DURATION)).time()
+    @classmethod
+    def end_time(cls) -> time:
+        return (dummy_datetime_from_time(cls.start_time()) + timedelta(minutes=cls.DURATION)).time()
 
 
 class ClientTestMixin(TestCase):
