@@ -1,7 +1,7 @@
-from .models import Lesson, Room, Subject, Teacher
+from .models import Lesson, Room, Subject, Teacher, TimeTable
 
 __all__ = [
-    "LessonSerializer"
+    "SubjectSerializer", "TeacherSerializer", "RoomSerializer", "LessonSerializer", "TimeTableSerializer"
 ]
 
 from ..utils.serializers import IdMixinSerializer
@@ -51,3 +51,10 @@ class LessonSerializer(IdMixinSerializer):
         )
         
         return lesson
+
+class TimeTableSerializer(IdMixinSerializer):
+    class Meta:
+        model = TimeTable
+        fields = ["lessons", "designation", "id"]
+    
+    lessons = LessonSerializer(many=True)

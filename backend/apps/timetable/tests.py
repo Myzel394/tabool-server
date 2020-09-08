@@ -1,17 +1,95 @@
 import json
 from datetime import date, datetime, timedelta
+from abc import ABC
+from typing import *
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
 from rest_framework import status
+import names
+import random
 
 from .models import Lesson, Room, Subject, Teacher, TimeTable
 from .serializers import LessonSerializer
 from .utils import create_designation_from_date
 from ..utils.fields.weekday import WeekdayChoices
-from ..utils.tests import StartTimeEndTimeTestMixin, UserCreationTestMixin
+from ..utils.tests import StartTimeEndTimeTestMixin, UserCreationTestMixin, ClientTestMixin
 from ..utils.time import dummy_datetime_from_time
+
+
+class TeacherTestMixin(TestCase, ABC):
+    @staticmethod
+    def Create_teacher(**kwargs) -> Teacher:
+        first_name = names.get_first_name()
+        last_name = names.get_last_name()
+        
+        return Teacher.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            email=(
+                f"{first_name}.{last_name}@gmail.com"
+                if random.choice([True, False]) else
+                None
+            ),
+            **kwargs
+        )
+
+
+class RoomTestMixin(TestCase, ABC):
+    @staticmethod
+    def Create_room(**kwargs) -> Room:
+        return Room.objects.create(
+            place=f"{random.choice(range(3 + 1))}{random.choice(10, 99 + 1)}",
+            **kwargs
+        )
+
+
+class SubjectTestMixin(TestCase, ABC):
+    @staticmethod
+    def Create_subject(**kwargs) -> Subject:
+        return Subject.objects.create(
+            name=random.choice([
+                "Mathe",
+                "Englisch",
+                "Deutsch",
+                "Physik",
+                "Biologie",
+                "Chemie",
+                "Geschichte",
+                "Informatik",
+                "Musik",
+                "Kunst",
+                "Sport",
+                "Ethik",
+                "Geschichte"
+            ]),
+            **kwargs
+        )
+
+
+class RandomLessonTextMixin(
+    TeacherTestMixin,
+    TeacherTestMixin,
+    RoomTestMixin,
+    StartTimeEndTimeTestMixin,
+    ABC
+):
+    @classmethod
+    def Create_lesson(cls, **kwargs) -> Lesson:
+        return Lesson.objects.create(
+            teacher=cls.Create_teacher(),
+            room=cls.Create_room(),
+            subject=cls.Create_subject(),
+            start_time=cls.start_time,
+            end_time=cls.end_time,
+            weekday=random.choice(WeekdayChoices.choices)[0],
+            **kwargs
+        )
+    
+    @staticmethod
+    def Create_lessons(amount: int) -> List[Lesson]:
+        lessons = []
 
 
 class ModelTest(UserCreationTestMixin, StartTimeEndTimeTestMixin):
@@ -177,6 +255,16 @@ class ApiTest(TestCase):
                 "name": "Musik"
             }
         }), content_type="application/json")
+        
+class ApiTest(UserCreationTestMixin, StartTimeEndTimeTestMixin, ClientTestMixin):
+    def setUp(self):
+        timetable = TimeTable.Easy_create(
+            lessons=[
+                Lesson.objects.create(
+                
+                )
+            ]
+        )
 
 
 class UtilsTest(TestCase):
