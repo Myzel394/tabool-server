@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 
 from django.conf import settings
 from django.db import models
@@ -33,3 +34,28 @@ class AssociatedUserMixin(models.Model):
         on_delete=models.CASCADE,
         editable=False
     )
+
+
+class DatesMixin(LifecycleModel):
+    class Meta:
+        abstract = True
+    
+    created_at = models.DateTimeField(
+        verbose_name=_("Erstelldatum"),
+        blank=True,
+    )
+    
+    last_edited_at = models.DateTimeField(
+        verbose_name=_("Zuletzt editiert"),
+        blank=True,
+        null=True
+    )
+    
+    @hook(BEFORE_CREATE)
+    @hook(BEFORE_UPDATE)
+    def _hook_set_created_at(self):
+        self.created_at = datetime.now()
+    
+    @hook(BEFORE_UPDATE)
+    def _hook_set_edited_at(self):
+        self.last_edited_at = datetime.now()

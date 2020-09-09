@@ -32,14 +32,17 @@ class Homework(RandomIDMixin, HandlerMixin, LifecycleModel):
         on_delete=models.CASCADE
     )
     
-    description = models.CharField(
+    title = models.CharField(
+        verbose_name=_("Überschrift"),
         max_length=maxlength.HOMEWORK,
-        verbose_name=_("Beschreibung")
+        blank=True,
+        null=True,
     )
     
-    completed = models.BooleanField(
-        default=False,
-        verbose_name=_("Erledigt")
+    description = models.TextField(
+        verbose_name=_("Beschreibung"),
+        blank=True,
+        null=True,
     )
     
     def __str__(self):
@@ -55,8 +58,37 @@ class Homework(RandomIDMixin, HandlerMixin, LifecycleModel):
     @hook(BEFORE_UPDATE, when="due_date")
     def _hook_due_date_validation(self):
         validate_only_future_dates(self.due_date)
+
+
+"""
+class Submission(RandomIDMixin, AssociatedUserMixin, DatesMixin):
+    class Meta:
+        verbose_name = _("Einreichung")
+        verbose_name_plural = _("Einreichungen")
+        ordering = ("-last_edited_at", "-created_at")
     
-    def complete(self):
-        """Marks the homework as completed"""
-        self.completed = True
-        self.save()
+    homework = models.ForeignKey(
+        Homework,
+        verbose_name=model_verbose(Homework),
+        on_delete=models.CASCADE,
+    )
+    
+    files = models.ManyToManyField(
+        "SubmissionFile",
+        verbose_name=model_verbose_plural("SubmissionFile"),
+    )
+
+
+class SubmissionFile(RandomIDMixin, AssociatedUserMixin, DatesMixin):
+    class Meta:
+        verbose_name = _("Datei-Einreichung")
+        verbose_name_plural = _("Datei-Einreichungen")
+        ordering = ("-last_edited_at", "-created_at")
+    
+    file = models.FileField(
+        verbose_name=_("Datei"),
+    )
+    
+    name = models.CharField(
+        verbose_name=_("Dateienname")
+    )"""
