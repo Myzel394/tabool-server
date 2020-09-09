@@ -160,6 +160,18 @@ class Lesson(RandomIDMixin):
         difference = dummy_datetime_from_time(self.end_time) - dummy_datetime_from_time(self.start_time)
         
         return int(difference.seconds / 60)
+    
+    @property
+    def homeworks(self) -> QueryType[Homework]:
+        return self.homework_set.all()
+    
+    def add_homework(self, **kwargs):
+        Homework.objects.add(
+            **{
+                "subject": self,
+                **kwargs
+            }   
+        )
 
 
 class TimeTable(RandomIDMixin, AssociatedUserMixin, LifecycleModel):
