@@ -4,7 +4,7 @@ colour==0.1.5
 Django==3.1.1
 django-ckeditor==5.9.0
 django-colorfield==0.3.2
-django-common-utils==1.5.0
+django-common-utils==1.5.1
 django-filter==2.3.0
 django-hint==0.1.5
 django-js-asset==1.2.2

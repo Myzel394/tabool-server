@@ -3,6 +3,7 @@ from django_common_utils.libraries.models import HandlerMixin, models, RandomIDM
 from django_hint import QueryType
 
 from constants import maxlength
+from .. import constants
 
 __all__ = [
     "Teacher"
@@ -14,6 +15,7 @@ class Teacher(RandomIDMixin, HandlerMixin):
         verbose_name = _("Lehrer")
         verbose_name_plural = _("Lehrer")
         ordering = ("last_name", "first_name", "email")
+        app_label = constants.APP_LABEL
     
     first_name = models.CharField(
         verbose_name=_("Vorname"),
