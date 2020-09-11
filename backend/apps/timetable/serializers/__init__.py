@@ -1,5 +1,5 @@
-from .room import *
-from .teacher import *
 from .lesson import *
+from .room import *
 from .subject import *
+from .teacher import *
 from .timetable import *

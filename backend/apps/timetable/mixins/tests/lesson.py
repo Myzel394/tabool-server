@@ -1,16 +1,13 @@
-import random
 from abc import ABC
+from typing import *
 from datetime import datetime, time, timedelta
-from typing import List, Optional
 
-from dateutil.rrule import MINUTELY, rrule
+from dateutil import rrule, MINUTELY
 
-from apps.lesson.models import Lesson
-from apps.timetable.mixins.tests import RoomTestMixin, SubjectTestMixin, TeacherTestMixin
-from apps.utils.fields.weekday import WeekdayChoices
 from apps.utils.tests import StartTimeEndTimeTestMixin
 from apps.utils.time import dummy_datetime_from_time
-
+from . import TeacherTestMixin, SubjectTestMixin, RoomTestMixin
+from ..models import Lesson
 
 class RandomLessonTextMixin(
     TeacherTestMixin,

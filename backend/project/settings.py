@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     
     "apps.timetable",
     "apps.event",
-    "apps.homework",
-    "apps.lesson"
 ]
 
 MIDDLEWARE = [

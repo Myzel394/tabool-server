@@ -1,17 +1,13 @@
-from django.db import models
-from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import RandomIDMixin
 from django_common_utils.libraries.utils import model_verbose
-from django_hint import QueryType
-from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
+from django_lifecycle import LifecycleModel, hook, BEFORE_CREATE, BEFORE_UPDATE
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+from django_hint import *
 
-from apps.utils.validators import validate_place
 from constants import maxlength
+from apps.utils.validators import validate_place
 from .. import constants
-
-__all__ = [
-    "Room"
-]
 
 
 class Room(RandomIDMixin, LifecycleModel):
@@ -41,3 +37,4 @@ class Room(RandomIDMixin, LifecycleModel):
     @property
     def lessons(self) -> QueryType["Lesson"]:
         return self.lesson_set.all()
+    

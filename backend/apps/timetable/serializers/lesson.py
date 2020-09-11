@@ -1,28 +1,11 @@
-from .models import Lesson, Room, Subject, Teacher, TimeTable
+from apps.utils.serializers import IdMixinSerializer
+
+from . import SubjectSerializer, TeacherSerializer, RoomSerializer
+from ..models import Lesson, Subject, Teacher, Room
 
 __all__ = [
-    "SubjectSerializer", "TeacherSerializer", "RoomSerializer", "LessonSerializer", "TimeTableSerializer"
+    "LessonSerializer"
 ]
-
-from ..utils.serializers import IdMixinSerializer
-
-
-class SubjectSerializer(IdMixinSerializer):
-    class Meta:
-        model = Subject
-        fields = ["name", "color", "id"]
-
-
-class TeacherSerializer(IdMixinSerializer):
-    class Meta:
-        model = Teacher
-        fields = ["first_name", "last_name", "email", "id"]
-
-
-class RoomSerializer(IdMixinSerializer):
-    class Meta:
-        model = Room
-        fields = ["place", "id"]
 
 
 class LessonSerializer(IdMixinSerializer):
@@ -51,10 +34,3 @@ class LessonSerializer(IdMixinSerializer):
         )
         
         return lesson
-
-class TimeTableSerializer(IdMixinSerializer):
-    class Meta:
-        model = TimeTable
-        fields = ["lessons", "designation", "id"]
-    
-    lessons = LessonSerializer(many=True)

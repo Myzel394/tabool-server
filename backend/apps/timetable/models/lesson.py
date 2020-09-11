@@ -4,8 +4,7 @@ from django_common_utils.libraries.models import RandomIDMixin
 from django_common_utils.libraries.utils import model_verbose
 from django_hint import QueryType
 
-from apps.lesson.constants import LESSON_ALLOWED_DAYS
-from apps.timetable.models import Room, Subject, Teacher
+from .. import constants
 from apps.utils.fields.weekday import WeekdayField
 from apps.utils.time import dummy_datetime_from_time, format_datetime
 
@@ -19,27 +18,28 @@ class Lesson(RandomIDMixin):
         verbose_name = _("Stunde")
         verbose_name_plural = _("Stunden")
         ordering = ("subject", "start_time")
+        app_label = constants.APP_LABEL
     
     teacher = models.ForeignKey(
-        Teacher,
+       "Teacher",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        verbose_name=model_verbose(Teacher)
+        verbose_name=model_verbose(f"{constants.APP_LABEL}.Teacher")
     )
     
     room = models.ForeignKey(
-        Room,
+        "Room",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        verbose_name=model_verbose(Room)
+        verbose_name=model_verbose(f"{constants.APP_LABEL}.Room")
     )
     
     subject = models.ForeignKey(
-        Subject,
+        "Subject",
         on_delete=models.CASCADE,
-        verbose_name=model_verbose(Subject)
+        verbose_name=model_verbose(f"{constants.APP_LABEL}.Subject")
     )
     
     start_time = models.TimeField(
@@ -52,7 +52,7 @@ class Lesson(RandomIDMixin):
     
     weekday = WeekdayField(
         verbose_name=_("Wochentag"),
-        choices=LESSON_ALLOWED_DAYS
+        choices=constants.LESSON_ALLOWED_DAYS
     )
     
     def __str__(self):

@@ -26,7 +26,7 @@ class TimeTable(RandomIDMixin, AssociatedUserMixin, LifecycleModel):
     
     lessons = models.ManyToManyField(
         "Lesson",
-        verbose_name=model_verbose("lesson.Lesson")
+        verbose_name=model_verbose(f"{constants.APP_LABEL}.Lesson")
     )
     
     designation = models.CharField(
