@@ -1,12 +1,17 @@
+from typing import *
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import RandomIDMixin
 from django_common_utils.libraries.utils import model_verbose
 from django_hint import QueryType
 
-from .. import constants
 from apps.utils.fields.weekday import WeekdayField
 from apps.utils.time import dummy_datetime_from_time, format_datetime
+from .. import constants
+
+if TYPE_CHECKING:
+    from apps.homework.models import Homework
 
 __all__ = [
     "Lesson",
@@ -21,7 +26,7 @@ class Lesson(RandomIDMixin):
         app_label = constants.APP_LABEL
     
     teacher = models.ForeignKey(
-       "Teacher",
+        "Teacher",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,

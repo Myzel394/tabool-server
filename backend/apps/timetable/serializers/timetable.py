@@ -1,6 +1,7 @@
 from apps.utils.serializers import IdMixinSerializer
 
 from . import LessonSerializer
+from ..models import TimeTable
 
 __all__ = [
     "TimeTableSerializer"

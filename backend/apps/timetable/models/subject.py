@@ -1,3 +1,5 @@
+from typing import *
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import HandlerMixin, RandomIDMixin, WhiteSpaceStripHandler
@@ -6,6 +8,9 @@ from django_hint import QueryType
 from apps.utils.models import ColorMixin
 from constants import maxlength
 from .. import constants
+
+if TYPE_CHECKING:
+    from ..models import Lesson
 
 __all__ = [
     "Subject"

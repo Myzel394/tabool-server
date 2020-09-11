@@ -1,9 +1,14 @@
+from typing import *
+
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import HandlerMixin, models, RandomIDMixin, WhiteSpaceStripHandler
 from django_hint import QueryType
 
 from constants import maxlength
 from .. import constants
+
+if TYPE_CHECKING:
+    from .. import Lesson
 
 __all__ = [
     "Teacher"

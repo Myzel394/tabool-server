@@ -1,20 +1,19 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.models import RandomIDMixin
+from django_common_utils.libraries.models import CustomQuerySetMixin, RandomIDMixin
 from django_common_utils.libraries.utils import model_verbose
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.utils.models import AssociatedUserMixin
 from constants import maxlength
-from .. import constants
-from ..utils import create_designation_from_date
+from .. import constants, create_designation_from_date, TimeTableQuerySet
 
 __all__ = [
     "TimeTable"
 ]
 
 
-class TimeTable(RandomIDMixin, AssociatedUserMixin, LifecycleModel):
+class TimeTable(RandomIDMixin, AssociatedUserMixin, LifecycleModel, CustomQuerySetMixin):
     class Meta:
         verbose_name = _("Stundenplan")
         verbose_name_plural = _("Stundenpläne")
@@ -23,6 +22,8 @@ class TimeTable(RandomIDMixin, AssociatedUserMixin, LifecycleModel):
             ("associated_user", "designation")
         )
         app_label = constants.APP_LABEL
+    
+    objects = TimeTableQuerySet.as_manager()
     
     lessons = models.ManyToManyField(
         "Lesson",
@@ -40,14 +41,3 @@ class TimeTable(RandomIDMixin, AssociatedUserMixin, LifecycleModel):
     @hook(BEFORE_UPDATE, when="designation")
     def _hook_constrain_designation(self):
         self.designation = self.designation or create_designation_from_date()
-    
-    @staticmethod
-    def Easy_create(**kwargs) -> "TimeTable":
-        lessons = kwargs.pop("lessons")
-        
-        timetable = TimeTable.objects.create(
-            **kwargs
-        )
-        timetable.lessons.add(lessons)
-        
-        return timetable
