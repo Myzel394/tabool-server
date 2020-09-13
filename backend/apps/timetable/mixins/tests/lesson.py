@@ -1,13 +1,22 @@
+import random
 from abc import ABC
-from typing import *
 from datetime import datetime, time, timedelta
+from typing import *
 
-from dateutil import rrule, MINUTELY
+from dateutil.rrule import MINUTELY, rrule
 
 from apps.utils.tests import StartTimeEndTimeTestMixin
 from apps.utils.time import dummy_datetime_from_time
-from . import TeacherTestMixin, SubjectTestMixin, RoomTestMixin
-from ..models import Lesson
+from .room import RoomTestMixin
+from .subject import SubjectTestMixin
+from .teacher import TeacherTestMixin
+from ...constants import LESSON_ALLOWED_DAYS
+from ...models import Lesson
+
+__all__ = [
+    "RandomLessonTextMixin"
+]
+
 
 class RandomLessonTextMixin(
     TeacherTestMixin,
@@ -25,7 +34,7 @@ class RandomLessonTextMixin(
                 "subject": cls.Create_subject(),
                 "start_time": cls.start_time(),
                 "end_time": cls.end_time(),
-                "weekday": random.choice(WeekdayChoices.values),
+                "weekday": random.choice([x[0] for x in LESSON_ALLOWED_DAYS]),
                 **kwargs
             }
         )
@@ -33,8 +42,8 @@ class RandomLessonTextMixin(
     @classmethod
     def Create_lessons(
             cls,
-            start_time: Optional[datetime] = None,
-            end_time: Optional[datetime] = None,
+            start_time: Optional[time] = None,
+            end_time: Optional[time] = None,
             duration: int = 45,
             **kwargs
     ) -> List[Lesson]:
@@ -43,7 +52,9 @@ class RandomLessonTextMixin(
         
         lessons = []
         
-        for weekday in WeekdayChoices.values:
+        weekday: int
+        for weekday in [x[0] for x in LESSON_ALLOWED_DAYS]:
+            current_time: datetime
             for current_time in rrule(
                     MINUTELY,
                     interval=duration,
@@ -52,8 +63,8 @@ class RandomLessonTextMixin(
             ):
                 lesson = cls.Create_lesson(
                     **{
-                        "start_time": current_time,
-                        "end_time": (dummy_datetime_from_time(current_time) + timedelta(minutes=duration)).time(),
+                        "start_time": current_time.time(),
+                        "end_time": (current_time + timedelta(minutes=duration)).time(),
                         "weekday": weekday,
                         **kwargs
                     }

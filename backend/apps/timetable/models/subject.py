@@ -2,15 +2,15 @@ from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.models import HandlerMixin, RandomIDMixin, WhiteSpaceStripHandler
+from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStripHandler
+from django_common_utils.libraries.models import RandomIDMixin
 from django_hint import QueryType
 
 from apps.utils.models import ColorMixin
 from constants import maxlength
-from .. import constants
 
 if TYPE_CHECKING:
-    from ..models import Lesson
+    from apps.timetable.models import Lesson
 
 __all__ = [
     "Subject"
@@ -22,7 +22,6 @@ class Subject(RandomIDMixin, HandlerMixin, ColorMixin):
         verbose_name = _("Fach")
         verbose_name_plural = _("Fächer")
         ordering = ("name",)
-        app_label = constants.APP_LABEL
     
     name = models.CharField(
         verbose_name=_("Name"),

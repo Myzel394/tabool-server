@@ -1,9 +1,13 @@
 import random
-
-from django.test import TestCase
 from abc import ABC
 
-from ..models import Subject
+from django.test import TestCase
+
+from ...models import Subject
+
+__all__ = [
+    "SubjectTestMixin"
+]
 
 
 class SubjectTestMixin(TestCase, ABC):
@@ -25,7 +29,6 @@ class SubjectTestMixin(TestCase, ABC):
                     "Sport",
                     "Ethik",
                     "Geschichte"
-
                 ]),
                 **kwargs
             }

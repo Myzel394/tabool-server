@@ -3,7 +3,12 @@ from abc import ABC
 
 from django.test import TestCase
 
-from ..models import Room
+from ...models import Room
+
+__all__ = [
+    "RoomTestMixin"
+]
+
 
 class RoomTestMixin(TestCase, ABC):
     @staticmethod

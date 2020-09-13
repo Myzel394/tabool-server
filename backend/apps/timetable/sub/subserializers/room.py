@@ -1,6 +1,5 @@
+from apps.timetable.models import Room
 from apps.utils.serializers import IdMixinSerializer
-
-from ..models import Room
 
 __all__ = [
     "RoomSerializer"

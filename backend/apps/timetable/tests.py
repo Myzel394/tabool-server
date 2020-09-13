@@ -1,2 +1,2 @@
 # noinspection PyUnresolvedReferences
-from .sub.subviews import *
+from .sub.subtests import *

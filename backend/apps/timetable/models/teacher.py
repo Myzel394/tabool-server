@@ -1,14 +1,15 @@
 from typing import *
 
+from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.models import HandlerMixin, models, RandomIDMixin, WhiteSpaceStripHandler
+from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStripHandler
+from django_common_utils.libraries.models import RandomIDMixin
 from django_hint import QueryType
 
 from constants import maxlength
-from .. import constants
 
 if TYPE_CHECKING:
-    from .. import Lesson
+    from apps.timetable import Lesson
 
 __all__ = [
     "Teacher"
@@ -20,7 +21,6 @@ class Teacher(RandomIDMixin, HandlerMixin):
         verbose_name = _("Lehrer")
         verbose_name_plural = _("Lehrer")
         ordering = ("last_name", "first_name", "email")
-        app_label = constants.APP_LABEL
     
     first_name = models.CharField(
         verbose_name=_("Vorname"),

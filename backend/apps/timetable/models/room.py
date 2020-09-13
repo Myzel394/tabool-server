@@ -9,10 +9,13 @@ from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.utils.validators import validate_place
 from constants import maxlength
-from .. import constants
 
 if TYPE_CHECKING:
-    from .. import Lesson
+    from apps.timetable import Lesson
+
+__all__ = [
+    "Room"
+]
 
 
 class Room(RandomIDMixin, LifecycleModel):
@@ -20,7 +23,6 @@ class Room(RandomIDMixin, LifecycleModel):
         verbose_name = _("Raum")
         verbose_name_plural = _("Räume")
         ordering = ("place",)
-        app_label = constants.APP_LABEL
     
     place = models.CharField(
         verbose_name=_("Ort"),

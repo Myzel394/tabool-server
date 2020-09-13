@@ -6,9 +6,9 @@ from django_common_utils.libraries.models import RandomIDMixin
 from django_common_utils.libraries.utils import model_verbose
 from django_hint import QueryType
 
+from apps.timetable import constants
 from apps.utils.fields.weekday import WeekdayField
 from apps.utils.time import dummy_datetime_from_time, format_datetime
-from .. import constants
 
 if TYPE_CHECKING:
     from apps.homework.models import Homework
@@ -18,19 +18,30 @@ __all__ = [
 ]
 
 
+def _lesson_teacher_model_verbose():
+    return model_verbose(f"{constants.APP_LABEL}.Teacher")
+
+
+def _lesson_room_model_verbose():
+    return model_verbose(f"{constants.APP_LABEL}.Room")
+
+
+def _lesson_subject_model_verbose():
+    return model_verbose(f"{constants.APP_LABEL}.Subject")
+
+
 class Lesson(RandomIDMixin):
     class Meta:
         verbose_name = _("Stunde")
         verbose_name_plural = _("Stunden")
         ordering = ("subject", "start_time")
-        app_label = constants.APP_LABEL
     
     teacher = models.ForeignKey(
         "Teacher",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        verbose_name=model_verbose(f"{constants.APP_LABEL}.Teacher")
+        verbose_name=_lesson_teacher_model_verbose
     )
     
     room = models.ForeignKey(
@@ -38,13 +49,13 @@ class Lesson(RandomIDMixin):
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        verbose_name=model_verbose(f"{constants.APP_LABEL}.Room")
+        verbose_name=_lesson_room_model_verbose
     )
     
     subject = models.ForeignKey(
         "Subject",
         on_delete=models.CASCADE,
-        verbose_name=model_verbose(f"{constants.APP_LABEL}.Subject")
+        verbose_name=_lesson_subject_model_verbose
     )
     
     start_time = models.TimeField(

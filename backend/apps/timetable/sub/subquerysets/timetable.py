@@ -3,7 +3,7 @@ from typing import *
 from django_common_utils.libraries.models import CustomQuerySetMixin
 
 if TYPE_CHECKING:
-    from .. import TimeTable
+    from apps.timetable import TimeTable
 
 
 class TimeTableQuerySet(CustomQuerySetMixin.QuerySet):
@@ -13,6 +13,6 @@ class TimeTableQuerySet(CustomQuerySetMixin.QuerySet):
         timetable = self.create(
             **kwargs
         )
-        timetable.lessons.add(lessons)
+        timetable.lessons.add(*lessons)
         
         return timetable

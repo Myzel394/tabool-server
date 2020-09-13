@@ -1,10 +1,14 @@
 import random
-import names
-
-from django.test import TestCase
 from abc import ABC
 
-from ..models import Teacher
+import names
+from django.test import TestCase
+
+from ...models import Teacher
+
+__all__ = [
+    "TeacherTestMixin"
+]
 
 
 class TeacherTestMixin(TestCase, ABC):
@@ -24,4 +28,3 @@ class TeacherTestMixin(TestCase, ABC):
                 **kwargs
             }
         )
-    

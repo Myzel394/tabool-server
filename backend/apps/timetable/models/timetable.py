@@ -4,13 +4,19 @@ from django_common_utils.libraries.models import CustomQuerySetMixin, RandomIDMi
 from django_common_utils.libraries.utils import model_verbose
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
+from apps.timetable import constants
+from apps.timetable.querysets import TimeTableQuerySet
+from apps.timetable.utils import create_designation_from_date
 from apps.utils.models import AssociatedUserMixin
 from constants import maxlength
-from .. import constants, create_designation_from_date, TimeTableQuerySet
 
 __all__ = [
     "TimeTable"
 ]
+
+
+def _timetable_lessons_model_verbose():
+    return model_verbose(f"{constants.APP_LABEL}.Lesson")
 
 
 class TimeTable(RandomIDMixin, AssociatedUserMixin, LifecycleModel, CustomQuerySetMixin):
@@ -21,13 +27,12 @@ class TimeTable(RandomIDMixin, AssociatedUserMixin, LifecycleModel, CustomQueryS
         unique_together = (
             ("associated_user", "designation")
         )
-        app_label = constants.APP_LABEL
     
     objects = TimeTableQuerySet.as_manager()
     
     lessons = models.ManyToManyField(
         "Lesson",
-        verbose_name=model_verbose(f"{constants.APP_LABEL}.Lesson")
+        verbose_name=_timetable_lessons_model_verbose
     )
     
     designation = models.CharField(
