@@ -1,5 +1,5 @@
 from apps.timetable.models import Lesson
-from apps.utils.serializers import IdMixinSerializer
+from apps.utils.serializers import IdMixinSerializer, NestedModelSerializerField
 from .room import RoomSerializer
 from .subject import SubjectSerializer
 from .teacher import TeacherSerializer
@@ -15,9 +15,9 @@ class LessonSerializer(IdMixinSerializer):
         model = Lesson
         fields = ["start_time", "end_time", "subject", "teacher", "room", "weekday", "id"]
     
-    subject = SubjectSerializer()
-    teacher = TeacherSerializer()
-    room = RoomSerializer()
+    subject = NestedModelSerializerField(SubjectSerializer)
+    teacher = NestedModelSerializerField(TeacherSerializer)
+    room = NestedModelSerializerField(RoomSerializer)
     
     @staticmethod
     def _create_subject(subject_data: dict) -> Subject:
@@ -43,7 +43,7 @@ class LessonSerializer(IdMixinSerializer):
         
         return room
     
-    def create(self, validated_data: dict) -> Lesson:
+    def not_create(self, validated_data: dict) -> Lesson:
         subject_data = validated_data.pop("subject")
         teacher_data = validated_data.pop("teacher")
         room_data = validated_data.pop("room")

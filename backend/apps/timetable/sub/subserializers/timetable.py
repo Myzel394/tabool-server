@@ -1,7 +1,7 @@
 from typing import *
 
 from apps.timetable.models import TimeTable
-from apps.utils.serializers import IdMixinSerializer, NestedSerializerMixin
+from apps.utils.serializers import IdMixinSerializer, NestedModelSerializerField, NestedSerializerMixin
 from . import LessonSerializer
 
 __all__ = [
@@ -14,19 +14,22 @@ class TimeTableSerializer(IdMixinSerializer, NestedSerializerMixin):
         model = TimeTable
         fields = ["lessons", "designation", "id"]
     
-    lessons = LessonSerializer(many=True)
+    lessons = NestedModelSerializerField(
+        LessonSerializer,
+        {
+            "many": True
+        }
+    )
     
     def create(self, validated_data: Dict[str, Any]):
         # Get values
         user = self.context['request'].user
-        lessons_raw = validated_data["lessons"]
-        designation_raw = validated_data.get("designation")
-        
-        lessons = self.create_nested(LessonSerializer, lessons_raw, many=True)
+        lessons = validated_data["lessons"]
+        designation = validated_data.get("designation")
         
         timetable = TimeTable.objects.create_with_lessons(
             lessons=lessons,
-            designation=designation_raw,
+            designation=designation,
             associated_user=user
         )
         
