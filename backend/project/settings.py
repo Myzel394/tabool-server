@@ -42,10 +42,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_common_utils.apps.Config",
     
-    "apps.timetable",
-    "apps.event",
     "apps.subject",
+    "apps.event",
     "apps.homework",
+    "apps.timetable",
 ]
 
 MIDDLEWARE = [

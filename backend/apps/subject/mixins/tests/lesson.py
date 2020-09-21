@@ -1,11 +1,10 @@
 import random
-from abc import ABC
 from datetime import datetime, time, timedelta
 from typing import *
 
 from dateutil.rrule import MINUTELY, rrule
 
-from apps.utils.tests import StartTimeEndTimeTestMixin
+from apps.utils.tests import StartTimeEndTimeTestMixin, UserCreationTestMixin
 from apps.utils.time import dummy_datetime_from_time
 from .room import RoomTestMixin
 from .subject import SubjectTestMixin
@@ -14,16 +13,16 @@ from ...constants import LESSON_ALLOWED_DAYS
 from ...models import Lesson
 
 __all__ = [
-    "RandomLessonTextMixin"
+    "LessonTestMixin"
 ]
 
 
-class RandomLessonTextMixin(
+class LessonTestMixin(
     TeacherTestMixin,
     SubjectTestMixin,
     RoomTestMixin,
     StartTimeEndTimeTestMixin,
-    ABC
+    UserCreationTestMixin
 ):
     @classmethod
     def Create_lesson(cls, **kwargs) -> Lesson:
@@ -35,6 +34,7 @@ class RandomLessonTextMixin(
                 "start_time": cls.start_time(),
                 "end_time": cls.end_time(),
                 "weekday": random.choice([x[0] for x in LESSON_ALLOWED_DAYS]),
+                "associated_user": cls.Create_user(),
                 **kwargs
             }
         )

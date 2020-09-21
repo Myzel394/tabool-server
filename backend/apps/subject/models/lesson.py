@@ -9,9 +9,12 @@ from django_hint import QueryType
 from apps.timetable import constants
 from apps.utils.fields.weekday import WeekdayField
 from apps.utils.time import dummy_datetime_from_time, format_datetime
+from .. import constants
+from ..sub.subquerysets.lesson import LessonQuerySet
+from ...utils.models import AssociatedUserMixin
 
 if TYPE_CHECKING:
-    from apps.homework.models import Homework, UserHomework
+    from apps.homework.models import TeacherHomework, UserHomework
 
 __all__ = [
     "Lesson",
@@ -30,14 +33,16 @@ def _lesson_subject_model_verbose():
     return model_verbose(f"{constants.APP_LABEL}.Subject")
 
 
-class Lesson(RandomIDMixin):
+class Lesson(RandomIDMixin, AssociatedUserMixin):
     class Meta:
         verbose_name = _("Stunde")
         verbose_name_plural = _("Stunden")
         ordering = ("subject", "start_time")
     
+    objects = LessonQuerySet.as_manager()
+    
     teacher = models.ForeignKey(
-        "Teacher",
+        f"{constants.APP_LABEL}.Teacher",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
@@ -45,7 +50,7 @@ class Lesson(RandomIDMixin):
     )
     
     room = models.ForeignKey(
-        "Room",
+        f"{constants.APP_LABEL}.Room",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
@@ -53,7 +58,7 @@ class Lesson(RandomIDMixin):
     )
     
     subject = models.ForeignKey(
-        "Subject",
+        f"{constants.APP_LABEL}.Subject",
         on_delete=models.CASCADE,
         verbose_name=_lesson_subject_model_verbose
     )
@@ -82,5 +87,13 @@ class Lesson(RandomIDMixin):
         return int(difference.seconds / 60)
     
     @property
-    def homeworks(self) -> QueryType[Union["Homework", "UserHomework"]]:
-        return self.homework_set.all() | self.userhomework_set.all()
+    def teacher_homeworks(self) -> QueryType["TeacherHomework"]:
+        return self.teacherhomework_set.all()
+    
+    @property
+    def user_homeworks(self) -> QueryType["UserHomework"]:
+        return self.userhomework_set.all()
+    
+    @property
+    def homeworks(self) -> QueryType[Union["TeacherHomework", "UserHomework"]]:
+        return self.teacher_homeworks | self.associated_user_id

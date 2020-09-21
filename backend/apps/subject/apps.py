@@ -1,5 +1,8 @@
 from django.apps import AppConfig
 
+from . import constants
+
 
 class SubjectConfig(AppConfig):
-    name = 'subject'
+    name = "apps.subject"
+    app_label = constants.APP_LABEL

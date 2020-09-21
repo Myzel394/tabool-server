@@ -1,33 +1,29 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .mixins.homework import BaseHomeworkMixin
-
 from apps.subject.models import Teacher
-from ..querysets import HomeworkQuerySet
+from .mixins.homework import BaseHomeworkMixin
+from ..querysets import TeacherHomeworkQuerySet
 
 __all__ = [
-    "Homework"
+    "TeacherHomework"
 ]
 
 
-class Homework(BaseHomeworkMixin):
+class TeacherHomework(BaseHomeworkMixin):
     class Meta:
-        verbose_name = _("Hausaufgabe")
-        verbose_name_plural = _("Hausaufgaben")
+        verbose_name = _("Lehrer-Hausaufgabe")
+        verbose_name_plural = _("Lehrer-Hausaufgaben")
         ordering = ("-completed", "due_date")
     
-    objects = HomeworkQuerySet.as_manager()
-
+    objects = TeacherHomeworkQuerySet.as_manager()
+    
     teacher = models.ForeignKey(
         Teacher,
         on_delete=models.SET_NULL,
         null=True,
         blank=True
     )
-
-
-# TODO: UserHomework adden!
 
 
 """

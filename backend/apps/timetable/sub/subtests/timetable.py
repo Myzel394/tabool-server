@@ -1,20 +1,20 @@
 import json
+from pprint import pp
 
-from apps.timetable.mixins.tests import RandomLessonTextMixin
+from apps.subject.mixins.tests import LessonTestMixin
+from apps.subject.serializers import LessonSerializer, SubjectSerializer
 from apps.timetable.models import TimeTable
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
+from ..subserializers import TimeTableSerializer
 from ...mixins.tests.timetable import TimeTableTestMixin
-from ...serializers import LessonSerializer, SubjectSerializer, TimeTableSerializer
 
 
-class ModelTest(RandomLessonTextMixin, UserCreationTestMixin):
+class ModelTest(LessonTestMixin, UserCreationTestMixin):
     def test_timetable(self):
         lessons = set(self.Create_lessons())
-        user = self.Create_user()
         
         timetable = TimeTable.objects.create_with_lessons(
             lessons=lessons,
-            associated_user=user
         )
         
         timetable_lessons = set(timetable.lessons.all())
@@ -25,7 +25,7 @@ class ModelTest(RandomLessonTextMixin, UserCreationTestMixin):
 # noinspection DuplicatedCode
 class APITest(TimeTableTestMixin, ClientTestMixin):
     def setUp(self) -> None:
-        self.Login_user()
+        self.logged_user = self.Login_user()
     
     def test_subject_serializer(self):
         subject = self.Create_subject()
@@ -41,72 +41,57 @@ class APITest(TimeTableTestMixin, ClientTestMixin):
         
         data = LessonSerializer(lessons).data
         serializer = LessonSerializer(data=data)
-        serializer.is_valid()
-        
-        print(serializer.is_valid())
+        serializer.is_valid(raise_exception=True)
     
     def test_lessons_serializer(self):
         lessons = self.Create_lessons()
         
         data = LessonSerializer(lessons, many=True).data
         serializer = LessonSerializer(data=data, many=True)
-        serializer.is_valid()
-        
-        print(serializer.is_valid())
+        serializer.is_valid(raise_exception=True)
     
-    def test_get(self):
-        self.timetable = self.Create_timetable()
+    def test_timetable_serializer(self):
+        timetable = self.Create_timetable()
+        
+        data = TimeTableSerializer(timetable).data
+        
+        pp(data)
+    
+    def test_get_all(self):
+        timetable = self.Create_timetable(
+            lessons=self.Create_lessons(associated_user=self.logged_user)
+        )
         
         response = self.client.get("/api/timetable/")
         
         self.assertEqual(response.status_code, 200)
-        actual_data = TimeTableSerializer(self.timetable).data
+        actual_data = TimeTableSerializer(timetable).data
         
         self.assertEqual(json.loads(json.dumps(response.data[0])), json.loads(json.dumps(actual_data)))
     
-    def test_create(self):
-        lessons = self.Create_lessons()
-        data = LessonSerializer(lessons, many=True).data
-        
-        response = self.client.post(
-            "/api/timetable/",
-            {
-                "lessons": data,
-            },
-            content_type="application/json"
+    def test_get_single(self):
+        timetable = self.Create_timetable(
+            lessons=self.Create_lessons(associated_user=self.logged_user)
         )
         
-        self.assertStatusOk(response.status_code)
-        
-        timetable = TimeTable.objects.all().first()
-        
+        response = self.client.get(
+            f"/api/timetable/{timetable.id}/"
+        )
         actual_data = response.data
         expected_data = TimeTableSerializer(timetable).data
         
         self.assertEqual(actual_data, expected_data)
     
-    def test_create_id(self):
-        lessons = self.Create_lessons()
-        ids = [
-            {
-                "id": lesson.id
-            }
-            for lesson in lessons
-        ]
-        
-        response = self.client.post(
-            "/api/timetable/",
-            {
-                "lessons": ids,
-            },
-            content_type="application/json"
+    def test_get_privacy(self):
+        self.Create_timetable(
+            lessons=self.Create_lessons(associated_user=self.logged_user)
         )
+        self.client.logout()
+        second_user = self.Login_user()
         
-        self.assertStatusOk(response.status_code)
+        response = self.client.get(
+            "/api/timetable/"
+        )
+        self.assertEqual(response.status_code, 200)
         
-        timetable = TimeTable.objects.all().first()
-        
-        actual_data = response.data
-        expected_data = TimeTableSerializer(timetable).data
-        
-        self.assertEqual(actual_data, expected_data)
+        self.assertEqual(response.data, [])

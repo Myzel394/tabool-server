@@ -1,6 +1,4 @@
-from abc import ABC
 import random
-from datetime import datetime
 
 from django.conf import settings
 from django.db import models
@@ -11,8 +9,7 @@ from apps.utils.fields import ColorField
 from constants import colors
 
 
-
-class ColorMixin(LifecycleModel, ABC):
+class ColorMixin(LifecycleModel):
     class Meta:
         abstract = True
     
@@ -27,7 +24,7 @@ class ColorMixin(LifecycleModel, ABC):
         self.color = self.color or random.sample(colors.BEAUTIFUL_COLORS, 1)[0]
 
 
-class AssociatedUserMixin(models.Model, ABC):
+class AssociatedUserMixin(models.Model):
     class Meta:
         abstract = True
     
@@ -38,32 +35,7 @@ class AssociatedUserMixin(models.Model, ABC):
     )
 
 
-class DatesMixin(LifecycleModel, ABC):
-    class Meta:
-        abstract = True
-    
-    created_at = models.DateTimeField(
-        verbose_name=_("Erstelldatum"),
-        blank=True,
-    )
-    
-    last_edited_at = models.DateTimeField(
-        verbose_name=_("Zuletzt editiert"),
-        blank=True,
-        null=True
-    )
-    
-    @hook(BEFORE_CREATE)
-    @hook(BEFORE_UPDATE)
-    def _hook_set_created_at(self):
-        self.created_at = datetime.now()
-    
-    @hook(BEFORE_UPDATE)
-    def _hook_set_edited_at(self):
-        self.last_edited_at = datetime.now()
-
-
-class AddedAtMixin(models.Model, ABC):
+class AddedAtMixin(models.Model):
     class Meta:
         abstract = True
     

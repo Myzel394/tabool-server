@@ -1,5 +1,5 @@
-from apps.timetable.models import Teacher
 from apps.utils.serializers import IdMixinSerializer
+from ...models import Teacher
 
 __all__ = [
     "TeacherSerializer"

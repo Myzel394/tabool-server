@@ -1,7 +1,7 @@
 from abc import ABC
 
+from apps.subject.mixins.tests import LessonTestMixin
 from apps.utils.tests import UserCreationTestMixin
-from . import RandomLessonTextMixin
 from ...models import TimeTable
 
 __all__ = [
@@ -10,7 +10,7 @@ __all__ = [
 
 
 class TimeTableTestMixin(
-    RandomLessonTextMixin,
+    LessonTestMixin,
     UserCreationTestMixin,
     ABC
 ):
@@ -19,7 +19,6 @@ class TimeTableTestMixin(
         return TimeTable.objects.create_with_lessons(
             **{
                 "lessons": cls.Create_lessons(),
-                "associated_user": cls.Create_user(),
                 **kwargs
             }
         )

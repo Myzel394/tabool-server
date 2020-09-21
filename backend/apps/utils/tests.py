@@ -14,7 +14,11 @@ class UserCreationTestMixin(TestCase):
     def Create_user() -> User:
         Model = get_user_model()
         first_name = names.get_first_name()
-        last_name = names.get_last_name()
+        while True:
+            last_name = names.get_last_name()
+            
+            if not Model.objects.filter(username=last_name.capitalize()).exists():
+                break
         
         return Model.objects.create_user(
             first_name=first_name,

@@ -9,12 +9,11 @@ __all__ = [
 ]
 
 
-class TimeTableViewSet(viewsets.ModelViewSet):
+class TimeTableViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TimeTableSerializer
-    queryset = TimeTable.objects.all()
     permission_classes = [
         IsAuthenticated
     ]
     
     def get_queryset(self):
-        return TimeTable.objects.all()
+        return TimeTable.objects.from_user(self.request.user)

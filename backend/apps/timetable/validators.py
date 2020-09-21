@@ -2,9 +2,9 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.utils import model_verbose_plural
-from django_hint import *
+from django_hint import QueryType
 
-from .models import Lesson
+from apps.subject.models import Lesson
 
 
 def validate_lessons_dont_overlap(lessons: QueryType[Lesson]):

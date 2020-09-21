@@ -1,11 +1,22 @@
-from apps.utils.serializers import IdMixinSerializer
+from apps.subject.sub.subserializers import LessonSerializer
+from apps.utils.serializers import IdMixinSerializer, NestedModelParentSerializerMixin, NestedModelSerializerField
 
-from ...models import Homework
+from ...models import UserHomework
+
+__all__ = [
+    "UserHomeworkSerializer"
+]
 
 
-class HomeworkSerializer(IdMixinSerializer):
+class UserHomeworkSerializer(IdMixinSerializer, NestedModelParentSerializerMixin):
     class Meta:
-        model = Homework
-        fields = ["lesson", "due_date", "information", "completed", "teacher", "id", "added_at"]
+        model = UserHomework
+        fields = [
+            "lesson", "due_date", "information", "completed", "homework_type", "id", "created_at", "edited_at",
+        ]
     
-    # TODO: Nested fields hinzufügen
+    lesson = NestedModelSerializerField(
+        LessonSerializer
+    )
+
+# TODO: https://github.com/beda-software/drf-writable-nested
