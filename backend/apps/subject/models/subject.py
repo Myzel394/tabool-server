@@ -16,6 +16,8 @@ __all__ = [
     "Subject"
 ]
 
+# TODO: Subject zu eigener App machen mit Homework, Vertretungen (Substitute) etc..
+
 
 class Subject(RandomIDMixin, HandlerMixin, ColorMixin):
     class Meta:

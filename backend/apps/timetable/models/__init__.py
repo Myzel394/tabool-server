@@ -1,5 +1,2 @@
-from .lesson import Lesson
-from .room import Room
-from .subject import Subject
-from .teacher import Teacher
+from apps.subject.models.lesson import Lesson
 from .timetable import TimeTable
