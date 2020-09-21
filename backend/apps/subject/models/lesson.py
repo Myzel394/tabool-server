@@ -11,7 +11,7 @@ from apps.utils.fields.weekday import WeekdayField
 from apps.utils.time import dummy_datetime_from_time, format_datetime
 
 if TYPE_CHECKING:
-    from apps.homework.models import Homework
+    from apps.homework.models import Homework, UserHomework
 
 __all__ = [
     "Lesson",
@@ -82,5 +82,5 @@ class Lesson(RandomIDMixin):
         return int(difference.seconds / 60)
     
     @property
-    def homeworks(self) -> QueryType["Homework"]:
-        return self.homework_set.all()
+    def homeworks(self) -> QueryType[Union["Homework", "UserHomework"]]:
+        return self.homework_set.all() | self.userhomework_set.all()

@@ -1,3 +1,4 @@
+from abc import ABC
 import random
 from datetime import datetime
 
@@ -10,7 +11,8 @@ from apps.utils.fields import ColorField
 from constants import colors
 
 
-class ColorMixin(LifecycleModel):
+
+class ColorMixin(LifecycleModel, ABC):
     class Meta:
         abstract = True
     
@@ -25,7 +27,7 @@ class ColorMixin(LifecycleModel):
         self.color = self.color or random.sample(colors.BEAUTIFUL_COLORS, 1)[0]
 
 
-class AssociatedUserMixin(models.Model):
+class AssociatedUserMixin(models.Model, ABC):
     class Meta:
         abstract = True
     
@@ -36,7 +38,7 @@ class AssociatedUserMixin(models.Model):
     )
 
 
-class DatesMixin(LifecycleModel):
+class DatesMixin(LifecycleModel, ABC):
     class Meta:
         abstract = True
     
@@ -59,3 +61,14 @@ class DatesMixin(LifecycleModel):
     @hook(BEFORE_UPDATE)
     def _hook_set_edited_at(self):
         self.last_edited_at = datetime.now()
+
+
+class AddedAtMixin(models.Model, ABC):
+    class Meta:
+        abstract = True
+    
+    added_at = models.DateTimeField(
+        verbose_name=_("Hinzugefügt"),
+        blank=True,
+        null=True
+    )

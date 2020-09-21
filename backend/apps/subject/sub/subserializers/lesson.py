@@ -1,9 +1,9 @@
 from apps.timetable.models import Lesson
 from apps.utils.serializers import IdMixinSerializer
-from .room import RoomSerializer
-from .subject import SubjectSerializer
-from .teacher import TeacherSerializer
-from ...models import Room, Subject, Teacher
+from apps.subject.sub.subserializers.room import RoomSerializer
+from apps.subject.sub.subserializers.subject import SubjectSerializer
+from apps.subject.sub.subserializers.teacher import TeacherSerializer
+from ...models import Subject, Teacher, Room
 
 __all__ = [
     "LessonSerializer"

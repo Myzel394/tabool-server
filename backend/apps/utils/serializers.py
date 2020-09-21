@@ -22,3 +22,4 @@ class NestedSerializerMixin(serializers.ModelSerializer):
     
     @staticmethod
     def create_by_ids(ids: Iterable[Any], queryset: QueryType, id_field: str = "id"):
+        pass

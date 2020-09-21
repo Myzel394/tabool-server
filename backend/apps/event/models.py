@@ -4,8 +4,10 @@ from django_common_utils.libraries.handlers import HandlerMixin
 from django_common_utils.libraries.handlers.mixins import TextOptimizerHandler, WhiteSpaceStripHandler
 from django_common_utils.libraries.models import RandomIDMixin
 
+from apps.subject.models import Room
 from apps.utils.time import format_datetime
 from constants import maxlength
+from .choices import *
 
 
 class Event(RandomIDMixin, HandlerMixin):
@@ -13,6 +15,19 @@ class Event(RandomIDMixin, HandlerMixin):
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
         ordering = ("start_datetime",)
+    
+    room = models.ForeignKey(
+        Room,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
+    
+    event_type = models.PositiveSmallIntegerField(
+        choices=EventTypeChoices.choices,
+        default=EventTypeChoices.EVENT,
+        verbose_name=_("Eventtyp")
+    )
     
     start_datetime = models.DateTimeField(
         verbose_name=_("Startzeit"),
@@ -27,9 +42,8 @@ class Event(RandomIDMixin, HandlerMixin):
         max_length=maxlength.TITLE,
     )
     
-    description = models.CharField(
-        verbose_name=_("Beschreibung"),
-        max_length=maxlength.DESCRIPTION,
+    information = models.TextField(
+        verbose_name=_("Information"),
         blank=True,
         null=True,
     )
