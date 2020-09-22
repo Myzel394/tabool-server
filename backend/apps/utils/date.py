@@ -1,11 +1,8 @@
-from datetime import date, timedelta
-
-__all__ = [
-    "find_next_date_with_weekday"
-]
+from datetime import date, datetime, timedelta
+from typing import *
 
 
-def find_next_date_with_weekday(start_date: date, weekday: int) -> date:
+def find_next_date_by_weekday(start_date: Union[date, datetime], weekday: int) -> Union[date, datetime]:
     assert 0 <= weekday <= 6, "Weekday not valid!"
     
     found_date = start_date

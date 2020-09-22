@@ -2,18 +2,24 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers import HandlerMixin, TextOptimizerHandler
 from django_common_utils.libraries.models import RandomIDMixin
+from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.subject import model_references, model_verbose_functions
+from ..querysets import ClassTestQuerySet
 
 __all__ = [
     "ClassTest"
 ]
 
+from apps.utils.validators import validate_weekday_in_lesson_data_available
 
-class ClassTest(RandomIDMixin, HandlerMixin):
+
+class ClassTest(RandomIDMixin, LifecycleModel, HandlerMixin):
     class Meta:
         verbose_name = _("Klassenarbeit")
         verbose_name_plural = _("Klassenarbeiten")
+    
+    objects = ClassTestQuerySet.as_manager()
     
     subject = models.ForeignKey(
         model_references.SUBJECT,
@@ -45,3 +51,8 @@ class ClassTest(RandomIDMixin, HandlerMixin):
         return {
             "information": TextOptimizerHandler()
         }
+    
+    @hook(BEFORE_CREATE)
+    @hook(BEFORE_UPDATE, when="targeted_date")
+    def _hook_validate_targeted_dae(self):
+        validate_weekday_in_lesson_data_available(self.targeted_date)

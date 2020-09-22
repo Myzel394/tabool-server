@@ -1,1 +1,1 @@
-from .timetable import TimeTable
+from .timetable import Timetable

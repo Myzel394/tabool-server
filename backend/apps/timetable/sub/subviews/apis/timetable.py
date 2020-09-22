@@ -1,23 +1,23 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from apps.timetable.models import TimeTable
-from apps.timetable.sub.subserializers import TimeTableDetailSerializer, TimeTableListSerializer
+from apps.timetable.models import Timetable
+from apps.timetable.sub.subserializers import TimetableDetailSerializer, TimetableListSerializer
 
 __all__ = [
-    "TimeTableViewSet"
+    "TimetableViewSet"
 ]
 
 
-class TimeTableViewSet(viewsets.ReadOnlyModelViewSet):
+class TimetableViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [
         IsAuthenticated
     ]
     
     def get_queryset(self):
-        return TimeTable.objects.from_user(self.request.user)
+        return Timetable.objects.from_user(self.request.user)
     
     def get_serializer_class(self):
         if self.action == "list":
-            return TimeTableListSerializer
-        return TimeTableDetailSerializer
+            return TimetableListSerializer
+        return TimetableDetailSerializer

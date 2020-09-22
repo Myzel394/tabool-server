@@ -2,18 +2,19 @@ import json
 from pprint import pp
 
 from apps.subject.mixins.tests import LessonTestMixin
+from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.subject.serializers import LessonDataDetailSerializer, SubjectDetailSerializer
-from apps.timetable.models import TimeTable
+from apps.timetable.models import Timetable
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
-from ..subserializers import TimeTableDetailSerializer, TimeTableListSerializer
-from ...mixins.tests.timetable import TimeTableTestMixin
+from ..subserializers import TimetableDetailSerializer, TimetableListSerializer
+from ...mixins.tests.timetable import TimetableTestMixin
 
 
 class ModelTest(LessonTestMixin, UserCreationTestMixin):
     def test_timetable(self):
         lessons = set(self.Create_lessons_data())
         
-        timetable = TimeTable.objects.create_with_lessons(
+        timetable = Timetable.objects.create_with_lessons(
             lessons_data=lessons,
         )
         
@@ -22,10 +23,13 @@ class ModelTest(LessonTestMixin, UserCreationTestMixin):
         self.assertEqual(lessons, timetable_lessons, "Lessons are not equal")
 
 
+# TODO: Remove unnecessary tests
+
 # noinspection DuplicatedCode
-class APITest(TimeTableTestMixin, ClientTestMixin):
+class APITest(TimetableTestMixin, ClientTestMixin):
     def setUp(self) -> None:
         self.logged_user = self.Login_user()
+        self.__class__.associated_user = self.logged_user
     
     def test_subject_serializer(self):
         subject = self.Create_subject()
@@ -53,39 +57,33 @@ class APITest(TimeTableTestMixin, ClientTestMixin):
     def test_timetable_serializer(self):
         timetable = self.Create_timetable()
         
-        data = TimeTableDetailSerializer(timetable).data
+        data = TimetableDetailSerializer(timetable).data
         
         pp(data)
     
     def test_get_all(self):
-        timetable = self.Create_timetable(
-            lessons_data=self.Create_lessons_data(associated_user=self.logged_user)
-        )
+        timetable = self.Create_timetable()
         
         response = self.client.get("/api/timetable/")
         
         self.assertEqual(response.status_code, 200)
-        actual_data = TimeTableListSerializer(timetable).data
+        actual_data = TimetableListSerializer(timetable).data
         
         self.assertEqual(json.loads(json.dumps(response.data[0])), json.loads(json.dumps(actual_data)))
     
     def test_get_single(self):
-        timetable = self.Create_timetable(
-            lessons_data=self.Create_lessons_data(associated_user=self.logged_user)
-        )
+        timetable = self.Create_timetable()
         
         response = self.client.get(
             f"/api/timetable/{timetable.id}/"
         )
         actual_data = response.data
-        expected_data = TimeTableDetailSerializer(timetable).data
+        expected_data = TimetableDetailSerializer(timetable).data
         
         self.assertEqual(actual_data, expected_data)
     
     def test_get_privacy(self):
-        self.Create_timetable(
-            lessons_data=self.Create_lessons_data(associated_user=self.logged_user)
-        )
+        self.Create_timetable()
         self.client.logout()
         second_user = self.Login_user()
         
@@ -95,3 +93,8 @@ class APITest(TimeTableTestMixin, ClientTestMixin):
         self.assertEqual(response.status_code, 200)
         
         self.assertEqual(response.data, [])
+
+
+class QuerySetTest(TimetableTestMixin, AssociatedUserTestMixin):
+    def test_association(self):
+        self.check_queryset_from_user(Timetable)

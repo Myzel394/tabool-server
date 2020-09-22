@@ -9,11 +9,11 @@ if TYPE_CHECKING:
     from apps.timetable import TimeTable
 
 __all__ = [
-    "TimeTableQuerySet"
+    "TimetableQuerySet"
 ]
 
 
-class TimeTableQuerySet(CustomQuerySetMixin.QuerySet):
+class TimetableQuerySet(CustomQuerySetMixin.QuerySet):
     def create_with_lessons(self, **kwargs) -> "TimeTable":
         lessons = kwargs.pop("lessons_data")
         
@@ -24,7 +24,7 @@ class TimeTableQuerySet(CustomQuerySetMixin.QuerySet):
         
         return timetable
     
-    def from_user(self, user: settings.AUTH_USER_MODEL) -> "TimeTableQuerySet":
+    def from_user(self, user: settings.AUTH_USER_MODEL) -> "TimetableQuerySet":
         return self.only("lessons_data").filter(
-            lessons_data__in=LessonData.objects.from_user(user)
+            lessons_data__in=LessonData.objects.all().from_user(user)
         ).distinct()

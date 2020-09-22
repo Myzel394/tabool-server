@@ -8,8 +8,8 @@ from django_hint import QueryType
 from apps.utils.fields.weekday import WeekdayField
 from apps.utils.time import dummy_datetime_from_time, format_datetime
 from .. import constants, model_references, model_verbose_functions
+from ..sub.subquerysets import LessonQuerySet
 from ..sub.subquerysets.lesson_data import LessonDataQuerySet
-from ...utils.models import AssociatedUserMixin
 
 if TYPE_CHECKING:
     from apps.homework.models import TeacherHomework, UserHomework
@@ -20,7 +20,7 @@ __all__ = [
 ]
 
 
-class LessonData(RandomIDMixin, AssociatedUserMixin):
+class LessonData(RandomIDMixin):
     class Meta:
         verbose_name = _("Stunde")
         verbose_name_plural = _("Stunden")
@@ -86,8 +86,7 @@ class LessonData(RandomIDMixin, AssociatedUserMixin):
         return self.teacher_homeworks | self.associated_user_id
     
     def get_lesson(self, **kwargs) -> "Lesson":
-        from ..actions import lesson_data_to_lesson
-        return lesson_data_to_lesson(
+        return LessonQuerySet.create_automatically(
             lesson_data=self,
             **kwargs
         )

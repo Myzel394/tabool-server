@@ -6,8 +6,9 @@ from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStrip
 from django_common_utils.libraries.models import RandomIDMixin
 from django_hint import QueryType
 
-from apps.utils.models import ColorMixin
+from apps.utils.models import AssociatedUserMixin, ColorMixin
 from constants import maxlength
+from ..querysets import SubjectQuerySet
 
 if TYPE_CHECKING:
     from apps.timetable.models import Lesson
@@ -17,11 +18,13 @@ __all__ = [
 ]
 
 
-class Subject(RandomIDMixin, HandlerMixin, ColorMixin):
+class Subject(RandomIDMixin, HandlerMixin, ColorMixin, AssociatedUserMixin):
     class Meta:
         verbose_name = _("Fach")
         verbose_name_plural = _("Fächer")
         ordering = ("name",)
+    
+    objects = SubjectQuerySet.as_manager()
     
     name = models.CharField(
         verbose_name=_("Name"),
@@ -32,8 +35,8 @@ class Subject(RandomIDMixin, HandlerMixin, ColorMixin):
         return self.name
     
     @property
-    def lessons(self) -> QueryType["Lesson"]:
-        return self.lesson_set.all()
+    def lessons_data(self) -> QueryType["Lesson"]:
+        return self.lessondata_set.all()
     
     @staticmethod
     def handlers():

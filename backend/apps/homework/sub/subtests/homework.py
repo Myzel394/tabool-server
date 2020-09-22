@@ -5,7 +5,12 @@ import lorem
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
 from apps.homework.models import TeacherHomework, UserHomework
 from apps.homework.sub.subserializers import TeacherHomeworkListSerializer, UserHomeworkDetailSerializer
+from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.utils.tests import ClientTestMixin
+
+__all__ = [
+    "APITest", "QuerySetTest"
+]
 
 
 class APITest(HomeworkTestMixin, ClientTestMixin):
@@ -59,3 +64,9 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         homework.refresh_from_db(fields=["information"])
         self.assertEqual(homework.information, new_information)
+
+
+class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):
+    def test_association(self):
+        self.check_queryset_from_user(UserHomework)
+        self.check_queryset_from_user(TeacherHomework)

@@ -9,6 +9,7 @@ from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 from apps.subject import model_references, model_verbose_functions
 from apps.utils.models import AddedAtMixin
 from apps.utils.time import format_datetime
+from apps.utils.validators import validate_weekday_in_lesson_data_available
 from ...validators import validate_only_future_days
 
 __all__ = [
@@ -53,6 +54,7 @@ class BaseHomeworkMixin(
     @hook(BEFORE_UPDATE, when="due_date")
     def _hook_due_date_validation(self):
         validate_only_future_days(self.due_date)
+        validate_weekday_in_lesson_data_available(self.due_date)
     
     @staticmethod
     def handlers():

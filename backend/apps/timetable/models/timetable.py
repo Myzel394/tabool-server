@@ -8,18 +8,18 @@ from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 from apps.subject import model_references, model_verbose_functions
 from apps.timetable.utils import create_designation_from_date
 from constants import maxlength
-from ..sub.subquerysets import TimeTableQuerySet
+from ..sub.subquerysets import TimetableQuerySet
 from ..validators import validate_lessons_dont_overlap
 
 if TYPE_CHECKING:
     pass
 
 __all__ = [
-    "TimeTable"
+    "Timetable"
 ]
 
 
-class TimeTable(
+class Timetable(
     RandomIDMixin,
     LifecycleModel,
     CustomQuerySetMixin
@@ -29,7 +29,7 @@ class TimeTable(
         verbose_name_plural = _("Stundenpläne")
         ordering = ("designation",)
     
-    objects = TimeTableQuerySet.as_manager()
+    objects = TimetableQuerySet.as_manager()
     
     lessons_data = models.ManyToManyField(
         model_references.LESSON_DATA,

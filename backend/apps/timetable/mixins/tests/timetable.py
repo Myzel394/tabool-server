@@ -2,21 +2,21 @@ from abc import ABC
 
 from apps.subject.mixins.tests import LessonTestMixin
 from apps.utils.tests import UserCreationTestMixin
-from ...models import TimeTable
+from ...models import Timetable
 
 __all__ = [
-    "TimeTableTestMixin"
+    "TimetableTestMixin"
 ]
 
 
-class TimeTableTestMixin(
+class TimetableTestMixin(
     LessonTestMixin,
     UserCreationTestMixin,
     ABC
 ):
     @classmethod
-    def Create_timetable(cls, **kwargs) -> TimeTable:
-        return TimeTable.objects.create_with_lessons(
+    def Create_timetable(cls, **kwargs) -> Timetable:
+        return Timetable.objects.create_with_lessons(
             **{
                 "lessons_data": cls.Create_lessons_data(),
                 **kwargs

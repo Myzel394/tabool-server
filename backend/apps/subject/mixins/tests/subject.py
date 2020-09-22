@@ -1,8 +1,7 @@
 import random
 from abc import ABC
 
-from django.test import TestCase
-
+from apps.utils.tests import UserCreationTestMixin
 from ...models import Subject
 
 __all__ = [
@@ -10,9 +9,9 @@ __all__ = [
 ]
 
 
-class SubjectTestMixin(TestCase, ABC):
-    @staticmethod
-    def Create_subject(**kwargs) -> Subject:
+class SubjectTestMixin(UserCreationTestMixin, ABC):
+    @classmethod
+    def Create_subject(cls, **kwargs) -> Subject:
         return Subject.objects.create(
             **{
                 "name": random.choice([
@@ -30,6 +29,7 @@ class SubjectTestMixin(TestCase, ABC):
                     "Ethik",
                     "Geschichte"
                 ]),
+                "associated_user": getattr(cls, "associated_user", None) or cls.Create_user(),
                 **kwargs
             }
         )

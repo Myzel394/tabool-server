@@ -4,4 +4,4 @@ __all__ = [
     "TIMETABLE"
 ]
 
-TIMETABLE = f"{constants.APP_LABEL}.TimeTable"
+TIMETABLE = f"{constants.APP_LABEL}.Timetable"

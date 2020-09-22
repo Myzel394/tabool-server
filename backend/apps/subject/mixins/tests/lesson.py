@@ -4,7 +4,7 @@ from typing import *
 
 from dateutil.rrule import MINUTELY, rrule
 
-from apps.utils.tests import StartTimeEndTimeTestMixin, UserCreationTestMixin
+from apps.utils.tests import StartTimeEndTimeTestMixin
 from apps.utils.time import dummy_datetime_from_time
 from .room import RoomTestMixin
 from .subject import SubjectTestMixin
@@ -21,8 +21,7 @@ class LessonTestMixin(
     TeacherTestMixin,
     SubjectTestMixin,
     RoomTestMixin,
-    StartTimeEndTimeTestMixin,
-    UserCreationTestMixin
+    StartTimeEndTimeTestMixin
 ):
     @classmethod
     def Create_lesson(cls, **kwargs):
@@ -43,7 +42,6 @@ class LessonTestMixin(
                 "start_time": cls.start_time(),
                 "end_time": cls.end_time(),
                 "weekday": random.choice([x[0] for x in LESSON_ALLOWED_DAYS]),
-                "associated_user": getattr(cls, "associated_user", None) or cls.Create_user(),
                 **kwargs
             }
         )

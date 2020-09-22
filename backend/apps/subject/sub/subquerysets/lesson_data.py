@@ -9,4 +9,4 @@ __all__ = [
 # noinspection PyTypeChecker
 class LessonDataQuerySet(CustomQuerySetMixin.QuerySet):
     def from_user(self, user: settings.AUTH_USER_MODEL) -> "LessonDataQuerySet":
-        return self.only("associated_user").filter(associated_user=user)
+        return self.filter(subject__associated_user=user)
