@@ -2,7 +2,7 @@ import json
 from pprint import pp
 
 from apps.subject.mixins.tests import LessonTestMixin
-from apps.subject.serializers import LessonSerializer, SubjectSerializer
+from apps.subject.serializers import LessonDataSerializer, SubjectSerializer
 from apps.timetable.models import TimeTable
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
 from ..subserializers import TimeTableSerializer
@@ -39,15 +39,15 @@ class APITest(TimeTableTestMixin, ClientTestMixin):
     def test_single_lesson_serializer(self):
         lessons = self.Create_lesson()
         
-        data = LessonSerializer(lessons).data
-        serializer = LessonSerializer(data=data)
+        data = LessonDataSerializer(lessons).data
+        serializer = LessonDataSerializer(data=data)
         serializer.is_valid(raise_exception=True)
     
     def test_lessons_serializer(self):
         lessons = self.Create_lessons()
         
-        data = LessonSerializer(lessons, many=True).data
-        serializer = LessonSerializer(data=data, many=True)
+        data = LessonDataSerializer(lessons, many=True).data
+        serializer = LessonDataSerializer(data=data, many=True)
         serializer.is_valid(raise_exception=True)
     
     def test_timetable_serializer(self):

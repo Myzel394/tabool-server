@@ -1,23 +1,22 @@
 from typing import *
 
-from apps.subject.sub.subserializers import LessonSerializer
+from drf_writable_nested.serializers import WritableNestedModelSerializer
+
+from apps.subject.sub.subserializers import LessonDataSerializer
 from apps.timetable.models import TimeTable
-from apps.utils.serializers import IdMixinSerializer, NestedModelSerializerField
+from apps.utils.serializers import IdMixinSerializer
 
 __all__ = [
     "TimeTableSerializer"
 ]
 
 
-class TimeTableSerializer(IdMixinSerializer):
+class TimeTableSerializer(IdMixinSerializer, WritableNestedModelSerializer):
     class Meta:
         model = TimeTable
         fields = ["lessons", "designation", "id"]
     
-    lessons = NestedModelSerializerField(
-        LessonSerializer,
-        many=True
-    )
+    lessons = LessonDataSerializer(many=True)
     
     def create(self, validated_data: Dict[str, Any]):
         # Get values

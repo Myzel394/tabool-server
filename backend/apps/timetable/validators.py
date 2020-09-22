@@ -4,13 +4,13 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.utils import model_verbose_plural
 from django_hint import QueryType
 
-from apps.subject.models import Lesson
+from apps.subject.models import LessonData
 
 
-def validate_lessons_dont_overlap(lessons: QueryType[Lesson]):
+def validate_lessons_dont_overlap(lessons: QueryType[LessonData]):
     """Validates whether there are no overlapping lessons"""
     for lesson in lessons:
-        if Lesson.objects.filter(
+        if LessonData.objects.filter(
                 Q(
                     start_time__gt=lesson.start_time,
                     start_time__lt=lesson.end_time
@@ -22,5 +22,5 @@ def validate_lessons_dont_overlap(lessons: QueryType[Lesson]):
                 weekday=lesson.weekday,
         ).exists():
             raise ValidationError(
-                _("{} dürfen sich nicht überlappen!").format(model_verbose_plural(Lesson))
+                _("{} dürfen sich nicht überlappen!").format(model_verbose_plural(LessonData))
             )

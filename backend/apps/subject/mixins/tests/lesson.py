@@ -10,7 +10,7 @@ from .room import RoomTestMixin
 from .subject import SubjectTestMixin
 from .teacher import TeacherTestMixin
 from ...constants import LESSON_ALLOWED_DAYS
-from ...models import Lesson
+from ...models import LessonData
 
 __all__ = [
     "LessonTestMixin"
@@ -25,8 +25,8 @@ class LessonTestMixin(
     UserCreationTestMixin
 ):
     @classmethod
-    def Create_lesson(cls, **kwargs) -> Lesson:
-        return Lesson.objects.create(
+    def Create_lesson(cls, **kwargs) -> LessonData:
+        return LessonData.objects.create(
             **{
                 "teacher": cls.Create_teacher(),
                 "room": cls.Create_room(),
@@ -46,7 +46,7 @@ class LessonTestMixin(
             end_time: Optional[time] = None,
             duration: int = 45,
             **kwargs
-    ) -> List[Lesson]:
+    ) -> List[LessonData]:
         start_time = start_time or time(hour=7, minute=55)
         end_time = end_time or (dummy_datetime_from_time(time(hour=13, minute=10)) - timedelta(minutes=duration)).time()
         

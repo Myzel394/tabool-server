@@ -3,7 +3,7 @@ from typing import *
 from django.conf import settings
 from django_common_utils.libraries.models import CustomQuerySetMixin
 
-from apps.subject.models import Lesson
+from apps.subject.models import LessonData
 
 if TYPE_CHECKING:
     from apps.timetable import TimeTable
@@ -26,5 +26,5 @@ class TimeTableQuerySet(CustomQuerySetMixin.QuerySet):
     
     def from_user(self, user: settings.AUTH_USER_MODEL) -> "TimeTableQuerySet":
         return self.only("lessons").filter(
-            lessons__in=Lesson.objects.from_user(user)
+            lessons__in=LessonData.objects.from_user(user)
         ).distinct()

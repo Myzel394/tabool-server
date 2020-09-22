@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.subject.models import Teacher
 from .mixins.homework import BaseHomeworkMixin
 from ..querysets import TeacherHomeworkQuerySet
+from apps.subject import model_references, model_verbose_functions
 
 __all__ = [
     "TeacherHomework"
@@ -19,7 +20,8 @@ class TeacherHomework(BaseHomeworkMixin):
     objects = TeacherHomeworkQuerySet.as_manager()
     
     teacher = models.ForeignKey(
-        Teacher,
+        model_references.TEACHER,
+        verbose_name=model_verbose_functions.teacher_single,
         on_delete=models.SET_NULL,
         null=True,
         blank=True

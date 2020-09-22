@@ -6,10 +6,10 @@ from django_common_utils.libraries.models import RandomIDMixin
 from django_common_utils.libraries.utils import model_verbose
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
-from apps.subject.models.lesson import Lesson
 from apps.utils.models import AddedAtMixin
 from apps.utils.time import format_datetime
 from ...validators import validate_only_future_days
+from apps.subject import model_verbose_functions, model_references
 
 __all__ = [
     "BaseHomeworkMixin"
@@ -27,9 +27,9 @@ class BaseHomeworkMixin(
         abstract = True
     
     lesson = models.ForeignKey(
-        Lesson,
+        model_references.LESSON,
         on_delete=models.CASCADE,
-        verbose_name=model_verbose(Lesson),
+        verbose_name=model_verbose_functions.lesson_single,
     )
     
     due_date = models.DateTimeField(
@@ -40,6 +40,8 @@ class BaseHomeworkMixin(
     
     information = models.TextField(
         verbose_name=_("Informationen"),
+        blank=True,
+        null=True,
     )
     
     completed = models.BooleanField(

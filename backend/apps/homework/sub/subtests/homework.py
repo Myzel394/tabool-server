@@ -1,5 +1,8 @@
 import json
+import random
+import string
 
+import lorem
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
 from apps.homework.models import TeacherHomework, UserHomework
 from apps.homework.sub.subserializers import TeacherHomeworkSerializer, UserHomeworkSerializer
@@ -25,7 +28,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         )
     
     def test_create_user_homework(self):
-        homework = self.Create_user_homework()
+        homework = self.Create_user_homework(lesson=self.Create_lesson(associated_user=self.logged_user))
         homework.delete()
         
         response = self.client.post(
@@ -34,6 +37,31 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             content_type="application/json"
         )
         
-        print(UserHomework.objects.all())
+        print(response.data)
+        self.assertStatusOk(response.status_code)
         
         self.assertTrue(UserHomework.objects.all().exists())
+    
+    def test_update_user_homework(self):
+        homework = self.Create_user_homework(lesson=self.Create_lesson(associated_user=self.logged_user))
+        new_information = lorem.sentence()
+        
+        print(UserHomework.objects.from_user(self.logged_user))
+        
+        response = self.client.patch(
+            f"/api/user-homework/{homework.id}/",
+            {
+                "information": new_information
+            },
+            content_type="application/json"
+        )
+        
+        print(response.data)
+        self.assertStatusOk(response.status_code)
+        
+        homework.refresh_from_db(fields=["information"])
+        self.assertEqual(homework.information, new_information)
+        
+        
+        
+        

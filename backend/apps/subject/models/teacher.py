@@ -9,7 +9,7 @@ from django_hint import QueryType
 from constants import maxlength
 
 if TYPE_CHECKING:
-    from apps.timetable import Lesson
+    from .lesson_data import LessonData
 
 __all__ = [
     "Teacher"
@@ -44,8 +44,8 @@ class Teacher(RandomIDMixin, HandlerMixin):
         return f"{self.first_name} {self.last_name}"
     
     @property
-    def lessons(self) -> QueryType["Lesson"]:
-        return self.lesson_set.all()
+    def lessons_data(self) -> QueryType["LessonData"]:
+        return self.lessons_data.all()
     
     @staticmethod
     def handlers():

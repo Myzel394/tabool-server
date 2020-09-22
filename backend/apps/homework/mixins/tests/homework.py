@@ -37,6 +37,7 @@ class HomeworkTestMixin(LessonTestMixin, ABC):
         return UserHomework.objects.create(
             **{
                 "lesson": cls.Create_lesson(),
-                "due_date": cls.get_random_due_date()
+                "due_date": cls.get_random_due_date(),
+                **kwargs
             }
         )

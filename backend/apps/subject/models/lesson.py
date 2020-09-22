@@ -1,99 +1,46 @@
-from typing import *
-
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import RandomIDMixin
+from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.utils import model_verbose
-from django_hint import QueryType
+from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
-from apps.timetable import constants
-from apps.utils.fields.weekday import WeekdayField
-from apps.utils.time import dummy_datetime_from_time, format_datetime
-from .. import constants
-from ..sub.subquerysets.lesson import LessonQuerySet
-from ...utils.models import AssociatedUserMixin
+from .. import constants, model_references, model_verbose_functions
+from ..validators import validate_lesson_weekday
+from ..querysets import LessonQuerySet
 
-if TYPE_CHECKING:
-    from apps.homework.models import TeacherHomework, UserHomework
 
 __all__ = [
-    "Lesson",
+    "Lesson"
 ]
 
 
-def _lesson_teacher_model_verbose():
-    return model_verbose(f"{constants.APP_LABEL}.Teacher")
-
-
-def _lesson_room_model_verbose():
-    return model_verbose(f"{constants.APP_LABEL}.Room")
-
-
-def _lesson_subject_model_verbose():
-    return model_verbose(f"{constants.APP_LABEL}.Subject")
-
-
-class Lesson(RandomIDMixin, AssociatedUserMixin):
+class Lesson(RandomIDMixin):
     class Meta:
         verbose_name = _("Stunde")
         verbose_name_plural = _("Stunden")
-        ordering = ("subject", "start_time")
+        unique_together = (
+            ("lesson", "date")
+        )
     
     objects = LessonQuerySet.as_manager()
     
-    teacher = models.ForeignKey(
-        f"{constants.APP_LABEL}.Teacher",
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        verbose_name=_lesson_teacher_model_verbose
-    )
-    
-    room = models.ForeignKey(
-        f"{constants.APP_LABEL}.Room",
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        verbose_name=_lesson_room_model_verbose
-    )
-    
-    subject = models.ForeignKey(
-        f"{constants.APP_LABEL}.Subject",
+    lesson_data = models.ForeignKey(
+        model_references.LESSON_DATA,
+        verbose_name=model_verbose_functions.lesson_data_single,
         on_delete=models.CASCADE,
-        verbose_name=_lesson_subject_model_verbose
     )
     
-    start_time = models.TimeField(
-        verbose_name=_("Startzeit"),
+    date = models.DateField(
+        verbose_name=_("Datum")
     )
     
-    end_time = models.TimeField(
-        verbose_name=_("Endzeit"),
+    attendance = models.BooleanField(
+        default=True,
+        verbose_name=_("Anwesend"),
+        help_text=_("Bist du in dieser Stunde anwesend?")
     )
     
-    weekday = WeekdayField(
-        verbose_name=_("Wochentag"),
-        choices=constants.LESSON_ALLOWED_DAYS
-    )
-    
-    def __str__(self):
-        return f"{self.subject}: {format_datetime(self.start_time)} - {format_datetime(self.end_time)}"
-    
-    @property
-    def duration(self) -> int:
-        """Returns the duration of the lesson in minutes"""
-        difference = dummy_datetime_from_time(self.end_time) - dummy_datetime_from_time(self.start_time)
-        
-        return int(difference.seconds / 60)
-    
-    @property
-    def teacher_homeworks(self) -> QueryType["TeacherHomework"]:
-        return self.teacherhomework_set.all()
-    
-    @property
-    def user_homeworks(self) -> QueryType["UserHomework"]:
-        return self.userhomework_set.all()
-    
-    @property
-    def homeworks(self) -> QueryType[Union["TeacherHomework", "UserHomework"]]:
-        return self.teacher_homeworks | self.associated_user_id
+    @hook(BEFORE_CREATE)
+    @hook(BEFORE_UPDATE, when="date")
+    def _hook_validate_date(self):
+        validate_lesson_weekday(self.date, self.lesson_data)
