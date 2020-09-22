@@ -11,13 +11,13 @@ from ...mixins.tests.timetable import TimeTableTestMixin
 
 class ModelTest(LessonTestMixin, UserCreationTestMixin):
     def test_timetable(self):
-        lessons = set(self.Create_lessons())
+        lessons = set(self.Create_lessons_data())
         
         timetable = TimeTable.objects.create_with_lessons(
-            lessons=lessons,
+            lessons_data=lessons,
         )
         
-        timetable_lessons = set(timetable.lessons.all())
+        timetable_lessons = set(timetable.lessons_data.all())
         
         self.assertEqual(lessons, timetable_lessons, "Lessons are not equal")
 
@@ -44,7 +44,7 @@ class APITest(TimeTableTestMixin, ClientTestMixin):
         serializer.is_valid(raise_exception=True)
     
     def test_lessons_serializer(self):
-        lessons = self.Create_lessons()
+        lessons = self.Create_lessons_data()
         
         data = LessonDataSerializer(lessons, many=True).data
         serializer = LessonDataSerializer(data=data, many=True)
@@ -59,7 +59,7 @@ class APITest(TimeTableTestMixin, ClientTestMixin):
     
     def test_get_all(self):
         timetable = self.Create_timetable(
-            lessons=self.Create_lessons(associated_user=self.logged_user)
+            lessons_data=self.Create_lessons_data(associated_user=self.logged_user)
         )
         
         response = self.client.get("/api/timetable/")
@@ -71,7 +71,7 @@ class APITest(TimeTableTestMixin, ClientTestMixin):
     
     def test_get_single(self):
         timetable = self.Create_timetable(
-            lessons=self.Create_lessons(associated_user=self.logged_user)
+            lessons_data=self.Create_lessons_data(associated_user=self.logged_user)
         )
         
         response = self.client.get(
@@ -84,7 +84,7 @@ class APITest(TimeTableTestMixin, ClientTestMixin):
     
     def test_get_privacy(self):
         self.Create_timetable(
-            lessons=self.Create_lessons(associated_user=self.logged_user)
+            lessons_data=self.Create_lessons_data(associated_user=self.logged_user)
         )
         self.client.logout()
         second_user = self.Login_user()

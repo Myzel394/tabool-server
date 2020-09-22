@@ -40,7 +40,7 @@ class LessonTestMixin(
         )
     
     @classmethod
-    def Create_lessons(
+    def Create_lessons_data(
             cls,
             start_time: Optional[time] = None,
             end_time: Optional[time] = None,

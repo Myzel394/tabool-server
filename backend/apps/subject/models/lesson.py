@@ -1,13 +1,11 @@
 from django.db import models
-from django_common_utils.libraries.models import RandomIDMixin
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.utils import model_verbose
+from django_common_utils.libraries.models import RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
-from .. import constants, model_references, model_verbose_functions
-from ..validators import validate_lesson_weekday
+from .. import model_references, model_verbose_functions
 from ..querysets import LessonQuerySet
-
+from ..validators import validate_lesson_weekday
 
 __all__ = [
     "Lesson"
@@ -19,7 +17,7 @@ class Lesson(RandomIDMixin):
         verbose_name = _("Stunde")
         verbose_name_plural = _("Stunden")
         unique_together = (
-            ("lesson", "date")
+            ("lesson_data", "date")
         )
     
     objects = LessonQuerySet.as_manager()

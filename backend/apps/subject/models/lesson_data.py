@@ -85,8 +85,9 @@ class LessonData(RandomIDMixin, AssociatedUserMixin):
     def homeworks(self) -> QueryType[Union["TeacherHomework", "UserHomework"]]:
         return self.teacher_homeworks | self.associated_user_id
     
-    @property
-    def lesson(self) -> "Lesson":
-        return self.objects.get_or_create_lesson(
+    def get_lesson(self, **kwargs) -> "Lesson":
+        from ..actions import lesson_data_to_lesson
+        return lesson_data_to_lesson(
             lesson_data=self,
+            **kwargs
         )

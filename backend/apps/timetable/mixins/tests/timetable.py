@@ -18,7 +18,7 @@ class TimeTableTestMixin(
     def Create_timetable(cls, **kwargs) -> TimeTable:
         return TimeTable.objects.create_with_lessons(
             **{
-                "lessons": cls.Create_lessons(),
+                "lessons_data": cls.Create_lessons_data(),
                 **kwargs
             }
         )
