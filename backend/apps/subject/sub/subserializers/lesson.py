@@ -1,6 +1,6 @@
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 
-from apps.utils.serializers import IdMixinSerializer
+from apps.utils.serializers import RandomIDSerializerMixin
 from .lesson_data import LessonDataDetailSerializer, LessonDataListSerializer
 from ...models import Lesson
 
@@ -9,7 +9,7 @@ __all__ = [
 ]
 
 
-class LessonListSerializer(IdMixinSerializer):
+class LessonListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Lesson
         fields = [
@@ -19,7 +19,7 @@ class LessonListSerializer(IdMixinSerializer):
     lesson_data = LessonDataListSerializer()
 
 
-class LessonDetailSerializer(IdMixinSerializer, WritableNestedModelSerializer):
+class LessonDetailSerializer(RandomIDSerializerMixin, WritableNestedModelSerializer):
     class Meta:
         model = Lesson
         fields = [

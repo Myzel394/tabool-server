@@ -1,6 +1,6 @@
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 
-from apps.utils.serializers import IdMixinSerializer
+from apps.utils.serializers import AssociatedUserSerializerMixin, RandomIDSerializerMixin
 from .room import RoomDetailSerializer
 from .subject import SubjectDetailSerializer
 from .teacher import TeacherDetailSerializer
@@ -11,7 +11,7 @@ __all__ = [
 ]
 
 
-class LessonDataListSerializer(IdMixinSerializer):
+class LessonDataListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = LessonData
         fields = [
@@ -21,7 +21,11 @@ class LessonDataListSerializer(IdMixinSerializer):
     subject = SubjectDetailSerializer()
 
 
-class LessonDataDetailSerializer(IdMixinSerializer, WritableNestedModelSerializer):
+class LessonDataDetailSerializer(
+    RandomIDSerializerMixin,
+    AssociatedUserSerializerMixin,
+    WritableNestedModelSerializer
+):
     class Meta:
         model = LessonData
         fields = [
@@ -31,8 +35,3 @@ class LessonDataDetailSerializer(IdMixinSerializer, WritableNestedModelSerialize
     teacher = TeacherDetailSerializer()
     room = RoomDetailSerializer()
     subject = SubjectDetailSerializer()
-    
-    def create(self, validated_data):
-        validated_data["associated_user"] = self.context["request"].user
-        
-        return super().create(validated_data)

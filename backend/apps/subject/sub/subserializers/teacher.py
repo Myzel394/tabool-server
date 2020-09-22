@@ -1,4 +1,4 @@
-from apps.utils.serializers import IdMixinSerializer
+from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Teacher
 
 __all__ = [
@@ -6,13 +6,13 @@ __all__ = [
 ]
 
 
-class TeacherListSerializer(IdMixinSerializer):
+class TeacherListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Teacher
         fields = ["last_name", "short_name", "id"]
 
 
-class TeacherDetailSerializer(IdMixinSerializer):
+class TeacherDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Teacher
         fields = ["first_name", "last_name", "short_name", "email", "id"]

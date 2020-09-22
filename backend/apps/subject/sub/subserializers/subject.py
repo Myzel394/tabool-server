@@ -1,4 +1,4 @@
-from apps.utils.serializers import IdMixinSerializer
+from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Subject
 
 __all__ = [
@@ -6,7 +6,7 @@ __all__ = [
 ]
 
 
-class SubjectDetailSerializer(IdMixinSerializer):
+class SubjectDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Subject
         fields = ["name", "color", "id"]

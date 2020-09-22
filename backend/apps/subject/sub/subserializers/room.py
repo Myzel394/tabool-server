@@ -1,4 +1,4 @@
-from apps.utils.serializers import IdMixinSerializer
+from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Room
 
 __all__ = [
@@ -6,7 +6,7 @@ __all__ = [
 ]
 
 
-class RoomDetailSerializer(IdMixinSerializer):
+class RoomDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Room
         fields = ["place", "id"]

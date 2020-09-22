@@ -1,19 +1,19 @@
 from apps.subject.sub.subserializers import LessonDataDetailSerializer
 from apps.timetable.models import TimeTable
-from apps.utils.serializers import IdMixinSerializer
+from apps.utils.serializers import RandomIDSerializerMixin
 
 __all__ = [
     "TimeTableDetailSerializer", "TimeTableListSerializer"
 ]
 
 
-class TimeTableListSerializer(IdMixinSerializer):
+class TimeTableListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = TimeTable
         fields = ["designation", "id"]
 
 
-class TimeTableDetailSerializer(IdMixinSerializer):
+class TimeTableDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = TimeTable
         fields = ["lessons_data", "designation", "id"]
