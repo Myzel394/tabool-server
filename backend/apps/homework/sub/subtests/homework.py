@@ -1,10 +1,14 @@
 import json
+from pprint import pp
 
 import lorem
 
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
 from apps.homework.models import TeacherHomework, UserHomework
-from apps.homework.sub.subserializers import TeacherHomeworkListSerializer, UserHomeworkDetailSerializer
+from apps.homework.sub.subserializers import (
+    TeacherHomeworkListSerializer, UserHomeworkDetailSerializer,
+    UserHomeworkListSerializer,
+)
 from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.utils.tests import ClientTestMixin
 
@@ -64,6 +68,47 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         homework.refresh_from_db(fields=["information"])
         self.assertEqual(homework.information, new_information)
+
+
+class CustomAPITest(HomeworkTestMixin, ClientTestMixin):
+    def setUp(self) -> None:
+        self.logged_user = self.Login_user()
+        self.__class__.associated_user = self.logged_user
+    
+    def test_temp(self):
+        subject = self.Create_subject()
+        homeworks = [
+            self.Create_user_homework(
+                lesson=self.Create_lesson(
+                    lesson_data=self.Create_lesson_data(
+                        subject=subject
+                    )
+                )
+            )
+            for _ in range(1)
+        ]
+        
+        response = self.client.get(
+            "/api/user-homework/by-subject/",
+            {
+                "subject": subject.id
+            },
+            content_type="application/json"
+        )
+        
+        self.assertStatusOk(response.status_code)
+        
+        [
+            homework.refresh_from_db()
+            for homework in homeworks
+        ]
+        
+        expected_data = json.loads(json.dumps(UserHomeworkListSerializer(homeworks, many=True).data))
+        actual_data = json.loads(json.dumps(response.data))
+        
+        self.assertEqual(expected_data, actual_data)
+        
+        pp(response.data)
 
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):

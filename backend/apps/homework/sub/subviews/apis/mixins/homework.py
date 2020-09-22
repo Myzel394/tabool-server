@@ -1,34 +1,22 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.handlers.wsgi import WSGIRequest
 from django.utils.translation import gettext_lazy as _
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from apps.homework.sub.subserializers import HomeworkBySubjectSerializer
 from apps.subject.models import Subject
 from apps.subject.sub.subquerysets import SubjectQuerySet
-from ...subserializers import HomeworkBySubjectSerializer, UserHomeworkDetailSerializer, UserHomeworkListSerializer
-from ....models import UserHomework
-
-__all__ = [
-    "UserHomeworkViewSet"
-]
 
 
-class UserHomeworkViewSet(viewsets.ModelViewSet):
+class HomeworkBySubjectMixin(viewsets.ModelViewSet):
     permission_classes = [
         IsAuthenticated
     ]
     
-    def get_queryset(self):
-        return UserHomework.objects.from_user(self.request.user)
-    
-    def get_serializer_class(self):
-        if self.action in ["list", "by_subject"]:
-            return UserHomeworkListSerializer
-        return UserHomeworkDetailSerializer
+    # TODO: Diese Klasse verallgemeinern (mit Reference object etc)
     
     def get_subject_queryset(self) -> SubjectQuerySet:
         return Subject.objects.all().from_user(self.request.user)

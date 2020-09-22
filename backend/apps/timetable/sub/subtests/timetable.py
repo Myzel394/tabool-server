@@ -24,6 +24,7 @@ class ModelTest(LessonTestMixin, UserCreationTestMixin):
 
 
 # TODO: Remove unnecessary tests
+# TODO: User model adden!
 
 # noinspection DuplicatedCode
 class APITest(TimetableTestMixin, ClientTestMixin):
