@@ -6,10 +6,10 @@ from django_common_utils.libraries.models import RandomIDMixin
 from django_common_utils.libraries.utils import model_verbose
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
+from apps.subject import model_references, model_verbose_functions
 from apps.utils.models import AddedAtMixin
 from apps.utils.time import format_datetime
 from ...validators import validate_only_future_days
-from apps.subject import model_verbose_functions, model_references
 
 __all__ = [
     "BaseHomeworkMixin"
@@ -47,14 +47,6 @@ class BaseHomeworkMixin(
     completed = models.BooleanField(
         verbose_name=_("Erledigt"),
         default=False,
-    )
-    
-    homework_type = models.CharField(
-        max_length=127,
-        verbose_name=_("Hausaufgaben-Typ"),
-        help_text=_("Beispiel: Vortag, Hausaufgabe, Protokoll, Hausarbeit"),
-        blank=True,
-        null=True
     )
     
     @hook(BEFORE_CREATE)

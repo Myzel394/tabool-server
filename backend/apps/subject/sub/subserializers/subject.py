@@ -2,11 +2,11 @@ from apps.utils.serializers import IdMixinSerializer
 from ...models import Subject
 
 __all__ = [
-    "SubjectSerializer"
+    "SubjectDetailSerializer"
 ]
 
 
-class SubjectSerializer(IdMixinSerializer):
+class SubjectDetailSerializer(IdMixinSerializer):
     class Meta:
         model = Subject
         fields = ["name", "color", "id"]

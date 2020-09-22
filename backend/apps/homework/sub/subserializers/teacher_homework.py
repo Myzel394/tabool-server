@@ -1,20 +1,29 @@
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 
-from apps.subject.sub.subserializers import LessonDataSerializer, TeacherSerializer
+from apps.subject.sub.subserializers import LessonDetailSerializer, LessonListSerializer
 from apps.utils.serializers import IdMixinSerializer
 from ...models import TeacherHomework
 
 __all__ = [
-    "TeacherHomeworkSerializer"
+    "TeacherHomeworkListSerializer", "TeacherHomeworkDetailSerializer"
 ]
 
 
-class TeacherHomeworkSerializer(IdMixinSerializer, WritableNestedModelSerializer):
+class TeacherHomeworkListSerializer(IdMixinSerializer):
     class Meta:
         model = TeacherHomework
         fields = [
-            "lessons", "due_date", "information", "completed", "homework_type", "id", "teacher"
+            "lesson", "due_date", "completed", "id"
         ]
     
-    lesson = LessonDataSerializer()
-    teacher = TeacherSerializer()
+    lesson = LessonListSerializer()
+
+
+class TeacherHomeworkDetailSerializer(IdMixinSerializer, WritableNestedModelSerializer):
+    class Meta:
+        model = TeacherHomework
+        fields = [
+            "lesson", "due_date", "information", "completed", "id"
+        ]
+    
+    lesson = LessonDetailSerializer()

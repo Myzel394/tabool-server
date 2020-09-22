@@ -20,7 +20,7 @@ class Teacher(RandomIDMixin, HandlerMixin):
     class Meta:
         verbose_name = _("Lehrer")
         verbose_name_plural = _("Lehrer")
-        ordering = ("last_name", "first_name", "email")
+        ordering = ("last_name", "first_name", "short_name", "email")
     
     first_name = models.CharField(
         verbose_name=_("Vorname"),
@@ -32,6 +32,13 @@ class Teacher(RandomIDMixin, HandlerMixin):
     last_name = models.CharField(
         verbose_name=_("Letzter Name"),
         max_length=maxlength.SECOND_NAME
+    )
+    
+    short_name = models.CharField(
+        verbose_name=_("Kürzel"),
+        max_length=3,
+        blank=True,
+        null=True
     )
     
     email = models.EmailField(

@@ -46,5 +46,5 @@ class BaseHomeworkQuerySetMixin(CustomQuerySetMixin.QuerySet):
     def by_subject(self, subject: "Subject") -> "BaseHomeworkQuerySetMixin":
         return self.filter(lesson__subject=subject)
     
-    def from_user(self, user: settings.AUTH_USER_MODEL) -> "UserHomeworkQuerySet":
-        return self.filter(lesson__associated_user=user)
+    def from_user(self, user: settings.AUTH_USER_MODEL) -> "BaseHomeworkQuerySetMixin":
+        return self.filter(lesson__lesson_data__associated_user=user)

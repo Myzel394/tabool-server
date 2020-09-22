@@ -2,11 +2,11 @@ from apps.utils.serializers import IdMixinSerializer
 from ...models import Room
 
 __all__ = [
-    "RoomSerializer"
+    "RoomDetailSerializer"
 ]
 
 
-class RoomSerializer(IdMixinSerializer):
+class RoomDetailSerializer(IdMixinSerializer):
     class Meta:
         model = Room
         fields = ["place", "id"]

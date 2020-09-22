@@ -25,7 +25,6 @@ class HomeworkTestMixin(LessonTestMixin, ABC):
     def Create_teacher_homework(cls, **kwargs) -> TeacherHomework:
         return TeacherHomework.objects.create(
             **{
-                "teacher": cls.Create_teacher(),
                 "lesson": cls.Create_lesson(),
                 "due_date": cls.get_random_due_date(),
                 **kwargs
