@@ -5,11 +5,15 @@ from django_common_utils.libraries.models import RandomIDMixin
 from .. import model_references, model_verbose_functions
 from ...utils.models import AssociatedUserMixin
 
+__all__ = [
+    "EventUserOption"
+]
 
-class EventUserRelation(RandomIDMixin, AssociatedUserMixin):
+
+class EventUserOption(RandomIDMixin, AssociatedUserMixin):
     class Meta:
-        verbose_name = _("Event-Benutzer-Bindung")
-        verbose_name_plural = _("Event-Benutzer-Bindungen")
+        verbose_name = _("Event-Benutzer-Einstellung")
+        verbose_name_plural = _("Event-Benutzer-Einstellungen")
         unique_together = (
             ("event", "associated_user")
         )
@@ -18,4 +22,9 @@ class EventUserRelation(RandomIDMixin, AssociatedUserMixin):
         model_references.EVENT,
         verbose_name=model_verbose_functions.event_single,
         on_delete=models.CASCADE,
+    )
+    
+    ignore = models.BooleanField(
+        verbose_name=_("Ignorieren"),
+        default=False,
     )

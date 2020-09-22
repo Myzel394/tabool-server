@@ -3,8 +3,12 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStripHandler
 from django_common_utils.libraries.models import RandomIDMixin
 
-import constants
 from apps.subject import model_references, model_verbose_functions
+from constants import maxlength
+
+__all__ = [
+    "Event"
+]
 
 
 class Event(RandomIDMixin, HandlerMixin):
@@ -22,7 +26,7 @@ class Event(RandomIDMixin, HandlerMixin):
     
     title = models.CharField(
         verbose_name=_("Titel"),
-        max_length=constants.TITLE
+        max_length=maxlength.TITLE
     )
     
     start_datetime = models.DateTimeField(
