@@ -2,9 +2,6 @@ from rest_framework import serializers
 
 from ...models import User
 
-# TODO: Add field-level exceptions!
-
-
 __all__ = [
     "UserDetailSerializer"
 ]
