@@ -1,8 +1,12 @@
-from django.test import TestCase
+import names
 from django.contrib.auth import get_user_model
+from rest_framework.exceptions import ValidationError
+
+from apps.authentication.models import AccessToken
+from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
 
 
-class UsersManagersTests(TestCase):
+class ModelTest(UserCreationTestMixin, ClientTestMixin):
     def test_create_user(self):
         User = get_user_model()
         user = User.objects.create_user(email='normal@user.com', password='foo')
@@ -39,3 +43,35 @@ class UsersManagersTests(TestCase):
         with self.assertRaises(ValueError):
             User.objects.create_superuser(
                 email='super@user.com', password='foo', is_superuser=False)
+    
+    def test_token(self):
+        self.Login_user()
+        access_token = AccessToken.objects.create()
+        
+        # Simple creation check
+        self.client.post("/api/authentication/", {
+            "first_name": names.get_first_name(),
+            "last_name": names.get_last_name(),
+            "password": names.get_first_name(),
+            "email": f"{names.get_first_name()}@gmail.com",
+            "token": access_token
+        }, content_type="application/json")
+        
+        # Double token check
+        with self.assertRaises(ValidationError):
+            self.client.post("/api/authentication/", {
+                "first_name": names.get_first_name(),
+                "last_name": names.get_last_name(),
+                "password": names.get_first_name(),
+                "email": f"{names.get_first_name()}@gmail.com",
+                "token": access_token
+            }, content_type="application/json")
+        
+        # No token check
+        with self.assertRaises(ValidationError):
+            self.client.post("/api/authentication/", {
+                "first_name": names.get_first_name(),
+                "last_name": names.get_last_name(),
+                "password": names.get_first_name(),
+                "email": f"{names.get_first_name()}@gmail.com",
+            }, content_type="application/json")
