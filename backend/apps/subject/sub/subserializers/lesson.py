@@ -13,8 +13,9 @@ class LessonListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Lesson
         fields = [
-            "lesson_data", "date", "attendance", "id"
+            "lesson_data", "date", "id"
         ]
+        read_only_fields = ["id"]
     
     lesson_data = LessonDataListSerializer()
 
@@ -25,5 +26,6 @@ class LessonDetailSerializer(RandomIDSerializerMixin, WritableNestedModelSeriali
         fields = [
             "lesson_data", "date", "attendance", "id"
         ]
+        read_only_fields = ["id"]
     
     lesson_data = LessonDataDetailSerializer()

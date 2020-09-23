@@ -1,7 +1,6 @@
-from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
 
 from ...models import User
 
@@ -46,15 +45,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
         fields = [
             "email", "first_name", "last_name", "password", "id"
         ]
-        extra_kwargs = {
-            "password": {
-                "write_only": True,
-                "required": True
-            },
-            "email": {
-                "required": True
-            }
-        }
+        read_only_fields = ["id"]
     
     def create(self, validated_data):
         return User.objects.create_user(
@@ -62,4 +53,3 @@ class UserDetailSerializer(serializers.ModelSerializer):
             validated_data.pop("password"),
             **validated_data
         )
-

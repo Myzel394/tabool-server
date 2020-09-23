@@ -11,6 +11,7 @@ class EventUserOptionListSerializer(serializers.ModelSerializer):
         fields = [
             "event", "id"
         ]
+        read_only_fields = ["event", "id"]
     
     event = EventListSerializer()
 
@@ -21,5 +22,6 @@ class EventUserOptionDetailSerializer(WritableNestedModelSerializer):
         fields = [
             "event", "ignore", "id"
         ]
+        read_only_fields = ["event", "id"]
     
     event = EventDetailSerializer()

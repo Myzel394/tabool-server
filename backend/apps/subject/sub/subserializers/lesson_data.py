@@ -17,8 +17,12 @@ class LessonDataListSerializer(RandomIDSerializerMixin):
         fields = [
             "subject", "start_time", "end_time", "weekday", "id"
         ]
+        read_only_fields = ["id"]
     
     subject = SubjectDetailSerializer()
+
+
+# TODO: News model hinzufügen!
 
 
 class LessonDataDetailSerializer(
@@ -31,6 +35,7 @@ class LessonDataDetailSerializer(
         fields = [
             "teacher", "room", "subject", "start_time", "end_time", "weekday", "id"
         ]
+        read_only_fields = ["id"]
     
     teacher = TeacherDetailSerializer()
     room = RoomDetailSerializer()
