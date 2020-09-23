@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_common_utils.apps.Config",
     
+    "apps.authentication",
     "apps.subject",
     "apps.event",
     "apps.homework",
@@ -56,7 +57,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
+    "apps.authentication.middlewares.EnsureAuthenticationToken",
 ]
+
+AUTH_USER_MODEL = "authentication.User"
 
 ROOT_URLCONF = "project.urls"
 

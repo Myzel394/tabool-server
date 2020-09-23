@@ -2,8 +2,8 @@ from datetime import datetime, time, timedelta
 from typing import *
 
 import names
+from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
 from apps.utils.time import dummy_datetime_from_time
@@ -11,7 +11,7 @@ from apps.utils.time import dummy_datetime_from_time
 
 class UserCreationTestMixin(TestCase):
     @staticmethod
-    def Create_user() -> User:
+    def Create_user() -> settings.AUTH_USER_MODEL:
         Model = get_user_model()
         first_name = names.get_first_name()
         while True:
@@ -28,7 +28,11 @@ class UserCreationTestMixin(TestCase):
             password=first_name
         )
     
-    def Login_user(self, user: Optional[User] = None, password: Optional[str] = None) -> User:
+    def Login_user(
+            self,
+            user: Optional[settings.AUTH_USER_MODEL] = None,
+            password: Optional[str] = None
+    ) -> settings.AUTH_USER_MODEL:
         """Logs the client in and returns the user with which the client was logged in"""
         self.assertTrue(hasattr(self, "client"), "`client` not available. Add it to the mixins of the test class.")
         
