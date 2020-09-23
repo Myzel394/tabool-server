@@ -1,5 +1,6 @@
 import names
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.authentication.models import AccessToken
@@ -46,32 +47,62 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
     
     def test_token(self):
         self.Login_user()
-        access_token = AccessToken.objects.create()
+        access_token: AccessToken = AccessToken.objects.create()
         
         # Simple creation check
-        self.client.post("/api/authentication/", {
+        self.client.post("/api/authentication/registration/", {
             "first_name": names.get_first_name(),
             "last_name": names.get_last_name(),
             "password": names.get_first_name(),
             "email": f"{names.get_first_name()}@gmail.com",
-            "token": access_token
+            "token": access_token.token
+        }, content_type="application/json")
+        
+        self.client.post("/api/authentication/registration/", {
+            "first_name": names.get_first_name(),
+            "last_name": names.get_last_name(),
+            "password": names.get_first_name(),
+            "email": f"{names.get_first_name()}@gmail.com",
+            "token": "a" * AccessToken.TOKEN_LENGTH
         }, content_type="application/json")
         
         # Double token check
-        with self.assertRaises(ValidationError):
-            self.client.post("/api/authentication/", {
+        with self.assertRaises(serializers.ValidationError):
+            self.client.post("/api/authentication/registration/", {
                 "first_name": names.get_first_name(),
                 "last_name": names.get_last_name(),
                 "password": names.get_first_name(),
                 "email": f"{names.get_first_name()}@gmail.com",
-                "token": access_token
+                "token": "a" * AccessToken.TOKEN_LENGTH
             }, content_type="application/json")
         
         # No token check
         with self.assertRaises(ValidationError):
-            self.client.post("/api/authentication/", {
+            self.client.post("/api/authentication/registration/", {
                 "first_name": names.get_first_name(),
                 "last_name": names.get_last_name(),
                 "password": names.get_first_name(),
                 "email": f"{names.get_first_name()}@gmail.com",
+            }, content_type="application/json")
+    
+    def test_forgot_password(self):
+        password = "awesome_password"
+        
+        user = self.Create_user(
+            password=password
+        )
+        
+        self.Login_user(user, password)
+        
+        self.client.post("/api/authentication/change-password/", {
+            "old_password": password,
+            "new_password": password + "abc",
+            "user": user.id
+        }, content_type="application/json")
+        
+        with self.assertRaises(ValidationError):
+            self.client.post("/api/authentication/change-password/", {
+                "old_password": password + "abc",
+                "new_password": password,
+                "user": user.id
             }, content_type="application/json")

@@ -54,7 +54,7 @@ class User(AbstractUser, LifecycleModel):
                 )
             )
             
-            if self.objects.only("id").get(id=random_id):
+            if not self.__class__.objects.only("id").filter(id=random_id).exists():
                 break
         
         self.id = random_id

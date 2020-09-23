@@ -11,7 +11,7 @@ from apps.utils.time import dummy_datetime_from_time
 
 class UserCreationTestMixin(TestCase):
     @staticmethod
-    def Create_user() -> settings.AUTH_USER_MODEL:
+    def Create_user(**kwargs) -> settings.AUTH_USER_MODEL:
         Model = get_user_model()
         first_name = names.get_first_name()
         while True:
@@ -21,10 +21,13 @@ class UserCreationTestMixin(TestCase):
                 break
         
         return Model.objects.create_user(
-            first_name=first_name,
-            last_name=last_name,
-            email=f"{first_name}.{last_name}@gmail.com",
-            password=first_name
+            **{
+                "first_name": first_name,
+                "last_name": last_name,
+                "email": f"{first_name}.{last_name}@gmail.com",
+                "password": first_name,
+                **kwargs
+            }
         )
     
     def Login_user(
@@ -38,7 +41,7 @@ class UserCreationTestMixin(TestCase):
         user = user or self.Create_user()
         
         is_login = self.client.login(
-            username=user.username,
+            email=user.email,
             password=password or user.first_name
         )
         
