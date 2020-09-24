@@ -6,19 +6,18 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 from django_hint import StandardModelType
-from rest_framework import serializers, viewsets
+from rest_framework import serializers
 from rest_framework.response import Response
 
 
 # TODO: remove `read_only = ["id"]`!
-# TODO: remove Modelserializer inheritance!
-class RandomIDSerializerMixin(serializers.ModelSerializer):
+class RandomIDSerializerMixin:
     id = serializers.CharField(
         read_only=True,
     )
 
 
-class AssociatedUserSerializerMixin(serializers.ModelSerializer):
+class AssociatedUserSerializerMixin:
     def update(self, instance, validated_data):
         validated_data.pop("associated_user", None)
         return super().update(instance, validated_data)
@@ -43,7 +42,6 @@ class RetrieveObjectByIDSerializerField(serializers.CharField):
         return obj
 
 
-# TODO: Das hier bei HomeworkBySubjectMixin hinzufügen!
 class ReferencedObjectViewSetMixin:
     validated_data_key: str
     validate_serializer_class: Type[serializers.Serializer]

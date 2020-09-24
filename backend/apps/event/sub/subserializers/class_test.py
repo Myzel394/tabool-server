@@ -15,7 +15,6 @@ class ClassTestListSerializer(serializers.ModelSerializer):
         fields = [
             "subject", "targeted_date", "id"
         ]
-        read_only_fields = ["id"]
     
     subject = SubjectDetailSerializer()
 
@@ -26,7 +25,6 @@ class ClassTestDetailSerializer(WritableNestedModelSerializer):
         fields = [
             "subject", "targeted_date", "information", "room", "id"
         ]
-        read_only_fields = ["id"]
     
     subject = SubjectDetailSerializer()
     room = RoomDetailSerializer()

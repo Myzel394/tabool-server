@@ -15,7 +15,6 @@ class EventListSerializer(serializers.ModelSerializer):
         fields = [
             "title", "start_datetime", "end_datetime", "id"
         ]
-        read_only_fields = ["id"]
 
 
 class EventDetailSerializer(WritableNestedModelSerializer):
@@ -24,6 +23,5 @@ class EventDetailSerializer(WritableNestedModelSerializer):
         fields = [
             "room", "title", "start_datetime", "end_datetime", "id"
         ]
-        read_only_fields = ["id"]
     
     room = RoomDetailSerializer()

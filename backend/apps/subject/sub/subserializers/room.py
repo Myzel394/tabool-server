@@ -10,4 +10,3 @@ class RoomDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Room
         fields = ["place", "id"]
-        read_only_fields = ["id"]
