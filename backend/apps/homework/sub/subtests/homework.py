@@ -85,7 +85,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         homework.refresh_from_db(fields=["information"])
         self.assertEqual(homework.information, new_information)
     
-    def x_test_filtering(self):
+    def test_filtering(self):
         # This homework should not be found
 
         lesson = self.Create_lesson()
