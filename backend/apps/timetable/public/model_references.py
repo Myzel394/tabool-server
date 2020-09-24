@@ -1,4 +1,4 @@
-from . import constants
+from apps.timetable import constants
 
 __all__ = [
     "TIMETABLE"

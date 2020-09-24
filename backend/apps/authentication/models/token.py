@@ -8,14 +8,15 @@ from django_common_utils.libraries.models.mixins.common import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import CreationDateMixin
 from django_lifecycle import BEFORE_CREATE, hook
 
-from apps.utils.model_verbose_functions import user_single
-
 
 # TODO: Creation date zu verschiedenen Modeln hinzufügen
 
 __all__ = [
     "AccessToken"
 ]
+
+from apps.authentication.public.model_references import USER
+from apps.authentication.public.model_verbose_functions import user_single
 
 
 class AccessToken(RandomIDMixin, CreationDateMixin):
@@ -26,7 +27,7 @@ class AccessToken(RandomIDMixin, CreationDateMixin):
     TOKEN_LENGTH = 255
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        USER,
         verbose_name=user_single,
         on_delete=models.CASCADE,
         blank=True,

@@ -6,7 +6,7 @@ from django_common_utils.libraries.models import RandomIDMixin
 from django_common_utils.libraries.utils import model_verbose
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
-from apps.subject import model_references, model_verbose_functions
+from apps.subject.public import model_references, model_verbose_functions
 from apps.utils.models import AddedAtMixin
 from apps.utils.time import format_datetime
 from apps.utils.validators import validate_weekday_in_lesson_data_available

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import RandomIDMixin
 
-from .. import model_references, model_verbose_functions
+from ..public import model_references, model_verbose_functions
 from ..sub.subquerysets import EventUserOptionQuerySet
 from ...utils.models import AssociatedUserMixin
 

@@ -5,8 +5,9 @@ from django.db import models
 from django.utils.translation import gettext as _
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
+from apps.authentication.public.model_references import USER
+from apps.authentication.public.model_verbose_functions import user_single
 from apps.utils.fields import ColorField
-from apps.utils.model_verbose_functions import user_single
 from constants import colors
 
 
@@ -30,7 +31,7 @@ class AssociatedUserMixin(models.Model):
         abstract = True
     
     associated_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        USER,
         verbose_name=user_single,
         on_delete=models.CASCADE,
         editable=False

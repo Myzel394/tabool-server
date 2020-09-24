@@ -7,7 +7,8 @@ from django_hint import QueryType
 
 from apps.utils.fields.weekday import WeekdayField
 from apps.utils.time import dummy_datetime_from_time, format_datetime
-from .. import constants, model_references, model_verbose_functions
+from .. import constants
+from ..public import model_references, model_verbose_functions
 from ..sub.subquerysets import LessonQuerySet
 from ..sub.subquerysets.lesson_data import LessonDataQuerySet
 

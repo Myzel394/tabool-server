@@ -4,7 +4,7 @@ from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStrip
 from django_common_utils.libraries.models import RandomIDMixin
 from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
-from apps.subject import model_references, model_verbose_functions
+from ...subject.public import model_references, model_verbose_functions
 from apps.utils.validators import validate_weekday_in_lesson_data_available
 from constants import maxlength
 from .event_user_option import EventUserOption

@@ -7,9 +7,6 @@ __all__ = [
 ]
 
 
-# TODO: Add password changer
-
-
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

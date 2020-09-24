@@ -1,4 +1,4 @@
-from . import constants
+from apps.event import constants
 
 __all__ = [
     "CLASS_TEST", "EVENT", "EVENT_USER_OPTION"

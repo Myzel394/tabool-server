@@ -1,4 +1,4 @@
-from . import constants
+from apps.homework import constants
 
 __all__ = [
     "TEACHER_HOMEWORK", "USER_HOMEWORK"
