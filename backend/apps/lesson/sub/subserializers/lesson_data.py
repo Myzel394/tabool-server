@@ -7,7 +7,7 @@ from .teacher import TeacherDetailSerializer
 from ...models import LessonData
 
 __all__ = [
-    "LessonDataListSerializer", "LessonDataDetailSerializer"
+    "LessonDataListSerializer", "LessonDataDetailSerializer", "LessonDataIDSerializer"
 ]
 
 
@@ -38,3 +38,9 @@ class LessonDataDetailSerializer(
     teacher = TeacherDetailSerializer()
     room = RoomDetailSerializer()
     subject = SubjectDetailSerializer()
+
+
+class LessonDataIDSerializer(RandomIDSerializerMixin):
+    class Meta:
+        model = LessonData
+        fields = ["id"]

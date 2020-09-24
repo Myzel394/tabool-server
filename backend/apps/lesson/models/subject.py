@@ -30,6 +30,12 @@ class Subject(RandomIDMixin, HandlerMixin, ColorMixin, AssociatedUserMixin):
         verbose_name=_("Name"),
         max_length=maxlength.SUBJECT
     )
+    suffix = models.CharField(
+        verbose_name=_("Suffix"),
+        max_length=31,
+        blank=True,
+        null=True
+    )
     
     def __str__(self):
         return self.name

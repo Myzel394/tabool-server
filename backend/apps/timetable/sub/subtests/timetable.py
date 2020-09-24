@@ -1,9 +1,11 @@
 import json
+from datetime import date, timedelta
 from pprint import pp
 
 from apps.lesson.mixins.tests import LessonTestMixin
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
-from apps.lesson.serializers import LessonDataDetailSerializer, SubjectDetailSerializer
+from apps.lesson.models import Lesson
+from apps.lesson.serializers import LessonDataDetailSerializer, LessonListSerializer, SubjectDetailSerializer
 from apps.timetable.models import Timetable
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
 from ..subserializers import TimetableDetailSerializer, TimetableListSerializer
@@ -93,6 +95,30 @@ class APITest(TimetableTestMixin, ClientTestMixin):
         self.assertEqual(response.status_code, 200)
         
         self.assertEqual(response.data, [])
+    
+    def test_lesson_creation(self):
+        timetable = self.Create_timetable()
+        
+        response = self.client.get(
+            f"/api/timetable/{timetable.id}/lessons/",
+            {
+                "start_date": date.today(),
+                "end_date": date.today() + timedelta(days=3)
+            },
+            content_type="application/json"
+        )
+        
+        print(response.data)
+        self.assertStatusOk(response.status_code)
+        
+        self.assertCountEqual(
+            response.data,
+            LessonListSerializer(Lesson.objects.all().from_user(self.logged_user), many=True).data
+        )
+
+
+# TODO: AssociatedUser zu Timetable ändern! (Subjects hat jeder)
+# TODO: add User Preferences app!
 
 
 class QuerySetTest(TimetableTestMixin, AssociatedUserTestMixin):

@@ -7,10 +7,10 @@ from django_hint import QueryType
 
 from apps.utils.fields.weekday import WeekdayField
 from apps.utils.time import dummy_datetime_from_time, format_datetime
+from .lesson import Lesson
 from .. import constants
 from ..public import model_references, model_verbose_functions
-from ..sub.subquerysets import LessonQuerySet
-from ..sub.subquerysets.lesson_data import LessonDataQuerySet
+from ..sub.subquerysets import LessonDataQuerySet
 
 if TYPE_CHECKING:
     from apps.homework.models import TeacherHomework, Homework
@@ -28,14 +28,6 @@ class LessonData(RandomIDMixin):
         ordering = ("subject", "start_time")
     
     objects = LessonDataQuerySet.as_manager()
-    
-    teacher = models.ForeignKey(
-        model_references.TEACHER,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        verbose_name=model_verbose_functions.teacher_single,
-    )
     
     room = models.ForeignKey(
         model_references.ROOM,
@@ -75,19 +67,11 @@ class LessonData(RandomIDMixin):
         return int(difference.seconds / 60)
     
     @property
-    def teacher_homeworks(self) -> QueryType["TeacherHomework"]:
-        return self.teacherhomework_set.all()
-    
-    @property
-    def user_homeworks(self) -> QueryType["Homework"]:
-        return self.userhomework_set.all()
-    
-    @property
     def homeworks(self) -> QueryType[Union["TeacherHomework", "Homework"]]:
-        return self.teacher_homeworks | self.associated_user_id
+        return self.homework_set.all()
     
-    def get_lesson(self, **kwargs) -> "Lesson":
-        return LessonQuerySet.create_automatically(
+    def create_lesson(self, **kwargs) -> "Lesson":
+        return Lesson.objects.create_automatically(
             lesson_data=self,
             **kwargs
         )
