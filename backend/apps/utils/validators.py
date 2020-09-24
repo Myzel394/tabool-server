@@ -5,7 +5,7 @@ from typing import *
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from apps.subject.models import LessonData
+from apps.lesson.models import LessonData
 
 
 def validate_place(value: str) -> None:

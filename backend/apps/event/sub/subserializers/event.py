@@ -1,7 +1,7 @@
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
 
-from apps.subject.sub.subserializers import RoomDetailSerializer
+from apps.lesson.sub.subserializers import RoomDetailSerializer
 from ...models import Event
 
 __all__ = [

@@ -1,6 +1,6 @@
 from apps.utils.fields.weekday import WeekdayChoices
 
-APP_LABEL = "subject"
+APP_LABEL = "lesson"
 LESSON_ALLOWED_DAYS = [
     choice
     for choice in WeekdayChoices.choices

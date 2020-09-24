@@ -3,7 +3,7 @@ import lorem
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
 from apps.homework.models import Homework
 from apps.homework.sub.subserializers import (HomeworkDetailSerializer, HomeworkListSerializer)
-from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
+from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.utils.tests import ClientTestMixin
 
 __all__ = [

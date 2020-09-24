@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 from apps.event.mixins.tests.class_test import ClassTestTestMixin
 from apps.event.models import ClassTest
-from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
+from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.utils.date import find_next_date_by_weekday
 
 __all__ = [

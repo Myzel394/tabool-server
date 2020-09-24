@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.utils import model_verbose_plural
 from django_hint import QueryType
 
-from apps.subject.models import LessonData
+from apps.lesson.models import LessonData
 
 
 def validate_lessons_dont_overlap(lessons: QueryType[LessonData]):

@@ -4,8 +4,8 @@ from django_common_utils.libraries.handlers import HandlerMixin, TextOptimizerHa
 from django_common_utils.libraries.models import RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
-from ...subject.public import model_references, model_verbose_functions
 from ..querysets import ClassTestQuerySet
+from ...lesson.public import model_references, model_verbose_functions
 
 __all__ = [
     "ClassTest"

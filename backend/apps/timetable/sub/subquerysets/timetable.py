@@ -3,7 +3,7 @@ from typing import *
 from django.conf import settings
 from django_common_utils.libraries.models import CustomQuerySetMixin
 
-from apps.subject.models import LessonData
+from apps.lesson.models import LessonData
 
 if TYPE_CHECKING:
     from apps.timetable import TimeTable

@@ -5,8 +5,8 @@ from django_common_utils.libraries.handlers.mixins import TextOptimizerHandler, 
 from django_common_utils.libraries.models import RandomIDMixin
 from django_common_utils.libraries.utils import model_verbose
 
-from apps.subject import constants as subject_constants
-from apps.subject.models import Room
+from apps.lesson import constants as subject_constants
+from apps.lesson.models import Room
 from apps.utils.time import format_datetime
 from .choices import *
 
@@ -69,4 +69,3 @@ class ClassTest(RandomIDMixin):
         on_delete=models.CASCADE,
         verbose_name=_classtest_lesson_model_verbose
     )
-

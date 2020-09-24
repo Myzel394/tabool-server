@@ -1,4 +1,4 @@
-from apps.subject.sub.subserializers import LessonDataDetailSerializer
+from apps.lesson.sub.subserializers import LessonDataDetailSerializer
 from apps.timetable.models import Timetable
 from apps.utils.serializers import RandomIDSerializerMixin
 

@@ -1,6 +1,6 @@
 from abc import ABC
 
-from apps.subject.mixins.tests import LessonTestMixin
+from apps.lesson.mixins.tests import LessonTestMixin
 from apps.utils.tests import joinkwargs, UserCreationTestMixin
 from ...models import Timetable
 

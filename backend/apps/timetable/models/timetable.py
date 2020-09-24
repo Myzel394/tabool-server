@@ -5,11 +5,11 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import CustomQuerySetMixin, RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
-from ...subject.public import model_references, model_verbose_functions
 from apps.timetable.utils import create_designation_from_date
 from constants import maxlength
 from ..sub.subquerysets import TimetableQuerySet
 from ..validators import validate_lessons_dont_overlap
+from ...lesson.public import model_references, model_verbose_functions
 
 if TYPE_CHECKING:
     pass

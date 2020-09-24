@@ -1,7 +1,7 @@
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from rest_framework import serializers
 
-from apps.subject.sub.subserializers.lesson import LessonDetailSerializer
+from apps.lesson.sub.subserializers.lesson import LessonDetailSerializer
 from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Homework
 

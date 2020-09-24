@@ -1,7 +1,7 @@
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from rest_framework import serializers
 
-from apps.subject.sub.subserializers import RoomDetailSerializer, SubjectDetailSerializer
+from apps.lesson.sub.subserializers import RoomDetailSerializer, SubjectDetailSerializer
 from ...models import ClassTest
 
 __all__ = [

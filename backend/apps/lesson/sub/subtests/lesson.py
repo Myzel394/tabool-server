@@ -1,6 +1,6 @@
-from apps.subject.mixins.tests import LessonTestMixin
-from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
-from apps.subject.models import Lesson
+from apps.lesson.mixins.tests import LessonTestMixin
+from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
+from apps.lesson.models import Lesson
 
 __all__ = [
     "QuerySetTest"

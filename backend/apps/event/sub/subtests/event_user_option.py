@@ -1,4 +1,4 @@
-from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
+from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from ...models import EventUserOption
 
 __all__ = [

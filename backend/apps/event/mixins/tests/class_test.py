@@ -4,7 +4,7 @@ from datetime import date
 
 import lorem
 
-from apps.subject.mixins.tests import RoomTestMixin, SubjectTestMixin
+from apps.lesson.mixins.tests import RoomTestMixin, SubjectTestMixin
 from apps.utils.date import find_next_date_by_weekday
 from ...models import ClassTest
 

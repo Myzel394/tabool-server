@@ -1,4 +1,4 @@
-from apps.subject import constants
+from apps.lesson import constants
 
 __all__ = [
     "LESSON", "LESSON_DATA", "ROOM", "SUBJECT", "TEACHER"

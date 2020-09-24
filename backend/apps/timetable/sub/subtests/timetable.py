@@ -1,9 +1,9 @@
 import json
 from pprint import pp
 
-from apps.subject.mixins.tests import LessonTestMixin
-from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
-from apps.subject.serializers import LessonDataDetailSerializer, SubjectDetailSerializer
+from apps.lesson.mixins.tests import LessonTestMixin
+from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
+from apps.lesson.serializers import LessonDataDetailSerializer, SubjectDetailSerializer
 from apps.timetable.models import Timetable
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
 from ..subserializers import TimetableDetailSerializer, TimetableListSerializer

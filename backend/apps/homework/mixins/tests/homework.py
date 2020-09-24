@@ -2,8 +2,8 @@ import random
 from abc import ABC
 from datetime import datetime, timedelta
 
-from apps.subject.mixins.tests import LessonTestMixin
-from apps.subject.models import LessonData
+from apps.lesson.mixins.tests import LessonTestMixin
+from apps.lesson.models import LessonData
 from apps.utils.date import find_next_date_by_weekday
 from apps.utils.tests import joinkwargs
 from ...models import Homework

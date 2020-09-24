@@ -6,7 +6,7 @@ from django.db.models import Q
 from django_common_utils.libraries.models import CustomQuerySetMixin
 
 if TYPE_CHECKING:
-    from apps.subject.models import Subject
+    from apps.lesson.models import Subject
 
 __all__ = [
     "HomeworkQuerySet"

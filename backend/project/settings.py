@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "django_common_utils.apps.Config",
     
     "apps.authentication",
-    "apps.subject",
+    "apps.lesson",
     "apps.event",
     "apps.homework",
     "apps.timetable",
