@@ -82,6 +82,10 @@ def joinkwargs(defaults: Dict[str, Callable], given: dict, /) -> dict:
             data[key] = given[key]
         else:
             data[key] = value()
-            
+    
+    remaining_keys = set(given.keys()) - set(defaults.keys())
+    
+    for key in remaining_keys:
+        data[key] = given[key]
+    
     return data
-

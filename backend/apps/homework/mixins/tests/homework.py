@@ -13,17 +13,13 @@ class HomeworkTestMixin(LessonTestMixin, ABC):
     @staticmethod
     def get_random_due_date() -> datetime:
         return find_next_date_by_weekday(
-            datetime.now() + (
-                # Minutes
-                random.choice([
-                    timedelta(hours=2), timedelta(hours=12), timedelta(hours=16)
-                ])
-            ) + (
+            (datetime.now() + (
                 # Days
                 random.choice([
                     timedelta(days=x) for x in [0, 1, 2, 3, 4, 5, 10, 12, 14]
                 ])
-            ),
+            )
+             ).date(),
             random.choice(LessonData.objects.all().values_list("weekday", flat=True).distinct())
         )
     

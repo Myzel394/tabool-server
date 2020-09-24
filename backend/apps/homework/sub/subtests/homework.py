@@ -1,5 +1,4 @@
 import json
-from pprint import pp
 
 import lorem
 
@@ -10,7 +9,6 @@ from apps.homework.sub.subserializers import (
     UserHomeworkListSerializer,
 )
 from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
-from apps.subject.models import Lesson
 from apps.utils.tests import ClientTestMixin
 
 __all__ = [
@@ -49,7 +47,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
                 many=True
             ).data
         )
-        
+    
     def test_create_user_homework(self):
         homework = self.Create_user_homework()
         homework.delete()
@@ -87,14 +85,11 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
     
     def test_filtering(self):
         # This homework should not be found
-
+        
         lesson = self.Create_lesson()
-        homework = self.Create_user_homework(
+        self.Create_user_homework(
             lesson=lesson
         )
-        
-        print(UserHomework.objects.all().from_user(self.logged_user))
-        print(UserHomework.objects.all().from_user(self.logged_user).filter(lesson__id=lesson.id))
         
         response = self.client.get("/api/user-homework/", {
             "lesson": lesson.id
@@ -102,20 +97,16 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         self.assertStatusOk(response.status_code)
         
-        expected_homeworks = UserHomework\
-            .objects\
-            .all()\
-            .from_user(self.logged_user)\
+        expected_homeworks = UserHomework \
+            .objects \
+            .all() \
+            .from_user(self.logged_user) \
             .filter(lesson__id=lesson.id)
         expected_data = UserHomeworkListSerializer(expected_homeworks, many=True).data
         actual_data = response.data
         
-        pp(expected_data)
-        print("#######")
-        pp(actual_data)
-        
         self.assertCountEqual(actual_data, expected_data)
-        
+
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):
     def test_association(self):

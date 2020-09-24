@@ -33,7 +33,7 @@ class BaseHomeworkMixin(
         verbose_name=model_verbose_functions.lesson_single,
     )
     
-    due_date = models.DateTimeField(
+    due_date = models.DateField(
         verbose_name=_("Fälligkeitsdatum"),
         blank=True,
         null=True
