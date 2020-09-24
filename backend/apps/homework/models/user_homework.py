@@ -16,7 +16,7 @@ class UserHomework(BaseHomeworkMixin, EditCreationDateMixin):
         verbose_name_plural = _("Eigene Hausaufgaben")
         ordering = ("-completed", "due_date")
     
-    homework_type = models.CharField(
+    type = models.CharField(
         max_length=127,
         verbose_name=_("Hausaufgaben-Typ"),
         help_text=_("Beispiel: Vortag, Hausaufgabe, Protokoll, Hausarbeit"),
