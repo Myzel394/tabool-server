@@ -1,9 +1,7 @@
 from apps.homework import constants
 
 __all__ = [
-    "TEACHER_HOMEWORK", "USER_HOMEWORK"
+    "HOMEWORK"
 ]
 
-TEACHER_HOMEWORK = f"{constants.APP_LABEL}.TeacherHomework"
-USER_HOMEWORK = f"{constants.APP_LABEL}.UserHomework"
-
+HOMEWORK = f"{constants.APP_LABEL}.Homework"

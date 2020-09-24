@@ -2,13 +2,22 @@ from django_common_utils.libraries.utils import model_verbose
 from django_filters import rest_framework as filters
 
 from apps.subject.models import Lesson, Subject
+from ...models import Homework
 
 __all__ = [
-    "BaseHomeworkFilterSetMixin"
+    "HomeworkFilterSet"
 ]
 
 
-class BaseHomeworkFilterSetMixin(filters.FilterSet):
+class HomeworkFilterSet(filters.FilterSet):
+    class Meta:
+        model = Homework
+        fields = {
+            "due_date": ["lte", "gte"],
+            "completed": ["exact"],
+            "type": ["iexact"]
+        }
+    
     lesson = filters.CharFilter(
         field_name="lesson__id",
         label=model_verbose(Lesson)

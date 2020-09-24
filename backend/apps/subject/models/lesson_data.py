@@ -13,7 +13,7 @@ from ..sub.subquerysets import LessonQuerySet
 from ..sub.subquerysets.lesson_data import LessonDataQuerySet
 
 if TYPE_CHECKING:
-    from apps.homework.models import TeacherHomework, UserHomework
+    from apps.homework.models import TeacherHomework, Homework
     from .lesson import Lesson
 
 __all__ = [
@@ -79,11 +79,11 @@ class LessonData(RandomIDMixin):
         return self.teacherhomework_set.all()
     
     @property
-    def user_homeworks(self) -> QueryType["UserHomework"]:
+    def user_homeworks(self) -> QueryType["Homework"]:
         return self.userhomework_set.all()
     
     @property
-    def homeworks(self) -> QueryType[Union["TeacherHomework", "UserHomework"]]:
+    def homeworks(self) -> QueryType[Union["TeacherHomework", "Homework"]]:
         return self.teacher_homeworks | self.associated_user_id
     
     def get_lesson(self, **kwargs) -> "Lesson":

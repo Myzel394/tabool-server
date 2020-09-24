@@ -9,23 +9,23 @@ if TYPE_CHECKING:
     from apps.subject.models import Subject
 
 __all__ = [
-    "BaseHomeworkQuerySetMixin"
+    "HomeworkQuerySet"
 ]
 
 
 # noinspection PyTypeChecker
-class BaseHomeworkQuerySetMixin(CustomQuerySetMixin.QuerySet):
-    def expired(self) -> "BaseHomeworkQuerySetMixin":
+class HomeworkQuerySet(CustomQuerySetMixin.QuerySet):
+    def expired(self) -> "HomeworkQuerySet":
         return self.only("due_date").filter(
             Q(due_date=None) | Q(due_date__lte=datetime.now())
         )
     
-    def not_expired(self) -> "BaseHomeworkQuerySetMixin":
+    def not_expired(self) -> "HomeworkQuerySet":
         return self.only("due_date").filter(
             Q(due_date=None) | Q(due_date__gte=datetime.now())
         )
     
-    def expires_today(self) -> "BaseHomeworkQuerySetMixin":
+    def expires_today(self) -> "HomeworkQuerySet":
         now = datetime.now()
         tomorrow = now + timedelta(days=1)
         tomorrow = datetime(tomorrow.year, tomorrow.month, tomorrow.day, 0, 0, 0)
@@ -34,17 +34,17 @@ class BaseHomeworkQuerySetMixin(CustomQuerySetMixin.QuerySet):
             Q(due_date=None) | Q(due_date__gte=datetime.now(), due_date__lte=tomorrow)
         )
     
-    def completed(self) -> "BaseHomeworkQuerySetMixin":
+    def completed(self) -> "HomeworkQuerySet":
         return self.only("completed").filter(completed=True)
     
-    def not_completed(self) -> "BaseHomeworkQuerySetMixin":
+    def not_completed(self) -> "HomeworkQuerySet":
         return self.only("completed").filter(completed=False)
     
-    def with_information(self) -> "BaseHomeworkQuerySetMixin":
+    def with_information(self) -> "HomeworkQuerySet":
         return self.only("information").exclude(information="")
     
-    def by_subject(self, subject: "Subject") -> "BaseHomeworkQuerySetMixin":
+    def by_subject(self, subject: "Subject") -> "HomeworkQuerySet":
         return self.filter(lesson__subject=subject)
     
-    def from_user(self, user: settings.AUTH_USER_MODEL) -> "BaseHomeworkQuerySetMixin":
+    def from_user(self, user: settings.AUTH_USER_MODEL) -> "HomeworkQuerySet":
         return self.filter(lesson__lesson_data__subject__associated_user=user)

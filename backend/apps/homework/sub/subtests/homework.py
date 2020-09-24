@@ -1,13 +1,8 @@
-import json
-
 import lorem
 
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
-from apps.homework.models import TeacherHomework, UserHomework
-from apps.homework.sub.subserializers import (
-    TeacherHomeworkListSerializer, UserHomeworkDetailSerializer,
-    UserHomeworkListSerializer,
-)
+from apps.homework.models import Homework
+from apps.homework.sub.subserializers import (HomeworkDetailSerializer, HomeworkListSerializer)
 from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.utils.tests import ClientTestMixin
 
@@ -21,20 +16,8 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         self.logged_user = self.Login_user()
         self.__class__.associated_user = self.logged_user
     
-    def test_receive_from_lesson(self):
-        homework = self.Create_teacher_homework()
-        
-        response = self.client.get(
-            "/api/teacher-homework/"
-        )
-        
-        self.assertEqual(
-            json.loads(json.dumps(response.data)),
-            json.loads(json.dumps(TeacherHomeworkListSerializer(TeacherHomework.objects.all(), many=True).data))
-        )
-    
     def test_receive(self):
-        homework = self.Create_user_homework()
+        homework = self.Create_homework()
         
         response = self.client.get("/api/user-homework/")
         
@@ -42,32 +25,32 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         self.assertCountEqual(
             response.data,
-            UserHomeworkListSerializer(
-                UserHomework.objects.all().from_user(self.logged_user),
+            HomeworkListSerializer(
+                Homework.objects.all().from_user(self.logged_user),
                 many=True
             ).data
         )
     
     def test_create_user_homework(self):
-        homework = self.Create_user_homework()
+        homework = self.Create_homework()
         homework.delete()
         
         response = self.client.post(
             "/api/user-homework/",
-            UserHomeworkDetailSerializer(homework).data,
+            HomeworkDetailSerializer(homework).data,
             content_type="application/json"
         )
         
         print(response.data)
         self.assertStatusOk(response.status_code)
         
-        self.assertTrue(UserHomework.objects.all().exists())
+        self.assertTrue(Homework.objects.all().exists())
     
     def test_update_user_homework(self):
-        homework = self.Create_user_homework()
+        homework = self.Create_homework()
         new_information = lorem.sentence()
         
-        print(UserHomework.objects.from_user(self.logged_user))
+        print(Homework.objects.from_user(self.logged_user))
         
         response = self.client.patch(
             f"/api/user-homework/{homework.id}/",
@@ -87,7 +70,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         # This homework should not be found
         
         lesson = self.Create_lesson()
-        self.Create_user_homework(
+        self.Create_homework(
             lesson=lesson
         )
         
@@ -97,12 +80,12 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         self.assertStatusOk(response.status_code)
         
-        expected_homeworks = UserHomework \
+        expected_homeworks = Homework \
             .objects \
             .all() \
             .from_user(self.logged_user) \
             .filter(lesson__id=lesson.id)
-        expected_data = UserHomeworkListSerializer(expected_homeworks, many=True).data
+        expected_data = HomeworkListSerializer(expected_homeworks, many=True).data
         actual_data = response.data
         
         self.assertCountEqual(actual_data, expected_data)
@@ -110,5 +93,4 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):
     def test_association(self):
-        self.check_queryset_from_user(UserHomework)
-        self.check_queryset_from_user(TeacherHomework)
+        self.check_queryset_from_user(Homework)

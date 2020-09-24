@@ -3,14 +3,14 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins.date import EditCreationDateMixin
 
 from .mixins.homework import BaseHomeworkMixin
-from ..querysets import UserHomeworkQuerySet
+from ..querysets import HomeworkQuerySet
 
 __all__ = [
-    "UserHomework"
+    "Homework"
 ]
 
 
-class UserHomework(BaseHomeworkMixin, EditCreationDateMixin):
+class Homework(BaseHomeworkMixin, EditCreationDateMixin):
     class Meta:
         verbose_name = _("Eigene Hausaufgabe")
         verbose_name_plural = _("Eigene Hausaufgaben")
@@ -24,4 +24,4 @@ class UserHomework(BaseHomeworkMixin, EditCreationDateMixin):
         null=True
     )
     
-    objects = UserHomeworkQuerySet.as_manager()
+    objects = HomeworkQuerySet.as_manager()
