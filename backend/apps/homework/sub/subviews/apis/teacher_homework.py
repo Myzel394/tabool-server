@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 
+from .mixins import HomeworkBySubjectMixin
 from ....models import TeacherHomework
 from ....serializers import TeacherHomeworkDetailSerializer, TeacherHomeworkListSerializer
 
@@ -9,15 +9,14 @@ __all__ = [
 ]
 
 
-class TeacherHomeworkViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [
-        IsAuthenticated
-    ]
-    
+class TeacherHomeworkViewSet(
+    viewsets.ReadOnlyModelViewSet,
+    HomeworkBySubjectMixin
+):
     def get_queryset(self):
         return TeacherHomework.objects.from_user(self.request.user)
     
     def get_serializer_class(self):
-        if self.action == "list":
+        if self.action in ["list", "by_subject"]:
             return TeacherHomeworkListSerializer
         return TeacherHomeworkDetailSerializer

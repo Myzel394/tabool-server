@@ -69,13 +69,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         homework.refresh_from_db(fields=["information"])
         self.assertEqual(homework.information, new_information)
 
-
-class CustomAPITest(HomeworkTestMixin, ClientTestMixin):
-    def setUp(self) -> None:
-        self.logged_user = self.Login_user()
-        self.__class__.associated_user = self.logged_user
-    
-    def test_temp(self):
+    def test_by_subject(self):
         subject = self.Create_subject()
         homeworks = [
             self.Create_user_homework(
@@ -85,9 +79,9 @@ class CustomAPITest(HomeworkTestMixin, ClientTestMixin):
                     )
                 )
             )
-            for _ in range(1)
+            for _ in range(5)
         ]
-        
+    
         response = self.client.get(
             "/api/user-homework/by-subject/",
             {
@@ -97,18 +91,16 @@ class CustomAPITest(HomeworkTestMixin, ClientTestMixin):
         )
         
         self.assertStatusOk(response.status_code)
-        
+    
         [
             homework.refresh_from_db()
             for homework in homeworks
         ]
         
-        expected_data = json.loads(json.dumps(UserHomeworkListSerializer(homeworks, many=True).data))
-        actual_data = json.loads(json.dumps(response.data))
-        
-        self.assertEqual(expected_data, actual_data)
-        
-        pp(response.data)
+        expected_data = UserHomeworkListSerializer(homeworks, many=True).data
+        actual_data = response.data
+    
+        self.assertCountEqual(expected_data, actual_data)
 
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):

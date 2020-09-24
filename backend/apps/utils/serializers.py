@@ -10,6 +10,8 @@ from rest_framework import serializers, viewsets
 from rest_framework.response import Response
 
 
+# TODO: remove `read_only = ["id"]`!
+# TODO: remove Modelserializer inheritance!
 class RandomIDSerializerMixin(serializers.ModelSerializer):
     id = serializers.CharField(
         read_only=True,
@@ -42,11 +44,10 @@ class RetrieveObjectByIDSerializerField(serializers.CharField):
 
 
 # TODO: Das hier bei HomeworkBySubjectMixin hinzufügen!
-class ReferencedObjectExtraViewSetMixin(viewsets.ModelViewSet, ABC):
+class ReferencedObjectViewSetMixin:
     validated_data_key: str
-    url_path: str
-    referenced_object_lookup_field: str = "pk"
     validate_serializer_class: Type[serializers.Serializer]
+    referenced_object_lookup_field: str = "pk"
     
     @abstractmethod
     def get_referenced_queryset(self) -> QuerySet:
@@ -71,6 +72,8 @@ class ReferencedObjectExtraViewSetMixin(viewsets.ModelViewSet, ABC):
     
     def list_response_from_qs(self, queryset: QuerySet):
         # Output
+        queryset = self.filter_queryset(queryset)
+        
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
