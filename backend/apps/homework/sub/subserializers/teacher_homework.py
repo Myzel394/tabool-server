@@ -1,4 +1,5 @@
 from drf_writable_nested.serializers import WritableNestedModelSerializer
+from rest_framework import serializers
 
 from apps.subject.sub.subserializers import LessonDetailSerializer, LessonListSerializer
 from apps.utils.serializers import RandomIDSerializerMixin
@@ -9,7 +10,7 @@ __all__ = [
 ]
 
 
-class TeacherHomeworkListSerializer(RandomIDSerializerMixin):
+class TeacherHomeworkListSerializer(RandomIDSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = TeacherHomework
         fields = [

@@ -10,14 +10,13 @@ from rest_framework import serializers
 from rest_framework.response import Response
 
 
-# TODO: remove `read_only = ["id"]`!
-class RandomIDSerializerMixin:
+class RandomIDSerializerMixin(serializers.ModelSerializer):
     id = serializers.CharField(
         read_only=True,
     )
 
 
-class AssociatedUserSerializerMixin:
+class AssociatedUserSerializerMixin(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         validated_data.pop("associated_user", None)
         return super().update(instance, validated_data)

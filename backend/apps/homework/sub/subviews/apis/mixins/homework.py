@@ -48,5 +48,3 @@ class HomeworkBySubjectMixin(
         )
         
         return self.list_response_from_qs(queryset)
-    
-    
