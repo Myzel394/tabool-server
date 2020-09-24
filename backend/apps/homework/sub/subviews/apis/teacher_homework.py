@@ -1,6 +1,5 @@
 from rest_framework import viewsets
 
-from .mixins import HomeworkBySubjectMixin
 from ....models import TeacherHomework
 from ....serializers import TeacherHomeworkDetailSerializer, TeacherHomeworkListSerializer
 
@@ -9,10 +8,7 @@ __all__ = [
 ]
 
 
-class TeacherHomeworkViewSet(
-    viewsets.ReadOnlyModelViewSet,
-    HomeworkBySubjectMixin
-):
+class TeacherHomeworkViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         return TeacherHomework.objects.from_user(self.request.user)
     

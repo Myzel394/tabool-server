@@ -10,6 +10,7 @@ from apps.homework.sub.subserializers import (
     UserHomeworkListSerializer,
 )
 from apps.subject.mixins.tests.associated_user import AssociatedUserTestMixin
+from apps.subject.models import Lesson
 from apps.utils.tests import ClientTestMixin
 
 __all__ = [
@@ -34,6 +35,21 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             json.loads(json.dumps(TeacherHomeworkListSerializer(TeacherHomework.objects.all(), many=True).data))
         )
     
+    def test_receive(self):
+        homework = self.Create_user_homework()
+        
+        response = self.client.get("/api/user-homework/")
+        
+        self.assertStatusOk(response.status_code)
+        
+        self.assertCountEqual(
+            response.data,
+            UserHomeworkListSerializer(
+                UserHomework.objects.all().from_user(self.logged_user),
+                many=True
+            ).data
+        )
+        
     def test_create_user_homework(self):
         homework = self.Create_user_homework()
         homework.delete()
@@ -68,40 +84,38 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         homework.refresh_from_db(fields=["information"])
         self.assertEqual(homework.information, new_information)
-
-    def test_by_subject(self):
-        subject = self.Create_subject()
-        homeworks = [
-            self.Create_user_homework(
-                lesson=self.Create_lesson(
-                    lesson_data=self.Create_lesson_data(
-                        subject=subject
-                    )
-                )
-            )
-            for _ in range(5)
-        ]
     
-        response = self.client.get(
-            "/api/user-homework/by-subject/",
-            {
-                "subject": subject.id
-            },
-            content_type="application/json"
+    def x_test_filtering(self):
+        # This homework should not be found
+
+        lesson = self.Create_lesson()
+        homework = self.Create_user_homework(
+            lesson=lesson
         )
         
-        self.assertStatusOk(response.status_code)
-    
-        [
-            homework.refresh_from_db()
-            for homework in homeworks
-        ]
+        print(UserHomework.objects.all().from_user(self.logged_user))
+        print(UserHomework.objects.all().from_user(self.logged_user).filter(lesson__id=lesson.id))
         
-        expected_data = UserHomeworkListSerializer(homeworks, many=True).data
+        response = self.client.get("/api/user-homework/", {
+            "lesson": lesson.id
+        }, content_type="application/json")
+        
+        self.assertStatusOk(response.status_code)
+        
+        expected_homeworks = UserHomework\
+            .objects\
+            .all()\
+            .from_user(self.logged_user)\
+            .filter(lesson__id=lesson.id)
+        expected_data = UserHomeworkListSerializer(expected_homeworks, many=True).data
         actual_data = response.data
-    
-        self.assertCountEqual(expected_data, actual_data)
-
+        
+        pp(expected_data)
+        print("#######")
+        pp(actual_data)
+        
+        self.assertCountEqual(actual_data, expected_data)
+        
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):
     def test_association(self):

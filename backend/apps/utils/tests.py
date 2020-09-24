@@ -8,6 +8,10 @@ from django.test import Client, TestCase
 
 from apps.utils.time import dummy_datetime_from_time
 
+__all__ = [
+    "UserCreationTestMixin", "StartTimeEndTimeTestMixin", "ClientTestMixin", "joinkwargs"
+]
+
 
 class UserCreationTestMixin(TestCase):
     @staticmethod
@@ -67,3 +71,17 @@ class ClientTestMixin(TestCase):
     
     def assertStatusOk(self, status_code: int) -> None:
         self.assertTrue(200 <= status_code <= 299, f"status_code is '{status_code}'")
+
+
+# TODO: joinkwargs überall hinzufügen!
+
+def joinkwargs(defaults: Dict[str, Callable], given: dict, /) -> dict:
+    data = {}
+    for key, value in defaults.items():
+        if key in given:
+            data[key] = given[key]
+        else:
+            data[key] = value()
+            
+    return data
+

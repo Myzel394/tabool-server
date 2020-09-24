@@ -4,7 +4,7 @@ from typing import *
 
 from dateutil.rrule import MINUTELY, rrule
 
-from apps.utils.tests import StartTimeEndTimeTestMixin
+from apps.utils.tests import joinkwargs, StartTimeEndTimeTestMixin
 from apps.utils.time import dummy_datetime_from_time
 from .room import RoomTestMixin
 from .subject import SubjectTestMixin
@@ -26,24 +26,28 @@ class LessonTestMixin(
     @classmethod
     def Create_lesson(cls, **kwargs):
         return Lesson.objects.create_automatically(
-            **{
-                "lesson_data": cls.Create_lesson_data(),
-                **kwargs
-            }
+            **joinkwargs(
+                {
+                    "lesson_data": cls.Create_lesson_data,
+                },
+                kwargs
+            )
         )
     
     @classmethod
     def Create_lesson_data(cls, **kwargs) -> LessonData:
         return LessonData.objects.create(
-            **{
-                "teacher": cls.Create_teacher(),
-                "room": cls.Create_room(),
-                "subject": cls.Create_subject(),
-                "start_time": cls.start_time(),
-                "end_time": cls.end_time(),
-                "weekday": random.choice([x[0] for x in LESSON_ALLOWED_DAYS]),
-                **kwargs
-            }
+            **joinkwargs(
+                {
+                    "teacher": cls.Create_teacher,
+                    "room": cls.Create_room,
+                    "subject": cls.Create_subject,
+                    "start_time": cls.start_time,
+                    "end_time": cls.end_time,
+                    "weekday": lambda: random.choice([x[0] for x in LESSON_ALLOWED_DAYS]),
+                },
+                kwargs
+            )
         )
     
     @classmethod
@@ -69,12 +73,14 @@ class LessonTestMixin(
                     until=dummy_datetime_from_time(end_time)
             ):
                 lesson = cls.Create_lesson_data(
-                    **{
-                        "start_time": current_time.time(),
-                        "end_time": (current_time + timedelta(minutes=duration)).time(),
-                        "weekday": weekday,
-                        **kwargs
-                    }
+                    **joinkwargs(
+                        {
+                            "start_time": lambda: current_time.time(),
+                            "end_time": lambda: (current_time + timedelta(minutes=duration)).time(),
+                            "weekday": lambda: weekday,
+                        },
+                        kwargs
+                    )
                 )
                 lessons.append(lesson)
         
