@@ -32,12 +32,6 @@ class Lesson(RandomIDMixin):
         verbose_name=_("Datum")
     )
     
-    attendance = models.BooleanField(
-        default=True,
-        verbose_name=_("Anwesend"),
-        help_text=_("Bist du in dieser Stunde anwesend?")
-    )
-    
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="date")
     def _hook_validate_date(self):

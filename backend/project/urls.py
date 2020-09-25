@@ -4,12 +4,12 @@ from rest_framework.routers import DefaultRouter
 
 from apps.authentication.views import LoginView, LogoutView, PasswordChangeView, RegisterView
 from apps.event.views import ClassTestViewSet, EventViewSet
-from apps.homework.views import UserHomeworkViewSet
+from apps.homework.views import HomeworkViewSet
 from apps.timetable.views import TimetableViewSet
 
 router = DefaultRouter()
 router.register("timetable", TimetableViewSet, basename="TimeTable")
-router.register("user-homework", UserHomeworkViewSet, basename="UserHomework")
+router.register("homework", HomeworkViewSet, basename="Homework")
 router.register("class-test", ClassTestViewSet, basename="ClassTest")
 router.register("event", EventViewSet, basename="Event")
 

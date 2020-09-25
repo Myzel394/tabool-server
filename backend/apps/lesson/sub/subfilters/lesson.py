@@ -12,5 +12,4 @@ class LessonFilterSet(filters.FilterSet):
         model = Lesson
         fields = {
             "date": ["lte", "gte"],
-            "attendance": ["exact"]
         }

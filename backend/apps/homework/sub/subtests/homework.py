@@ -19,7 +19,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
     def test_receive(self):
         homework = self.Create_homework()
         
-        response = self.client.get("/api/user-homework/")
+        response = self.client.get("/api/homework/")
         
         self.assertStatusOk(response.status_code)
         
@@ -36,7 +36,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         homework.delete()
         
         response = self.client.post(
-            "/api/user-homework/",
+            "/api/homework/",
             HomeworkDetailSerializer(homework).data,
             content_type="application/json"
         )
@@ -53,7 +53,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         print(Homework.objects.from_user(self.logged_user))
         
         response = self.client.patch(
-            f"/api/user-homework/{homework.id}/",
+            f"/api/homework/{homework.id}/",
             {
                 "information": new_information
             },
@@ -74,7 +74,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             lesson=lesson
         )
         
-        response = self.client.get("/api/user-homework/", {
+        response = self.client.get("/api/homework/", {
             "lesson": lesson.id
         }, content_type="application/json")
         
@@ -91,7 +91,13 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         self.assertCountEqual(actual_data, expected_data)
     
     def test_private_homework(self):
+        first_user = self.logged_user
+        second_user = self.Create_user()
+        
         course = self.Create_course()
+        course.participants.add(first_user, second_user)
+        course.save()
+        
         # Public homework
         self.Create_homework(
             lesson=self.Create_lesson(
@@ -101,10 +107,68 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             )
         )
         
+        # Public homework, that will be added via post
+        homework = self.Create_homework(
+            lesson=self.Create_lesson(
+                lesson_data=self.Create_lesson_data(
+                    course=course
+                )
+            )
+        )
+        homework.delete()
+        
+        self.client.post(
+            "/api/homework/",
+            HomeworkDetailSerializer(homework).data,
+            content_type="application/json"
+        )
+        
         # Private homework
-        self.client.post()
+        private_homework = self.Create_homework(
+            lesson=self.Create_lesson(
+                lesson_data=self.Create_lesson_data(
+                    course=course
+                )
+            ),
+            private_to_user=first_user,
+        )
+        private_homework.delete()
         
+        self.client.logout()
+        with self.Login_user_as_context(first_user):
+            self.client.post(
+                "/api/homework/",
+                HomeworkDetailSerializer(private_homework).data,
+                content_type="application/json"
+            )
         
+        private_homework = Homework.objects.all().get(private_to_user=first_user)
+        
+        # Check
+        
+        # Should return public + private
+        with self.Login_user_as_context(first_user):
+            response = self.client.get("/api/homework/")
+            homeworks = Homework.objects.all().from_user(first_user)
+            
+            self.assertStatusOk(response.status_code)
+            self.assertCountEqual(
+                HomeworkListSerializer(homeworks, many=True).data,
+                response.data
+            )
+            self.assertIn(private_homework, homeworks)
+        
+        # Should return only public
+        with self.Login_user_as_context(second_user):
+            response = self.client.get("/api/homework/")
+            homeworks = Homework.objects.all().from_user(second_user)
+            
+            self.assertStatusOk(response.status_code)
+            self.assertCountEqual(
+                HomeworkListSerializer(homeworks, many=True).data,
+                response.data
+            )
+            self.assertNotIn(private_homework, homeworks)
 
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):

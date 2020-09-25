@@ -14,7 +14,6 @@ class HomeworkFilterSet(filters.FilterSet):
         model = Homework
         fields = {
             "due_date": ["lte", "gte"],
-            "completed": ["exact"],
             "type": ["iexact"]
         }
     

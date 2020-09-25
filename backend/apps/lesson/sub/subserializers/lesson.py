@@ -23,7 +23,7 @@ class LessonDetailSerializer(RandomIDSerializerMixin, WritableNestedModelSeriali
     class Meta:
         model = Lesson
         fields = [
-            "lesson_data", "date", "attendance", "id"
+            "lesson_data", "date", "id"
         ]
     
     lesson_data = LessonDataDetailSerializer()

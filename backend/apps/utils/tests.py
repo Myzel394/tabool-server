@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from datetime import datetime, time, timedelta
 from typing import *
 
@@ -52,6 +53,18 @@ class UserCreationTestMixin(TestCase):
         self.assertTrue(is_login, "Couldn't login the user")
         
         return user
+    
+    @contextmanager
+    def Login_user_as_context(self, *args, **kwargs):
+        previous_value = getattr(self.__class__, "associated_user", None)
+        
+        try:
+            user = self.Login_user(*args, **kwargs)
+            self.__class__.associated_user = user
+            yield user
+        finally:
+            self.client.logout()
+            self.__class__.associated_user = previous_value
 
 
 class StartTimeEndTimeTestMixin(TestCase):

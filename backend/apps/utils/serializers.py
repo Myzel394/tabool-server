@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import *
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -85,19 +85,29 @@ class WritableSerializerMethodField(serializers.SerializerMethodField):
         self.method_name = method_name
         self.setter_method_name = kwargs.pop('setter_method_name', None)
         self.deserializer_field = kwargs.pop('deserializer_field')
-
+        
+        kwargs.setdefault("read_only", False)
+        read_only = kwargs.pop("read_only")
+        
         kwargs['source'] = '*'
         super().__init__(*args, **kwargs)
-
+        self.read_only = read_only
+    
     def bind(self, field_name: str, parent):
         data = super().bind(field_name, parent)
         if not self.setter_method_name:
             self.setter_method_name = f'set_{field_name}'
-
+        
         return data
-
+    
     def to_internal_value(self, data):
         value = self.deserializer_field.to_internal_value(data)
-        method = getattr(self.parent, self.setter_method_name)
-        method(value)
+        
+        if hasattr(self.parent, self.setter_method_name):
+            func = getattr(self.parent, self.setter_method_name)
+            func(value)
+        else:
+            return {
+                self.field_name: value
+            }
         return {}

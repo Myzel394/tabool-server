@@ -1,8 +1,6 @@
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from rest_framework import serializers
-from rest_framework.fields import CurrentUserDefault
 
-from apps.authentication.sub.subserializers import UserDetailSerializer
 from apps.lesson.sub.subserializers.lesson import LessonDetailSerializer
 from apps.utils.serializers import RandomIDSerializerMixin, WritableSerializerMethodField
 from ...models import Homework
@@ -16,7 +14,7 @@ class HomeworkListSerializer(RandomIDSerializerMixin, serializers.ModelSerialize
     class Meta:
         model = Homework
         fields = [
-            "lesson", "due_date", "completed", "id"
+            "lesson", "due_date", "id"
         ]
     
     lesson = LessonDetailSerializer()
@@ -26,8 +24,10 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin, WritableNestedModelSeria
     class Meta:
         model = Homework
         fields = [
-            "lesson", "is_private", "due_date", "information", "completed",
-            "type", "id", "created_at", "edited_at",
+            "lesson", "is_private", "due_date", "information", "type", "id", "created_at", "edited_at",
+        ]
+        read_only_fields = [
+            "created_at", "edited_at",
         ]
     
     lesson = LessonDetailSerializer()
@@ -35,9 +35,18 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin, WritableNestedModelSeria
         deserializer_field=serializers.BooleanField()
     )
     
-    def get_is_private(self, obj: Homework):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._is_private = False
+    
+    def create(self, validated_data):
+        validated_data["private_to_user"] = self.context["request"].user if self._is_private else None
+        
+        return super().create(validated_data)
+    
+    @staticmethod
+    def get_is_private(obj: Homework):
         return obj.is_private
     
     def set_is_private(self, value: bool):
-        self.instance.private_for_user = CurrentUserDefault() if value else None
-
+        self._is_private = value
