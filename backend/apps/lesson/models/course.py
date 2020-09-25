@@ -4,6 +4,12 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import RandomIDMixin
 
 from ..public import model_references, model_verbose_functions
+from ..querysets import CourseQuerySet
+
+
+__all__ = [
+    "Course"
+]
 
 
 class Course(RandomIDMixin):
@@ -11,9 +17,17 @@ class Course(RandomIDMixin):
         verbose_name = _("Kurs")
         verbose_name_plural = _("Kurse")
     
+    objects = CourseQuerySet.as_manager()
+    
     participants = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         verbose_name=_("Teilnehmer"),
+    )
+    
+    subject = models.ForeignKey(
+        model_references.SUBJECT,
+        verbose_name=model_verbose_functions.subject_single,
+        on_delete=models.CASCADE,
     )
     
     teacher = models.ForeignKey(
@@ -27,5 +41,6 @@ class Course(RandomIDMixin):
     name = models.CharField(
         verbose_name=_("Name"),
         blank=True,
-        null=True
+        null=True,
+        max_length=7
     )

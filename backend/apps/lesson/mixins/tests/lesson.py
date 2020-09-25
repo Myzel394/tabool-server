@@ -7,8 +7,7 @@ from dateutil.rrule import MINUTELY, rrule
 from apps.utils.tests import joinkwargs, StartTimeEndTimeTestMixin
 from apps.utils.time import dummy_datetime_from_time
 from .room import RoomTestMixin
-from .subject import SubjectTestMixin
-from .teacher import TeacherTestMixin
+from .course import CourseTestMixin
 from ...constants import LESSON_ALLOWED_DAYS
 from ...models import Lesson, LessonData
 
@@ -18,10 +17,9 @@ __all__ = [
 
 
 class LessonTestMixin(
-    TeacherTestMixin,
-    SubjectTestMixin,
     RoomTestMixin,
-    StartTimeEndTimeTestMixin
+    StartTimeEndTimeTestMixin,
+    CourseTestMixin
 ):
     @classmethod
     def Create_lesson(cls, **kwargs):
@@ -39,9 +37,8 @@ class LessonTestMixin(
         return LessonData.objects.create(
             **joinkwargs(
                 {
-                    "teacher": cls.Create_teacher,
                     "room": cls.Create_room,
-                    "subject": cls.Create_subject,
+                    "course": cls.Create_course,
                     "start_time": cls.start_time,
                     "end_time": cls.end_time,
                     "weekday": lambda: random.choice([x[0] for x in LESSON_ALLOWED_DAYS]),

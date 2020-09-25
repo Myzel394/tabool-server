@@ -21,7 +21,7 @@ class ClassTest(RandomIDMixin, LifecycleModel, HandlerMixin):
     
     objects = ClassTestQuerySet.as_manager()
     
-    subject = models.ForeignKey(
+    course = models.ForeignKey(
         model_references.SUBJECT,
         on_delete=models.CASCADE,
         verbose_name=model_verbose_functions.subject_single,

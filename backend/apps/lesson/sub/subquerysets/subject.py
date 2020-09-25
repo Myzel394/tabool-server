@@ -8,5 +8,4 @@ __all__ = [
 
 # noinspection PyTypeChecker
 class SubjectQuerySet(CustomQuerySetMixin.QuerySet):
-    def from_user(self, user: settings.AUTH_USER_MODEL) -> "SubjectQuerySet":
-        return self.only("associated_user").filter(associated_user=user)
+    pass

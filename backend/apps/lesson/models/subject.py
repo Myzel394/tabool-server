@@ -18,7 +18,7 @@ __all__ = [
 ]
 
 
-class Subject(RandomIDMixin, HandlerMixin, ColorMixin, AssociatedUserMixin):
+class Subject(RandomIDMixin, HandlerMixin, ColorMixin):
     class Meta:
         verbose_name = _("Fach")
         verbose_name_plural = _("Fächer")
@@ -29,12 +29,6 @@ class Subject(RandomIDMixin, HandlerMixin, ColorMixin, AssociatedUserMixin):
     name = models.CharField(
         verbose_name=_("Name"),
         max_length=maxlength.SUBJECT
-    )
-    suffix = models.CharField(
-        verbose_name=_("Suffix"),
-        max_length=31,
-        blank=True,
-        null=True
     )
     
     def __str__(self):

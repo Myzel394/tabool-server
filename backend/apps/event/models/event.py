@@ -2,11 +2,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStripHandler
 from django_common_utils.libraries.models import RandomIDMixin
-from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
+from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.utils.validators import validate_weekday_in_lesson_data_available
 from constants import maxlength
-from .event_user_option import EventUserOption
 from ...lesson.public import model_references, model_verbose_functions
 
 __all__ = [
@@ -51,9 +50,3 @@ class Event(RandomIDMixin, LifecycleModel, HandlerMixin):
     def _hook_validate_dates(self):
         validate_weekday_in_lesson_data_available(self.start_datetime)
         validate_weekday_in_lesson_data_available(self.end_datetime)
-    
-    @hook(AFTER_CREATE)
-    def _hook_create_event_user_option(self):
-        EventUserOption.objects.create(
-            event=self
-        )

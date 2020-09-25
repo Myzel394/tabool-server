@@ -4,8 +4,13 @@ from .model_references import *
 
 
 __all__ = [
-    "lesson_single", "lesson_data_single", "room_single", "subject_single", "teacher_single"
+    "course_single", "lesson_single", "lesson_data_single", "room_single", "subject_single",
+    "teacher_single"
 ]
+
+
+def course_single():
+    return model_verbose(COURSE)
 
 
 def lesson_single():

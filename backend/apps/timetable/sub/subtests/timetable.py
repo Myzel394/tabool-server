@@ -117,7 +117,6 @@ class APITest(TimetableTestMixin, ClientTestMixin):
         )
 
 
-# TODO: AssociatedUser zu Timetable ändern! (Subjects hat jeder)
 # TODO: add User Preferences app!
 
 

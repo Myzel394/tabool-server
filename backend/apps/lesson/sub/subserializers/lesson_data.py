@@ -1,13 +1,13 @@
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 
-from apps.utils.serializers import AssociatedUserSerializerMixin, RandomIDSerializerMixin
+from apps.utils.serializers import RandomIDSerializerMixin
+from .course import CourseDetailSerializer, CourseListSerializer
 from .room import RoomDetailSerializer
-from .subject import SubjectDetailSerializer
 from .teacher import TeacherDetailSerializer
 from ...models import LessonData
 
 __all__ = [
-    "LessonDataListSerializer", "LessonDataDetailSerializer", "LessonDataIDSerializer"
+    "LessonDataListSerializer", "LessonDataDetailSerializer"
 ]
 
 
@@ -15,10 +15,10 @@ class LessonDataListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = LessonData
         fields = [
-            "subject", "start_time", "end_time", "weekday", "id"
+            "course", "start_time", "end_time", "weekday", "id"
         ]
     
-    subject = SubjectDetailSerializer()
+    course = CourseListSerializer()
 
 
 # TODO: News model hinzufügen!
@@ -26,21 +26,13 @@ class LessonDataListSerializer(RandomIDSerializerMixin):
 
 class LessonDataDetailSerializer(
     RandomIDSerializerMixin,
-    AssociatedUserSerializerMixin,
     WritableNestedModelSerializer
 ):
     class Meta:
         model = LessonData
         fields = [
-            "teacher", "room", "subject", "start_time", "end_time", "weekday", "id"
+            "room", "course", "start_time", "end_time", "weekday", "id"
         ]
     
-    teacher = TeacherDetailSerializer()
     room = RoomDetailSerializer()
-    subject = SubjectDetailSerializer()
-
-
-class LessonDataIDSerializer(RandomIDSerializerMixin):
-    class Meta:
-        model = LessonData
-        fields = ["id"]
+    course = CourseDetailSerializer()

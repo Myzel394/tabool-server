@@ -1,6 +1,6 @@
 from apps.lesson.mixins.tests import LessonTestMixin
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
-from apps.lesson.models import Lesson
+from apps.lesson.models import Course, Lesson
 
 __all__ = [
     "QuerySetTest"
@@ -10,3 +10,5 @@ __all__ = [
 class QuerySetTest(LessonTestMixin, AssociatedUserTestMixin):
     def test_association(self):
         self.check_queryset_from_user(Lesson)
+        self.check_queryset_from_user(Course)
+

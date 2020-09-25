@@ -30,9 +30,6 @@ class SubjectTestMixin(UserCreationTestMixin, ABC):
                         "Ethik",
                         "Geschichte"
                     ]),
-                    "associated_user": lambda: (
-                            getattr(cls, "associated_user", None) or cls.Create_user()
-                    ),
                 },
                 kwargs
             )

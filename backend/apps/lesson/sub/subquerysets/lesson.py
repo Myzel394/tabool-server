@@ -17,7 +17,7 @@ __all__ = [
 # noinspection PyTypeChecker
 class LessonQuerySet(CustomQuerySetMixin.QuerySet):
     def from_user(self, user: settings.AUTH_USER_MODEL) -> "LessonQuerySet":
-        return self.filter(lesson_data__subject__associated_user=user)
+        return self.filter(lesson_data__course__participants__in=[user])
     
     def create_automatically(
             self,

@@ -25,7 +25,7 @@ class LessonData(RandomIDMixin):
     class Meta:
         verbose_name = _("Stunde")
         verbose_name_plural = _("Stunden")
-        ordering = ("subject", "start_time")
+        ordering = ("course", "start_time")
     
     objects = LessonDataQuerySet.as_manager()
     
@@ -37,10 +37,10 @@ class LessonData(RandomIDMixin):
         verbose_name=model_verbose_functions.room_single,
     )
     
-    subject = models.ForeignKey(
-        model_references.SUBJECT,
+    course = models.ForeignKey(
+        model_references.COURSE,
         on_delete=models.CASCADE,
-        verbose_name=model_verbose_functions.subject_single,
+        verbose_name=model_verbose_functions.course_single,
     )
     
     start_time = models.TimeField(
@@ -55,9 +55,6 @@ class LessonData(RandomIDMixin):
         verbose_name=_("Wochentag"),
         choices=constants.LESSON_ALLOWED_DAYS
     )
-    
-    def __str__(self):
-        return f"{self.subject}: {format_datetime(self.start_time)} - {format_datetime(self.end_time)}"
     
     @property
     def duration(self) -> int:
