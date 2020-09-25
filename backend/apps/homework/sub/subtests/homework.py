@@ -89,6 +89,22 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         actual_data = response.data
         
         self.assertCountEqual(actual_data, expected_data)
+    
+    def test_private_homework(self):
+        course = self.Create_course()
+        # Public homework
+        self.Create_homework(
+            lesson=self.Create_lesson(
+                lesson_data=self.Create_lesson_data(
+                    course=course
+                )
+            )
+        )
+        
+        # Private homework
+        self.client.post()
+        
+        
 
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):
