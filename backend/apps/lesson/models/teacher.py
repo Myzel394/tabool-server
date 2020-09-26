@@ -27,25 +27,25 @@ class Teacher(RandomIDMixin, HandlerMixin):
         blank=True,
         null=True,
         max_length=maxlength.FIRST_NAME,
-    )
+    )  # type: str
     
     last_name = models.CharField(
         verbose_name=_("Letzter Name"),
         max_length=maxlength.SECOND_NAME
-    )
+    )  # type: str
     
     short_name = models.CharField(
         verbose_name=_("Kürzel"),
         max_length=3,
         blank=True,
         null=True
-    )
+    )  # type: str
     
     email = models.EmailField(
         verbose_name=_("E-Mail"),
         blank=True,
         null=True
-    )
+    )  # type: str
     
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

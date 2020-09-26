@@ -12,6 +12,10 @@ from .lesson import Lesson
 from ..public import model_references, model_verbose_functions
 from ..querysets import CourseQuerySet
 
+if TYPE_CHECKING:
+    from django.contrib.auth import get_user_model
+    from . import Subject, Teacher
+
 __all__ = [
     "Course"
 ]
@@ -29,13 +33,13 @@ class Course(RandomIDMixin, LifecycleModel):
     participants = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         verbose_name=_("Teilnehmer"),
-    )
+    )  # type: get_user_model()
     
     subject = models.ForeignKey(
         model_references.SUBJECT,
         verbose_name=model_verbose_functions.subject_single,
         on_delete=models.CASCADE,
-    )
+    )  # type: Subject
     
     teacher = models.ForeignKey(
         model_references.TEACHER,
@@ -43,14 +47,14 @@ class Course(RandomIDMixin, LifecycleModel):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-    )
+    )  # type: Teacher
     
     name = models.CharField(
         verbose_name=_("Name"),
         blank=True,
         null=True,
         max_length=7
-    )
+    )  # type: str
     
     def __call_manage_relations_on_model(self, models: Iterable[StandardModelType]) -> None:
         participants = self.participants.all()

@@ -3,7 +3,6 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import RandomIDMixin
-from django_hint import QueryType
 
 from apps.utils.fields.weekday import WeekdayField
 from apps.utils.time import dummy_datetime_from_time
@@ -13,8 +12,8 @@ from ..public import model_references, model_verbose_functions
 from ..sub.subquerysets import LessonDataQuerySet
 
 if TYPE_CHECKING:
-    from apps.homework.models import TeacherHomework, Homework
-    from .lesson import Lesson
+    from datetime import time
+    from . import Room, Course
 
 __all__ = [
     "LessonData",
@@ -35,26 +34,26 @@ class LessonData(RandomIDMixin):
         blank=True,
         null=True,
         verbose_name=model_verbose_functions.room_single,
-    )
+    )  # type: Room
     
     course = models.ForeignKey(
         model_references.COURSE,
         on_delete=models.CASCADE,
         verbose_name=model_verbose_functions.course_single,
-    )
+    )  # type: Course
     
     start_time = models.TimeField(
         verbose_name=_("Startzeit"),
-    )
+    )  # type: time
     
     end_time = models.TimeField(
         verbose_name=_("Endzeit"),
-    )
+    )  # type: time
     
     weekday = WeekdayField(
         verbose_name=_("Wochentag"),
         choices=weekdays.ALLOWED_WEEKDAYS
-    )
+    )  # type: int
     
     @property
     def duration(self) -> int:
@@ -63,11 +62,7 @@ class LessonData(RandomIDMixin):
         
         return int(difference.seconds / 60)
     
-    @property
-    def homeworks(self) -> QueryType[Union["TeacherHomework", "Homework"]]:
-        return self.homework_set.all()
-    
-    def create_lesson(self, **kwargs) -> "Lesson":
+    def create_lesson(self, **kwargs) -> Lesson:
         return Lesson.objects.create_automatically(
             lesson_data=self,
             **kwargs

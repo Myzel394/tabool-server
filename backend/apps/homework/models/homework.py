@@ -1,19 +1,23 @@
+from typing import *
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers import TextOptimizerHandler
 from django_common_utils.libraries.models import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import EditCreationDateMixin
-from django_common_utils.libraries.utils import model_verbose
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
-from apps.authentication.public import (
-    model_references as user_model_references, model_verbose_functions as user_model_verbose_function,
-)
-from apps.lesson.public import model_references, model_verbose_functions
+from apps.authentication.public import *
+from apps.lesson.public import *
 from apps.utils import format_datetime, RelationMixin, validate_weekday_in_lesson_data_available
 from .user_relations.homework import UserHomeworkRelation
 from ..querysets import HomeworkQuerySet
 from ..validators import validate_only_future_days
+
+if TYPE_CHECKING:
+    from datetime import date
+    from apps.lesson.models import Lesson
+    from django.contrib.auth import get_user_model
 
 __all__ = [
     "Homework"
@@ -32,30 +36,30 @@ class Homework(RandomIDMixin, EditCreationDateMixin, RelationMixin):
     objects = HomeworkQuerySet.as_manager()
     
     lesson = models.ForeignKey(
-        model_references.LESSON,
+        LESSON,
         on_delete=models.CASCADE,
-        verbose_name=model_verbose_functions.lesson_single,
-    )
+        verbose_name=lesson_single,
+    )  # type: Lesson
     
     private_to_user = models.ForeignKey(
-        user_model_references.USER,
-        verbose_name=user_model_verbose_function.user_single,
+        USER,
+        verbose_name=user_single,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
-    )
+    )  # type: get_user_model()
     
     due_date = models.DateField(
         verbose_name=_("Fälligkeitsdatum"),
         blank=True,
         null=True
-    )
+    )  # type: date
     
     information = models.TextField(
         verbose_name=_("Informationen"),
         blank=True,
         null=True,
-    )
+    )  # type: str
     
     type = models.CharField(
         max_length=127,
@@ -63,7 +67,7 @@ class Homework(RandomIDMixin, EditCreationDateMixin, RelationMixin):
         help_text=_("Beispiel: Vortag, Hausaufgabe, Protokoll, Hausarbeit"),
         blank=True,
         null=True
-    )
+    )  # type: str
     
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="due_date")

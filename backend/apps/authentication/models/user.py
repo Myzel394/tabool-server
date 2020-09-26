@@ -23,11 +23,12 @@ class User(AbstractUser, LifecycleModel):
         editable=False,
         max_length=6 + 4,
         primary_key=True,
-    )
+    )  # type: str
+    
     email = models.EmailField(
         verbose_name=_("Email-Adresse"),
         unique=True,
-    )
+    )  # type: str
     
     username = None
     

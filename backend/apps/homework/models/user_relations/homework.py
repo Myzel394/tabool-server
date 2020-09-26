@@ -1,9 +1,14 @@
+from typing import *
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import RandomIDMixin
 
 from apps.utils import UserModelRelationMixin
 from ...public import model_references, model_verbose_functions
+
+if TYPE_CHECKING:
+    from ...models import Homework
 
 __all__ = [
     "UserHomeworkRelation"
@@ -23,9 +28,9 @@ class UserHomeworkRelation(RandomIDMixin, UserModelRelationMixin):
         model_references.HOMEWORK,
         verbose_name=model_verbose_functions.homework_single,
         on_delete=models.CASCADE,
-    )
+    )  # type: Homework
     
     completed = models.BooleanField(
         default=False,
         verbose_name=_("Erledigt")
-    )
+    )  # type: bool

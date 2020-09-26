@@ -41,7 +41,7 @@ class Timetable(
         verbose_name=_("Bezeichnung"),
         help_text=_("Die Bezeichnung für den Stundenplan"),
         blank=True
-    )
+    )  # type: str
     
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="designation")

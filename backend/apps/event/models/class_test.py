@@ -1,18 +1,25 @@
+from typing import *
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers import HandlerMixin, TextOptimizerHandler
 from django_common_utils.libraries.models import RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
+from apps.utils.validators import validate_weekday_in_lesson_data_available
 from ..querysets import ClassTestQuerySet
-from ...lesson.public import model_references, model_verbose_functions
+from ...lesson.public import *
+
+if TYPE_CHECKING:
+    from datetime import date
+    from apps.lesson.models import Subject, Room
 
 __all__ = [
     "ClassTest"
 ]
 
-from apps.utils.validators import validate_weekday_in_lesson_data_available
 
+# TODO: Add timeline, who edited what
 
 class ClassTest(RandomIDMixin, LifecycleModel, HandlerMixin):
     class Meta:
@@ -22,29 +29,29 @@ class ClassTest(RandomIDMixin, LifecycleModel, HandlerMixin):
     objects = ClassTestQuerySet.as_manager()
     
     course = models.ForeignKey(
-        model_references.SUBJECT,
+        SUBJECT,
         on_delete=models.CASCADE,
-        verbose_name=model_verbose_functions.subject_single,
-    )
+        verbose_name=subject_single,
+    )  # type: Subject
     
     room = models.ForeignKey(
-        model_references.ROOM,
+        ROOM,
         on_delete=models.CASCADE,
-        verbose_name=model_verbose_functions.room_single,
+        verbose_name=room_single,
         blank=True,
         null=True
-    )
+    )  # type: Room
     
     targeted_date = models.DateField(
         verbose_name=_("Datum"),
         help_text=_("Datum, wann die Klassenarbeit geschrieben wird.")
-    )
+    )  # type: date
     
     information = models.TextField(
         verbose_name=_("Informationen"),
         blank=True,
         null=True
-    )
+    )  # type: str
     
     @staticmethod
     def handlers():

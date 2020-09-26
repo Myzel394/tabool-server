@@ -25,4 +25,4 @@ class UserLessonRelation(RandomIDMixin, UserModelRelationMixin):
         default=True,
         verbose_name=_("Anwesend?"),
         help_text=_("Bist du in dieser Stunde anwesend?")
-    )
+    )  # type: bool
