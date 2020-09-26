@@ -1,5 +1,4 @@
-from rest_framework import serializers
-
+from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import User
 
 __all__ = [
@@ -7,7 +6,7 @@ __all__ = [
 ]
 
 
-class UserDetailSerializer(serializers.ModelSerializer):
+class UserDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = User
         fields = [

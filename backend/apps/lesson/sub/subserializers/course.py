@@ -1,9 +1,6 @@
-from drf_writable_nested.serializers import WritableNestedModelSerializer
-
-from apps.utils.serializers import RandomIDSerializerMixin, AssociatedUserSerializerMixin
-from .subject import SubjectDetailSerializer
-from .teacher import TeacherDetailSerializer
+from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Course
+from ...public.serializer_fields import SubjectField, TeacherField
 
 
 class CourseListSerializer(RandomIDSerializerMixin):
@@ -12,18 +9,16 @@ class CourseListSerializer(RandomIDSerializerMixin):
         fields = [
             "subject", "name", "id"
         ]
+    
+    subject = SubjectField()
 
-    subject = SubjectDetailSerializer()
 
-
-class CourseDetailSerializer(RandomIDSerializerMixin, AssociatedUserSerializerMixin, WritableNestedModelSerializer):
+class CourseDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Course
         fields = [
             "subject", "teacher", "name", "id"
         ]
     
-    subject = SubjectDetailSerializer()
-    teacher = TeacherDetailSerializer()
-
-
+    subject = SubjectField()
+    teacher = TeacherField()

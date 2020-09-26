@@ -49,7 +49,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "email", "first_name", "last_name", "id", "token"
+            "email", "first_name", "last_name", "token"
         ]
     
     token = serializers.CharField(

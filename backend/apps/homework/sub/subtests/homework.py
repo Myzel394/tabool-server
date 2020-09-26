@@ -1,7 +1,9 @@
+from pprint import pp
+
 import lorem
 
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
-from apps.homework.models import Homework, UserHomeworkRelation
+from apps.homework.models import Homework
 from apps.homework.sub.subserializers import (HomeworkDetailSerializer, HomeworkListSerializer)
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.utils.tests import ClientTestMixin
@@ -34,6 +36,8 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
     def test_create_user_homework(self):
         homework = self.Create_homework()
         homework.delete()
+        
+        pp(HomeworkDetailSerializer(homework).data)
         
         response = self.client.post(
             "/api/homework/",
@@ -93,9 +97,6 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         completed_homework = self.Create_homework()
         course = completed_homework.lesson.lesson_data.course
         course.update_relations()
-        
-        print(completed_homework.lesson.lesson_data.course.participants.all())
-        print(UserHomeworkRelation.objects.all())
         
         relation = completed_homework.get_relation(self.logged_user)
         relation.completed = True
@@ -174,6 +175,8 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
                 HomeworkDetailSerializer(private_homework).data,
                 content_type="application/json"
             )
+        
+        print(Homework.objects.all())
         
         private_homework = Homework.objects.all().get(private_to_user=first_user)
         

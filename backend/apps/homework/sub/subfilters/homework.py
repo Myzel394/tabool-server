@@ -13,7 +13,7 @@ class HomeworkFilterSet(filters.FilterSet):
     class Meta:
         model = Homework
         fields = {
-            "due_date": ["lte", "gte"],
+            "due_date": ["lte", "gte", "exact"],
             "type": ["iexact"]
         }
     

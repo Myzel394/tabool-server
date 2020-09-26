@@ -14,14 +14,12 @@ from ...lesson.public import *
 
 if TYPE_CHECKING:
     from datetime import date, datetime
-    from apps.lesson.models import Subject, Room
+    from apps.lesson.models import Room, Course
 
 __all__ = [
     "ClassTest"
 ]
 
-
-# TODO: Add timeline, who edited what
 
 class ClassTest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     class Meta:
@@ -31,10 +29,10 @@ class ClassTest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     objects = ClassTestQuerySet.as_manager()
     
     course = models.ForeignKey(
-        SUBJECT,
+        COURSE,
         on_delete=models.CASCADE,
-        verbose_name=subject_single,
-    )  # type: Subject
+        verbose_name=course_single,
+    )  # type: Course
     
     room = models.ForeignKey(
         ROOM,

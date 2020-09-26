@@ -1,7 +1,6 @@
-from drf_writable_nested.serializers import WritableNestedModelSerializer
 from rest_framework import serializers
 
-from apps.lesson.sub.subserializers.lesson import LessonDetailSerializer
+from apps.lesson.public.serializer_fields import LessonField
 from apps.utils.serializers import RandomIDSerializerMixin, WritableSerializerMethodField
 from ...models import Homework
 
@@ -10,24 +9,24 @@ __all__ = [
 ]
 
 
-class HomeworkListSerializer(RandomIDSerializerMixin, serializers.ModelSerializer):
+class HomeworkListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Homework
         fields = [
             "lesson", "due_date", "id"
         ]
     
-    lesson = LessonDetailSerializer()
+    lesson = LessonField()
 
 
-class HomeworkDetailSerializer(RandomIDSerializerMixin, WritableNestedModelSerializer):
+class HomeworkDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Homework
         fields = [
             "lesson", "is_private", "due_date", "information", "type", "created_at", "edited_at", "id",
         ]
     
-    lesson = LessonDetailSerializer()
+    lesson = LessonField()
     is_private = WritableSerializerMethodField(
         deserializer_field=serializers.BooleanField()
     )

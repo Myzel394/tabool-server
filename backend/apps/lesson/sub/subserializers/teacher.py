@@ -9,10 +9,12 @@ __all__ = [
 class TeacherListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Teacher
-        fields = ["last_name", "short_name", "id"]
+        fields = ["short_name", "id"]
 
 
 class TeacherDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Teacher
         fields = ["first_name", "last_name", "short_name", "email", "id"]
+
+# TODO: Add get viewsets for the serializers!

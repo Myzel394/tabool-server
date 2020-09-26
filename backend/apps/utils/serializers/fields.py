@@ -1,11 +1,17 @@
-from typing import Callable, Optional
+from abc import ABC
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Model
+from django.utils.translation import gettext_lazy as _
+from django_hint import *
 from rest_framework import serializers
 
 __all__ = [
-    "RetrieveObjectByIDSerializerField", "WritableSerializerMethodField"
+    "RetrieveObjectByIDSerializerField", "WritableSerializerMethodField", "WritableIDField",
+    "WritableFromUserFieldMixin", "WritableAllFieldMixin"
 ]
+
+from rest_framework.fields import empty
 
 
 class RetrieveObjectByIDSerializerField(serializers.CharField):
@@ -55,3 +61,62 @@ class WritableSerializerMethodField(serializers.SerializerMethodField):
                 self.field_name: value
             }
         return {}
+
+
+class WritableIDField(serializers.Field):
+    default_error_messages = {
+        "object_not_found": _("Das Objekt wurde nicht gefunden")
+    }
+    
+    @staticmethod
+    def default_get_qs(key, request: RequestType, instance):
+        raise NotImplementedError()
+    
+    def __init__(
+            self,
+            get_object: Optional[Callable] = None,
+            lookup_field: str = "id",
+            *args,
+            **kwargs
+    ):
+        super().__init__(*args, **kwargs)
+        self.get_object = get_object or self.default_get_qs
+        self.lookup_field = lookup_field
+        self.__cached_object = None
+    
+    def run_validation(self, data=empty):
+        if data is not empty:
+            try:
+                self.__cached_object = self.get_object(data, self.context["request"], self)
+            except ObjectDoesNotExist:
+                self.fail("object_not_found")
+        
+        return super().run_validation(data)
+    
+    def to_representation(self, value):
+        return getattr(value, self.lookup_field)
+    
+    def to_internal_value(self, data):
+        return self.__cached_object
+
+
+class WritableFromUserFieldMixin(WritableIDField, ABC):
+    model = Type[Model]
+    lookup_field: str = "id"
+    
+    @classmethod
+    def default_get_qs(cls, key, request: RequestType, instance):
+        return cls.model.objects.all().from_user(request.user).only(cls.lookup_field).get(**{
+            cls.lookup_field: key
+        })
+
+
+class WritableAllFieldMixin(WritableIDField, ABC):
+    model = Type[Model]
+    lookup_field: str = "id"
+    
+    @classmethod
+    def default_get_qs(cls, key, request: RequestType, instance):
+        return cls.model.objects.all().only(cls.lookup_field).get(**{
+            cls.lookup_field: key
+        })

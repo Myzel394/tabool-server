@@ -7,7 +7,7 @@ __all__ = [
 
 class RandomIDSerializerMixin(serializers.ModelSerializer):
     id = serializers.CharField(
-        read_only=True,
+        read_only=True
     )
 
 

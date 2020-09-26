@@ -1,7 +1,7 @@
-from drf_writable_nested.serializers import WritableNestedModelSerializer
 from rest_framework import serializers
 
-from apps.lesson.sub.subserializers import RoomDetailSerializer, SubjectDetailSerializer
+from apps.lesson.public.serializer_fields import CourseField, RoomField
+from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import ClassTest
 
 __all__ = [
@@ -9,23 +9,23 @@ __all__ = [
 ]
 
 
-class ClassTestListSerializer(serializers.ModelSerializer):
+class ClassTestListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = ClassTest
         fields = [
-            "subject", "targeted_date", "id"
+            "course", "id"
         ]
     
-    subject = SubjectDetailSerializer()
+    course = CourseField()
 
 
-class ClassTestDetailSerializer(WritableNestedModelSerializer):
+class ClassTestDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = ClassTest
         fields = [
-            "subject", "targeted_date", "information", "created_at", "edited_at", "room", "id"
+            "course", "room", "targeted_date", "information", "created_at", "edited_at", "id"
         ]
     
-    subject = SubjectDetailSerializer()
-    room = RoomDetailSerializer()
+    course = CourseField()
+    room = RoomField()
     edited_at = serializers.DateTimeField(read_only=True)

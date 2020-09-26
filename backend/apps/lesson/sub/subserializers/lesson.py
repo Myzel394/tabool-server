@@ -1,8 +1,6 @@
-from drf_writable_nested.serializers import WritableNestedModelSerializer
-
 from apps.utils.serializers import RandomIDSerializerMixin
-from .lesson_data import LessonDataDetailSerializer, LessonDataListSerializer
 from ...models import Lesson
+from ...public.serializer_fields import LessonDataField
 
 __all__ = [
     "LessonListSerializer", "LessonDetailSerializer", "LessonDetailSerializer"
@@ -16,14 +14,14 @@ class LessonListSerializer(RandomIDSerializerMixin):
             "lesson_data", "date", "id"
         ]
     
-    lesson_data = LessonDataListSerializer()
+    lesson_data = LessonDataField()
 
 
-class LessonDetailSerializer(RandomIDSerializerMixin, WritableNestedModelSerializer):
+class LessonDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Lesson
         fields = [
             "lesson_data", "date", "id"
         ]
     
-    lesson_data = LessonDataDetailSerializer()
+    lesson_data = LessonDataField()

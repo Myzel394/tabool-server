@@ -1,7 +1,5 @@
-from drf_writable_nested import WritableNestedModelSerializer
-from rest_framework import serializers
-
-from apps.lesson.sub.subserializers import RoomDetailSerializer
+from apps.lesson.public.serializer_fields import RoomField
+from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Event
 
 __all__ = [
@@ -9,7 +7,7 @@ __all__ = [
 ]
 
 
-class EventListSerializer(serializers.ModelSerializer):
+class EventListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Event
         fields = [
@@ -17,11 +15,11 @@ class EventListSerializer(serializers.ModelSerializer):
         ]
 
 
-class EventDetailSerializer(WritableNestedModelSerializer):
+class EventDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Event
         fields = [
             "room", "title", "start_datetime", "end_datetime", "id"
         ]
     
-    room = RoomDetailSerializer()
+    room = RoomField()

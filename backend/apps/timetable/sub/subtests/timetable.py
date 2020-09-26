@@ -1,14 +1,12 @@
-import json
 from datetime import date, timedelta
-from pprint import pp
 
 from apps.lesson.mixins.tests import LessonTestMixin
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.lesson.models import Lesson
-from apps.lesson.serializers import LessonDataDetailSerializer, LessonListSerializer, SubjectDetailSerializer
+from apps.lesson.serializers import LessonListSerializer
 from apps.timetable.models import Timetable
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
-from ..subserializers import TimetableDetailSerializer, TimetableListSerializer
+from ..subserializers import TimetableDetailSerializer
 from ...mixins.tests.timetable import TimetableTestMixin
 
 
@@ -33,54 +31,14 @@ class APITest(TimetableTestMixin, ClientTestMixin):
         self.logged_user = self.Login_user()
         self.__class__.associated_user = self.logged_user
     
-    def test_subject_serializer(self):
-        subject = self.Create_subject()
-        
-        data = SubjectDetailSerializer(subject).data
-        serializer = SubjectDetailSerializer(data=data)
-        serializer.is_valid()
-        
-        print(serializer.validated_data)
-    
-    def test_single_lesson_serializer(self):
-        lessons = self.Create_lesson_data()
-        
-        data = LessonDataDetailSerializer(lessons).data
-        serializer = LessonDataDetailSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-    
-    def test_lessons_serializer(self):
-        lessons = self.Create_lessons_data()
-        
-        data = LessonDataDetailSerializer(lessons, many=True).data
-        serializer = LessonDataDetailSerializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-    
-    def test_timetable_serializer(self):
-        timetable = self.Create_timetable()
-        
-        data = TimetableDetailSerializer(timetable).data
-        
-        pp(data)
-    
-    def test_get_all(self):
-        timetable = self.Create_timetable()
-        
-        response = self.client.get("/api/timetable/")
-        
-        self.assertEqual(response.status_code, 200)
-        actual_data = TimetableListSerializer(timetable).data
-        
-        self.assertEqual(json.loads(json.dumps(response.data[0])), json.loads(json.dumps(actual_data)))
-    
     def test_get_single(self):
         timetable = self.Create_timetable()
         
+        expected_data = TimetableDetailSerializer(timetable).data
         response = self.client.get(
             f"/api/timetable/{timetable.id}/"
         )
         actual_data = response.data
-        expected_data = TimetableDetailSerializer(timetable).data
         
         self.assertEqual(actual_data, expected_data)
     
