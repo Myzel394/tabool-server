@@ -20,7 +20,7 @@ class UserRelationViewSetMixin(
     ]
     access_serializer: Type[serializers.ModelSerializer] = DefaultAccessSerializer
     model: StandardModelType
-    related_name: str = "user_relation"
+    related_name: str = "get_relation"
     model_lookup_name: str = "id"
     serializer_lookup_key_name: str = "id"
     
@@ -42,4 +42,4 @@ class UserRelationViewSetMixin(
             self.model_lookup_name: validated_data[self.serializer_lookup_key_name]
         })
         
-        return getattr(obj, self.related_name)
+        return getattr(obj, self.related_name)(self.request.user)

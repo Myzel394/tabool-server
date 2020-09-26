@@ -57,10 +57,10 @@ class RelationMixin(LifecycleModel):
     
     def get_relation(self, user: Optional[USER] = None) -> Union["RELATED_MODEL", QueryType["RELATED_MODEL"]]:
         related_model_attr = self.related_model_attr = f"{self.RELATED_MODEL.__name__.lower()}_set"
-        all_relations = getattr(self, related_model_attr)
+        all_relations = getattr(self, related_model_attr).all()
         
         if user:
-            return all_relations.get(user=user)
+            return all_relations.all().get(user=user)
         return all_relations
 
 
