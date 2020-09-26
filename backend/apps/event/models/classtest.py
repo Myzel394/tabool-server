@@ -9,7 +9,7 @@ from simple_history.models import HistoricalRecords
 
 from apps.history_extras.extras.user_information import UserInformationHistoricalModel
 from apps.utils.validators import validate_weekday_in_lesson_data_available
-from ..querysets import ClassTestQuerySet
+from ..querysets import ClasstestQuerySet
 from ...lesson.public import *
 
 if TYPE_CHECKING:
@@ -17,16 +17,16 @@ if TYPE_CHECKING:
     from apps.lesson.models import Room, Course
 
 __all__ = [
-    "ClassTest"
+    "Classtest"
 ]
 
 
-class ClassTest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
+class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     class Meta:
         verbose_name = _("Klassenarbeit")
         verbose_name_plural = _("Klassenarbeiten")
     
-    objects = ClassTestQuerySet.as_manager()
+    objects = ClasstestQuerySet.as_manager()
     
     course = models.ForeignKey(
         COURSE,

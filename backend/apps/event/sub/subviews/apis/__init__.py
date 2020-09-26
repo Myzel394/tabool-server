@@ -1,3 +1,3 @@
-from .class_test import *
+from .classtest import *
 from .event import *
 from .event_user_relation import *

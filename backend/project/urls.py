@@ -3,7 +3,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from apps.authentication.views import LoginView, LogoutView, PasswordChangeView, RegisterView
-from apps.event.views import ClassTestViewSet, EventViewSet, UserEventRelationViewSet
+from apps.event.views import ClasstestViewSet, EventViewSet, UserEventRelationViewSet
 from apps.homework.views import HomeworkViewSet, UserHomeworkRelationViewSet
 from apps.lesson.views import CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet
 from apps.news.views import NewsViewSet
@@ -12,7 +12,7 @@ from apps.timetable.views import TimetableViewSet
 router = DefaultRouter()
 router.register("timetable", TimetableViewSet, basename="Timetable")
 router.register("homework", HomeworkViewSet, basename="Homework")
-router.register("class-test", ClassTestViewSet, basename="ClassTest")  # TODO: Rename ClassTest -> Test
+router.register("classtest", ClasstestViewSet, basename="Classtest")
 router.register("event", EventViewSet, basename="Event")
 router.register("course", CourseViewSet, basename="Course")
 router.register("room", RoomViewSet, basename="Room")

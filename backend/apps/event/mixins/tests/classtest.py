@@ -8,13 +8,13 @@ from apps.lesson.mixins.tests import RoomTestMixin, SubjectTestMixin
 from apps.lesson.mixins.tests.course import CourseTestMixin
 from apps.utils import joinkwargs
 from apps.utils.date import find_next_date_by_weekday
-from ...models import ClassTest
+from ...models import Classtest
 
 
-class ClassTestTestMixin(RoomTestMixin, CourseTestMixin, SubjectTestMixin, ABC):
+class ClasstestTestMixin(RoomTestMixin, CourseTestMixin, SubjectTestMixin, ABC):
     @classmethod
-    def Create_class_test(cls, **kwargs) -> ClassTest:
-        return ClassTest.objects.create(
+    def Create_classtest(cls, **kwargs) -> Classtest:
+        return Classtest.objects.create(
             **joinkwargs(
                 {
                     "course": cls.Create_course,

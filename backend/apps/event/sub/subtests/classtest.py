@@ -2,8 +2,8 @@ from datetime import date, timedelta
 
 from django.core.exceptions import ValidationError
 
-from apps.event.mixins.tests.class_test import ClassTestTestMixin
-from apps.event.models import ClassTest
+from apps.event.mixins.tests.classtest import ClasstestTestMixin
+from apps.event.models import Classtest
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.utils import ClientTestMixin
 from apps.utils.date import find_next_date_by_weekday
@@ -13,21 +13,21 @@ __all__ = [
 ]
 
 
-class ModelTest(ClassTestTestMixin, ClientTestMixin):
+class ModelTest(ClasstestTestMixin, ClientTestMixin):
     def test_invalid_date(self):
         def func():
-            self.Create_class_test(
+            self.Create_classtest(
                 targeted_date=find_next_date_by_weekday(date.today(), 5)
             )
         
-        self.Create_class_test()
+        self.Create_classtest()
         self.assertRaises(ValidationError, func)
     
     def test_create(self):
         with self.Login_user_as_context() as user:
             course = self.Create_course()
             
-            response = self.client.post("/api/class-test/", {
+            response = self.client.post("/api/classtest/", {
                 "information": "Bebi",
                 "targeted_date": date.today() + timedelta(days=5),
                 "course": course.id,
@@ -36,6 +36,6 @@ class ModelTest(ClassTestTestMixin, ClientTestMixin):
         self.assertStatusOk(response.status_code)
 
 
-class QuerySetTest(ClassTestTestMixin, AssociatedUserTestMixin):
+class QuerySetTest(ClasstestTestMixin, AssociatedUserTestMixin):
     def test_association(self):
-        self.check_queryset_from_user(ClassTest)
+        self.check_queryset_from_user(Classtest)

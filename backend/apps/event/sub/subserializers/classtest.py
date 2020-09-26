@@ -2,16 +2,16 @@ from rest_framework import serializers
 
 from apps.lesson.public.serializer_fields import CourseField, RoomField
 from apps.utils.serializers import RandomIDSerializerMixin
-from ...models import ClassTest
+from ...models import Classtest
 
 __all__ = [
-    "ClassTestListSerializer", "ClassTestDetailSerializer"
+    "ClasstestListSerializer", "ClasstestDetailSerializer"
 ]
 
 
-class ClassTestListSerializer(RandomIDSerializerMixin):
+class ClasstestListSerializer(RandomIDSerializerMixin):
     class Meta:
-        model = ClassTest
+        model = Classtest
         fields = [
             "course", "id"
         ]
@@ -19,9 +19,9 @@ class ClassTestListSerializer(RandomIDSerializerMixin):
     course = CourseField()
 
 
-class ClassTestDetailSerializer(RandomIDSerializerMixin):
+class ClasstestDetailSerializer(RandomIDSerializerMixin):
     class Meta:
-        model = ClassTest
+        model = Classtest
         fields = [
             "course", "room", "targeted_date", "information", "created_at", "edited_at", "id"
         ]

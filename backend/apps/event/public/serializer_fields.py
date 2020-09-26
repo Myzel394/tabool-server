@@ -1,8 +1,8 @@
 from apps.utils.serializers import WritableFromUserFieldMixin
-from ..models import ClassTest, Event
+from ..models import Classtest, Event
 
 __all__ = [
-    "EventField", "ClassTestField",
+    "EventField", "ClasstestField",
 ]
 
 
@@ -10,5 +10,5 @@ class EventField(WritableFromUserFieldMixin):
     model = Event
 
 
-class ClassTestField(WritableFromUserFieldMixin):
-    model = ClassTest
+class ClasstestField(WritableFromUserFieldMixin):
+    model = Classtest
