@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 
 from apps.event.mixins.tests.classtest import ClasstestTestMixin
 from apps.event.models import Classtest
+from apps.event.sub.subserializers import ClasstestListSerializer
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.utils import ClientTestMixin
 from apps.utils.date import find_next_date_by_weekday
@@ -34,6 +35,36 @@ class ModelTest(ClasstestTestMixin, ClientTestMixin):
             }, content_type="application/json")
         
         self.assertStatusOk(response.status_code)
+    
+    def test_filtering(self):
+        with self.Login_user_as_context() as user:
+            self.__class__.associated_user = user
+            
+            for _ in range(50):
+                self.Create_classtest()
+            
+            targeted_date = date.today() + timedelta(days=2)
+            filter_statement = "targeted_date"
+            
+            print("Classtests for user:", Classtest.objects.all().from_user(user).count())
+            print("Classtests for user filtered:", Classtest.objects.all().from_user(user).filter(
+                targeted_date__lte=targeted_date).count())
+            
+            response = self.client.get(
+                "/api/classtest/",
+                {
+                    filter_statement: targeted_date
+                },
+                content_type="application/json"
+            )
+            
+            print(response.data)
+            self.assertStatusOk(response.status_code)
+            
+            expected = Classtest.objects.all().from_user(user).filter(**{filter_statement: targeted_date})
+            expected = ClasstestListSerializer(expected, many=True).data
+            
+            self.assertCountEqual(expected, response.data)
 
 
 class QuerySetTest(ClasstestTestMixin, AssociatedUserTestMixin):

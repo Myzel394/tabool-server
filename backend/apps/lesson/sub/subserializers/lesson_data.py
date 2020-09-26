@@ -17,9 +17,6 @@ class LessonDataListSerializer(RandomIDSerializerMixin):
     course = CourseField()
 
 
-# TODO: News model hinzufügen!
-
-
 class LessonDataDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = LessonData

@@ -1,5 +1,7 @@
+from django_common_utils.libraries.utils import model_verbose
 from django_filters import rest_framework as filters
 
+from apps.lesson.models import Course, Subject
 from ...models import Classtest
 
 __all__ = [
@@ -13,3 +15,13 @@ class ClasstestFilterSet(filters.FilterSet):
         fields = {
             "targeted_date": ["lte", "gte", "exact"],
         }
+    
+    course = filters.CharFilter(
+        field_name="course__id",
+        label=model_verbose(Course)
+    )
+    
+    subject = filters.CharFilter(
+        field_name="course__subject__id",
+        label=model_verbose(Subject)
+    )

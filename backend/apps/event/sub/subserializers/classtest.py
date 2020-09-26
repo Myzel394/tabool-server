@@ -13,7 +13,7 @@ class ClasstestListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Classtest
         fields = [
-            "course", "id"
+            "course", "targeted_date", "id"
         ]
     
     course = CourseField()

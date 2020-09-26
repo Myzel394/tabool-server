@@ -8,4 +8,4 @@ __all__ = [
 
 class ClasstestQuerySet(CustomQuerySetMixin.QuerySet):
     def from_user(self, user: settings.AUTH_USER_MODEL) -> "ClasstestQuerySet":
-        return self.filter(course__associated_user=user)
+        return self.filter(course__participants__in=[user])

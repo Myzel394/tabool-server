@@ -23,8 +23,6 @@ class ModelTest(LessonTestMixin, UserCreationTestMixin):
         self.assertEqual(lessons, timetable_lessons, "Lessons are not equal")
 
 
-# TODO: Remove unnecessary tests
-
 # noinspection DuplicatedCode
 class APITest(TimetableTestMixin, ClientTestMixin):
     def setUp(self) -> None:
@@ -39,8 +37,9 @@ class APITest(TimetableTestMixin, ClientTestMixin):
             f"/api/timetable/{timetable.id}/"
         )
         actual_data = response.data
+        print(response.data)
         
-        self.assertEqual(actual_data, expected_data)
+        self.assertCountEqual(actual_data, expected_data)
     
     def test_get_privacy(self):
         self.Create_timetable()
