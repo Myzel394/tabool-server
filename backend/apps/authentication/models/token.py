@@ -13,8 +13,6 @@ from ..public import *
 if TYPE_CHECKING:
     from django.contrib.auth import get_user_model
 
-# TODO: Creation date zu verschiedenen Modeln hinzufügen
-
 __all__ = [
     "AccessToken"
 ]

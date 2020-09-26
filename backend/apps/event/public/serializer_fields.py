@@ -8,7 +8,6 @@ __all__ = [
 
 class EventField(WritableFromUserFieldMixin):
     model = Event
-    # TODO: Add from_user to event's qs!
 
 
 class ClassTestField(WritableFromUserFieldMixin):

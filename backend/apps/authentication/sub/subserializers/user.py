@@ -1,14 +1,23 @@
-from apps.utils.serializers import RandomIDSerializerMixin
+from rest_framework import serializers
+
 from ...models import User
 
 __all__ = [
-    "UserDetailSerializer"
+    "UserInformationSerializer", "UserDetailSerializer"
 ]
 
 
-class UserDetailSerializer(RandomIDSerializerMixin):
+class UserInformationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "email", "first_name", "last_name", "password", "id"
+            "email", "first_name", "last_name"
+        ]
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "first_name"
         ]

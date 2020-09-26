@@ -43,12 +43,15 @@ INSTALLED_APPS = [
     "simple_history",
     "django_filters",  # TODO: Add filters everywhere
     "django_common_utils.apps.Config",  # TODO: Add user access token, login, etc. as views!
+    "django_bleach",
     
-    "apps.authentication.apps.AuthenticationConfig",
-    "apps.lesson.apps.LessonConfig",
-    "apps.event.apps.EventConfig",
-    "apps.homework.apps.HomeworkConfig",
-    "apps.timetable.apps.TimetableConfig",
+    "apps.authentication",
+    "apps.lesson",
+    "apps.event",
+    "apps.homework",
+    "apps.timetable",
+    
+    "apps.news",
 ]
 
 MIDDLEWARE = [
@@ -141,3 +144,42 @@ STATIC_URL = "/static/"
 SIMPLE_HISTORY_HISTORY_ID_USE_UUID = True
 SIMPLE_HISTORY_FILEFIELD_TO_CHARFIELD = True
 SIMPLE_HISTORY_HISTORY_CHANGE_REASON_USE_TEXT_FIELD = True
+
+
+def create_around_style(prefix: str, arounds: list = ["top", "right", "bottom", "left"]):
+    for around in arounds:
+        yield f"{prefix}-{around}"
+
+
+BLEACH_ALLOWED_TAGS = [
+    *(f"h{i}" for i in range(1, 6 + 1)),
+    "p",
+    "i", "em",
+    "b", "strong",
+    "a",
+    "ul", "ol", "li",
+    "blockquote",
+    "hr", "br",
+    "img",
+    "div",
+    "br",
+    "table", "tr", "th", "td", "thead", "tbody",
+    "dl", "dt", "dd"
+]
+BLEACH_ALLOWED_ATTRIBUTES = [
+    "href",
+    "title",
+    "style",
+    "src", "loading", "width", "height", "alt"
+]
+BLEACH_ALLOWED_STYLES = [
+    "margin", *(create_around_style("margin-")),
+    "padding", *(create_around_style("padding-")),
+    "color",
+    "text-align", "text-decoration"
+]
+BLEACH_ALLOWED_PROTOCOLS = [
+    "https", "data"
+]
+BLEACH_STRIP_TAGS = True
+BLEACH_STRIP_COMMENTS = True

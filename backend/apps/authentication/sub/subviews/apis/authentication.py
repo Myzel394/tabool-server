@@ -3,7 +3,7 @@ from rest_framework import generics, views
 from rest_framework.permissions import IsAuthenticated, NOT
 from rest_framework.response import Response
 
-from ....serializers import LoginSerializer, RegisterSerializer, UserDetailSerializer
+from ....serializers import LoginSerializer, RegisterSerializer, UserInformationSerializer
 
 __all__ = [
     "LoginView", "LogoutView", "RegisterView"
@@ -22,7 +22,7 @@ class LoginView(views.APIView):
         user = validated_data["user"]
         
         login(request, user)
-        user_data = UserDetailSerializer(user).data
+        user_data = UserInformationSerializer(user).data
         
         return Response(user_data)
 

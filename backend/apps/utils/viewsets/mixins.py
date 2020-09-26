@@ -1,3 +1,4 @@
+from django.db.models import Model
 from django_hint import *
 from rest_framework import serializers, viewsets
 from rest_framework.generics import get_object_or_404
@@ -6,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from .helpers.mixins import DefaultAccessSerializer
 
 __all__ = [
-    "UserRelationViewSetMixin"
+    "UserRelationViewSetMixin", "RetrieveFromUserMixin", "RetrieveAllMixin"
 ]
 
 
@@ -43,3 +44,21 @@ class UserRelationViewSetMixin(
         })
         
         return getattr(obj, self.related_name)(self.request.user)
+
+
+class RetrieveFromUserMixin(
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet
+):
+    permission_classes = [
+        IsAuthenticated
+    ]
+    model: Type[Model]
+    
+    def get_queryset(self):
+        return self.model.objects.all().from_user(self.request.user)
+
+
+class RetrieveAllMixin(RetrieveFromUserMixin):
+    def get_queryset(self):
+        return self.model.objects.all()
