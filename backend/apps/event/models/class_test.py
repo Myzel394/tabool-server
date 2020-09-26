@@ -3,15 +3,17 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers import HandlerMixin, TextOptimizerHandler
-from django_common_utils.libraries.models import RandomIDMixin
+from django_common_utils.libraries.models import CreationDateMixin, RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
+from simple_history.models import HistoricalRecords
 
+from apps.history_extras.extras.user_information import UserInformationHistoricalModel
 from apps.utils.validators import validate_weekday_in_lesson_data_available
 from ..querysets import ClassTestQuerySet
 from ...lesson.public import *
 
 if TYPE_CHECKING:
-    from datetime import date
+    from datetime import date, datetime
     from apps.lesson.models import Subject, Room
 
 __all__ = [
@@ -21,7 +23,7 @@ __all__ = [
 
 # TODO: Add timeline, who edited what
 
-class ClassTest(RandomIDMixin, LifecycleModel, HandlerMixin):
+class ClassTest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     class Meta:
         verbose_name = _("Klassenarbeit")
         verbose_name_plural = _("Klassenarbeiten")
@@ -53,6 +55,11 @@ class ClassTest(RandomIDMixin, LifecycleModel, HandlerMixin):
         null=True
     )  # type: str
     
+    history = HistoricalRecords(
+        cascade_delete_history=True,
+        bases=[UserInformationHistoricalModel]
+    )
+    
     @staticmethod
     def handlers():
         return {
@@ -63,3 +70,7 @@ class ClassTest(RandomIDMixin, LifecycleModel, HandlerMixin):
     @hook(BEFORE_UPDATE, when="targeted_date")
     def _hook_validate_targeted_dae(self):
         validate_weekday_in_lesson_data_available(self.targeted_date)
+    
+    @property
+    def edited_at(self) -> "datetime":
+        return self.history.all().latest().history_date

@@ -86,8 +86,6 @@ class ClientTestMixin(TestCase):
         self.assertTrue(200 <= status_code <= 299, f"status_code is '{status_code}'")
 
 
-# TODO: joinkwargs überall hinzufügen!
-
 def joinkwargs(defaults: Dict[str, Callable], given: dict, /) -> dict:
     data = {}
     for key, value in defaults.items():

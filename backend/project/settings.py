@@ -40,14 +40,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     
     "rest_framework",
-    "django_filters",
-    "django_common_utils.apps.Config",
+    "simple_history",
+    "django_filters",  # TODO: Add filters everywhere
+    "django_common_utils.apps.Config",  # TODO: Add user access token, login, etc. as views!
     
-    "apps.authentication",
-    "apps.lesson",
-    "apps.event",
-    "apps.homework",
-    "apps.timetable",
+    "apps.authentication.apps.AuthenticationConfig",
+    "apps.lesson.apps.LessonConfig",
+    "apps.event.apps.EventConfig",
+    "apps.homework.apps.HomeworkConfig",
+    "apps.timetable.apps.TimetableConfig",
 ]
 
 MIDDLEWARE = [
@@ -60,6 +61,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     
     "apps.authentication.middlewares.EnsureAuthenticationToken",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 REST_FRAMEWORK = {
@@ -135,3 +137,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+SIMPLE_HISTORY_HISTORY_ID_USE_UUID = True
+SIMPLE_HISTORY_FILEFIELD_TO_CHARFIELD = True
+SIMPLE_HISTORY_HISTORY_CHANGE_REASON_USE_TEXT_FIELD = True

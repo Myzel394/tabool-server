@@ -24,16 +24,14 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin, WritableNestedModelSeria
     class Meta:
         model = Homework
         fields = [
-            "lesson", "is_private", "due_date", "information", "type", "id", "created_at", "edited_at",
-        ]
-        read_only_fields = [
-            "created_at", "edited_at", "id"
+            "lesson", "is_private", "due_date", "information", "type", "created_at", "edited_at", "id",
         ]
     
     lesson = LessonDetailSerializer()
     is_private = WritableSerializerMethodField(
         deserializer_field=serializers.BooleanField()
     )
+    edited_at = serializers.DateTimeField(read_only=True)
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

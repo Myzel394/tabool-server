@@ -23,8 +23,9 @@ class ClassTestDetailSerializer(WritableNestedModelSerializer):
     class Meta:
         model = ClassTest
         fields = [
-            "subject", "targeted_date", "information", "room", "id"
+            "subject", "targeted_date", "information", "created_at", "edited_at", "room", "id"
         ]
     
     subject = SubjectDetailSerializer()
     room = RoomDetailSerializer()
+    edited_at = serializers.DateTimeField(read_only=True)

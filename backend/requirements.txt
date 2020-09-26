@@ -4,13 +4,16 @@ colour==0.1.5
 Django==3.1.1
 django-ckeditor==5.9.0
 django-colorfield==0.3.2
-django-common-utils==1.5.1
+django-common-utils==1.6.0
 django-filter==2.3.0
 django-hint==0.1.5
 django-js-asset==1.2.2
 django-lifecycle==0.7.7
+django-simple-history==2.11.0
 djangorestframework==3.11.1
+drf-writable-nested==0.6.1
 htmlmin==0.1.12
+lorem==0.1.1
 Markdown==3.2.2
 names==0.3.0
 Pillow==7.2.0

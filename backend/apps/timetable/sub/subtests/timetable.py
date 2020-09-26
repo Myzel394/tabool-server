@@ -117,9 +117,6 @@ class APITest(TimetableTestMixin, ClientTestMixin):
         )
 
 
-# TODO: add User Preferences app!
-
-
 class QuerySetTest(TimetableTestMixin, AssociatedUserTestMixin):
     def test_association(self):
         self.check_queryset_from_user(Timetable)
