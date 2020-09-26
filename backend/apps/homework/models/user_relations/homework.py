@@ -14,6 +14,10 @@ class UserHomeworkRelation(RandomIDMixin, UserModelRelationMixin):
     class Meta:
         verbose_name = _("Benutzer-Hausaufgabe-Beziehung")
         verbose_name_plural = _("Benutzer-Hausaufgaben-Beziehungen")
+        unique_together = (
+            ("homework", "user")
+        )
+        ordering = ("homework", "user")
     
     homework = models.ForeignKey(
         model_references.HOMEWORK,

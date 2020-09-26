@@ -10,7 +10,10 @@ class UserLessonRelation(RandomIDMixin, UserModelRelationMixin):
     class Meta:
         verbose_name = _("Benutzer-Stunde-Beziehung")
         verbose_name_plural = _("Benutzer-Stunden-Beziehungen")
-        # TODO: Add unique_together!
+        unique_together = (
+            ("lesson", "user")
+        )
+        ordering = ("lesson", "user")
     
     lesson = models.ForeignKey(
         model_references.LESSON,
