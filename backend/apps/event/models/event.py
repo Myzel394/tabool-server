@@ -4,19 +4,25 @@ from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStrip
 from django_common_utils.libraries.models import RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
+from apps.lesson.public import model_references, model_verbose_functions  # TODO: Import these as *
 from apps.utils.validators import validate_weekday_in_lesson_data_available
 from constants import maxlength
-from ...lesson.public import model_references, model_verbose_functions
+from .user_relations.event import UserEventRelation
+from ...utils import RelationMixin
 
 __all__ = [
     "Event"
 ]
 
 
-class Event(RandomIDMixin, LifecycleModel, HandlerMixin):
+class Event(RandomIDMixin, LifecycleModel, HandlerMixin, RelationMixin):
     class Meta:
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
+        ordering = ("title", "start_datetime", "end_datetime", "room")
+    
+    get_relation: UserEventRelation
+    RELATED_MODEL = UserEventRelation
     
     room = models.ForeignKey(
         model_references.ROOM,

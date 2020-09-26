@@ -1,1 +1,1 @@
-from .lesson import *
+from .lesson_user_relation import *
