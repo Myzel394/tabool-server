@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStripHandler
 from django_common_utils.libraries.models import RandomIDMixin
-from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
+from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
 from apps.lesson.public import model_references, model_verbose_functions  # TODO: Import these as *
 from apps.utils.validators import validate_weekday_in_lesson_data_available
@@ -15,7 +15,7 @@ __all__ = [
 ]
 
 
-class Event(RandomIDMixin, LifecycleModel, HandlerMixin, RelationMixin):
+class Event(RandomIDMixin, HandlerMixin, RelationMixin):
     class Meta:
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
