@@ -1,9 +1,9 @@
 import random
 
-from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext as _
-from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
+from django_hint import *
+from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.authentication.public.model_references import USER
 from apps.authentication.public.model_verbose_functions import user_single
@@ -47,3 +47,20 @@ class AddedAtMixin(models.Model):
         blank=True,
         null=True
     )
+
+
+class UserRelationMixin(LifecycleModel):
+    class Meta:
+        abstract = True
+    
+    RELATED_MODEL: StandardModelType
+    
+    @hook(AFTER_CREATE)
+    def _user_relation_mixin_hook_create_relation(self):
+        self.RELATED_MODEL.objects.create(**{
+            self.__class__.__name__.lower(): self
+        })
+    
+    @property
+    def user_relation(self):
+        return getattr(self, self.RELATED_MODEL.__name__.lower())
