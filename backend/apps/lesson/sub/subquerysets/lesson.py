@@ -2,9 +2,10 @@ from datetime import date as d_date
 from typing import *
 
 from django.conf import settings
-from django_common_utils.libraries.models import CustomQuerySetMixin
 
 from apps.utils.date import find_next_date_by_weekday
+from apps.utils.querysets import RelationQuerySetMixin
+from ...models.user_relations.lesson import UserLessonRelation
 
 if TYPE_CHECKING:
     from ...models import Lesson, LessonData
@@ -15,9 +16,9 @@ __all__ = [
 
 
 # noinspection PyTypeChecker
-class LessonQuerySet(CustomQuerySetMixin.QuerySet):
-    def from_user(self, user: settings.AUTH_USER_MODEL) -> "LessonQuerySet":
-        return self.filter(lesson_data__course__participants__in=[user])
+class LessonQuerySet(RelationQuerySetMixin):
+    ref_filter_statement = "lesson_data__course"
+    related_model = UserLessonRelation
     
     def create_automatically(
             self,
@@ -31,3 +32,6 @@ class LessonQuerySet(CustomQuerySetMixin.QuerySet):
             lesson_data=lesson_data,
             **kwargs
         )[0]
+    
+    def from_user(self, user: settings.AUTH_USER_MODEL) -> "LessonQuerySet":
+        return self.filter(lesson_data__course__participants__in=[user])

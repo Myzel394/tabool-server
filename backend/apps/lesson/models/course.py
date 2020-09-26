@@ -1,21 +1,28 @@
+from typing import *
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import RandomIDMixin
+from django_hint import *
+from django_lifecycle import AFTER_SAVE, hook, LifecycleModel
 
+from apps.homework.models import Homework
+from .lesson import Lesson
 from ..public import model_references, model_verbose_functions
 from ..querysets import CourseQuerySet
-
 
 __all__ = [
     "Course"
 ]
 
 
-class Course(RandomIDMixin):
+class Course(RandomIDMixin, LifecycleModel):
     class Meta:
         verbose_name = _("Kurs")
         verbose_name_plural = _("Kurse")
+    
+    RELATION_MODELS = {Lesson, Homework}
     
     objects = CourseQuerySet.as_manager()
     
@@ -44,3 +51,25 @@ class Course(RandomIDMixin):
         null=True,
         max_length=7
     )
+    
+    def __call_manage_relations_on_model(self, models: Iterable[StandardModelType]) -> None:
+        participants = self.participants.all()
+        participants_list = list(participants)
+        
+        for model in models:
+            model.objects.manage_relations(participants_list, self)
+    
+    @hook(AFTER_SAVE)
+    def _call_manage_relations_on_related_models(self) -> None:
+        self.__call_manage_relations_on_model(self.RELATION_MODELS)
+    
+    def update_relations(self, targeted_models: Optional[Set[StandardModelType]] = None) -> None:
+        if targeted_models:
+            assert all([
+                x in self.RELATION_MODELS
+                for x in targeted_models
+            ]), "Not all models were found in `self.RELATION_MODELS`. Maybe you forgot adding it?"
+        else:
+            targeted_models = self.RELATION_MODELS
+        
+        self.__call_manage_relations_on_model(targeted_models)

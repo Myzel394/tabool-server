@@ -7,25 +7,27 @@ from django_common_utils.libraries.utils import model_verbose
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
 from apps.authentication.public import (
-    model_references as user_model_references, model_verbose_functions as \
-    user_model_verbose_function,
+    model_references as user_model_references, model_verbose_functions as user_model_verbose_function,
 )
 from apps.lesson.public import model_references, model_verbose_functions
+from apps.utils import format_datetime, RelationMixin, validate_weekday_in_lesson_data_available
+from .user_relations.homework import UserHomeworkRelation
 from ..querysets import HomeworkQuerySet
 from ..validators import validate_only_future_days
-from ...utils.time import format_datetime
-from ...utils.validators import validate_weekday_in_lesson_data_available
 
 __all__ = [
     "Homework"
 ]
 
 
-class Homework(RandomIDMixin, EditCreationDateMixin):
+class Homework(RandomIDMixin, EditCreationDateMixin, RelationMixin):
     class Meta:
         verbose_name = _("Hausaufgabe")
         verbose_name_plural = _("Hausaufgaben")
         ordering = ("due_date", "type")
+    
+    get_relation: UserHomeworkRelation
+    RELATED_MODEL = UserHomeworkRelation
     
     objects = HomeworkQuerySet.as_manager()
     

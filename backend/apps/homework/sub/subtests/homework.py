@@ -1,7 +1,7 @@
 import lorem
 
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
-from apps.homework.models import Homework
+from apps.homework.models import Homework, UserHomeworkRelation
 from apps.homework.sub.subserializers import (HomeworkDetailSerializer, HomeworkListSerializer)
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.utils.tests import ClientTestMixin
@@ -67,8 +67,6 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         self.assertEqual(homework.information, new_information)
     
     def test_filtering(self):
-        # This homework should not be found
-        
         lesson = self.Create_lesson()
         self.Create_homework(
             lesson=lesson
@@ -89,6 +87,41 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         actual_data = response.data
         
         self.assertCountEqual(actual_data, expected_data)
+    
+    def test_filtering_relation(self):
+        homework = self.Create_homework()
+        completed_homework = self.Create_homework()
+        course = completed_homework.lesson.lesson_data.course
+        course.update_relations()
+        
+        print(completed_homework.lesson.lesson_data.course.participants.all())
+        print(UserHomeworkRelation.objects.all())
+        
+        relation = completed_homework.get_relation(self.logged_user)
+        relation.completed = True
+        relation.save()
+        
+        response = self.client.get("/api/homework/", {
+            "completed": False
+        }, content_type="application/json")
+        expected = Homework.objects.all().from_user(self.logged_user).filter(userhomeworkrelation__completed=False)
+        
+        self.assertStatusOk(response.status_code)
+        self.assertCountEqual(
+            response.data,
+            HomeworkListSerializer(expected, many=True).data
+        )
+        
+        response = self.client.get("/api/homework/", {
+            "completed": True
+        }, content_type="application/json")
+        expected = Homework.objects.all().from_user(self.logged_user).filter(userhomeworkrelation__completed=True)
+        
+        self.assertStatusOk(response.status_code)
+        self.assertCountEqual(
+            response.data,
+            HomeworkListSerializer(expected, many=True).data
+        )
     
     def test_private_homework(self):
         first_user = self.logged_user

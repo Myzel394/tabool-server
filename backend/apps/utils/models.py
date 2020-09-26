@@ -3,11 +3,10 @@ import random
 from django.db import models
 from django.utils.translation import gettext as _
 from django_hint import *
-from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
+from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
-from apps.authentication.public.model_references import USER
-from apps.authentication.public.model_verbose_functions import user_single
-from apps.utils.fields import ColorField
+from apps.authentication.public.model_verbose_functions import *
+from apps.utils.fields.color import ColorField
 from constants import colors
 
 
@@ -49,18 +48,28 @@ class AddedAtMixin(models.Model):
     )
 
 
-class UserRelationMixin(LifecycleModel):
+class RelationMixin(LifecycleModel):
     class Meta:
         abstract = True
     
     RELATED_MODEL: StandardModelType
+    related_model_attr: Optional[str] = None
     
-    @hook(AFTER_CREATE)
-    def _user_relation_mixin_hook_create_relation(self):
-        self.RELATED_MODEL.objects.create(**{
-            self.__class__.__name__.lower(): self
-        })
+    def get_relation(self, user: Optional[USER] = None) -> Union["RELATED_MODEL", QueryType["RELATED_MODEL"]]:
+        related_model_attr = self.related_model_attr = f"{self.RELATED_MODEL.__name__.lower()}_set"
+        all_relations = getattr(self, related_model_attr)
+        
+        if user:
+            return all_relations.get(user=user)
+        return all_relations
+
+
+class UserModelRelationMixin(models.Model):
+    class Meta:
+        abstract = True
     
-    @property
-    def user_relation(self):
-        return getattr(self, self.RELATED_MODEL.__name__.lower())
+    user = models.ForeignKey(
+        USER,
+        verbose_name=user_single,
+        on_delete=models.CASCADE,
+    )

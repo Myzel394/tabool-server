@@ -1,6 +1,6 @@
 from apps.lesson.mixins.tests import LessonTestMixin
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
-from apps.lesson.models import Course, Lesson
+from apps.lesson.models import Course, Lesson, UserLessonRelation
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
 
 __all__ = [
@@ -22,7 +22,7 @@ class UserRelationTest(LessonTestMixin, ClientTestMixin, UserCreationTestMixin):
         for _ in range(20):
             self.Create_lesson()
     
-    def test_relation(self):
+    def test_relation_api(self):
         lesson = Lesson.objects.all().first()
         
         response = self.client.get(f"/api/lesson/user-relation/{lesson.id}/")
@@ -50,3 +50,26 @@ class UserRelationTest(LessonTestMixin, ClientTestMixin, UserCreationTestMixin):
         
         self.assertStatusOk(response.status_code)
         self.assertTrue(response.data["attendance"])
+        
+        course = lesson.lesson_data.course
+        course.participants.remove(self.__class__.associated_user)
+        course.save()
+        
+        self.assertEqual(UserLessonRelation.objects.all().count(), Lesson.objects.all().count() - 1)
+
+
+class UserRelationCreationTest(LessonTestMixin, ClientTestMixin, UserCreationTestMixin):
+    def test_relation(self):
+        with self.Login_user_as_context() as user:
+            lesson = self.Create_lesson()
+            course = lesson.lesson_data.course
+            course.participants.add(user)
+            course.save()
+            
+            self.assertEqual(UserLessonRelation.objects.all().count(), 1)
+            print(lesson.get_relation())
+            
+            course.participants.remove(user)
+            course.save()
+            
+            self.assertEqual(UserLessonRelation.objects.all().count(), 0)

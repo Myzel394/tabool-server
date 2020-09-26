@@ -6,7 +6,7 @@ from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStrip
 from django_common_utils.libraries.models import RandomIDMixin
 from django_hint import QueryType
 
-from apps.utils.models import AssociatedUserMixin, ColorMixin
+from apps.utils.models import ColorMixin
 from constants import maxlength
 from ..querysets import SubjectQuerySet
 
@@ -18,7 +18,7 @@ __all__ = [
 ]
 
 
-class Subject(RandomIDMixin, HandlerMixin, ColorMixin):
+class Subject(RandomIDMixin, ColorMixin, HandlerMixin):
     class Meta:
         verbose_name = _("Fach")
         verbose_name_plural = _("Fächer")

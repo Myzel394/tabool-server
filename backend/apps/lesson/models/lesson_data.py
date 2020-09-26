@@ -6,9 +6,9 @@ from django_common_utils.libraries.models import RandomIDMixin
 from django_hint import QueryType
 
 from apps.utils.fields.weekday import WeekdayField
-from apps.utils.time import dummy_datetime_from_time, format_datetime
+from apps.utils.time import dummy_datetime_from_time
+from constants import weekdays
 from .lesson import Lesson
-from .. import constants
 from ..public import model_references, model_verbose_functions
 from ..sub.subquerysets import LessonDataQuerySet
 
@@ -53,7 +53,7 @@ class LessonData(RandomIDMixin):
     
     weekday = WeekdayField(
         verbose_name=_("Wochentag"),
-        choices=constants.LESSON_ALLOWED_DAYS
+        choices=weekdays.ALLOWED_WEEKDAYS
     )
     
     @property

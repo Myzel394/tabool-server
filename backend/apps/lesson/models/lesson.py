@@ -7,14 +7,14 @@ from .user_relations.lesson import UserLessonRelation
 from ..public import model_references, model_verbose_functions
 from ..querysets import LessonQuerySet
 from ..validators import validate_lesson_weekday
-from ...utils.models import UserRelationMixin
+from ...utils.models import RelationMixin
 
 __all__ = [
     "Lesson"
 ]
 
 
-class Lesson(RandomIDMixin, UserRelationMixin):
+class Lesson(RandomIDMixin, RelationMixin):
     class Meta:
         verbose_name = _("Stunde")
         verbose_name_plural = _("Stunden")
@@ -22,6 +22,7 @@ class Lesson(RandomIDMixin, UserRelationMixin):
             ("lesson_data", "date")
         )
     
+    get_relation: UserLessonRelation
     RELATED_MODEL = UserLessonRelation
     
     objects = LessonQuerySet.as_manager()
@@ -30,7 +31,7 @@ class Lesson(RandomIDMixin, UserRelationMixin):
         model_references.LESSON_DATA,
         verbose_name=model_verbose_functions.lesson_data_single,
         on_delete=models.CASCADE,
-    )
+    )  # TODO: Add type hints on fields!
     
     date = models.DateField(
         verbose_name=_("Datum")

@@ -6,9 +6,9 @@ from dateutil.rrule import MINUTELY, rrule
 
 from apps.utils.tests import joinkwargs, StartTimeEndTimeTestMixin
 from apps.utils.time import dummy_datetime_from_time
-from .room import RoomTestMixin
+from constants.weekdays import ALLOWED_WEEKDAYS
 from .course import CourseTestMixin
-from ...constants import LESSON_ALLOWED_DAYS
+from .room import RoomTestMixin
 from ...models import Lesson, LessonData
 
 __all__ = [
@@ -41,7 +41,7 @@ class LessonTestMixin(
                     "course": cls.Create_course,
                     "start_time": cls.start_time,
                     "end_time": cls.end_time,
-                    "weekday": lambda: random.choice([x[0] for x in LESSON_ALLOWED_DAYS]),
+                    "weekday": lambda: random.choice([x[0] for x in ALLOWED_WEEKDAYS]),
                 },
                 kwargs
             )
@@ -61,7 +61,7 @@ class LessonTestMixin(
         lessons = []
         
         weekday: int
-        for weekday in [x[0] for x in LESSON_ALLOWED_DAYS]:
+        for weekday in [x[0] for x in ALLOWED_WEEKDAYS]:
             current_time: datetime
             for current_time in rrule(
                     MINUTELY,

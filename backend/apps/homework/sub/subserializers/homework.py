@@ -27,7 +27,7 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin, WritableNestedModelSeria
             "lesson", "is_private", "due_date", "information", "type", "id", "created_at", "edited_at",
         ]
         read_only_fields = [
-            "created_at", "edited_at",
+            "created_at", "edited_at", "id"
         ]
     
     lesson = LessonDetailSerializer()
