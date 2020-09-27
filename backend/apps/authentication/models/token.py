@@ -4,11 +4,7 @@ from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.models.mixins.common import RandomIDMixin
-from django_common_utils.libraries.models.mixins.date import CreationDateMixin
-from django_lifecycle import BEFORE_CREATE, hook
-
-from ..public import *
+from django_lifecycle import BEFORE_CREATE, hook, LifecycleModel
 
 if TYPE_CHECKING:
     from django.contrib.auth import get_user_model
@@ -18,7 +14,7 @@ __all__ = [
 ]
 
 
-class AccessToken(RandomIDMixin, CreationDateMixin):
+class AccessToken(LifecycleModel):
     class Meta:
         verbose_name = _("Zugangszeichen")
         verbose_name_plural = _("Zugangszeichen")
@@ -26,8 +22,7 @@ class AccessToken(RandomIDMixin, CreationDateMixin):
     TOKEN_LENGTH = 255
     
     user = models.ForeignKey(
-        USER,
-        verbose_name=user_single,
+        "authentication.User",
         on_delete=models.CASCADE,
         blank=True,
         null=True
@@ -41,8 +36,14 @@ class AccessToken(RandomIDMixin, CreationDateMixin):
         editable=False,
     )  # type: str
     
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+    
     @hook(BEFORE_CREATE)
     def _hook_create_token(self):
+        tokens = set(self.__class__.objects.values_list("token", flat=True))
+        
         while True:
             token = "".join(
                 random.choices(
@@ -51,7 +52,7 @@ class AccessToken(RandomIDMixin, CreationDateMixin):
                 )
             )
             
-            if not self.objects.only("token").filter(token=token).exists():
+            if token not in tokens:
                 break
         
         self.token = token

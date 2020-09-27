@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from ...models import AccessToken
+from ...models import AccessToken, ScoosoData
 from ...validators import email_not_in_use, token_exists, token_not_in_use
 
 __all__ = [
@@ -45,25 +46,46 @@ class LoginSerializer(serializers.Serializer):
         return {"user": user}
 
 
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = [
-            "email", "first_name", "last_name", "token"
-        ]
+class RegisterSerializer(serializers.Serializer):
+    email = serializers.EmailField(
+        validators=[email_not_in_use]
+    )
+    
+    first_name = serializers.CharField(
+        min_length=2
+    )
+    
+    last_name = serializers.CharField(
+        min_length=2
+    )
+    
+    password = serializers.CharField(
+        validators=[validate_password]
+    )
+    
+    scooso_username = serializers.CharField()
+    
+    scooso_password = serializers.CharField()
     
     token = serializers.CharField(
         validators=[token_exists, token_not_in_use],
         min_length=AccessToken.TOKEN_LENGTH
     )
     
-    email = serializers.EmailField(
-        validators=[email_not_in_use]
-    )
-    
     def create(self, validated_data):
-        return User.objects.create_user(
-            validated_data.pop("email"),
-            validated_data.pop("password"),
-            **validated_data
+        user = User.objects.create_user(
+            validated_data["email"],
+            validated_data["password"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"]
         )
+        scooso_data = ScoosoData.objects.create(
+            user=user,
+            username=validated_data["scooso_username"],
+            password=validated_data["scooso_password"]
+        )
+        token = AccessToken.objects.get(token=validated_data["token"])
+        token.user = user
+        token.save()
+        
+        return user

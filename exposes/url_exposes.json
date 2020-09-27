@@ -1,0 +1,194 @@
+{
+    "timetable": {
+        "url": "/scooso/bin/php/query.php",
+        "required_params": {
+            "client": {
+                "type": "string",
+                "constant": "rwg"
+            },
+            "logSessionId": {
+                "type": "string"
+            },
+            "cmd": {
+                "type": "int",
+                "constant": 600
+            },
+            "subcmd": {
+                "type": "int",
+                "constant": 100
+            },
+            "startDate": {
+                "type": "datetime",
+                "hint": "Type is datetime but with time set to MIN_VALUE"
+            },
+            "endDate": {
+                "type": "datetime",
+                "hint": "Type is datetime but with time set to MIN_VALUE"
+            }
+        },
+        "response": {
+            "failure": {
+                "characteristic": {
+                    "item.code": null
+                }
+            },
+            "success": {
+                "design": {
+                    "table.schedule": {
+                        "type": "list",
+                        "design": {
+                            "type": "dict",
+                            "content": {
+                                "lesson": {
+                                    "determines_by": [
+                                        "type"
+                                    ],
+                                    "design": [
+                                        {
+                                            "name": "type",
+                                            "type": "string[int]",
+                                            "constant": 100
+                                        },
+                                        {
+                                            "name": "coursenumber",
+                                            "type": "string[int]"
+                                        },
+                                        {
+                                            "name": "weekday",
+                                            "type": "string[int]"
+                                        },
+                                        {
+                                            "name": "start_time",
+                                            "type": "datetime[time]"
+                                        },
+                                        {
+                                            "name": "end_time",
+                                            "type": "datetime[time]"
+                                        },
+                                        {
+                                            "name": "location_code",
+                                            "type": "string[int]"
+                                        },
+                                        {
+                                            "name": "subject_code",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "name": "teacher_code",
+                                            "type": "string"
+                                        }
+                                    ]
+                                },
+                                "event": {
+                                    "determines_by": [
+                                        "type"
+                                    ],
+                                    "design": [
+                                        {
+                                            "name": "type",
+                                            "type": "string[int]",
+                                            "constant": 1
+                                        },
+                                        {
+                                            "name": "title",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "name": "start_time",
+                                            "type": "datetime[time]"
+                                        },
+                                        {
+                                            "name": "end_time",
+                                            "type": "datetime[time]"
+                                        },
+                                        {
+                                            "name": "allday",
+                                            "type": "string[bool]"
+                                        }
+                                    ]
+                                },
+                                "freePeriod": {
+                                    "determines_by": [
+                                        "type"
+                                    ],
+                                    "design": [
+                                        {
+                                            "name": "type",
+                                            "type": "string[int]",
+                                            "constant": 1060,
+                                            "hint": "Ausfall"
+                                        },
+                                        {
+                                            "name": "information",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "name": "subject_code",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "name": "location_code",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "name": "teacher_code",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "name": "coursenumber",
+                                            "type": "string[int]"
+                                        },
+                                        {
+                                            "name": "information",
+                                            "type": ""
+                                        }
+                                    ]
+                                },
+                                "replace": {
+                                    "determines_by": [
+                                        "old_teacher_code"
+                                    ],
+                                    "design": [
+                                        {
+                                            "name": "old_subject_code | subject_code",
+                                            "type": "string",
+                                            "hint": "Old subject, if `old_subject_code` is null, `subject_code` should be used"
+                                        },
+                                        {
+                                            "name": "old_teacher_code | teacher_code",
+                                            "type": "string",
+                                            "hint": "Old teacher"
+                                        },
+                                        {
+                                            "name": "old_location_code",
+                                            "type": "string[int]",
+                                            "hint": "Old location"
+                                        },
+                                        {
+                                            "name": "new_subject_code",
+                                            "type": "string]",
+                                            "hint": "New Subject",
+                                            "optional": true
+                                        },
+                                        {
+                                            "name": "new_teacher_code",
+                                            "type": "string",
+                                            "hint": "New Teacher",
+                                            "optional": true
+                                        },
+                                        {
+                                            "name": "new_location_code",
+                                            "type": "string[int]",
+                                            "hint": "New location",
+                                            "optional": true
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

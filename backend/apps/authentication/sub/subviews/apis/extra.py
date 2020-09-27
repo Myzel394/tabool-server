@@ -15,7 +15,7 @@ class PasswordChangeView(views.APIView):
     ]
     
     def post(self, request):
-        serializer = PasswordChangerSerializer(request.data)
+        serializer = PasswordChangerSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         user = validated_data["user"]

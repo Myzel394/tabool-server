@@ -12,12 +12,12 @@ __all__ = [
 
 
 def token_exists(value: str):
-    if not AccessToken.objects.all().only("token").fitler(token=value).exists():
+    if not AccessToken.objects.all().only("token").filter(token=value).exists():
         raise ValidationError(_("Zugangscode nicht gültig"))
 
 
 def token_not_in_use(value: str):
-    if AccessToken.objects.all().only("token").filter(token=value).exists():
+    if AccessToken.objects.all().only("token", "user").filter(token=value).exclude(user=None).exists():
         raise ValidationError(
             _("Dieser Zugangscode wurde bereits verwendet. Du kannst Zugangscode nur für einen Account "
               "verwenden. Wenn dein Zugangscode von jemand anderem verwendet wurde, kontaktiere uns.")

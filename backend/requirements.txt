@@ -1,12 +1,15 @@
 asgiref==3.2.10
 beautifulsoup4==4.9.1
 bleach==3.2.1
+cffi==1.14.3
 colour==0.1.5
+cryptography==3.1.1
 Django==3.1.1
 django-bleach==0.6.1
 django-ckeditor==5.9.0
 django-colorfield==0.3.2
 django-common-utils==1.6.0
+django-fernet-fields==0.6
 django-filter==2.3.0
 django-hint==0.1.5
 django-js-asset==1.2.2
@@ -19,6 +22,7 @@ Markdown==3.2.2
 names==0.3.0
 packaging==20.4
 Pillow==7.2.0
+pycparser==2.20
 pyparsing==2.4.7
 python-dateutil==2.8.1
 pytz==2020.1

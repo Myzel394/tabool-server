@@ -22,7 +22,7 @@ class PasswordChangerSerializer(serializers.Serializer):
         new_password: str = attrs["new_password"]
         
         # Check passwords are the same
-        if old_password != new_password:
+        if old_password == new_password:
             raise serializers.ValidationError({
                 "new_password": _("Das Passwort ist das gleiche wie das alte!")
             })

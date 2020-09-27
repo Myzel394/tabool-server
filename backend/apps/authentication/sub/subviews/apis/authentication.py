@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout
-from rest_framework import generics, views
+from rest_framework import generics, status, views
 from rest_framework.permissions import IsAuthenticated, NOT
 from rest_framework.response import Response
 
@@ -44,3 +44,14 @@ class RegisterView(generics.CreateAPIView):
     def perform_create(self, serializer: RegisterSerializer):
         user = serializer.save()
         login(self.request, user)
+        return user
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        user = self.perform_create(serializer)
+        serializer = UserInformationSerializer(user)
+        
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

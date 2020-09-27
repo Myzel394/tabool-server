@@ -1,3 +1,2 @@
-from django.test import TestCase
-
-# Create your tests here.
+# noinspection PyUnresolvedReferences
+from .sub.subtests import *
