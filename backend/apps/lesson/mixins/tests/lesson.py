@@ -5,7 +5,7 @@ from typing import *
 from dateutil.rrule import MINUTELY, rrule
 
 from apps.utils.tests import joinkwargs, StartTimeEndTimeTestMixin
-from apps.utils.time import dummy_datetime_from_time
+from apps.utils.time import dummy_datetime_from_target
 from constants.weekdays import ALLOWED_WEEKDAYS
 from .course import CourseTestMixin
 from .room import RoomTestMixin
@@ -56,7 +56,8 @@ class LessonTestMixin(
             **kwargs
     ) -> List[LessonData]:
         start_time = start_time or time(hour=7, minute=55)
-        end_time = end_time or (dummy_datetime_from_time(time(hour=13, minute=10)) - timedelta(minutes=duration)).time()
+        end_time = end_time or (
+                    dummy_datetime_from_target(time(hour=13, minute=10)) - timedelta(minutes=duration)).time()
         
         lessons = []
         
@@ -66,8 +67,8 @@ class LessonTestMixin(
             for current_time in rrule(
                     MINUTELY,
                     interval=duration,
-                    dtstart=dummy_datetime_from_time(start_time),
-                    until=dummy_datetime_from_time(end_time)
+                    dtstart=dummy_datetime_from_target(start_time),
+                    until=dummy_datetime_from_target(end_time)
             ):
                 lesson = cls.Create_lesson_data(
                     **joinkwargs(

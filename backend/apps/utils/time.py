@@ -15,15 +15,29 @@ def format_datetime(value: AnyDatetimeModule, /, format: Optional[str] = None) -
     return value.strftime(format)
 
 
-def dummy_datetime_from_time(value: time) -> datetime:
-    now = datetime.now()
+def dummy_datetime_from_target(target: Union[date, datetime, time]) -> datetime:
+    NOW = datetime.now()
     
-    return datetime(
-        year=now.year,
-        month=now.month,
-        day=now.day,
-        hour=value.hour,
-        minute=value.minute,
-        second=value.second,
-        microsecond=value.microsecond
-    )
+    if type(target) is datetime:
+        return target
+    elif type(target) is date:
+        return datetime(
+            year=target.year,
+            month=target.month,
+            day=target.day,
+            hour=NOW.hour,
+            minute=NOW.minute,
+            second=NOW.second
+        )
+    elif type(target) is time:
+        return datetime(
+            year=NOW.year,
+            month=NOW.month,
+            day=NOW.day,
+            hour=target.hour,
+            minute=target.minute,
+            second=target.second,
+            microsecond=target.minute,
+        )
+    
+    raise ValueError("Date couldn't be converted.")

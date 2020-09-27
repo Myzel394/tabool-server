@@ -9,9 +9,7 @@ from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 from apps.lesson.public import *
 from apps.utils.validators import validate_weekday_in_lesson_data_available
 from constants import maxlength
-from .user_relations.event import UserEventRelation
 from ..sub.subquerysets import EventQuerySet
-from ...utils import RelationMixin
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -22,16 +20,13 @@ __all__ = [
 ]
 
 
-class Event(RandomIDMixin, HandlerMixin, RelationMixin):
+class Event(RandomIDMixin, HandlerMixin):
     class Meta:
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
         ordering = ("title", "start_datetime", "end_datetime", "room")
     
     objects = EventQuerySet.as_manager()
-    
-    get_relation: UserEventRelation
-    RELATED_MODEL = UserEventRelation
     
     room = models.ForeignKey(
         ROOM,

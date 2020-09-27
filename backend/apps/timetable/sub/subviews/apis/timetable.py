@@ -6,14 +6,13 @@ from rest_framework.response import Response
 
 from apps.lesson.models import LessonData
 from apps.lesson.serializers import LessonListSerializer
+from apps.utils.date import find_next_date_by_weekday
 from ....models import Timetable
 from ....serializers import LessonAccessSerializer, TimetableDetailSerializer, TimetableListSerializer
 
 __all__ = [
     "TimetableViewSet"
 ]
-
-from apps.utils.date import find_next_date_by_weekday
 
 
 # TODO: Change permissions_class "IsAuthenticated" to own, which also validates if a user is active

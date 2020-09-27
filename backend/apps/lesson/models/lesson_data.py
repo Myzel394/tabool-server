@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import RandomIDMixin
 
 from apps.utils.fields.weekday import WeekdayField
-from apps.utils.time import dummy_datetime_from_time
+from apps.utils.time import dummy_datetime_from_target
 from constants import weekdays
 from .lesson import Lesson
 from ..public import model_references, model_verbose_functions
@@ -58,7 +58,7 @@ class LessonData(RandomIDMixin):
     @property
     def duration(self) -> int:
         """Returns the duration of the lesson in minutes"""
-        difference = dummy_datetime_from_time(self.end_time) - dummy_datetime_from_time(self.start_time)
+        difference = dummy_datetime_from_target(self.end_time) - dummy_datetime_from_target(self.start_time)
         
         return int(difference.seconds / 60)
     

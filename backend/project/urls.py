@@ -3,7 +3,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from apps.authentication.views import LoginView, LogoutView, PasswordChangeView, RegisterView
-from apps.event.views import ClasstestViewSet, EventViewSet, UserEventRelationViewSet
+from apps.event.views import ClasstestViewSet, EventViewSet
 from apps.homework.views import HomeworkViewSet, UserHomeworkRelationViewSet
 from apps.lesson.views import CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet
 from apps.news.views import NewsViewSet
@@ -20,9 +20,8 @@ router.register("subject", SubjectViewSet, basename="Subject")
 router.register("teacher", TeacherViewSet, basename="Teacher")
 router.register("news", NewsViewSet, basename="News")
 
-router.register("lesson/user-relation", UserLessonRelationViewSet, basename="UserLessonRelation")
-router.register("homework/user-relation", UserHomeworkRelationViewSet, basename="UserHomeworkRelation")
-router.register("event/user-relation", UserEventRelationViewSet, basename="UserEventRelation")
+router.register("user-relation/lesson", UserLessonRelationViewSet, basename="UserLessonRelation")
+router.register("user-relation/homework", UserHomeworkRelationViewSet, basename="UserHomeworkRelation")
 
 urlpatterns = [
     path("admin/", admin.site.urls),

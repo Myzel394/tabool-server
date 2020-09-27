@@ -27,20 +27,20 @@ class UserRelationTest(LessonTestMixin, ClientTestMixin, UserCreationTestMixin):
         lesson.lesson_data.course.update_relations()
         self.assertEqual(UserLessonRelation.objects.all().count(), 1)
         
-        response = self.client.get(f"/api/lesson/user-relation/{lesson.id}/")
+        response = self.client.get(f"/api/user-relation/lesson/{lesson.id}/")
         
         self.assertStatusOk(response.status_code)
         self.assertTrue(response.data["attendance"])
         
         self.client.patch(
-            f"/api/lesson/user-relation/{lesson.id}/",
+            f"/api/user-relation/lesson/{lesson.id}/",
             {
                 "attendance": False
             },
             content_type="application/json"
         )
         
-        response = self.client.get(f"/api/lesson/user-relation/{lesson.id}/")
+        response = self.client.get(f"/api/user-relation/lesson/{lesson.id}/")
         
         self.assertStatusOk(response.status_code)
         self.assertFalse(response.data["attendance"])
@@ -49,7 +49,7 @@ class UserRelationTest(LessonTestMixin, ClientTestMixin, UserCreationTestMixin):
         
         other_lesson = Lesson.objects.all().last()
         other_lesson.lesson_data.course.update_relations()
-        response = self.client.get(f"/api/lesson/user-relation/{other_lesson.id}/")
+        response = self.client.get(f"/api/user-relation/lesson/{other_lesson.id}/")
         self.assertEqual(UserLessonRelation.objects.all().count(), 2)
         
         self.assertStatusOk(response.status_code)

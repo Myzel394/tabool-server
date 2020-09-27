@@ -1,3 +1,6 @@
+import json
+from pprint import pp
+
 from apps.lesson.mixins.tests import RoomTestMixin
 from apps.utils import ClientTestMixin, UserCreationTestMixin
 
@@ -10,5 +13,7 @@ class APITest(ClientTestMixin, UserCreationTestMixin, RoomTestMixin):
     def test_pagination(self):
         with self.Login_user_as_context() as user:
             response = self.client.get("/api/room/")
-            
-            print(response.data)
+        
+        results = response.data["results"]
+        pp(json.loads(json.dumps(response.data)))
+        print(len(results))

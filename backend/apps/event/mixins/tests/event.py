@@ -3,21 +3,23 @@ from abc import ABC
 import lorem
 
 from apps.lesson.mixins.tests import RoomTestMixin
-from apps.utils.tests import StartTimeEndTimeTestMixin
+from apps.utils.tests import DateUtilsTestMixin, joinkwargs, StartTimeEndTimeTestMixin
 from ...models import Event
 
 
-class EventTestMixin(RoomTestMixin, StartTimeEndTimeTestMixin, ABC):
+class EventTestMixin(RoomTestMixin, StartTimeEndTimeTestMixin, DateUtilsTestMixin, ABC):
     DURATION = 60 * 3
     
     @classmethod
     def Create_event(cls, **kwargs) -> Event:
         return Event.objects.create(
-            **{
-                "room": cls.Create_room(),
-                "title": lorem.sentence(1),
-                "start_datetime": cls.start_time(),
-                "end_datetime": cls.end_time(),
-                **kwargs
-            }
+            **joinkwargs(
+                {
+                    "room": cls.Create_room,
+                    "title": lorem.sentence,
+                    "start_datetime": cls.Random_allowed_datetime,
+                    "end_datetime": cls.Random_allowed_datetime,
+                },
+                kwargs
+            )
         )

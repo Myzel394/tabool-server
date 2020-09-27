@@ -51,7 +51,7 @@ class APITest(TimetableTestMixin, ClientTestMixin):
         )
         self.assertEqual(response.status_code, 200)
         
-        self.assertEqual(response.data, [])
+        self.assertEqual(response.data["results"], [])
     
     def test_lesson_creation(self):
         timetable = self.Create_timetable()

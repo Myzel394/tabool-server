@@ -26,7 +26,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         self.assertStatusOk(response.status_code)
         
         self.assertCountEqual(
-            response.data,
+            response.data["results"],
             HomeworkListSerializer(
                 Homework.objects.all().from_user(self.logged_user),
                 many=True
@@ -88,7 +88,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             .from_user(self.logged_user) \
             .filter(lesson__id=lesson.id)
         expected_data = HomeworkListSerializer(expected_homeworks, many=True).data
-        actual_data = response.data
+        actual_data = response.data["results"]
         
         self.assertCountEqual(actual_data, expected_data)
     
@@ -109,7 +109,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         self.assertStatusOk(response.status_code)
         self.assertCountEqual(
-            response.data,
+            response.data["results"],
             HomeworkListSerializer(expected, many=True).data
         )
         
@@ -120,7 +120,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         self.assertStatusOk(response.status_code)
         self.assertCountEqual(
-            response.data,
+            response.data["results"],
             HomeworkListSerializer(expected, many=True).data
         )
     
@@ -190,7 +190,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             self.assertStatusOk(response.status_code)
             self.assertCountEqual(
                 HomeworkListSerializer(homeworks, many=True).data,
-                response.data
+                response.data["results"]
             )
             self.assertIn(private_homework, homeworks)
         
@@ -202,7 +202,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             self.assertStatusOk(response.status_code)
             self.assertCountEqual(
                 HomeworkListSerializer(homeworks, many=True).data,
-                response.data
+                response.data["results"]
             )
             self.assertNotIn(private_homework, homeworks)
 
