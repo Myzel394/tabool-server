@@ -22,4 +22,4 @@ class EventDetailSerializer(RandomIDSerializerMixin):
             "room", "title", "start_datetime", "end_datetime", "id"
         ]
     
-    room = RoomField()
+    room = RoomField(required=False)

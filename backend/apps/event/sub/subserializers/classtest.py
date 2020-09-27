@@ -27,5 +27,5 @@ class ClasstestDetailSerializer(RandomIDSerializerMixin):
         ]
     
     course = CourseField()
-    room = RoomField()
+    room = RoomField(required=False)
     edited_at = serializers.DateTimeField(read_only=True)

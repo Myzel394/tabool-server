@@ -55,4 +55,5 @@ class HomeworkQuerySet(RelationQuerySetMixin):
         return self.filter(
             Q(lesson__lesson_data__course__participants__in=[user], private_to_user=None)
             | Q(private_to_user=user)
+            | Q(userhomeworkrelation__user=user)
         ).distinct()

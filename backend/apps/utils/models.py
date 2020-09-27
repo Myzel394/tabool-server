@@ -2,7 +2,6 @@ import random
 
 from django.db import models
 from django.utils.translation import gettext as _
-from django_hint import *
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.authentication.public.model_verbose_functions import *
@@ -46,22 +45,6 @@ class AddedAtMixin(models.Model):
         blank=True,
         null=True
     )
-
-
-class RelationMixin(LifecycleModel):
-    class Meta:
-        abstract = True
-    
-    RELATED_MODEL: StandardModelType
-    related_model_attr: Optional[str] = None
-    
-    def get_relation(self, user: Optional[USER] = None) -> Union["RELATED_MODEL", QueryType["RELATED_MODEL"]]:
-        related_model_attr = self.related_model_attr = f"{self.RELATED_MODEL.__name__.lower()}_set"
-        all_relations = getattr(self, related_model_attr).all()
-        
-        if user:
-            return all_relations.all().get(user=user)
-        return all_relations
 
 
 class UserModelRelationMixin(models.Model):

@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "django_common_utils.apps.Config",  # TODO: Add user access token, login, etc. as views!
     "django_bleach",
     
+    "apps.relation_managers.apps.RelationManagersConfig",
+    
     "apps.authentication",
     "apps.lesson",
     "apps.event",

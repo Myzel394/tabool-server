@@ -98,7 +98,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         course = completed_homework.lesson.lesson_data.course
         course.update_relations()
         
-        relation = completed_homework.get_relation(self.logged_user)
+        relation = completed_homework.user_relations.get(user=self.logged_user)
         relation.completed = True
         relation.save()
         

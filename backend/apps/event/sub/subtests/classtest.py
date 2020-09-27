@@ -64,7 +64,7 @@ class ModelTest(ClasstestTestMixin, ClientTestMixin):
             expected = Classtest.objects.all().from_user(user).filter(**{filter_statement: targeted_date})
             expected = ClasstestListSerializer(expected, many=True).data
             
-            self.assertCountEqual(expected, response.data)
+            self.assertCountEqual(expected, response.data["results"])
 
 
 class QuerySetTest(ClasstestTestMixin, AssociatedUserTestMixin):

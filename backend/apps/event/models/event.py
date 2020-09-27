@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStripHandler
 from django_common_utils.libraries.models import RandomIDMixin
+from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
 from apps.lesson.public import *
@@ -14,6 +15,7 @@ from ..sub.subquerysets import EventQuerySet
 if TYPE_CHECKING:
     from datetime import datetime
     from apps.lesson.models import Room
+    from . import UserEventRelation
 
 __all__ = [
     "Event"
@@ -60,3 +62,7 @@ class Event(RandomIDMixin, HandlerMixin):
     def _hook_validate_dates(self):
         validate_weekday_in_lesson_data_available(self.start_datetime)
         validate_weekday_in_lesson_data_available(self.end_datetime)
+    
+    @property
+    def user_relations(self) -> QueryType["UserEventRelation"]:
+        return self.usereventrelation_set.all()

@@ -10,11 +10,10 @@ from .user_relations.lesson import UserLessonRelation
 from ..public import model_references, model_verbose_functions
 from ..querysets import LessonQuerySet
 from ..validators import validate_lesson_weekday
-from ...utils.models import RelationMixin
 
 if TYPE_CHECKING:
     from datetime import date as typing_date
-    from . import LessonData
+    from . import LessonData, UserLessonRelation
     from apps.homework.models import Homework
 
 __all__ = [
@@ -22,16 +21,13 @@ __all__ = [
 ]
 
 
-class Lesson(RandomIDMixin, RelationMixin):
+class Lesson(RandomIDMixin):
     class Meta:
         verbose_name = _("Stunde")
         verbose_name_plural = _("Stunden")
         unique_together = (
             ("lesson_data", "date")
         )
-    
-    get_relation: UserLessonRelation
-    RELATED_MODEL = UserLessonRelation
     
     objects = LessonQuerySet.as_manager()
     
@@ -53,3 +49,7 @@ class Lesson(RandomIDMixin, RelationMixin):
     @property
     def homeworks(self) -> QueryType["Homework"]:
         return self.homework_set.all()
+    
+    @property
+    def user_relations(self) -> QueryType["UserLessonRelation"]:
+        return self.userlessonrelation_set.all()

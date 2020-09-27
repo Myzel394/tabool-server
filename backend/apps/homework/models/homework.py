@@ -5,19 +5,21 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers import TextOptimizerHandler
 from django_common_utils.libraries.models import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import CreationDateMixin
+from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 from simple_history.models import HistoricalRecords
 
 from apps.authentication.public import *
 from apps.history_extras.extras import UserInformationHistoricalModel
 from apps.lesson.public import *
-from apps.utils import format_datetime, RelationMixin, validate_weekday_in_lesson_data_available
+from apps.utils import format_datetime, validate_weekday_in_lesson_data_available
 from .user_relations.homework import UserHomeworkRelation
 from ..querysets import HomeworkQuerySet
 from ..validators import validate_only_future_days
 
 if TYPE_CHECKING:
     from datetime import date, datetime
+    from . import UserHomeworkRelation
     from apps.lesson.models import Lesson
     from django.contrib.auth import get_user_model
 
@@ -26,14 +28,11 @@ __all__ = [
 ]
 
 
-class Homework(RandomIDMixin, CreationDateMixin, RelationMixin):
+class Homework(RandomIDMixin, CreationDateMixin):
     class Meta:
         verbose_name = _("Hausaufgabe")
         verbose_name_plural = _("Hausaufgaben")
         ordering = ("due_date", "type")
-    
-    get_relation: UserHomeworkRelation
-    RELATED_MODEL = UserHomeworkRelation
     
     objects = HomeworkQuerySet.as_manager()
     
@@ -101,3 +100,7 @@ class Homework(RandomIDMixin, CreationDateMixin, RelationMixin):
     @property
     def edited_at(self) -> "datetime":
         return self.history.all().latest().history_date
+    
+    @property
+    def user_relations(self) -> QueryType["UserHomeworkRelation"]:
+        return self.userhomeworkrelation_set.all()

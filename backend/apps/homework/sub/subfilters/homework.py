@@ -14,8 +14,12 @@ class HomeworkFilterSet(filters.FilterSet):
         model = Homework
         fields = {
             "due_date": ["lte", "gte", "exact"],
-            "type": ["iexact"]
         }
+    
+    type = filters.CharFilter(
+        field_name="type__iexact",
+        label=field_verbose(Homework, "type")
+    )
     
     lesson = filters.CharFilter(
         field_name="lesson__id",

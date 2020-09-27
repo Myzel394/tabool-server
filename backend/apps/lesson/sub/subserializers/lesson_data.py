@@ -24,5 +24,5 @@ class LessonDataDetailSerializer(RandomIDSerializerMixin):
             "room", "course", "start_time", "end_time", "weekday", "id"
         ]
     
-    room = RoomField()
+    room = RoomField(required=False)
     course = CourseField()

@@ -1,9 +1,18 @@
+from typing import *
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models import RandomIDMixin
 
 from apps.utils import UserModelRelationMixin
-from ...public import model_references, model_verbose_functions
+from ...public import *
+
+if TYPE_CHECKING:
+    from .. import Lesson
+
+__all__ = [
+    "UserLessonRelation"
+]
 
 
 class UserLessonRelation(RandomIDMixin, UserModelRelationMixin):
@@ -16,10 +25,10 @@ class UserLessonRelation(RandomIDMixin, UserModelRelationMixin):
         ordering = ("lesson", "user")
     
     lesson = models.ForeignKey(
-        model_references.LESSON,
-        verbose_name=model_verbose_functions.lesson_single,
+        LESSON,
+        verbose_name=lesson_single,
         on_delete=models.CASCADE
-    )
+    )  # type: Lesson
     
     attendance = models.BooleanField(
         default=True,
