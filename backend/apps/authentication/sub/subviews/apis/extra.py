@@ -1,5 +1,4 @@
 from rest_framework import views
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.authentication.sub.subserializers import PasswordChangerSerializer
@@ -10,10 +9,6 @@ __all__ = [
 
 
 class PasswordChangeView(views.APIView):
-    permission_classes = [
-        IsAuthenticated
-    ]
-    
     def post(self, request):
         serializer = PasswordChangerSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

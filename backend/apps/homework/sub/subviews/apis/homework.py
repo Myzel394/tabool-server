@@ -1,7 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.permissions import IsAuthenticated
 
 from ...subserializers import HomeworkDetailSerializer, HomeworkListSerializer
 from ....filters import HomeworkFilterSet
@@ -13,9 +12,6 @@ __all__ = [
 
 
 class HomeworkViewSet(viewsets.ModelViewSet):
-    permission_classes = [
-        IsAuthenticated
-    ]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = HomeworkFilterSet
     search_fields = ["information"]

@@ -51,14 +51,6 @@ class RegisterSerializer(serializers.Serializer):
         validators=[email_not_in_use]
     )
     
-    first_name = serializers.CharField(
-        min_length=2
-    )
-    
-    last_name = serializers.CharField(
-        min_length=2
-    )
-    
     password = serializers.CharField(
         validators=[validate_password]
     )
@@ -76,8 +68,6 @@ class RegisterSerializer(serializers.Serializer):
         user = User.objects.create_user(
             validated_data["email"],
             validated_data["password"],
-            first_name=validated_data["first_name"],
-            last_name=validated_data["last_name"]
         )
         scooso_data = ScoosoData.objects.create(
             user=user,

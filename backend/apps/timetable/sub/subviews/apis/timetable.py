@@ -1,7 +1,6 @@
 from dateutil.rrule import DAILY, rrule
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.lesson.models import LessonData
@@ -15,13 +14,7 @@ __all__ = [
 ]
 
 
-# TODO: Change permissions_class "IsAuthenticated" to own, which also validates if a user is active
-
 class TimetableViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [
-        IsAuthenticated
-    ]
-    
     def get_queryset(self):
         return Timetable.objects.from_user(self.request.user)
     

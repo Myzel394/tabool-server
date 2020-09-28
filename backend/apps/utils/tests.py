@@ -1,4 +1,5 @@
 import random
+import string
 from contextlib import contextmanager
 from datetime import date, datetime, time, timedelta
 from typing import *
@@ -56,6 +57,17 @@ class UserCreationTestMixin(TestCase):
         self.assertTrue(is_login, "Couldn't login the user")
         
         return user
+    
+    @staticmethod
+    def Get_random_password(level: str = "strong") -> str:
+        if level == "weak":
+            return random.choice(string.ascii_letters + string.digits) * random.choice([2, 5, 12, 20])
+        return "".join(
+            random.choices(
+                string.ascii_letters + string.digits,
+                k=random.choice([12, 14, 20, 24])
+            )
+        )
     
     @contextmanager
     def Login_user_as_context(self, *args, **kwargs):

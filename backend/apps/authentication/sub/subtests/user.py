@@ -51,56 +51,69 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
                 email='super@user.com', password='foo', is_superuser=False)
     
     def test_token(self):
-        self.Login_user()
         access_token: AccessToken = AccessToken.objects.create()
-        password = "".join(random.choices(string.ascii_letters + string.digits, k=20))
+        password = self.Get_random_password()
         
-        # Simple creation check
-        response = self.client.post("/api/registration/", {
-            "first_name": names.get_first_name(),
-            "last_name": names.get_last_name(),
+        default_data = {
             "password": password,
             "email": f"{names.get_first_name()}@gmail.com",
             "token": access_token.token,
-            "scooso_username": "abc",
-            "scooso_password": "abc",
-        }, content_type="application/json")
+            "scooso_username": names.get_first_name(),
+            "scooso_password": self.Get_random_password(),
+        }
+        # Simple creation check
+        response = self.client.post("/api/registration/", default_data, content_type="application/json")
         self.assertStatusOk(response.status_code)
         
-        # Invalid token check
-        response = self.client.post("/api/registration/", {
-            "first_name": names.get_first_name(),
-            "last_name": names.get_last_name(),
-            "password": password,
-            "email": f"{names.get_first_name()}@gmail.com",
-            "token": "a" * AccessToken.TOKEN_LENGTH,
-            "scooso_username": "abc",
-            "scooso_password": "abc",
-        }, content_type="application/json")
-        self.assertStatusNotOk(response.status_code)
+        invalid_data = [
+            # Invalid token check
+            {"token": "a" * AccessToken.TOKEN_LENGTH},  # TODO: TOKEN_LENGTH in constants!
+            # Double token check
+            {},
+            # No token check
+            {"token": None}
+        ]
         
-        # Double token check
-        response = self.client.post("/api/registration/", {
-            "first_name": names.get_first_name(),
-            "last_name": names.get_last_name(),
-            "password": password,
-            "email": f"{names.get_first_name()}@gmail.com",
-            "token": access_token.token,
+        for invalid in invalid_data:
+            use_data = default_data.copy()
+            use_data.update(invalid)
+            
+            response = self.client.post("/api/registration/", use_data, content_type="application/json")
+            self.assertStatusNotOk(response.status_code)
+    
+    def test_invalid_creation(self):
+        default_data = {
             "scooso_username": "abc",
-            "scooso_password": "abc",
-        }, content_type="application/json")
-        self.assertStatusNotOk(response.status_code)
+            "scooso_password": "abc"
+        }
+        invalid_data = [
+            {"password": self.Get_random_password("weak")},
+            {"email": "invalid-email.com"},
+        ]
         
-        # No token check
-        response = self.client.post("/api/authentication/registration/", {
-            "first_name": names.get_first_name(),
-            "last_name": names.get_last_name(),
+        for invalid in invalid_data:
+            use_data = default_data.copy()
+            use_data.update(invalid)
+            
+            response = self.client.post("/api/registration/", use_data, content_type="application/json")
+            self.assertStatusNotOk(response.status_code)
+    
+    def test_creation(self):
+        User = get_user_model()
+        first_name = names.get_first_name()
+        last_name = names.get_last_name()
+        password = self.Get_random_password()
+        email = f"{first_name}.{last_name}@gmail.com"
+        
+        response = self.client.post("/api/registration/", {
+            "email": email,
             "password": password,
-            "email": f"{names.get_first_name()}@gmail.com",
-            "scooso_username": "abc",
-            "scooso_password": "abc",
+            "scooso_username": first_name,
+            "scooso_password": password,
+            "token": AccessToken.objects.create().token
         }, content_type="application/json")
-        self.assertStatusNotOk(response.status_code)
+        self.assertStatusOk(response.status_code)
+        User.objects.all().get(email__iexact=email)
     
     def test_forgot_password(self):
         password = "awesome_password"

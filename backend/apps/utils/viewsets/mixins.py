@@ -2,7 +2,6 @@ from django.db.models import Model
 from django_hint import *
 from rest_framework import serializers, viewsets
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
 
 from .helpers.mixins import DefaultAccessSerializer
 
@@ -16,9 +15,6 @@ class UserRelationViewSetMixin(
     viewsets.mixins.RetrieveModelMixin,
     viewsets.GenericViewSet
 ):
-    permission_classes = [
-        IsAuthenticated
-    ]
     access_serializer: Type[serializers.ModelSerializer] = DefaultAccessSerializer
     model: StandardModelType
     related_name: str = "user_relations"
@@ -50,9 +46,6 @@ class RetrieveFromUserMixin(
     viewsets.mixins.RetrieveModelMixin,
     viewsets.GenericViewSet
 ):
-    permission_classes = [
-        IsAuthenticated
-    ]
     model: Type[Model]
     
     def get_queryset(self):

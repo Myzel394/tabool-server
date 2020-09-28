@@ -1,6 +1,6 @@
 from django.contrib.auth import login, logout
 from rest_framework import generics, status, views
-from rest_framework.permissions import IsAuthenticated, NOT
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ....serializers import LoginSerializer, RegisterSerializer, UserInformationSerializer
@@ -12,7 +12,7 @@ __all__ = [
 
 class LoginView(views.APIView):
     permission_classes = [
-        NOT(IsAuthenticated)
+        ~IsAuthenticated
     ]
     
     def post(self, request):
@@ -39,6 +39,9 @@ class LogoutView(views.APIView):
 
 
 class RegisterView(generics.CreateAPIView):
+    permission_classes = [
+        ~IsAuthenticated
+    ]
     serializer_class = RegisterSerializer
     
     def perform_create(self, serializer: RegisterSerializer):
