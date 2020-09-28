@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.authentication.views import LoginView, LogoutView, PasswordChangeView, RegisterView
+from apps.authentication.views import LoginView, LogoutView, PasswordChangeView, RegisterView, UserPaymentViewSet
 from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet
 from apps.homework.views import HomeworkViewSet, UserHomeworkRelationViewSet
 from apps.lesson.views import CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet
@@ -19,6 +19,7 @@ router.register("room", RoomViewSet, basename="Room")
 router.register("subject", SubjectViewSet, basename="Subject")
 router.register("teacher", TeacherViewSet, basename="Teacher")
 router.register("news", NewsViewSet, basename="News")
+router.register("user-payment", UserPaymentViewSet, basename="PaidUser")
 
 router.register("user-relation/lesson", UserLessonRelationViewSet, basename="UserLessonRelation")
 router.register("user-relation/homework", UserHomeworkRelationViewSet, basename="UserHomeworkRelation")

@@ -1,12 +1,16 @@
 import random
 import string
+from typing import *
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_lifecycle import BEFORE_CREATE, hook, LifecycleModel
 
-from apps.authentication.sub.subquerysets.user import UserQuerySet
+from ..querysets import UserQuerySet
+
+if TYPE_CHECKING:
+    from ..querysets import UserPaymentQuerySet
 
 __all__ = [
     "User"
@@ -59,3 +63,7 @@ class User(AbstractUser, LifecycleModel):
                 break
         
         self.id = random_id
+        
+    @property
+    def payments(self) -> "UserPaymentQuerySet":
+        return self.userpayment_set.all()
