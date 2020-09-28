@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets
 
-from ....permissions import UserPaymentAccessPermission
-from ....serializers import UserPaymentDetailSerializer, ManageUserPaymentSerializer
 from ....models import UserPayment
+from ....permissions import UserPaymentAccessPermission
+from ....serializers import ManageUserPaymentSerializer, UserPaymentDetailSerializer
 
 __all__ = [
     "UserPaymentViewSet"
@@ -27,6 +27,3 @@ class UserPaymentViewSet(
     
     def get_queryset(self):
         return UserPayment.objects.all()
-
-# TODO: Global permission classes!
-

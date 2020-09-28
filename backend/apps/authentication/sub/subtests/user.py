@@ -68,7 +68,7 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
         
         invalid_data = [
             # Invalid token check
-            {"token": "a" * constants.TOKEN_LENGTH},  # TODO: TOKEN_LENGTH in constants!
+            {"token": "a" * constants.TOKEN_LENGTH},
             # Double token check
             {},
             # No token check

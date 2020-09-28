@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     
     "rest_framework",
     "simple_history",
-    "django_filters",  # TODO: Add filters everywhere
-    "django_common_utils.apps.Config",  # TODO: Add user access token, login, etc. as views!
+    "django_filters",
+    "django_common_utils.apps.Config",
     "django_bleach",
     
     "apps.relation_managers.apps.RelationManagersConfig",
@@ -77,7 +77,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_THROTTLE_RATES": {
         "anon": "5/second",
-        "user": "50/second"
+        "user": "60/second"
     },
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 25,
@@ -198,3 +198,11 @@ BLEACH_ALLOWED_PROTOCOLS = [
 ]
 BLEACH_STRIP_TAGS = True
 BLEACH_STRIP_COMMENTS = True
+
+# EMAIL
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "127.0.0.1"
+EMAIL_PORT = 1025
+EMAIL_SUBJECT_PREFIX = ""
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
