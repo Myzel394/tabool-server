@@ -6,6 +6,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_lifecycle import BEFORE_CREATE, hook, LifecycleModel
 
+from ..querysets import AccessTokenQuerySet
+
 if TYPE_CHECKING:
     from django.contrib.auth import get_user_model
 
@@ -20,6 +22,8 @@ class AccessToken(LifecycleModel):
         verbose_name_plural = _("Zugangszeichen")
     
     TOKEN_LENGTH = 255
+    
+    objects = AccessTokenQuerySet()
     
     user = models.ForeignKey(
         "authentication.User",

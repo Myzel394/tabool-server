@@ -30,7 +30,7 @@ class ModelTest(ClasstestTestMixin, ClientTestMixin):
             
             response = self.client.post("/api/classtest/", {
                 "information": "Bebi",
-                "targeted_date": date.today() + timedelta(days=5),
+                "targeted_date": find_next_date_by_weekday(date.today() + timedelta(days=5), 1),
                 "course": course.id,
             }, content_type="application/json")
         

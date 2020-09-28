@@ -140,7 +140,7 @@
                                         },
                                         {
                                             "name": "information",
-                                            "type": ""
+                                            "type": "string"
                                         }
                                     ]
                                 },

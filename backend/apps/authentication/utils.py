@@ -1,0 +1,23 @@
+from typing import *
+from datetime import date
+
+
+from . import constants
+
+__all__ = [
+    "get_school_starts_date_for_year"
+]
+
+
+def get_school_starts_date_for_year(year: Optional[int]) -> date:
+    year = year or date.today().year
+    
+    return date(
+        year,
+        constants.SCHOOL_YEAR_START_DATE.month,
+        constants.SCHOOL_YEAR_START_DATE.day
+    )
+    
+    
+    
+
