@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 
 from apps.authentication.models import AccessToken
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
+from ... import constants
 
 __all__ = [
     "ModelTest"
@@ -67,7 +68,7 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
         
         invalid_data = [
             # Invalid token check
-            {"token": "a" * AccessToken.TOKEN_LENGTH},  # TODO: TOKEN_LENGTH in constants!
+            {"token": "a" * constants.TOKEN_LENGTH},  # TODO: TOKEN_LENGTH in constants!
             # Double token check
             {},
             # No token check

@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from ... import constants
 from ...models import AccessToken, ScoosoData
 from ...validators import email_not_in_use, token_exists, token_not_in_use
 
@@ -61,7 +62,7 @@ class RegisterSerializer(serializers.Serializer):
     
     token = serializers.CharField(
         validators=[token_exists, token_not_in_use],
-        min_length=AccessToken.TOKEN_LENGTH
+        min_length=constants.TOKEN_LENGTH
     )
     
     def create(self, validated_data):

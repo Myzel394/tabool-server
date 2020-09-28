@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_lifecycle import BEFORE_CREATE, hook, LifecycleModel
 
+from .. import constants
 from ..querysets import AccessTokenQuerySet
 
 if TYPE_CHECKING:
@@ -22,8 +23,6 @@ class AccessToken(LifecycleModel):
         verbose_name_plural = _("Zugangszeichen")
         ordering = ("created_at",)
     
-    TOKEN_LENGTH = 255
-    
     objects = AccessTokenQuerySet()
     
     user = models.ForeignKey(
@@ -37,7 +36,7 @@ class AccessToken(LifecycleModel):
         verbose_name=_("Token"),
         blank=True,
         unique=True,
-        max_length=TOKEN_LENGTH,
+        max_length=constants.TOKEN_LENGTH,
         editable=False,
     )  # type: str
     
@@ -53,7 +52,7 @@ class AccessToken(LifecycleModel):
             token = "".join(
                 random.choices(
                     string.ascii_letters + string.digits,
-                    k=self.TOKEN_LENGTH
+                    k=constants.TOKEN_LENGTH
                 )
             )
             
