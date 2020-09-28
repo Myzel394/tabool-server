@@ -58,7 +58,6 @@ class ModelTest(ClasstestTestMixin, ClientTestMixin):
                 content_type="application/json"
             )
             
-            print(response.data)
             self.assertStatusOk(response.status_code)
             
             expected = Classtest.objects.all().from_user(user).filter(**{filter_statement: targeted_date})

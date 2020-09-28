@@ -1,5 +1,3 @@
-from pprint import pp
-
 import lorem
 
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
@@ -37,15 +35,12 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         homework = self.Create_homework()
         homework.delete()
         
-        pp(HomeworkDetailSerializer(homework).data)
-        
         response = self.client.post(
             "/api/homework/",
             HomeworkDetailSerializer(homework).data,
             content_type="application/json"
         )
         
-        print(response.data)
         self.assertStatusOk(response.status_code)
         
         self.assertTrue(Homework.objects.all().exists())
@@ -53,8 +48,6 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
     def test_update_user_homework(self):
         homework = self.Create_homework()
         new_information = lorem.sentence()
-        
-        print(Homework.objects.from_user(self.logged_user))
         
         response = self.client.patch(
             f"/api/homework/{homework.id}/",
@@ -64,7 +57,6 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             content_type="application/json"
         )
         
-        print(response.data)
         self.assertStatusOk(response.status_code)
         
         homework.refresh_from_db(fields=["information"])
@@ -175,8 +167,6 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
                 HomeworkDetailSerializer(private_homework).data,
                 content_type="application/json"
             )
-        
-        print(Homework.objects.all())
         
         private_homework = Homework.objects.all().get(private_to_user=first_user)
         

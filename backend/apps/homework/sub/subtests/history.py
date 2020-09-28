@@ -6,7 +6,6 @@ class HistoryTest(HomeworkTestMixin, ClientTestMixin):
     def test_history(self):
         with self.Login_user_as_context() as _:
             self.homework = self.Create_homework()
-            print(self.homework.information)
             response = self.client.patch(
                 f"/api/homework/{self.homework.id}/",
                 {
@@ -17,8 +16,3 @@ class HistoryTest(HomeworkTestMixin, ClientTestMixin):
             self.homework.refresh_from_db()
             
             self.assertStatusOk(response.status_code)
-        
-        print(self.homework.information)
-        first = self.homework.history.earliest()
-        
-        print(first.information)

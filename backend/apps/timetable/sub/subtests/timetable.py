@@ -37,14 +37,13 @@ class APITest(TimetableTestMixin, ClientTestMixin):
             f"/api/timetable/{timetable.id}/"
         )
         actual_data = response.data
-        print(response.data)
         
         self.assertCountEqual(actual_data, expected_data)
     
     def test_get_privacy(self):
         self.Create_timetable()
         self.client.logout()
-        second_user = self.Login_user()
+        self.Login_user()
         
         response = self.client.get(
             "/api/timetable/"
@@ -65,7 +64,6 @@ class APITest(TimetableTestMixin, ClientTestMixin):
             content_type="application/json"
         )
         
-        print(response.data)
         self.assertStatusOk(response.status_code)
         
         self.assertCountEqual(

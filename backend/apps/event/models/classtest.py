@@ -25,6 +25,7 @@ class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     class Meta:
         verbose_name = _("Klassenarbeit")
         verbose_name_plural = _("Klassenarbeiten")
+        ordering = ("targeted_date", "course", "room")
     
     objects = ClasstestQuerySet.as_manager()
     
