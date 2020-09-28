@@ -1,10 +1,7 @@
-from datetime import date
-
-from django.utils.translation import gettext_lazy as _
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from ..querysets import UserPaymentQuerySet
-
 
 __all__ = [
     "UserPayment"
@@ -15,6 +12,7 @@ class UserPayment(models.Model):
     class Meta:
         verbose_name = _("Benutzer-Bezahlung")
         verbose_name_plural = _("Benutzer-Bezahlungen")
+        ordering = ("user",)
     
     objects = UserPaymentQuerySet()
     
@@ -32,5 +30,3 @@ class UserPayment(models.Model):
     @property
     def has_paid(self) -> bool:
         return self.paid_at is not None
-    
-

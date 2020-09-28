@@ -22,7 +22,7 @@ class TestNotPrivileged(ClientTestMixin, UserPaymentTestMixin):
         
         # At end, because `Create_user_payment` would otherwise associated it
         self.__class__.associated_user = self.logged_user
-        
+    
     def test_access(self):
         # List access
         response = self.client.get(
@@ -41,14 +41,14 @@ class TestNotPrivileged(ClientTestMixin, UserPaymentTestMixin):
             f"/api/user-payment/{self.logged_user.payments[0].id}/"
         )
         self.assertStatusOk(response.status_code)
-        
+    
     def test_patch_not_ok(self):
         # Owner patch check, should not work
         response = self.client.patch(
             f"/api/user-payment/{self.logged_user.payments[0].id}/"
         )
         self.assertStatusNotOk(response.status_code)
-    
+
 
 class TestPrivileged(ClientTestMixin, UserPaymentTestMixin):
     def setUp(self) -> None:
@@ -82,15 +82,24 @@ class TestPrivileged(ClientTestMixin, UserPaymentTestMixin):
             f"/api/user-payment/"
         )
         self.assertStatusOk(response.status_code)
+        
+        # Single access
+        payment: UserPayment = UserPayment.objects.all().first()
+        response = self.client.get(
+            f"/api/user-payment/{payment.id}/",
+        )
+        self.assertStatusOk(response.status_code)
     
     def test_patch(self):
-        payment = UserPayment.objects.all().first()
+        payment: UserPayment = UserPayment.objects.all().first()
         
         response = self.client.patch(
             f"/api/user-payment/{payment.id}/",
             {
                 "has_paid": True,
-            }
+            },
+            content_type="application/json"
         )
+        payment.refresh_from_db()
         self.assertStatusOk(response.status_code)
-        self.assertEqual(payment, True)
+        self.assertEqual(payment.has_paid, True)

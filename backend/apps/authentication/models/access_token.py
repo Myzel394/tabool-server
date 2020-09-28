@@ -20,6 +20,7 @@ class AccessToken(LifecycleModel):
     class Meta:
         verbose_name = _("Zugangszeichen")
         verbose_name_plural = _("Zugangszeichen")
+        ordering = ("created_at",)
     
     TOKEN_LENGTH = 255
     

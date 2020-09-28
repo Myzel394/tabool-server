@@ -13,6 +13,7 @@ class ScoosoData(models.Model):
     class Meta:
         verbose_name = _("Scooso-Daten")
         verbose_name_plural = _("Scooso-Daten")
+        ordering = ("user",)
     
     objects = ScoosoDataQuerySet()
     
