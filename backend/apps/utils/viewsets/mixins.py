@@ -12,7 +12,7 @@ __all__ = [
 
 class UserRelationViewSetMixin(
     viewsets.mixins.UpdateModelMixin,
-    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.RetrieveModelMixin,  # TODO: Make not retrievable, the serializers should return the data
     viewsets.GenericViewSet
 ):
     access_serializer: Type[serializers.ModelSerializer] = DefaultAccessSerializer
@@ -22,7 +22,7 @@ class UserRelationViewSetMixin(
     serializer_lookup_key_name: str = "id"
     
     def get_queryset(self):
-        return self.model.objects.all().from_user(self.request.user)
+        return self.model.objects.from_user(self.request.user)
     
     def get_object(self):
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
@@ -49,7 +49,7 @@ class RetrieveFromUserMixin(
     model: Type[Model]
     
     def get_queryset(self):
-        return self.model.objects.all().from_user(self.request.user)
+        return self.model.objects.from_user(self.request.user)
 
 
 class RetrieveAllMixin(RetrieveFromUserMixin):

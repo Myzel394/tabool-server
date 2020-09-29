@@ -68,7 +68,7 @@ class APITest(TimetableTestMixin, ClientTestMixin):
         
         self.assertCountEqual(
             response.data,
-            LessonListSerializer(Lesson.objects.all().from_user(self.logged_user), many=True).data
+            LessonListSerializer(Lesson.objects.from_user(self.logged_user), many=True).data
         )
 
 

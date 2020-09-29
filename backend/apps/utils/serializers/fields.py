@@ -106,7 +106,7 @@ class WritableFromUserFieldMixin(WritableIDField, ABC):
     
     @classmethod
     def default_get_qs(cls, key, request: RequestType, instance):
-        return cls.model.objects.all().from_user(request.user).only(cls.lookup_field).get(**{
+        return cls.model.objects.from_user(request.user).only(cls.lookup_field).get(**{
             cls.lookup_field: key
         })
 
@@ -117,6 +117,6 @@ class WritableAllFieldMixin(WritableIDField, ABC):
     
     @classmethod
     def default_get_qs(cls, key, request: RequestType, instance):
-        return cls.model.objects.all().only(cls.lookup_field).get(**{
+        return cls.model.objects.only(cls.lookup_field).get(**{
             cls.lookup_field: key
         })

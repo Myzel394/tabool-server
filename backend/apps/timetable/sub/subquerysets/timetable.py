@@ -26,5 +26,5 @@ class TimetableQuerySet(CustomQuerySetMixin.QuerySet):
     
     def from_user(self, user: settings.AUTH_USER_MODEL) -> "TimetableQuerySet":
         return self.only("lessons_data").filter(
-            lessons_data__in=LessonData.objects.all().from_user(user)
+            lessons_data__in=LessonData.objects.from_user(user)
         ).distinct()

@@ -18,7 +18,7 @@ class ClasstestViewSet(viewsets.ModelViewSet):
     ordering_fields = ["targeted_date"]
     
     def get_queryset(self):
-        return Classtest.objects.all().from_user(self.request.user)
+        return Classtest.objects.from_user(self.request.user)
     
     def get_serializer_class(self):
         if self.action == "list":

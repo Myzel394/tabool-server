@@ -26,7 +26,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         self.assertCountEqual(
             response.data["results"],
             HomeworkListSerializer(
-                Homework.objects.all().from_user(self.logged_user),
+                Homework.objects.from_user(self.logged_user),
                 many=True
             ).data
         )
@@ -97,7 +97,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         response = self.client.get("/api/homework/", {
             "completed": False
         }, content_type="application/json")
-        expected = Homework.objects.all().from_user(self.logged_user).filter(userhomeworkrelation__completed=False)
+        expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=False)
         
         self.assertStatusOk(response.status_code)
         self.assertCountEqual(
@@ -108,7 +108,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         response = self.client.get("/api/homework/", {
             "completed": True
         }, content_type="application/json")
-        expected = Homework.objects.all().from_user(self.logged_user).filter(userhomeworkrelation__completed=True)
+        expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=True)
         
         self.assertStatusOk(response.status_code)
         self.assertCountEqual(
@@ -168,14 +168,14 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
                 content_type="application/json"
             )
         
-        private_homework = Homework.objects.all().get(private_to_user=first_user)
+        private_homework = Homework.objects.get(private_to_user=first_user)
         
         # Check
         
         # Should return public + private
         with self.Login_user_as_context(first_user):
             response = self.client.get("/api/homework/")
-            homeworks = Homework.objects.all().from_user(first_user)
+            homeworks = Homework.objects.from_user(first_user)
             
             self.assertStatusOk(response.status_code)
             self.assertCountEqual(
@@ -187,7 +187,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         # Should return only public
         with self.Login_user_as_context(second_user):
             response = self.client.get("/api/homework/")
-            homeworks = Homework.objects.all().from_user(second_user)
+            homeworks = Homework.objects.from_user(second_user)
             
             self.assertStatusOk(response.status_code)
             self.assertCountEqual(

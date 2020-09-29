@@ -19,7 +19,7 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
             
             self.assertGreater(UserEventRelation.objects.all().count(), 0)
             
-            event = Event.objects.all().first()
+            event = Event.objects.first()
             relations, ignore_amount = self.get_ignore_and_qs()
             
             response = self.client.patch(
@@ -45,7 +45,7 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
             self.assertStatusOk(response.status_code)
             self.assertCountEqual(
                 response.data["results"],
-                EventListSerializer(Event.objects.all().filter(
+                EventListSerializer(Event.objects.filter(
                     usereventrelation__user=user,
                     usereventrelation__ignore=True
                 ), many=True).data
@@ -67,7 +67,7 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
             self.assertStatusOk(response.status_code)
             self.assertCountEqual(
                 response.data["results"],
-                EventListSerializer(Event.objects.all().filter(
+                EventListSerializer(Event.objects.filter(
                     usereventrelation__user=user,
                     usereventrelation__ignore=False
                 ), many=True).data

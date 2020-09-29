@@ -27,7 +27,7 @@ class LoginSerializer(serializers.Serializer):
         
         # Check existence
         try:
-            user = User.objects.all().only("email").get(email=email)
+            user = User.objects.only("email").get(email=email)
         except ObjectDoesNotExist:
             raise serializers.ValidationError({
                 "email": _("Die E-Mail ist falsch eingegeben.")

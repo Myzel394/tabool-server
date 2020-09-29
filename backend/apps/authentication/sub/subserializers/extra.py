@@ -14,7 +14,7 @@ __all__ = [
 class PasswordChangerSerializer(serializers.Serializer):
     old_password = serializers.CharField()
     new_password = serializers.CharField()
-    user = RetrieveObjectByIDSerializerField(lambda value, _: User.objects.all().only("id").get(id=value))
+    user = RetrieveObjectByIDSerializerField(lambda value, _: User.objects.only("id").get(id=value))
     
     def validate(self, attrs: dict):
         user: User = attrs["user"]

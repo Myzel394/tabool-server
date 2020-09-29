@@ -114,7 +114,7 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
             "token": AccessToken.objects.create().token
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
-        User.objects.all().get(email__iexact=email)
+        User.objects.get(email__iexact=email)
     
     def test_forgot_password(self):
         password = "awesome_password"

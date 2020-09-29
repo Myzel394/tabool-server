@@ -4,10 +4,11 @@ from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_lifecycle import BEFORE_CREATE, hook, LifecycleModel
+from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from .. import constants
 from ..querysets import AccessTokenQuerySet
+from ..exceptions import CannotChangeTokenError
 
 if TYPE_CHECKING:
     from django.contrib.auth import get_user_model
@@ -25,7 +26,7 @@ class AccessToken(LifecycleModel):
     
     objects = AccessTokenQuerySet()
     
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         "authentication.User",
         on_delete=models.CASCADE,
         blank=True,
@@ -60,3 +61,10 @@ class AccessToken(LifecycleModel):
                 break
         
         self.token = token
+    
+    @hook(BEFORE_UPDATE, when="token")
+    def _hook_prevent_token_change(self):
+        if self.has_changed("token"):
+            raise CannotChangeTokenError(_(
+                "Der Zugangscode kann nicht geändert werden."
+            ))

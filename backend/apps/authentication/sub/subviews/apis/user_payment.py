@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from rest_framework import viewsets
 
 from ....models import UserPayment
-from ....permissions import UserPaymentAccessPermission
-from ....serializers import ManageUserPaymentSerializer, UserPaymentDetailSerializer
+from ....permissions import IsOwnerPermission
+from ....serializers import UserPaymentDetailSerializer
 
 __all__ = [
     "UserPaymentViewSet"
@@ -14,15 +14,11 @@ User = get_user_model()
 
 class UserPaymentViewSet(
     viewsets.mixins.RetrieveModelMixin,
-    viewsets.mixins.UpdateModelMixin,
-    viewsets.mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
-    permission_classes = [UserPaymentAccessPermission]
+    permission_classes = [IsOwnerPermission]
     
     def get_serializer_class(self):
-        if self.action in ["update", "partial_update"]:
-            return ManageUserPaymentSerializer
         return UserPaymentDetailSerializer
     
     def get_queryset(self):

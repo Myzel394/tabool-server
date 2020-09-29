@@ -1,7 +1,13 @@
+from typing import *
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from ..querysets import UserPaymentQuerySet
+
+if TYPE_CHECKING:
+    from ..public import *
+    
 
 __all__ = [
     "UserPayment"
@@ -30,3 +36,7 @@ class UserPayment(models.Model):
     @property
     def has_paid(self) -> bool:
         return self.paid_at is not None
+    
+    def is_user_owner(self, user: "USER") -> bool:
+        return user == self.user
+

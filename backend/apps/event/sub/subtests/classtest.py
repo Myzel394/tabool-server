@@ -46,8 +46,8 @@ class ModelTest(ClasstestTestMixin, ClientTestMixin):
             targeted_date = date.today() + timedelta(days=2)
             filter_statement = "targeted_date"
             
-            print("Classtests for user:", Classtest.objects.all().from_user(user).count())
-            print("Classtests for user filtered:", Classtest.objects.all().from_user(user).filter(
+            print("Classtests for user:", Classtest.objects.from_user(user).count())
+            print("Classtests for user filtered:", Classtest.objects.from_user(user).filter(
                 targeted_date__lte=targeted_date).count())
             
             response = self.client.get(
@@ -60,7 +60,7 @@ class ModelTest(ClasstestTestMixin, ClientTestMixin):
             
             self.assertStatusOk(response.status_code)
             
-            expected = Classtest.objects.all().from_user(user).filter(**{filter_statement: targeted_date})
+            expected = Classtest.objects.from_user(user).filter(**{filter_statement: targeted_date})
             expected = ClasstestListSerializer(expected, many=True).data
             
             self.assertCountEqual(expected, response.data["results"])

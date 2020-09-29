@@ -35,6 +35,6 @@ class AssociatedUserTestMixin(UserCreationTestMixin, ABC):
         self.__class__.associated_user = previous_value
         
         # Check
-        self.assertNotEqual(model.objects.all(), model.objects.all().from_user(user))
+        self.assertNotEqual(model.objects.all(), model.objects.from_user(user))
         self.assertEqual(model.objects.all().count(), all_amount + 2)
-        self.assertEqual(model.objects.all().from_user(user).count(), user_amount + 1)
+        self.assertEqual(model.objects.from_user(user).count(), user_amount + 1)

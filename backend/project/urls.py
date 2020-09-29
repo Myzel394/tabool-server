@@ -5,7 +5,8 @@ from rest_framework.routers import DefaultRouter
 from apps.authentication.views import LoginView, LogoutView, PasswordChangeView, RegisterView, UserPaymentViewSet
 from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet
 from apps.homework.views import HomeworkViewSet, UserHomeworkRelationViewSet
-from apps.lesson.views import CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet
+from apps.lesson.views import CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet, \
+    UserSubjectRelationViewSet
 from apps.news.views import NewsViewSet
 from apps.timetable.views import TimetableViewSet
 
@@ -21,9 +22,11 @@ router.register("teacher", TeacherViewSet, basename="Teacher")
 router.register("news", NewsViewSet, basename="News")
 router.register("user-payment", UserPaymentViewSet, basename="PaidUser")
 
+# TODO: Add user uploads & downloads
 router.register("user-relation/lesson", UserLessonRelationViewSet, basename="UserLessonRelation")
 router.register("user-relation/homework", UserHomeworkRelationViewSet, basename="UserHomeworkRelation")
 router.register("user-relation/event", EventUserRelationViewSet, basename="EventUserRelation")
+router.register("user-relation/subject", UserSubjectRelationViewSet, basename="UserSubjectRelation")
 
 urlpatterns = [
     path("admin/", admin.site.urls),

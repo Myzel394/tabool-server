@@ -26,7 +26,7 @@ class UserCreationTestMixin(TestCase):
         while True:
             last_name = names.get_last_name()
             
-            if not Model.objects.all().filter(last_name__iexact=last_name).exists():
+            if not Model.objects.filter(last_name__iexact=last_name).exists():
                 break
         
         return Model.objects.create_user(

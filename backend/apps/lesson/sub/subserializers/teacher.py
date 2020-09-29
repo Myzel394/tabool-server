@@ -1,8 +1,9 @@
 from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Teacher
+from ...public.serializer_fields import SubjectField
 
 __all__ = [
-    "TeacherDetailSerializer"
+    "TeacherListSerializer", "TeacherDetailSerializer"
 ]
 
 
@@ -15,4 +16,8 @@ class TeacherListSerializer(RandomIDSerializerMixin):
 class TeacherDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Teacher
-        fields = ["first_name", "last_name", "short_name", "email", "id"]
+        fields = [
+            "first_name", "last_name", "short_name", "email", "teaches_subjects", "id"
+        ]
+    
+    teaches_subjects = SubjectField(many=True)

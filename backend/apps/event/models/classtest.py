@@ -11,6 +11,7 @@ from apps.history_extras.extras.user_information import UserInformationHistorica
 from apps.utils.validators import validate_weekday_in_lesson_data_available
 from ..querysets import ClasstestQuerySet
 from ...lesson.public import *
+from ...utils import format_datetime
 
 if TYPE_CHECKING:
     from datetime import date, datetime
@@ -72,4 +73,10 @@ class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     
     @property
     def edited_at(self) -> "datetime":
-        return self.history.all().latest().history_date
+        return self.history.latest().history_date
+    
+    def __str__(self):
+        return _("{course} am {targeted_date_formatted}").format(
+            course_str=self.course,
+            targeted_date_formatted=format_datetime(self.targeted_date)
+        )

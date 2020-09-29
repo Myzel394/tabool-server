@@ -7,6 +7,7 @@ from django_common_utils.libraries.models import RandomIDMixin
 from django_hint import QueryType
 
 from constants import maxlength
+from ..public import *
 
 if TYPE_CHECKING:
     from .lesson_data import LessonData
@@ -46,6 +47,12 @@ class Teacher(RandomIDMixin, HandlerMixin):
         blank=True,
         null=True
     )  # type: str
+    
+    teaches_subjects = models.ManyToManyField(
+        SUBJECT,
+        verbose_name=_("Unterrichtsfächer"),
+        help_text=_("Dies sind Fächer, die vom Lehrer unterrichtet werden.")
+    )
     
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

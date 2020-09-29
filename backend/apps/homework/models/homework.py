@@ -99,7 +99,7 @@ class Homework(RandomIDMixin, CreationDateMixin):
     
     @property
     def edited_at(self) -> "datetime":
-        return self.history.all().latest().history_date
+        return self.history.latest().history_date
     
     @property
     def user_relations(self) -> QueryType["UserHomeworkRelation"]:
