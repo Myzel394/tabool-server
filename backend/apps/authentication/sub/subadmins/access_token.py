@@ -1,8 +1,7 @@
 from django.contrib import admin
-from django_common_utils.libraries.fieldsets import DefaultAdminMixin
+from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 
 from ...models import AccessToken
-
 
 __all__ = [
     "AccessTokenAdmin"
@@ -19,4 +18,3 @@ class AccessTokenAdmin(DefaultAdminMixin):
     ]
     list_display = ["user", "created_at"]
     date_hierarchy = "created_at"
-

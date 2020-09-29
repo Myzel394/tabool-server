@@ -76,12 +76,14 @@ class WritableIDField(serializers.Field):
             self,
             get_object: Optional[Callable] = None,
             lookup_field: str = "id",
+            many: bool = False,
             *args,
             **kwargs
     ):
         super().__init__(*args, **kwargs)
         self.get_object = get_object or self.default_get_qs
         self.lookup_field = lookup_field
+        self.many = many
         self.__cached_object = None
     
     def run_validation(self, data=empty):

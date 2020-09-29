@@ -2,8 +2,9 @@ from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.handlers import HandlerMixin, WhiteSpaceStripHandler
-from django_common_utils.libraries.models import RandomIDMixin
+from django_common_utils.libraries.handlers.mixins import WhiteSpaceStripHandler
+from django_common_utils.libraries.handlers.models import HandlerMixin
+from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import QueryType
 
 from apps.utils.models import ColorMixin
@@ -11,7 +12,7 @@ from constants import maxlength
 from ..querysets import SubjectQuerySet
 
 if TYPE_CHECKING:
-    from apps.timetable.models import Lesson
+    from ..models import Lesson
 
 __all__ = [
     "Subject"

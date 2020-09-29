@@ -1,3 +1,2 @@
-from django.contrib import admin
-
-# Register your models here.
+# noinspection PyUnresolvedReferences
+from .sub.subadmins import *

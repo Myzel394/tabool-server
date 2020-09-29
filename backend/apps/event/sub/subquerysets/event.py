@@ -1,5 +1,5 @@
 from django.conf import settings
-from django_common_utils.libraries.models import CustomQuerySetMixin
+from django_common_utils.libraries.models.mixins import CustomQuerySetMixin
 
 from apps.utils.querysets import RelationAllUserQuerySetMixin
 from ...models.user_relations.event import UserEventRelation

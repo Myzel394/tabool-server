@@ -1,8 +1,7 @@
-from django_common_utils.libraries.models import CustomQuerySetMixin
+from django_common_utils.libraries.models.mixins import CustomQuerySetMixin
 
 from apps.utils.querysets import RelationAllUserQuerySetMixin
 from ...models.user_relations.subject import UserSubjectRelation
-
 
 __all__ = [
     "SubjectQuerySet"
@@ -11,4 +10,3 @@ __all__ = [
 
 class SubjectQuerySet(CustomQuerySetMixin.QuerySet, RelationAllUserQuerySetMixin):
     related_model = UserSubjectRelation
-

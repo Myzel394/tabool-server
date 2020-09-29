@@ -1,8 +1,7 @@
 from django.contrib import admin
-from django_common_utils.libraries.fieldsets import DefaultAdminMixin
+from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 
-from ...models import User, AccessToken, UserPayment
-
+from ...models import AccessToken, User, UserPayment
 
 __all__ = [
     "UserAdmin"

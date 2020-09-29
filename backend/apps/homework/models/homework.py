@@ -2,8 +2,8 @@ from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.handlers import TextOptimizerHandler
-from django_common_utils.libraries.models import RandomIDMixin
+from django_common_utils.libraries.handlers.mixins import TextOptimizerHandler
+from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import CreationDateMixin
 from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook

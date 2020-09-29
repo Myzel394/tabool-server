@@ -1,3 +1,5 @@
+from rest_framework import serializers
+
 from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Teacher
 from ...public.serializer_fields import SubjectField
@@ -20,4 +22,4 @@ class TeacherDetailSerializer(RandomIDSerializerMixin):
             "first_name", "last_name", "short_name", "email", "teaches_subjects", "id"
         ]
     
-    teaches_subjects = SubjectField(many=True)
+    teaches_subjects = serializers.ListField(child=SubjectField())

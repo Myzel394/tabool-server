@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_common_utils.libraries.models.mixins import RandomIDMixin
 from fernet_fields import EncryptedCharField
 
 from ..querysets import ScoosoDataQuerySet
@@ -9,7 +10,7 @@ __all__ = [
 ]
 
 
-class ScoosoData(models.Model):
+class ScoosoData(RandomIDMixin):
     class Meta:
         verbose_name = _("Scooso-Daten")
         verbose_name_plural = _("Scooso-Daten")

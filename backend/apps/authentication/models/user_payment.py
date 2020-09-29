@@ -2,19 +2,19 @@ from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_common_utils.libraries.models.mixins.common import RandomIDMixin
 
 from ..querysets import UserPaymentQuerySet
 
 if TYPE_CHECKING:
     from ..public import *
-    
 
 __all__ = [
     "UserPayment"
 ]
 
 
-class UserPayment(models.Model):
+class UserPayment(RandomIDMixin):
     class Meta:
         verbose_name = _("Benutzer-Bezahlung")
         verbose_name_plural = _("Benutzer-Bezahlungen")
@@ -39,4 +39,3 @@ class UserPayment(models.Model):
     
     def is_user_owner(self, user: "USER") -> bool:
         return user == self.user
-

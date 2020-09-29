@@ -4,11 +4,12 @@ from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from .. import constants
-from ..querysets import AccessTokenQuerySet
 from ..exceptions import CannotChangeTokenError
+from ..querysets import AccessTokenQuerySet
 
 if TYPE_CHECKING:
     from django.contrib.auth import get_user_model
@@ -18,7 +19,7 @@ __all__ = [
 ]
 
 
-class AccessToken(LifecycleModel):
+class AccessToken(RandomIDMixin, CreationDateMixin, LifecycleModel):
     class Meta:
         verbose_name = _("Zugangszeichen")
         verbose_name_plural = _("Zugangszeichen")
@@ -40,10 +41,6 @@ class AccessToken(LifecycleModel):
         max_length=constants.TOKEN_LENGTH,
         editable=False,
     )  # type: str
-    
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
     
     @hook(BEFORE_CREATE)
     def _hook_create_token(self):

@@ -1,4 +1,4 @@
-from django_common_utils.libraries.models import CustomQuerySetMixin
+from django_common_utils.libraries.models.mixins import CustomQuerySetMixin
 from django_hint import *
 
 from apps.authentication.public.model_references import *
@@ -53,5 +53,3 @@ class RelationAllUserQuerySetMixin:
                 "user": user,
                 ref_name: ref
             })
-        
-

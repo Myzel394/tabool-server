@@ -1,5 +1,3 @@
-from rest_framework import serializers
-
 from apps.lesson.public.serializer_fields import CourseField, RoomField
 from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Classtest
@@ -23,9 +21,11 @@ class ClasstestDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Classtest
         fields = [
-            "course", "room", "targeted_date", "information", "created_at", "edited_at", "id"
+            "course", "room", "targeted_date", "information", "created_at", "id"
+        ]
+        read_only_fields = [
+            "created_at"
         ]
     
     course = CourseField()
     room = RoomField(required=False)
-    edited_at = serializers.DateTimeField(read_only=True)

@@ -1,9 +1,12 @@
 from django.contrib import admin
-from django_common_utils.libraries.fieldsets import DefaultAdminMixin
+from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 
+from apps.lesson.public.admin_inlines import *
 from ...models import Classtest
 
-# TODO: Add subject user relation!
+__all__ = [
+    "Classtest"
+]
 
 
 @admin.register(Classtest)
@@ -16,6 +19,6 @@ class ClassTestAdmin(DefaultAdminMixin):
     search_fields = ["information"]
     list_filter = ["course__subject", "room"]
     date_hierarchy = "targeted_date"
-    
-
-
+    inlines = [
+        CourseAdminInline, RoomAdminInline
+    ]

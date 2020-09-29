@@ -2,7 +2,7 @@ from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.models import RandomIDMixin
+from django_common_utils.libraries.models.mixins import RandomIDMixin
 
 from apps.utils import UserModelRelationMixin
 from ...public import model_references, model_verbose_functions
