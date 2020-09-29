@@ -2,11 +2,16 @@ import random
 
 from django.db import models
 from django.utils.translation import gettext as _
+from django_common_utils.libraries.models import RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.authentication.public.model_verbose_functions import *
 from apps.utils.fields.color import ColorField
 from constants import colors
+
+__all__ = [
+    "ColorMixin", "AssociatedUserMixin", "AddedAtMixin", "UserModelRelationMixin", "ScoosoDataMixin"
+]
 
 
 class ColorMixin(LifecycleModel):
@@ -47,6 +52,7 @@ class AddedAtMixin(models.Model):
     )
 
 
+# TODO: Add RandomIDMixin as inheritance!
 class UserModelRelationMixin(models.Model):
     class Meta:
         abstract = True
@@ -55,4 +61,13 @@ class UserModelRelationMixin(models.Model):
         USER,
         verbose_name=user_single,
         on_delete=models.CASCADE,
+    )
+
+
+class ScoosoDataMixin(RandomIDMixin):
+    class Meta:
+        abstract = True
+    
+    scooso_id = models.PositiveIntegerField(
+        verbose_name=_("Scooso-ID"),
     )
