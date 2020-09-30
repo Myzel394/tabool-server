@@ -137,10 +137,6 @@
                                         {
                                             "name": "coursenumber",
                                             "type": "string[int]"
-                                        },
-                                        {
-                                            "name": "information",
-                                            "type": "string"
                                         }
                                     ]
                                 },

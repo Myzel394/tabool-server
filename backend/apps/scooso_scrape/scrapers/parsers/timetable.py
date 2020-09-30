@@ -1,0 +1,165 @@
+from datetime import datetime
+from typing import *
+
+from .base import BaseParser
+
+__all__ = [
+    "TimetableParser"
+]
+
+LESSON_TYPES = {
+    "lesson": [100],
+    "event": [1],
+    "freePeriod": [1050, 1060],
+    "replace": [1030, 1040]
+}
+
+
+class TimetableParser(BaseParser):
+    @staticmethod
+    def build_course_name(subject: str, course_number: int) -> Optional[str]:
+        return f"{subject or ''}{course_number or ''}" or None
+    
+    @staticmethod
+    def extract_subject(data: dict) -> Dict[str, Any]:
+        return {
+            "code": data.get("subject_code"),
+            "id": data.get("subject")
+        }
+    
+    @staticmethod
+    def extract_teacher(data: dict) -> Dict[str, Any]:
+        return {
+            "code": data.get("teacher_code"),
+            "id": data.get("teacher")
+        }
+    
+    @staticmethod
+    def extract_room(data: dict) -> Dict[str, Any]:
+        return {
+            "code": data.get("location_code"),
+            "id": data.get("location")
+        }
+    
+    @classmethod
+    def extract_course(cls, data: dict) -> Dict[str, Any]:
+        course_number = data.get("coursenumber")
+        
+        return {
+            "number": course_number,
+            "course_number": int(course_number) if course_number else None,
+            "suggested_name": cls.build_course_name(data.get("subject_code"), course_number)
+        }
+    
+    @classmethod
+    def get_lesson_data(cls, lesson: dict) -> Dict[str, Dict[str, Any]]:
+        start_datetime: datetime = lesson["start_time"]
+        end_datetime: datetime = lesson["end_time"]
+        
+        return {
+            "lesson": {
+                "start_time": start_datetime,
+                "end_time": end_datetime,
+            },
+            "room": cls.extract_room(lesson),
+            "subject": cls.extract_subject(lesson),
+            "teacher": cls.extract_teacher(lesson),
+            "course": cls.extract_course(lesson),
+            "materials": {
+                "id": lesson["time_id"]
+            }
+        }
+    
+    @staticmethod
+    def get_event_data(event: dict) -> Dict[str, Any]:
+        default_data = {
+            "title": event.get("title") or None,
+        }
+        
+        if event.get("allday", 1) is 1:
+            return {
+                "is_all_day": True,
+                **default_data
+            }
+        return {
+            "start_time": event["start_time"].time(),
+            "end_time": event["end_time"].time(),
+            **default_data
+        }
+    
+    @classmethod
+    def get_freeperiod_data(cls, period: dict) -> Dict[str, Any]:
+        return {
+            "period": {
+                "information": period.get("information") or None
+            },
+            "room": cls.extract_room(period),
+            "course": cls.extract_course(period),
+            "teacher": cls.extract_teacher(period)
+        }
+    
+    @classmethod
+    def get_replacement_data(cls, replace: dict) -> Dict[str, Any]:
+        information = replace.get("information") or None
+        
+        new_subject_code = replace.get("subject_code")
+        new_subject_id = replace.get("subject")
+        new_room_code = replace.get("new_location_code")
+        new_room_id = replace.get("new_location")
+        new_teacher_code = replace.get("old_teacher_code")
+        new_teacher_id = replace.get("old_teacher")
+        
+        start_time = replace["start_time"]
+        end_time = replace["end_time"]
+        
+        return {
+            "replacement": {
+                "information": information,
+                "start_time": start_time,
+                "end_time": end_time
+            },
+            "subject": {
+                "code": new_subject_code,
+                "id": new_subject_id
+            },
+            "teacher": {
+                "code": new_teacher_code,
+                "id": new_teacher_id
+            },
+            "room": {
+                "code": new_room_code,
+                "id": new_room_id
+            }
+        }
+    
+    @property
+    def is_valid(self) -> bool:
+        try:
+            return self.json["item"].get("code", None) is not None
+        except KeyError:
+            return False
+    
+    @property
+    def data(self):
+        lessons = []
+        events = []
+        modifications = []
+        free_periods = []
+        
+        for thing in self.json["tables"]["schedule"]:
+            lesson_type = thing["type"]
+            if lesson_type in LESSON_TYPES["lesson"]:
+                lessons.append(self.get_lesson_data(thing))
+            elif lesson_type in LESSON_TYPES["event"]:
+                events.append(self.get_event_data(thing))
+            elif lesson_type in LESSON_TYPES["freePeriod"]:
+                free_periods.append(self.get_freeperiod_data(thing))
+            elif lesson_type in LESSON_TYPES["replace"]:
+                modifications.append(self.get_replacement_data(thing))
+        
+        return {
+            "lessons": lessons,
+            "events": events,
+            "modifications": modifications,
+            "free_periods": free_periods
+        }

@@ -865,6 +865,7 @@ class ScCore {
     }
 
     static loadCloudFileLists(t) {
+        debugger;
         let e = "&destid=" + (t = $.extend({
             div_f: $("<div>"),
             dir: 0,

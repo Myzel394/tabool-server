@@ -7,5 +7,6 @@ LOGIN_CONNECTION = {
 
 TIMETABLE_CONNECTION = {
     "url": f"{BASE_URL}/query.php",
-    "method": "POST"
+    "method": "POST",
+    "dt_format": "%Y-%M-YD 00:00:00"
 }
