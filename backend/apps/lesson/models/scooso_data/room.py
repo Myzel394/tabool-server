@@ -1,0 +1,29 @@
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from apps.lesson.public import *
+from apps.utils import ScoosoDataMixin
+
+__all__ = [
+    "RoomScoosoData"
+]
+
+
+class RoomScoosoData(ScoosoDataMixin):
+    class Meta:
+        verbose_name = _("Raum-Scooso-Daten")
+        verbose_name_plural = _("Raum-Scooso-Daten")
+        ordering = ("code", "scooso_id")
+    
+    room = models.OneToOneField(
+        ROOM,
+        verbose_name=room_single,
+        on_delete=models.CASCADE,
+    )
+    
+    code = models.PositiveSmallIntegerField(
+        verbose_name=_("Raum-Code"),
+        blank=True,
+        null=True
+    )
+

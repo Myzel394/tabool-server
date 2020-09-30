@@ -70,4 +70,6 @@ class ScoosoDataMixin(RandomIDMixin):
     
     scooso_id = models.PositiveIntegerField(
         verbose_name=_("Scooso-ID"),
+        blank=True,
+        null=True
     )

@@ -4,7 +4,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 
-from apps.utils import ColorField, UserModelRelationMixin
+from apps.utils import UserModelRelationMixin
+from apps.utils.fields import ColorField
 from ...public import *
 
 if TYPE_CHECKING:

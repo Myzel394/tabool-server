@@ -18,3 +18,4 @@ class AssociatedUserSerializerMixin(serializers.ModelSerializer):
     
     def create(self, validated_data):
         validated_data["associated_user"] = self.context["request"].user
+

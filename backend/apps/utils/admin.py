@@ -1,5 +1,3 @@
-from abc import ABC
-
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.fieldsets.admin import BaseAdminMixinsMixin
@@ -10,7 +8,7 @@ __all__ = [
 ]
 
 
-class DefaultAdminInlineMixin(BaseAdminMixinsMixin, admin.TabularInline, ABC):
+class DefaultAdminInlineMixin(BaseAdminMixinsMixin, admin.TabularInline):
     extra = 0
     min_num = 0
     
