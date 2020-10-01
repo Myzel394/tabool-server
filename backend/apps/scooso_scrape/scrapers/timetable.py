@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from typing import *
 
-from .parsers import TimetableParser
+from .parsers import PureTimetableParser
 from .request import Request
 from .. import constants
 
@@ -22,7 +22,7 @@ class TimetableRequest(Request):
         return self.request_with_parser(
             url=constants.TIMETABLE_CONNECTION["url"],
             method=constants.TIMETABLE_CONNECTION["method"],
-            parser=TimetableParser,
+            parser=PureTimetableParser,
             data={
                 "cmd": 600,
                 "subcmd": 100,
