@@ -3,16 +3,19 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from apps.authentication.views import LoginView, LogoutView, PasswordChangeView, RegisterView, UserPaymentViewSet
-from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet
+from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet, ModificationViewSet
 from apps.homework.views import HomeworkViewSet, UserHomeworkRelationViewSet
-from apps.lesson.views import CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet, \
-    UserSubjectRelationViewSet
+from apps.lesson.views import (
+    CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet,
+    UserSubjectRelationViewSet,
+)
 from apps.news.views import NewsViewSet
 from apps.timetable.views import TimetableViewSet
 
 router = DefaultRouter()
 router.register("timetable", TimetableViewSet, basename="Timetable")
 router.register("homework", HomeworkViewSet, basename="Homework")
+router.register("modification", ModificationViewSet, basename="Modification")
 router.register("classtest", ClasstestViewSet, basename="Classtest")
 router.register("event", EventViewSet, basename="Event")
 router.register("course", CourseViewSet, basename="Course")

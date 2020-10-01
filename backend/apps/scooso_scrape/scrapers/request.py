@@ -36,14 +36,16 @@ class Request(ABC):
             constants.LOGIN_CONNECTION["url"], {
                 "fInstitution": "rwg",
                 "fUsername": self.username,
-                "fPassword": self.password
+                "fPassword": self.password,
+                "asd": "Anmelden"
             }
         )
         with self.client as tr:
             for _ in range(login_attempts):
                 response = tr.session.request(constants.LOGIN_CONNECTION["method"], url)
+                content = response.content.decode("utf-8")
                 
-                parser = LoginParser(response.content)
+                parser = LoginParser(content)
                 
                 if parser.is_valid:
                     break
@@ -59,30 +61,36 @@ class Request(ABC):
     
     def request_with_parser(
             self,
-            url: str,
-            parser: Type[BaseParser],
-            attempts: int = 5,
+            parser_class: Type[BaseParser],
+            url: Optional[str] = None,
+            full_url: Optional[str] = None,
             data: Optional[dict] = None,
+            attempts: int = 5,
             method: str = "POST",
     ):
-        data = data or {}
-        full_url = build_url(url, data)
+        assert not (type(full_url) is str and (url or data)), "Either set `full_url` or (`data` and `url`)!"
+        
+        if not full_url:
+            data = data or {}
+            data.update(self.login_data)
+            full_url = build_url(url, data)
         
         with self.client as tr:
             for _ in range(attempts):
                 response = tr.session.request(method, full_url)
+                content = response.content.decode("utf-8")
                 
-                parser = parser(response.content)
+                parser_instance = parser_class(content)
                 
-                if parser.is_valid:
+                if parser_instance.is_valid:
                     break
                 
-                # Login required
+                # Maybe login session is not valid anymore
                 self.login()
             else:
-                raise LoginFailed()
+                raise RequestFailed()
         
-        return parser.data
+        return parser_instance.data
     
     def request(
             self,
@@ -96,7 +104,7 @@ class Request(ABC):
         with self.client as tr:
             response = tr.session.request(method, full_url)
         
-        return response.content
+        return response.content.decode("utf-8")
     
     @property
     def login_data(self) -> dict:

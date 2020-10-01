@@ -12,6 +12,7 @@ __all__ = [
 @dataclass
 class BaseParser(ABC):
     _raw_input: str
+    _is_json: bool = False
     
     def __post_init__(self):
         self.unparsed_json = json.loads(self._raw_input) if type(self._raw_input) is str else self._raw_input

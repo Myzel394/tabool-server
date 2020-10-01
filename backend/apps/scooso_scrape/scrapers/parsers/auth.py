@@ -18,12 +18,12 @@ class LoginParser(BaseParser):
             "id": data["id"],
             "first_name": data["prename"],
             "last_name": data["name"],
-            "session": auth_data["logSessionId"]
+            "session": auth_data["logSessionId"][0]
         }
     
     @property
     def is_valid(self) -> bool:
         try:
             return self.json["header"].get("log", None) is not None
-        except KeyError:
+        except:
             return False

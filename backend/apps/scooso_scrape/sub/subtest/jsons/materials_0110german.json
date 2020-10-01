@@ -1,0 +1,63 @@
+{
+    "header": {
+        "state": 0,
+        "number": 0,
+        "message": "",
+        "times": {
+            "header": 0.008958816528320312,
+            "execution": 0.002215147018432617,
+            "total": 0.01117396354675293
+        },
+        "warnings": "",
+        "errors": "",
+        "logType": "20",
+        "client": "rwg",
+        "ipl_count": 0,
+        "query_num": "15"
+    },
+    "item": {
+        "id": "310",
+        "type": "1",
+        "flags": "0",
+        "owner": "0",
+        "parent": "300",
+        "name": "Materialien",
+        "sort": "0",
+        "lft": "14",
+        "rgt": "15"
+    },
+    "tables": {
+        "items": [
+            {
+                "id": "73912",
+                "prop": "310",
+                "owner": "6247",
+                "size": "655536",
+                "name": "Hausaufgabe_zum_8102020.pdf",
+                "scooname": "5f75cdca1e504.pdf",
+                "created": "2020-10-01 14:38:34",
+                "deleted": "0",
+                "deldate": "0000-00-00 00:00:00",
+                "filetype": "0",
+                "keywords": "",
+                "imgarray": "0",
+                "changed": "2020-10-01 14:38:34"
+            },
+            {
+                "id": "73893",
+                "prop": "310",
+                "owner": "6247",
+                "size": "592767",
+                "name": "Vergleich_von_Personenkonstellationen.pdf",
+                "scooname": "5f75c3af9adb3.pdf",
+                "created": "2020-10-01 13:55:27",
+                "deleted": "0",
+                "deldate": "0000-00-00 00:00:00",
+                "filetype": "0",
+                "keywords": "",
+                "imgarray": "0",
+                "changed": "2020-10-01 13:55:27"
+            }
+        ]
+    }
+}

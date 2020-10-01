@@ -1,10 +1,10 @@
-from datetime import datetime
+from datetime import datetime, time
 from typing import *
 
 from .base import BaseParser
 
 __all__ = [
-    "PureTimetableParser"
+    "PureTimetableParser", "PureTimetableParserDataType"
 ]
 
 LESSON_TYPES = {
@@ -13,6 +13,84 @@ LESSON_TYPES = {
     "freePeriod": [1050, 1060],
     "replace": [1030, 1040]
 }
+
+
+class DefaultScoosoDataTypeMixin(TypedDict):
+    code: Optional[str]
+    id: Optional[int]
+
+
+class RoomType(DefaultScoosoDataTypeMixin):
+    pass
+
+
+class SubjectType(DefaultScoosoDataTypeMixin):
+    pass
+
+
+class TeacherType(DefaultScoosoDataTypeMixin):
+    pass
+
+
+class CourseType(TypedDict):
+    course_number: Optional[int]
+    suggested_name: Optional[str]
+
+
+class LessonType(TypedDict):
+    start_time: time
+    end_time: time
+
+
+class ModificationType(TypedDict):
+    information: Optional[str]
+    start_time: time
+    end_time: time
+
+
+class PeriodType(TypedDict):
+    information: Optional[str]
+
+
+class SingleLessonType(TypedDict):
+    lesson: LessonType
+    room: RoomType
+    subject: SubjectType
+    teacher: TeacherType
+    course: CourseType
+
+
+class SingleEventType(TypedDict):
+    start_time: time
+    end_time: time
+    title: str
+
+
+class SingleFreePeriodType(TypedDict):
+    period: PeriodType
+    room: RoomType
+    course: CourseType
+
+
+class SingleMaterialsDataType(TypedDict):
+    calendar_id: int
+    time_id: int
+    subject_id: int
+
+
+class SingleModificationType(TypedDict):
+    modification: ModificationType
+    subject: SubjectType
+    teacher: TeacherType
+    room: RoomType
+
+
+class PureTimetableParserDataType(TypedDict):
+    lessons: List[SingleLessonType]
+    events: List[SingleEventType]
+    modifications: List[SingleModificationType]
+    free_periods: List[SingleFreePeriodType]
+    materials_data: List[SingleMaterialsDataType]
 
 
 class PureTimetableParser(BaseParser):
@@ -46,7 +124,6 @@ class PureTimetableParser(BaseParser):
         course_number = data.get("coursenumber")
         
         return {
-            "number": course_number,
             "course_number": int(course_number) if course_number else None,
             "suggested_name": cls.build_course_name(data.get("subject_code"), course_number)
         }
@@ -58,8 +135,8 @@ class PureTimetableParser(BaseParser):
         
         return {
             "lesson": {
-                "start_time": start_datetime,
-                "end_time": end_datetime,
+                "start_time": start_datetime.time(),
+                "end_time": end_datetime.time(),
             },
             "room": cls.extract_room(lesson),
             "subject": cls.extract_subject(lesson),
@@ -73,7 +150,7 @@ class PureTimetableParser(BaseParser):
             "title": event.get("title") or None,
         }
         
-        if event.get("allday", 1) is 1:
+        if event.get("allday", 1) == 1:
             return {
                 "is_all_day": True,
                 **default_data
@@ -92,7 +169,6 @@ class PureTimetableParser(BaseParser):
             },
             "room": cls.extract_room(period),
             "course": cls.extract_course(period),
-            "teacher": cls.extract_teacher(period)
         }
     
     @classmethod
@@ -110,7 +186,7 @@ class PureTimetableParser(BaseParser):
         end_time = replace["end_time"]
         
         return {
-            "replacement": {
+            "modification": {
                 "information": information,
                 "start_time": start_time,
                 "end_time": end_time
@@ -132,25 +208,24 @@ class PureTimetableParser(BaseParser):
     @staticmethod
     def get_material_data(data: dict) -> Optional[dict]:
         if (key := "materials") in data:
-            prop = data[key].keys()[0]
-        
+            prop = next(iter(data[key]))
+            
             return {
-                "prop": prop,
-                "destination_id": data["time_id"]
+                "calendar_id": int(prop),
+                "time_id": data["time_id"],
+                "subject_id": data["subject"]
             }
         return None
-            
-        
     
     @property
     def is_valid(self) -> bool:
         try:
             return self.json["item"].get("code", None) is not None
-        except KeyError:
+        except:
             return False
     
     @property
-    def data(self):
+    def data(self) -> PureTimetableParserDataType:
         lessons = []
         events = []
         modifications = []
@@ -167,10 +242,10 @@ class PureTimetableParser(BaseParser):
                 free_periods.append(self.get_freeperiod_data(thing))
             elif lesson_type in LESSON_TYPES["replace"]:
                 modifications.append(self.get_replacement_data(thing))
-
+            
             if data := self.get_material_data(thing):
                 materials.append(data)
-                
+        
         return {
             "lessons": lessons,
             "events": events,

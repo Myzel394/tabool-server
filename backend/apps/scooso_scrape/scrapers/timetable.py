@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from typing import *
 
-from .parsers import PureTimetableParser
+from .parsers import PureTimetableParser, PureTimetableParserDataType
 from .request import Request
 from .. import constants
 
@@ -15,14 +15,14 @@ class TimetableRequest(Request):
             self,
             start_date: Optional[date] = None,
             end_date: Optional[date] = None
-    ) -> dict:
+    ) -> PureTimetableParserDataType:
         start_date = start_date or date.today()
         end_date = end_date or start_date + timedelta(days=5)
         
         return self.request_with_parser(
             url=constants.TIMETABLE_CONNECTION["url"],
             method=constants.TIMETABLE_CONNECTION["method"],
-            parser=PureTimetableParser,
+            parser_class=PureTimetableParser,
             data={
                 "cmd": 600,
                 "subcmd": 100,
