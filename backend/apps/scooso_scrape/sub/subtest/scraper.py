@@ -6,7 +6,7 @@ from pprint import pp
 from django.test import TestCase
 from dotenv import load_dotenv
 
-from ...scrapers.parsers import TimetableParser
+from ...scrapers.parsers import PureTimetableParser
 
 
 class ParserTest(TestCase):
@@ -21,7 +21,7 @@ class ParserTest(TestCase):
         self.data = json.loads(data)
     
     def test_parser(self):
-        parser = TimetableParser(self.data)
+        parser = PureTimetableParser(self.data)
         self.assertTrue(parser.is_valid)
         data = parser.data
         
@@ -29,5 +29,6 @@ class ParserTest(TestCase):
         self.assertEqual(len(data["modifications"]), 1)
         self.assertEqual(len(data["events"]), 3)
         self.assertEqual(len(data["free_periods"]), 6)
+        self.assertEqual(len(data["materials_data"]), 6)
         
         pp(parser.data)

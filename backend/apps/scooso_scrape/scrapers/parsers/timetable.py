@@ -4,7 +4,7 @@ from typing import *
 from .base import BaseParser
 
 __all__ = [
-    "TimetableParser"
+    "PureTimetableParser"
 ]
 
 LESSON_TYPES = {
@@ -15,7 +15,7 @@ LESSON_TYPES = {
 }
 
 
-class TimetableParser(BaseParser):
+class PureTimetableParser(BaseParser):
     @staticmethod
     def build_course_name(subject: str, course_number: int) -> Optional[str]:
         return f"{subject or ''}{course_number or ''}" or None
@@ -65,9 +65,6 @@ class TimetableParser(BaseParser):
             "subject": cls.extract_subject(lesson),
             "teacher": cls.extract_teacher(lesson),
             "course": cls.extract_course(lesson),
-            "materials": {
-                "id": lesson["time_id"]
-            }
         }
     
     @staticmethod
@@ -132,6 +129,19 @@ class TimetableParser(BaseParser):
             }
         }
     
+    @staticmethod
+    def get_material_data(data: dict) -> Optional[dict]:
+        if (key := "materials") in data:
+            prop = data[key].keys()[0]
+        
+            return {
+                "prop": prop,
+                "destination_id": data["time_id"]
+            }
+        return None
+            
+        
+    
     @property
     def is_valid(self) -> bool:
         try:
@@ -145,6 +155,7 @@ class TimetableParser(BaseParser):
         events = []
         modifications = []
         free_periods = []
+        materials = []
         
         for thing in self.json["tables"]["schedule"]:
             lesson_type = thing["type"]
@@ -156,10 +167,14 @@ class TimetableParser(BaseParser):
                 free_periods.append(self.get_freeperiod_data(thing))
             elif lesson_type in LESSON_TYPES["replace"]:
                 modifications.append(self.get_replacement_data(thing))
-        
+
+            if data := self.get_material_data(thing):
+                materials.append(data)
+                
         return {
             "lessons": lessons,
             "events": events,
             "modifications": modifications,
-            "free_periods": free_periods
+            "free_periods": free_periods,
+            "materials_data": materials
         }

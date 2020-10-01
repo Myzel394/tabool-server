@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
 from apps.utils.viewsets.mixins import RetrieveFromUserMixin
-from ...subserializers import ModificationDetailSerializer, ModificationListSerializer
+from ....serializers import ModificationDetailSerializer, ModificationListSerializer
 from ....models import Modification
 
 __all__ = [
