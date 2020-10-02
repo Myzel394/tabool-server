@@ -1,4 +1,7 @@
+from django.shortcuts import render
 from django_hint import RequestType
+
+from constants import names
 
 __all__ = [
     "landing_page"
@@ -6,4 +9,6 @@ __all__ = [
 
 
 def landing_page(request: RequestType):
-    return
+    return render(request, "main/index.html", {
+        "cookie_name": names.ACCESS_TOKEN_COOKIE_NAME
+    })

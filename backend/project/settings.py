@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "apps.timetable",
     
     "apps.news",
+    "apps.main",
 ]
 
 MIDDLEWARE = [
@@ -103,6 +104,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.main.context_processors.constants_processor"
             ],
         },
     },
