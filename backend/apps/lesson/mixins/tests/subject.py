@@ -12,24 +12,27 @@ __all__ = [
 class SubjectTestMixin(UserCreationTestMixin, ABC):
     @classmethod
     def Create_subject(cls, **kwargs) -> Subject:
+        choice = random.choice([
+            "Mathe",
+            "Englisch",
+            "Deutsch",
+            "Physik",
+            "Biologie",
+            "Chemie",
+            "Geschichte",
+            "Informatik",
+            "Musik",
+            "Kunst",
+            "Sport",
+            "Ethik",
+            "Geschichte"
+        ])
+        
         return Subject.objects.create(
             **joinkwargs(
                 {
-                    "name": lambda: random.choice([
-                        "Mathe",
-                        "Englisch",
-                        "Deutsch",
-                        "Physik",
-                        "Biologie",
-                        "Chemie",
-                        "Geschichte",
-                        "Informatik",
-                        "Musik",
-                        "Kunst",
-                        "Sport",
-                        "Ethik",
-                        "Geschichte"
-                    ]),
+                    "name": lambda: choice,
+                    "short_name": choice[:2]
                 },
                 kwargs
             )

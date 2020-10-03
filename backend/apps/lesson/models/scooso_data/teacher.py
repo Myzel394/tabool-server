@@ -14,17 +14,18 @@ class TeacherScoosoData(ScoosoDataMixin):
         verbose_name = _("Lehrer-Scooso-Daten")
         verbose_name_plural = _("Lehrer-Scooso-Daten")
         ordering = ("code", "scooso_id")
-        
+    
     teacher = models.OneToOneField(
         TEACHER,
         verbose_name=teacher_single,
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
     
     code = models.CharField(
         max_length=127,
+        verbose_name=_("Lehrer-Code"),
         blank=True,
-        null=True,
-        verbose_name=_("Lehrer-Code")
+        null=True
     )
-

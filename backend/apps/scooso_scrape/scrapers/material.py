@@ -1,85 +1,153 @@
-import os
-import random
-import stat
-import string
-from datetime import datetime, timedelta
+import mimetypes
+from datetime import date
+from enum import Enum
 from pathlib import Path
-from typing import *
+
+from secure_file_detection import detector
+from secure_file_detection.exceptions import *
 
 from .parsers import PureMaterialParser, PureMaterialParserDataType
-from .parsers.material_file import MaterialFileParser
-from .request import build_url, Request
+from .parsers.material_download import MaterialFileParser
+from .parsers.material_upload import MaterialUploadParser
+from .request import Request
 from .. import constants
+from ..exceptions import FileManipulatedException
+from ..utils import build_url, get_mime_from_extension, get_safe_filename
 
 __all__ = [
-    "MaterialRequest"
+    "MaterialRequest", "MaterialTypeOptions"
 ]
+
+
+class MaterialTypeOptions(Enum):
+    TEACHER_MATERIALS = 310
+    HOMEWORK = 320
 
 
 class MaterialRequest(Request):
     @staticmethod
-    def get_pardate() -> datetime:
-        return datetime.now() + timedelta(weeks=1) + random.choice([
-            timedelta(days=days)
-            for days in [0, 1, 3, 5, 7]
-        ])
+    def constrain_filename(file: Path) -> Path:
+        true_type = detector.detect_true_type(file)
+        extension = mimetypes.guess_extension(true_type, strict=True)
+        
+        return file.with_suffix(extension)
     
     @staticmethod
-    def get_subfolder_path(base_path: Path) -> Path:
-        suffix = f"{datetime.now().strftime('%d.%m.%y.%h.%M.%S')}__{''.join(random.choices(string.ascii_letters, k=4))}"
-        path = base_path / suffix
-        path.mkdir(parents=True, exist_ok=True)
+    def create_file(original_path: Path, data: bytes) -> Path:
+        # Preparation
+        original_path = original_path.with_name(get_safe_filename(original_path.name))
+        original_path.parent.mkdir(exist_ok=True, parents=True)
         
-        return path
+        with original_path.open("wb") as file:
+            file.write(data)
+        
+        # Validation
+        try:
+            true_type = detector.detect_true_type(original_path)
+        except (ManipulatedFileError, MimeTypeNotSupported, MimeTypeNotDetectable):
+            original_path.unlink()
+            
+            raise FileManipulatedException()
+        
+        extension = mimetypes.guess_extension(true_type)
+        real_path = original_path.with_suffix(extension)
+        
+        original_path.rename(real_path)
+        
+        return original_path
     
     def get_materials(
             self,
-            destination_id: int,
-            calendar_id: int = 310,
-    ) -> List[PureMaterialParserDataType]:
+            time_id: int,
+            targeted_date: date,
+            material_type: MaterialTypeOptions = MaterialTypeOptions.TEACHER_MATERIALS
+    ) -> PureMaterialParserDataType:
+        method = constants.MATERIAL_CONNECTION["method"]
         url = constants.MATERIAL_CONNECTION["url"]
-        data = {
-            "cmd": 4000,
-            "subcmd": 5,
-            "subsubcmd": 2,
-            "prop": calendar_id,
-            "destid": destination_id,
-            "desttype": 10030,
-            **self.login_data
-        }
-        prefix = f"&pardate={self.get_pardate().strftime(constants.TIMETABLE_CONNECTION['dt_format'])}"
+        suffix = f"&pardate={targeted_date.strftime(constants.TIMETABLE_CONNECTION['dt_format'])}"
         
-        full_url = build_url(url, data) + prefix
+        def get_data():
+            data = {
+                "cmd": 4000,
+                "subcmd": 5,
+                "subsubcmd": 2,
+                "prop": material_type.value,
+                "destid": time_id,
+                "desttype": 10030,
+                **self.login_data
+            }
+            return {
+                "url": build_url(url, data) + suffix,
+                "method": method
+            }
         
         return self.request_with_parser(
             parser_class=PureMaterialParser,
-            method=constants.MATERIAL_CONNECTION["method"],
-            full_url=full_url
+            get_data=get_data
         )
     
     def download_material(
             self,
             material_id: int,
-            download_to: Path
-    ) -> None:
+            download_to: Path,
+    ) -> Path:
         url = constants.MATERIAL_DOWNLOAD_CONNECTION["url"]
-        data = {
-            "cmd": 3000,
-            "subcmd": 20,
-            "varname": "file",
-            **self.login_data
-        }
-        prefix = f"&file[{int(material_id)}]=on"
+        suffix = f"&file[{int(material_id)}]=on"
+        method = constants.MATERIAL_DOWNLOAD_CONNECTION["method"]
         
-        full_url = build_url(url, data) + prefix
+        def get_data():
+            data = {
+                "cmd": 3000,
+                "subcmd": 20,
+                "varname": "file",
+                **self.login_data
+            }
+            return {
+                "url": build_url(url, data) + suffix,
+                "method": method
+            }
         
         data = self.request_with_parser(
             parser_class=MaterialFileParser,
-            method=constants.MATERIAL_DOWNLOAD_CONNECTION["method"],
-            full_url=full_url
+            get_data=get_data
         )
         
-        with download_to.open("w", encoding="utf-8") as file:
-            file.write(data)
+        return self.create_file(download_to, data)
+    
+    def upload_material(
+            self,
+            time_id: int,
+            target_date: date,
+            filename: str,
+            data: str,
+            material_type: MaterialTypeOptions = MaterialTypeOptions.HOMEWORK,
+    ) -> None:
+        url = constants.MATERIAL_UPLOAD_CONNECTION["url"]
+        method = constants.MATERIAL_UPLOAD_CONNECTION["method"]
+        targeted_date_str = target_date.strftime(constants.MATERIAL_UPLOAD_CONNECTION["dt_format"])
+        mimetype_from_extension = get_mime_from_extension(filename)
         
-        os.chmod(str(download_to), stat.S_IRGRP)
+        def get_data():
+            form_data = {
+                "cmd": 3000,
+                "subcmd": 10,
+                "dir": material_type.value,
+                "destType": 10030,
+                "destId": time_id,
+                "parDate": targeted_date_str,
+                **self.login_data
+            }
+            
+            return {
+                "url": url,
+                "method": method,
+                "files": {
+                    "file": (filename, data, mimetype_from_extension)
+                },
+                "data": form_data
+            }
+        
+        self.request_with_parser(
+            parser_class=MaterialUploadParser,
+            get_data=get_data
+        )

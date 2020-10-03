@@ -38,7 +38,7 @@ class Room(RandomIDMixin, LifecycleModel):
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="place")
     def _hook_place_validation_and_constraining(self):
-        self.place = self.place.capitalize()
+        self.place = self.place.upper()
         validate_place(self.place)
     
     @property

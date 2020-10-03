@@ -49,12 +49,10 @@ class Course(RandomIDMixin, LifecycleModel):
         on_delete=models.SET_NULL,
     )  # type: Teacher
     
-    name = models.CharField(
-        verbose_name=_("Name"),
-        blank=True,
-        null=True,
-        max_length=7
-    )  # type: str
+    course_number = models.PositiveSmallIntegerField(
+        verbose_name=_("Kursnummer"),
+        default=1
+    )  # type: int
     
     def __call_manage_relations_on_model(self, models: Iterable[StandardModelType]) -> None:
         participants = self.participants.all()

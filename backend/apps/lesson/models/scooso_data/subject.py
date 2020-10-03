@@ -19,6 +19,8 @@ class SubjectScoosoData(ScoosoDataMixin):
         SUBJECT,
         verbose_name=subject_single,
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
     
     code = models.CharField(
@@ -27,4 +29,3 @@ class SubjectScoosoData(ScoosoDataMixin):
         blank=True,
         null=True
     )
-

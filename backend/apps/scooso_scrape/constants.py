@@ -22,4 +22,14 @@ MATERIAL_DOWNLOAD_CONNECTION = {
     "method": "GET"
 }
 
-TOR_PORT = 9200
+MATERIAL_UPLOAD_CONNECTION = {
+    "url": DEFAULT_QUERY_URL,
+    "method": "POST",
+    "dt_format": "%Y-%m-%d 00:00:00"
+}
+
+LESSON_CONTENT_CONNECTION = {
+    "url": DEFAULT_QUERY_URL,
+    "method": "POST",
+    "dt_format": "%Y-%m-%d %H:%M:%S"
+}

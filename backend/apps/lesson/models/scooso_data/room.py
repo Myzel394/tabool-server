@@ -19,11 +19,13 @@ class RoomScoosoData(ScoosoDataMixin):
         ROOM,
         verbose_name=room_single,
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
     
-    code = models.PositiveSmallIntegerField(
+    code = models.CharField(
         verbose_name=_("Raum-Code"),
+        max_length=31,
         blank=True,
         null=True
     )
-

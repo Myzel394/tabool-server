@@ -9,7 +9,7 @@ class CourseListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Course
         fields = [
-            "subject", "name", "id"
+            "subject", "id"
         ]
     
     subject = SubjectField()
@@ -19,7 +19,7 @@ class CourseDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Course
         fields = [
-            "subject", "teacher", "name", "participants_count", "id"
+            "subject", "teacher", "course_number", "participants_count", "id"
         ]
     
     subject = SubjectField()

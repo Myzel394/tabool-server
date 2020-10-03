@@ -5,10 +5,11 @@ __all__ = [
     "SubjectDetailSerializer"
 ]
 
+
 # TODO: Automatically add extra fields to get the user relation data!
 
 
 class SubjectDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Subject
-        fields = ["name", "color", "id"]
+        fields = ["name", "short_name", "color", "id"]

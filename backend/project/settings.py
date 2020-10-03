@@ -66,7 +66,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     
-    "apps.authentication.middlewares.EnsureAuthenticationToken",
     "simple_history.middleware.HistoryRequestMiddleware",
 ]
 

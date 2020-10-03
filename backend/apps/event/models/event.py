@@ -14,7 +14,7 @@ from constants import maxlength
 from ..sub.subquerysets import EventQuerySet
 
 if TYPE_CHECKING:
-    from datetime import datetime
+    from datetime import datetime, time, timedelta
     from apps.lesson.models import Room
     from . import UserEventRelation
 
@@ -67,3 +67,12 @@ class Event(RandomIDMixin, CreationDateMixin, HandlerMixin):
     @property
     def user_relations(self) -> QueryType["UserEventRelation"]:
         return self.usereventrelation_set.all()
+    
+    @property
+    def is_all_day(self) -> bool:
+        start_datetime_begin = datetime.combine(
+            self.start_datetime.date(),
+            time.min
+        )
+        
+        return start_datetime_begin + timedelta(days=1) == self.end_datetime

@@ -32,6 +32,11 @@ class Subject(RandomIDMixin, ColorMixin, HandlerMixin):
         max_length=maxlength.SUBJECT
     )  # type: str
     
+    short_name = models.CharField(
+        verbose_name=_("Kurzer Name"),
+        max_length=15,
+    )  # type: str
+    
     def __str__(self):
         return self.name
     
