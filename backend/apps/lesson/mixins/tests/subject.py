@@ -32,7 +32,7 @@ class SubjectTestMixin(UserCreationTestMixin, ABC):
             **joinkwargs(
                 {
                     "name": lambda: choice,
-                    "short_name": choice[:2]
+                    "short_name": lambda: choice[:2]
                 },
                 kwargs
             )

@@ -136,7 +136,13 @@ class ForeignSerializerTest(DummyUser):
         self.assertEqual(lesson.date, lesson_data_data['date'])
     
     def test_simple(self):
-        """Just checks that there are no errors"""
+        """Just checks that there are no errors thrown while importing objects"""
+        # Event
         random_event = random.choice(self.timetable['events'])
-        
         event = TimetableRequest.import_event_from_scraper(random_event)
+        # Modification
+        random_modification = random.choice(self.timetable['modifications'])
+        event = TimetableRequest.import_modification_from_scraper(random_modification)
+        # Free Period
+        random_free_period = random.choice(self.timetable['free_periods'])
+        event = TimetableRequest.import_modification_from_scraper(random_free_period)

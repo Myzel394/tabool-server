@@ -10,8 +10,7 @@ __all__ = [
 LESSON_TYPES = {
     "lesson": [100],
     "event": [1],
-    "freePeriod": [1050, 1060],
-    "modification": [1030, 1040]
+    "modification": [1030, 1040, 1050, 1060]
 }
 
 
@@ -82,7 +81,7 @@ class SingleFreePeriodType(TypedDict):
     course: CourseType
 
 
-class SingleMaterialsDataType(TypedDict):
+class SingleMaterialDataType(TypedDict):
     calendar_id: int
     time_id: int
     subject_id: int
@@ -100,8 +99,7 @@ class PureTimetableParserDataType(TypedDict):
     lessons: List[SingleLessonType]
     events: List[SingleEventType]
     modifications: List[SingleModificationType]
-    free_periods: List[SingleFreePeriodType]
-    materials_data: List[SingleMaterialsDataType]
+    materials_data: List[SingleMaterialDataType]
 
 
 class PureTimetableParser(BaseParser):
@@ -246,8 +244,6 @@ class PureTimetableParser(BaseParser):
                 lessons.append(self.get_lesson_data(thing))
             elif lesson_type in LESSON_TYPES["event"]:
                 events.append(self.get_event_data(thing))
-            elif lesson_type in LESSON_TYPES["freePeriod"]:
-                free_periods.append(self.get_freeperiod_data(thing))
             elif lesson_type in LESSON_TYPES["modification"]:
                 modifications.append(self.get_modification_data(thing))
             
@@ -258,6 +254,5 @@ class PureTimetableParser(BaseParser):
             "lessons": lessons,
             "events": events,
             "modifications": modifications,
-            "free_periods": free_periods,
             "materials_data": materials
         }

@@ -11,7 +11,7 @@ from apps.lesson.sub.subserializers import (
 from .parsers import PureTimetableParser, PureTimetableParserDataType
 from .parsers.timetable import (
     CourseType, EventType, LessonType, ModificationType, RoomType, SingleEventType, SingleLessonType,
-    SubjectType, TeacherType,
+    SingleMaterialDataType, SingleModificationType, SubjectType, TeacherType,
 )
 from .request import Request
 from .. import constants
@@ -22,6 +22,7 @@ __all__ = [
 ]
 
 from ...event.models import Event
+from ...event.options import ModificationTypeOptions
 
 from ...event.sub.subserializers import EventScoosoScraperSerializer
 from ...event.sub.subserializers.scooso_scrapers.modification import ModificationScoosoScraperSerializer
@@ -90,10 +91,10 @@ class TimetableRequest(Request):
     
     @classmethod
     def import_lesson_from_scraper(cls, lesson: SingleLessonType) -> Lesson:
-        room = cls.import_room(lesson['room'])
-        subject = cls.import_subject(lesson['subject'])
-        teacher = cls.import_teacher(lesson['teacher'])
-        course = cls.import_course(lesson['course'], subject=subject, teacher=teacher)
+        room = cls.import_room(lesson['room'], none_on_error=True)
+        subject = cls.import_subject(lesson['subject'], none_on_error=True)
+        teacher = cls.import_teacher(lesson['teacher'], none_on_error=True)
+        course = cls.import_course(lesson['course'], none_on_error=True, subject=subject, teacher=teacher)
         lesson_data = cls.import_lesson_data(
             lesson['lesson'],
             room=room,
@@ -110,8 +111,29 @@ class TimetableRequest(Request):
         
         return event
     
-    # TODO: Outsource all the functions!
+    @classmethod
+    def import_modification_from_scraper(
+            cls,
+            modification: SingleModificationType,
+            modification_type: int = ModificationTypeOptions.REPLACEMENT.value,
+    ) -> Modification:
+        room = cls.import_room(modification['room'], none_on_error=True)
+        teacher = cls.import_teacher(modification['teacher'], none_on_error=True)
+        subject = cls.import_subject(modification['subject'], none_on_error=True)
+        modification = cls.import_modification(
+            modification['modification'],
+            room=room,
+            teacher=teacher,
+            subject=subject,
+            modification_type=modification_type
+        )
+        
+        return modification
     
     @classmethod
-    def import_modification_from_scraper(cls, modification: ModificationType) -> Modification:
+    def import_materials_data_from_scraper(
+            cls,
+            material_data: SingleMaterialDataType
+    ):
         pass
+        # TODO: Add this!

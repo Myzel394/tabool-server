@@ -75,3 +75,7 @@ class Course(RandomIDMixin, LifecycleModel):
             targeted_models = self.RELATION_MODELS
         
         self.__call_manage_relations_on_model(targeted_models)
+    
+    @property
+    def name(self) -> str:
+        return f"{self.subject.name}{self.course_number}".lower()

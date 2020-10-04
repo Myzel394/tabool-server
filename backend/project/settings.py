@@ -17,6 +17,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", __file__)
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
+LIB_DIR = BASE_DIR / "lib"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     "django_filters",
     "django_common_utils.apps.Config",
     "django_bleach",
+    "private_storage",
     
     "apps.relation_managers.apps.RelationManagersConfig",
     
@@ -157,12 +159,15 @@ USE_TZ = False
 
 STATIC_URL = "/static/"
 
+MEDIA_ROOT = LIB_DIR / "MEDIA"
+
 SIMPLE_HISTORY_HISTORY_ID_USE_UUID = True
 SIMPLE_HISTORY_FILEFIELD_TO_CHARFIELD = True
 SIMPLE_HISTORY_HISTORY_CHANGE_REASON_USE_TEXT_FIELD = True
 
 
-def create_around_style(prefix: str, arounds: list = ["top", "right", "bottom", "left"]):
+def create_around_style(prefix: str, arounds=None):
+    arounds = arounds or ["top", "right", "bottom", "left"]
     for around in arounds:
         yield f"{prefix}-{around}"
 
@@ -207,3 +212,6 @@ EMAIL_PORT = 1025
 EMAIL_SUBJECT_PREFIX = ""
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
+
+# Private storage
+PRIVATE_STORAGE_PATH = LIB_DIR / "private_media"

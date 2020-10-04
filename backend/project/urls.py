@@ -1,10 +1,11 @@
+import private_storage.urls
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from apps.authentication.views import LoginView, LogoutView, PasswordChangeView, RegisterView, UserPaymentViewSet
 from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet, ModificationViewSet
-from apps.homework.views import HomeworkViewSet, UserHomeworkRelationViewSet
+from apps.homework.views import HomeworkViewSet, MaterialDownloadView, UserHomeworkRelationViewSet
 from apps.lesson.views import (
     CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet,
     UserSubjectRelationViewSet,
@@ -32,13 +33,19 @@ router.register("user-relation/event", EventUserRelationViewSet, basename="Event
 router.register("user-relation/subject", UserSubjectRelationViewSet, basename="UserSubjectRelation")
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    # Static access
+    path("private-media/", MaterialDownloadView.as_view()),
+    path("private-media/", include(private_storage.urls)),
+    
     path("api/", include(router.urls)),
     path("api/", include("rest_framework.urls")),
-    path("", include("apps.main.urls")),
     
     path("api/change-password/", PasswordChangeView.as_view()),
     path("api/registration/", RegisterView.as_view()),
     path("api/login/", LoginView.as_view()),
     path("api/logout/", LogoutView.as_view()),
+    
+    path("", include("apps.main.urls")),
+    path("admin/", admin.site.urls),
+
 ]
