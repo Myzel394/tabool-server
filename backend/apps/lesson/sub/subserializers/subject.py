@@ -1,4 +1,6 @@
+from apps.relation_managers.serializers import UserRelationSerializerField
 from apps.utils.serializers import RandomIDSerializerMixin
+from .user_relations import UserSubjectRelationSerializer
 from ...models import Subject
 
 __all__ = [
@@ -6,10 +8,14 @@ __all__ = [
 ]
 
 
-# TODO: Automatically add extra fields to get the user relation data!
-
-
 class SubjectDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Subject
-        fields = ["name", "short_name", "color", "id"]
+        fields = [
+            "name", "short_name", "color", "id", "user_relation"
+        ]
+        read_only_fields = [
+            "id", "user_relation"
+        ]
+    
+    user_relation = UserRelationSerializerField(serializer_class=UserSubjectRelationSerializer)

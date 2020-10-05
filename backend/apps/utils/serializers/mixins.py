@@ -1,13 +1,9 @@
 from typing import *
 
-from drf_writable_nested.serializers import WritableNestedModelSerializer
 from rest_framework import serializers
 
-from .fields import WritableSerializerMethodField
-
 __all__ = [
-    "RandomIDSerializerMixin", "AssociatedUserSerializerMixin", "ScoosoScraperSerializerMixin",
-    "UserRelationSerializerMixin"
+    "RandomIDSerializerMixin", "AssociatedUserSerializerMixin", "ScoosoScraperSerializerMixin"
 ]
 
 
@@ -90,21 +86,3 @@ class ScoosoScraperSerializerMixin(serializers.Serializer):
         model_instance.save()
         
         return model_instance
-
-
-class UserRelationSerializerMixin(WritableNestedModelSerializer):
-    class Meta:
-        user_relation_serializer: Type[serializers.ModelSerializer]
-    
-    user_relation: WritableSerializerMethodField
-    
-    def get_user_relation(self, instance):
-        user = self.context["request"].user
-        
-        return instance.user_relations.only("user").get(user=user)
-    
-    def set_user_relation(self, given_data: dict):
-        serializer = self.Meta.user_relation_serializer(data=given_data)
-        serializer.is_valid(raise_exception=True)
-        
-        return serializer.save()

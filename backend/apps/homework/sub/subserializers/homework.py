@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
 from apps.lesson.public.serializer_fields import LessonField
+from apps.relation_managers.serializers import UserRelationSerializerField
 from apps.utils.serializers import RandomIDSerializerMixin, WritableSerializerMethodField
+from .user_relations import UserHomeworkRelationSerializer
 from ...models import Homework
 
 __all__ = [
@@ -23,14 +25,20 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Homework
         fields = [
-            "lesson", "is_private", "due_date", "information", "type", "created_at", "edited_at", "id",
+            "lesson", "is_private", "due_date", "information", "type", "created_at", "edited_at", "id", "user_relation"
+        ]
+        read_only_fields = [
+            "created_at", "edited_at", "id", "user_relation"
         ]
     
-    lesson = LessonField()
     is_private = WritableSerializerMethodField(
         deserializer_field=serializers.BooleanField()
     )
     edited_at = serializers.DateTimeField(read_only=True)
+    
+    lesson = LessonField()
+    
+    user_relation = UserRelationSerializerField(serializer_class=UserHomeworkRelationSerializer)
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

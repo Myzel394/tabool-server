@@ -1,7 +1,8 @@
 from apps.lesson.public.serializer_fields import RoomField
-from apps.utils.serializers import RandomIDSerializerMixin, UserRelationSerializerMixin, WritableSerializerMethodField
-from ...models import Event
+from apps.relation_managers.serializers import UserRelationSerializerField
+from apps.utils.serializers import RandomIDSerializerMixin
 from .user_relations import UserEventRelationSerializer
+from ...models import Event
 
 __all__ = [
     "EventListSerializer", "EventDetailSerializer"
@@ -16,13 +17,16 @@ class EventListSerializer(RandomIDSerializerMixin):
         ]
 
 
-class EventDetailSerializer(UserRelationSerializerMixin, RandomIDSerializerMixin):
+class EventDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Event
         fields = [
             "room", "title", "start_datetime", "end_datetime", "id", "user_relation"
         ]
+        read_only_fields = [
+            "user_relation", "id"
+        ]
     
-    user_relation = WritableSerializerMethodField(deserializer_field=UserEventRelationSerializer())
+    user_relation = UserRelationSerializerField(serializer_class=UserEventRelationSerializer)
     
     room = RoomField(required=False)

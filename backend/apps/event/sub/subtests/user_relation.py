@@ -1,5 +1,3 @@
-from pprint import pp
-
 from apps.event.mixins.tests.event import EventTestMixin
 from apps.utils import ClientTestMixin, UserCreationTestMixin
 
@@ -13,11 +11,8 @@ class UserRelationTest(UserCreationTestMixin, EventTestMixin, ClientTestMixin):
         
         self.event = self.Create_event()
     
-    def test_relation(self):
+    def test_get(self):
         response = self.client.get(
             f"/api/event/{self.event.id}/"
         )
-        
-        pp(response.data)
-        
-        
+        self.assertStatusOk(response.status_code)
