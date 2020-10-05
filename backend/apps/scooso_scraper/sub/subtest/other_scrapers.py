@@ -2,7 +2,7 @@ from pprint import pp
 
 from django.test import TestCase
 
-from apps.scooso_scrape.other_scrapers.scrape_teachers import scrape_teachers
+from apps.scooso_scraper.other_scrapers.scrape_teachers import scrape_teachers
 
 
 class TeacherScrapeTest(TestCase):

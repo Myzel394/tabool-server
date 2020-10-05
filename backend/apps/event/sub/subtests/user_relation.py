@@ -2,8 +2,6 @@ from apps.event.mixins.tests.event import EventTestMixin
 from apps.utils import ClientTestMixin, UserCreationTestMixin
 
 
-# TODO: Add listener on new users!
-
 class UserRelationTest(UserCreationTestMixin, EventTestMixin, ClientTestMixin):
     def setUp(self) -> None:
         self.logged_user = self.Login_user()

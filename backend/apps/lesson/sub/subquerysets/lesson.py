@@ -20,6 +20,10 @@ class LessonQuerySet(RelationQuerySetMixin):
     ref_filter_statement = "lesson_data__course"
     related_model = UserLessonRelation
     
+    @staticmethod
+    def get_ref_from_element(element: "Lesson"):
+        return element.lesson_data.course
+    
     def create_automatically(
             self,
             *,

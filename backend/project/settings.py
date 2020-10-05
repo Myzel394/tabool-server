@@ -206,12 +206,16 @@ BLEACH_STRIP_TAGS = True
 BLEACH_STRIP_COMMENTS = True
 
 # EMAIL
+DEFAULT_FROM_EMAIL = "testfrom@gmail.com"
+SERVER_EMAIL = "test@gmail.com"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "127.0.0.1"
 EMAIL_PORT = 1025
 EMAIL_SUBJECT_PREFIX = ""
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
+EMAIL_HOST_PASSWORD = None
+EMAIL_HOST_USER = None
 
 # Private storage
 PRIVATE_STORAGE_PATH = LIB_DIR / "private_media"

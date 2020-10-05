@@ -29,9 +29,8 @@ class ParserTest(DummyUser):
         data = parser.data
         
         self.assertEqual(len(data["lessons"]), 21)
-        self.assertEqual(len(data["modifications"]), 1)
+        self.assertEqual(len(data["modifications"]), 7)
         self.assertEqual(len(data["events"]), 3)
-        self.assertEqual(len(data["free_periods"]), 6)
         self.assertEqual(len(data["materials_data"]), 5)
 
 
@@ -143,6 +142,3 @@ class ForeignSerializerTest(DummyUser):
         # Modification
         random_modification = random.choice(self.timetable['modifications'])
         event = TimetableRequest.import_modification_from_scraper(random_modification)
-        # Free Period
-        random_free_period = random.choice(self.timetable['free_periods'])
-        event = TimetableRequest.import_modification_from_scraper(random_free_period)

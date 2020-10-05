@@ -14,3 +14,7 @@ class LessonCourseRelationManager(SimpleRelatedRelationManagerMixin):
     
     def get_users(self):
         return self.instance.participants.all()
+    
+    @staticmethod
+    def get_model_from_related_instance(instance: Lesson) -> Course:
+        return instance.lesson_data.course

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 import chardet
 
-from apps.scooso_scrape import parser
+from apps.scooso_scraper import parser
 
 __all__ = [
     "BaseParser"

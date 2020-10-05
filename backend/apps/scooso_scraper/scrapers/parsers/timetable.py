@@ -90,9 +90,9 @@ class SingleMaterialDataType(TypedDict):
 
 class SingleModificationType(TypedDict):
     modification: ModificationType
-    subject: SubjectType
-    teacher: TeacherType
-    room: RoomType
+    new_subject: SubjectType
+    new_teacher: TeacherType
+    new_room: RoomType
 
 
 class PureTimetableParserDataType(TypedDict):
@@ -177,37 +177,41 @@ class PureTimetableParser(BaseParser):
         }
     
     @classmethod
-    def get_modification_data(cls, replace: dict) -> Dict[str, Any]:
-        information = replace.get("information") or None
+    def get_modification_data(cls, modification: dict) -> Dict[str, Any]:
+        information = modification.get("information") or None
         
-        new_subject_code = replace.get("subject_code")
-        new_subject_id = replace.get("subject")
-        new_room_code = replace.get("new_location_code")
-        new_room_id = replace.get("new_location")
-        new_teacher_code = replace.get("old_teacher_code")
-        new_teacher_id = replace.get("old_teacher")
+        new_subject_code = modification.get("subject_code")
+        new_subject_id = modification.get("subject")
+        new_room_code = modification.get("new_location_code")
+        new_room_id = modification.get("new_location")
+        new_teacher_code = modification.get("old_teacher_code")
+        new_teacher_id = modification.get("old_teacher")
         
-        start_time = replace["start_time"]
-        end_time = replace["end_time"]
+        start_time = modification["start_time"]
+        end_time = modification["end_time"]
         
         return {
             "modification": {
                 "information": information,
-                "start_time": start_time,
-                "end_time": end_time
+                "start_datetime": start_time,
+                "end_datetime": end_time
             },
-            "subject": {
+            "new_subject": {
                 "code": new_subject_code,
                 "scooso_id": new_subject_id
             },
-            "teacher": {
+            "new_teacher": {
                 "code": new_teacher_code,
                 "scooso_id": new_teacher_id
             },
-            "room": {
+            "new_room": {
                 "code": new_room_code,
                 "scooso_id": new_room_id
-            }
+            },
+            "new_course": {
+                "course_number": modification.get("coursenumber")
+            },
+            "course": cls.extract_course(modification),
         }
     
     @staticmethod

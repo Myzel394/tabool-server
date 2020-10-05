@@ -14,13 +14,12 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
     
     def test_relation(self):
         with self.Login_user_as_context() as user:
-            for _ in range(20):
+            for _ in range(10):
                 self.Create_event()
             
             self.assertGreater(UserEventRelation.objects.all().count(), 0)
             
             event = Event.objects.first()
-            relations, ignore_amount = self.get_ignore_and_qs()
             
             response = self.client.patch(
                 f"/api/user-relation/event/{event.id}/",
@@ -31,9 +30,8 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
             )
             
             self.assertStatusOk(response.status_code)
-            relations, ignore_amount = self.get_ignore_and_qs()
             
-            # Get event
+            # Get events
             response = self.client.get(
                 "/api/event/",
                 {
@@ -51,24 +49,32 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
                 ), many=True).data
             )
         
-        relations, ignore_amount = self.get_ignore_and_qs()
         with self.Login_user_as_context() as user:
             
             # Get event
             response = self.client.get(
                 "/api/event/",
                 {
-                    "ignore": True
+                    "ignore": False
                 },
                 content_type="application/json"
             )
-            relations, ignore_amount = self.get_ignore_and_qs()
+            events = Event.objects.filter(
+                usereventrelation__user=user,
+                usereventrelation__ignore=False
+            )
             
             self.assertStatusOk(response.status_code)
             self.assertCountEqual(
-                response.data["results"],
-                EventListSerializer(Event.objects.filter(
-                    usereventrelation__user=user,
-                    usereventrelation__ignore=False
-                ), many=True).data
+                response.data["results"], EventListSerializer(events, many=True).data
             )
+    
+    def test_user_created_after_object_created(self):
+        with self.Login_user_as_context() as _:
+            self.Create_event()
+            before_create_count = UserEventRelation.objects.all().count()
+            self.assertEqual(before_create_count, 1)
+            
+            self.Create_event()
+            after_create_count = UserEventRelation.objects.all().count()
+            self.assertEqual(after_create_count, 2)

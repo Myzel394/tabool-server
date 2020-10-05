@@ -8,6 +8,7 @@ from apps.utils.querysets import RelationQuerySetMixin
 from ...models.user_relations.homework import UserHomeworkRelation
 
 if TYPE_CHECKING:
+    from ...models import Homework
     from apps.lesson.models import Subject
 
 __all__ = [
@@ -19,6 +20,10 @@ __all__ = [
 class HomeworkQuerySet(RelationQuerySetMixin):
     ref_filter_statement = "lesson__lesson_data__course"
     related_model = UserHomeworkRelation
+    
+    @staticmethod
+    def get_ref_from_element(element: "Homework"):
+        return element.lesson.lesson_data.course
     
     def expired(self) -> "HomeworkQuerySet":
         return self.only("due_date").filter(
@@ -55,5 +60,4 @@ class HomeworkQuerySet(RelationQuerySetMixin):
         return self.filter(
             Q(lesson__lesson_data__course__participants__in=[user], private_to_user=None)
             | Q(private_to_user=user)
-            | Q(userhomeworkrelation__user=user)
-        ).distinct()
+        )

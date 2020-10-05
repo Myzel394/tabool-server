@@ -117,14 +117,14 @@ class TimetableRequest(Request):
             modification: SingleModificationType,
             modification_type: int = ModificationTypeOptions.REPLACEMENT.value,
     ) -> Modification:
-        room = cls.import_room(modification['room'], none_on_error=True)
-        teacher = cls.import_teacher(modification['teacher'], none_on_error=True)
-        subject = cls.import_subject(modification['subject'], none_on_error=True)
+        room = cls.import_room(modification['new_room'], none_on_error=True)
+        teacher = cls.import_teacher(modification['new_teacher'])
+        subject = cls.import_subject(modification['new_subject'])
         modification = cls.import_modification(
             modification['modification'],
-            room=room,
-            teacher=teacher,
-            subject=subject,
+            new_room=room,
+            new_teacher=teacher,
+            new_subject=subject,
             modification_type=modification_type
         )
         

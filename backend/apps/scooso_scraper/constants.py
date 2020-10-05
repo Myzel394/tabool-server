@@ -33,3 +33,6 @@ LESSON_CONTENT_CONNECTION = {
     "method": "POST",
     "dt_format": "%Y-%m-%d %H:%M:%S"
 }
+
+UNNAMED_FILE_DETECT_REGEX = r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}"
+UNNAMED_FILE_REPLACE_NAME = "Unbenannte_Datei"

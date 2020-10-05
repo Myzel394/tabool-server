@@ -2,7 +2,8 @@ import lorem
 
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
 from apps.homework.models import Homework
-from apps.homework.sub.subserializers import (HomeworkDetailSerializer, HomeworkListSerializer)
+from apps.homework.sub.subserializers import (HomeworkListSerializer)
+from apps.homework.sub.subserializers.tests.homework import HomeworkDetailSerializerTest
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.utils.tests import ClientTestMixin
 
@@ -37,7 +38,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         response = self.client.post(
             "/api/homework/",
-            HomeworkDetailSerializer(homework).data,
+            HomeworkDetailSerializerTest(homework).data,
             content_type="application/json"
         )
         
@@ -97,7 +98,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         response = self.client.get("/api/homework/", {
             "completed": False
         }, content_type="application/json")
-        expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=False)
+        expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=False).distinct()
         
         self.assertStatusOk(response.status_code)
         self.assertCountEqual(
@@ -108,7 +109,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         response = self.client.get("/api/homework/", {
             "completed": True
         }, content_type="application/json")
-        expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=True)
+        expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=True).distinct()
         
         self.assertStatusOk(response.status_code)
         self.assertCountEqual(
@@ -145,7 +146,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         self.client.post(
             "/api/homework/",
-            HomeworkDetailSerializer(homework).data,
+            HomeworkDetailSerializerTest(homework).data,
             content_type="application/json"
         )
         
@@ -164,7 +165,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         with self.Login_user_as_context(first_user):
             self.client.post(
                 "/api/homework/",
-                HomeworkDetailSerializer(private_homework).data,
+                HomeworkDetailSerializerTest(private_homework).data,
                 content_type="application/json"
             )
         
@@ -175,7 +176,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         # Should return public + private
         with self.Login_user_as_context(first_user):
             response = self.client.get("/api/homework/")
-            homeworks = Homework.objects.from_user(first_user)
+            homeworks = Homework.objects.from_user(first_user).distinct()
             
             self.assertStatusOk(response.status_code)
             self.assertCountEqual(
@@ -187,7 +188,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         # Should return only public
         with self.Login_user_as_context(second_user):
             response = self.client.get("/api/homework/")
-            homeworks = Homework.objects.from_user(second_user)
+            homeworks = Homework.objects.from_user(second_user).distinct()
             
             self.assertStatusOk(response.status_code)
             self.assertCountEqual(

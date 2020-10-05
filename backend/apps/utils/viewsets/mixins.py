@@ -22,7 +22,7 @@ class UserRelationViewSetMixin(
     serializer_lookup_key_name: str = "id"
     
     def get_queryset(self):
-        return self.model.objects.from_user(self.request.user)
+        return self.model.objects.from_user(self.request.user).distinct()
     
     def get_object(self):
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
@@ -49,9 +49,9 @@ class RetrieveFromUserMixin(
     model: Type[Model]
     
     def get_queryset(self):
-        return self.model.objects.from_user(self.request.user)
+        return self.model.objects.from_user(self.request.user).distinct()
 
 
 class RetrieveAllMixin(RetrieveFromUserMixin):
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().distinct()

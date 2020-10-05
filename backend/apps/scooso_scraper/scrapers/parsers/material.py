@@ -1,8 +1,12 @@
 import re
 from datetime import datetime
+from pathlib import Path
 from typing import *
 
+from django.utils.translation import gettext_lazy as _
+
 from .base import BaseParser
+from ... import constants
 
 __all__ = [
     "PureMaterialParser", "PureMaterialParserDataType"
@@ -26,10 +30,17 @@ class PureMaterialParserDataType(TypedDict):
 
 class PureMaterialParser(BaseParser):
     material_filename_regex = re.compile(r"[0-9]+_(?=.)")
+    unnamed_material_filename_regex = re.compile(constants.UNNAMED_FILE_DETECT_REGEX, re.RegexFlag.I)
     
     @classmethod
     def constrain_filename(cls, name: str) -> str:
         return cls.material_filename_regex.sub("", name)
+    
+    @classmethod
+    def get_any_filename(cls, name: str) -> str:
+        if cls.unnamed_material_filename_regex.match(name):
+            return Path(name).with_name(str(_(constants.UNNAMED_FILE_REPLACE_NAME)))
+        return name
     
     @property
     def data(self) -> PureMaterialParserDataType:
@@ -39,7 +50,11 @@ class PureMaterialParser(BaseParser):
         for item in items:
             data.append({
                 "id": item["id"],
-                "filename": self.constrain_filename(get_safe_filename(item["name"])),
+                "filename": self.get_any_filename(
+                    self.constrain_filename(
+                        get_safe_filename(item["name"])
+                    )
+                ),
                 "owner": item.get("owner"),
                 "created_at": item.get("created"),
                 "edited_at": item.get("edited"),
@@ -54,5 +69,7 @@ class PureMaterialParser(BaseParser):
     def is_valid(self) -> bool:
         try:
             return len(self.json["tables"].get("items", [])) > 0
-        except:
+        except KeyError:
             return False
+
+# TODO: Add tasks!

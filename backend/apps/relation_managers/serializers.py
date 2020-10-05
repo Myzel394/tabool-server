@@ -34,7 +34,9 @@ class UserRelationSerializerField(serializers.SerializerMethodField):
         data = super().bind(field_name, parent)
         self.setter_method_name = self.setter_method_name or f"set_{field_name}"
         self.instance = parent.instance
-        self.user = parent.context["request"].user
+        
+        if (key := "request") in parent.context:
+            self.user = parent.context[key].user
         
         return data
     
