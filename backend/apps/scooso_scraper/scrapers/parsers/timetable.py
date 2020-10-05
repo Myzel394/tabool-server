@@ -16,7 +16,7 @@ LESSON_TYPES = {
 
 class DefaultScoosoDataTypeMixin(TypedDict):
     code: Optional[str]
-    id: Optional[int]
+    scooso_id: Optional[int]
 
 
 class RoomType(DefaultScoosoDataTypeMixin):
@@ -70,6 +70,12 @@ class EventType(TypedDict):
     title: str
 
 
+class MaterialType(TypedDict):
+    calendar_id: int
+    time_id: int
+    target_date: date
+
+
 class SingleEventType(TypedDict):
     event: EventType
     room: RoomType
@@ -82,10 +88,8 @@ class SingleFreePeriodType(TypedDict):
 
 
 class SingleMaterialDataType(TypedDict):
-    calendar_id: int
-    time_id: int
-    subject_id: int
-    target_date: date
+    material: MaterialType
+    subject: SubjectType
 
 
 class SingleModificationType(TypedDict):
@@ -93,6 +97,8 @@ class SingleModificationType(TypedDict):
     new_subject: SubjectType
     new_teacher: TeacherType
     new_room: RoomType
+    
+    # TODO: Add time_id, targeted_date etc as meta (or lesson)
 
 
 class PureTimetableParserDataType(TypedDict):
@@ -214,16 +220,18 @@ class PureTimetableParser(BaseParser):
             "course": cls.extract_course(modification),
         }
     
-    @staticmethod
-    def get_material_data(data: dict) -> Optional[dict]:
+    @classmethod
+    def get_material_data(cls, data: dict) -> Optional[dict]:
         if (key := "materials") in data:
             prop = next(iter(data[key]))
             
             return {
-                "calendar_id": int(prop),
-                "time_id": data["time_id"],
-                "subject_id": data["subject"],
-                "target_date": data["start_time"].date()
+                "material": {
+                    "time_id": data["time_id"],
+                    "target_date": data["start_time"].date(),
+                    "calendar_id": int(prop),
+                },
+                "subject": cls.extract_subject(data),
             }
         return None
     

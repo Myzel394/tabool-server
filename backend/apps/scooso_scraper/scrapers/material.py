@@ -86,6 +86,28 @@ class MaterialRequest(Request):
             get_data=get_data
         )
     
+    def get_teacher_homework(
+            self,
+            time_id: int,
+            targeted_date: date,
+    ) -> PureMaterialParserDataType:
+        return self.get_materials(
+            time_id=time_id,
+            targeted_date=targeted_date,
+            material_type=MaterialTypeOptions.TEACHER_MATERIALS
+        )
+    
+    def get_user_homework(
+            self,
+            time_id: int,
+            targeted_date: date
+    ) -> PureMaterialParserDataType:
+        return self.get_materials(
+            time_id=time_id,
+            targeted_date=targeted_date,
+            material_type=MaterialTypeOptions.HOMEWORK
+        )
+    
     def download_material(
             self,
             material_id: int,

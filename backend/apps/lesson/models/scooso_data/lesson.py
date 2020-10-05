@@ -20,7 +20,6 @@ class LessonScoosoData(RandomIDMixin):
         verbose_name=lesson_single,
         on_delete=models.CASCADE,
         blank=True,
-        null=True,
     )
     
     time_id = models.PositiveSmallIntegerField(

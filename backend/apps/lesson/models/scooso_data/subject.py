@@ -20,7 +20,6 @@ class SubjectScoosoData(ScoosoDataMixin):
         verbose_name=subject_single,
         on_delete=models.CASCADE,
         blank=True,
-        null=True,
     )
     
     code = models.CharField(

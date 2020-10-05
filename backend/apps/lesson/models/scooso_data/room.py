@@ -20,7 +20,6 @@ class RoomScoosoData(ScoosoDataMixin):
         verbose_name=room_single,
         on_delete=models.CASCADE,
         blank=True,
-        null=True,
     )
     
     code = models.CharField(

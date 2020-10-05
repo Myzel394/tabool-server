@@ -7,7 +7,7 @@ from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
 from .user_relations.lesson import UserLessonRelation
-from ..public import model_references, model_verbose_functions
+from ..public import *
 from ..querysets import LessonQuerySet
 from ..validators import validate_lesson_weekday
 
@@ -32,8 +32,8 @@ class Lesson(RandomIDMixin):
     objects = LessonQuerySet.as_manager()
     
     lesson_data = models.ForeignKey(
-        model_references.LESSON_DATA,
-        verbose_name=model_verbose_functions.lesson_data_single,
+        LESSON_DATA,
+        verbose_name=lesson_data_single,
         on_delete=models.CASCADE,
     )  # type: LessonData
     

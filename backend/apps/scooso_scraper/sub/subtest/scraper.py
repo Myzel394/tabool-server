@@ -7,6 +7,7 @@ from pprint import pp
 
 import lorem
 
+from apps.lesson.models import TeacherScoosoData
 from ...actions import import_teachers
 from ...mixins.tests.dummy_data import DummyUser
 from ...scrapers import HomeworkRequest, MaterialRequest, MaterialTypeOptions, TimetableRequest
@@ -52,11 +53,11 @@ class SomeTests(DummyUser):
         scraper.download_material(material_id, download_path)
     
     def test_get_material(self):
-        random_subject = random.choice(self.data['materials_data'])
+        random_material_data = random.choice(self.data['materials_data'])
         scraper = MaterialRequest(self.username, self.password)
         materials = scraper.get_materials(
-            random_subject['time_id'],
-            random_subject['target_date']
+            random_material_data['material']['time_id'],
+            random_material_data['material']['target_date']
         )
         random_material = random.choice(materials['materials'])
         
@@ -106,9 +107,9 @@ class ForeignSerializerTest(DummyUser):
         self.load_dummy_user()
         
         import_teachers()
-        scraper = TimetableRequest(self.username, self.password)
-        scraper.login()
-        self.timetable = scraper.get_timetable()
+        self.scraper = TimetableRequest(self.username, self.password)
+        self.scraper.login()
+        self.timetable = self.scraper.get_timetable()
     
     def test_timetable(self):
         # Creation
@@ -142,3 +143,26 @@ class ForeignSerializerTest(DummyUser):
         # Modification
         random_modification = random.choice(self.timetable['modifications'])
         event = TimetableRequest.import_modification_from_scraper(random_modification)
+    
+    def test_materials(self):
+        random_material_data = random.choice(self.timetable['materials_data'])
+        scraper = MaterialRequest(self.username, self.password)
+        materials = scraper.get_teacher_homework(
+            time_id=random_material_data['material']['time_id'],
+            targeted_date=random_material_data['material']['target_date'],
+        )
+        random_material = random.choice(materials['materials'])
+        material_data_time_id = random_material_data['material']['time_id']
+        
+        lesson = [
+            lesson
+            for lesson in self.timetable['lessons']
+            if lesson['lesson']['time_id'] == material_data_time_id
+        ][0]
+        
+        imported_teacher = self.scraper.import_teacher(lesson['teacher'])
+        
+        teachers = TeacherScoosoData.objects.all()
+        teacher = teachers.get(scooso_id=lesson['teacher']['scooso_id'])
+        
+        print(teacher)

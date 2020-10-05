@@ -11,7 +11,7 @@ from apps.lesson.sub.subserializers import (
 from .parsers import PureTimetableParser, PureTimetableParserDataType
 from .parsers.timetable import (
     CourseType, EventType, LessonType, ModificationType, RoomType, SingleEventType, SingleLessonType,
-    SingleMaterialDataType, SingleModificationType, SubjectType, TeacherType,
+    SingleModificationType, SubjectType, TeacherType,
 )
 from .request import Request
 from .. import constants
@@ -129,11 +129,3 @@ class TimetableRequest(Request):
         )
         
         return modification
-    
-    @classmethod
-    def import_materials_data_from_scraper(
-            cls,
-            material_data: SingleMaterialDataType
-    ):
-        pass
-        # TODO: Add this!

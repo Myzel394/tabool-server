@@ -20,7 +20,6 @@ class TeacherScoosoData(ScoosoDataMixin):
         verbose_name=teacher_single,
         on_delete=models.CASCADE,
         blank=True,
-        null=True,
     )
     
     code = models.CharField(
@@ -29,3 +28,6 @@ class TeacherScoosoData(ScoosoDataMixin):
         blank=True,
         null=True
     )
+    
+    def __str__(self):
+        return f"{self.teacher}: {self.code} ({self.id})"

@@ -34,8 +34,8 @@ class MaterialTest(MaterialTestMixin, ClientTestMixin):
                     "file.txt",
                     big_data.encode()
                 )
-            )  # TODO: Add scooso names constraining and validation!
-
+            )
+        
         small_data = "".join(random.choices(
             string.ascii_letters,
             k=int(constants.MAX_UPLOAD_SIZE * .1)

@@ -18,7 +18,7 @@ from ...utils import get_safe_filename
 class MaterialType(TypedDict):
     id: int
     filename: str
-    owner: Optional[int]
+    owner_id: Optional[int]
     created_at: Optional[datetime]
     edited_at: Optional[datetime]
 
@@ -55,7 +55,7 @@ class PureMaterialParser(BaseParser):
                         get_safe_filename(item["name"])
                     )
                 ),
-                "owner": item.get("owner"),
+                "owner_id": item.get("owner"),
                 "created_at": item.get("created"),
                 "edited_at": item.get("edited"),
             })
@@ -69,7 +69,7 @@ class PureMaterialParser(BaseParser):
     def is_valid(self) -> bool:
         try:
             return len(self.json["tables"].get("items", [])) > 0
-        except KeyError:
+        except:  # TODO: Make except general for every error!
             return False
 
-# TODO: Add tasks!
+# TODO: Add celery tasks!

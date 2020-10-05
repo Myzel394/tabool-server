@@ -20,7 +20,6 @@ class LessonDataScoosoData(RandomIDMixin):
         verbose_name=lesson_data_single(),
         on_delete=models.CASCADE,
         blank=True,
-        null=True,
     )
     
     lesson_type = models.UUIDField(

@@ -81,8 +81,9 @@ class ScoosoScraperSerializerMixin(serializers.Serializer):
             setattr(model_instance, key, value)
         
         # Set relation
-        setattr(model_instance, field_name, scooso_instance)
+        setattr(scooso_instance, field_name, model_instance)
         # Save
-        model_instance.save()
+        scooso_instance.save()
         
+        model_instance.refresh_from_db()
         return model_instance

@@ -8,7 +8,6 @@ from private_storage.fields import PrivateFileField
 from secure_file_detection.constants import SUPPORTED_MIMETYPES
 
 from apps.lesson.public import *
-from .. import constants
 from ..helpers import build_material_path, validate_material_file
 from ..querysets import MaterialQuerySet
 
