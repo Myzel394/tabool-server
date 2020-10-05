@@ -11,5 +11,5 @@ class UserHomeworkRelationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserHomeworkRelation
         fields = [
-            "completed"
+            "completed", "ignore"
         ]

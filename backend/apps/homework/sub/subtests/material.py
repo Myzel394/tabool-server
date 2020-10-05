@@ -1,3 +1,5 @@
+import random
+import string
 from datetime import datetime
 from pathlib import Path
 
@@ -22,17 +24,27 @@ class MaterialTest(MaterialTestMixin, ClientTestMixin):
             )
         
         with self.assertRaises(ValidationError):
+            big_data = "".join(random.choices(
+                string.ascii_letters,
+                k=int(constants.MAX_UPLOAD_SIZE * 1.1)
+            ))
+            
             self.Create_material(
                 file=SimpleUploadedFile(
                     "file.txt",
-                    ("x" * int(constants.MAX_UPLOAD_SIZE * 2000)).encode()
+                    big_data.encode()
                 )
-            )
+            )  # TODO: Add scooso names constraining and validation!
+
+        small_data = "".join(random.choices(
+            string.ascii_letters,
+            k=int(constants.MAX_UPLOAD_SIZE * .1)
+        ))
         
         self.Create_material(
             file=SimpleUploadedFile(
                 "file.txt",
-                ("x" * min(constants.MAX_UPLOAD_SIZE * .1, 1024)).encode()
+                small_data.encode()
             )
         )
     

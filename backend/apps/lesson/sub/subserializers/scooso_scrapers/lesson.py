@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.utils.serializers import ScoosoSerializerMixin
+from apps.utils.serializers import ScoosoScraperSerializerMixin
 from ....models import Lesson, LessonScoosoData
 
 __all__ = [
@@ -8,7 +8,7 @@ __all__ = [
 ]
 
 
-class LessonScoosoScraperSerializer(ScoosoSerializerMixin):
+class LessonScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     class Meta:
         model = Lesson
         scooso_model = LessonScoosoData

@@ -35,3 +35,8 @@ class HomeworkFilterSet(filters.FilterSet):
         field_name="userhomeworkrelation__completed",
         label=field_verbose(UserHomeworkRelation, "completed")
     )
+
+    ignore = filters.BooleanFilter(
+        field_name="userhomeworkrelation__ignore",
+        label=field_verbose(UserHomeworkRelation, "ignore")
+    )

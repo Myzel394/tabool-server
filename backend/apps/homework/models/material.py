@@ -39,7 +39,6 @@ class Material(RandomIDMixin, CreationDateMixin, LifecycleModel):
         verbose_name=_("Datei"),
         upload_to=build_material_path,
         content_types=SUPPORTED_MIMETYPES,
-        max_file_size=constants.MAX_UPLOAD_SIZE,
     )  # type: FieldFile
     
     @hook(BEFORE_CREATE)

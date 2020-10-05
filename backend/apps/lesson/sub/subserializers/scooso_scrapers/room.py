@@ -1,14 +1,14 @@
 from rest_framework import serializers
 
 from apps.lesson.models import Room, RoomScoosoData
-from apps.utils.serializers.mixins import ScoosoSerializerMixin
+from apps.utils.serializers.mixins import ScoosoScraperSerializerMixin
 
 __all__ = [
     "RoomScoosoScraperSerializer"
 ]
 
 
-class RoomScoosoScraperSerializer(ScoosoSerializerMixin):
+class RoomScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     class Meta:
         model = Room
         scooso_model = RoomScoosoData

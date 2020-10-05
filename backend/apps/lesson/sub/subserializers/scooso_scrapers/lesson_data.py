@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.utils.serializers.mixins import ScoosoSerializerMixin
+from apps.utils.serializers.mixins import ScoosoScraperSerializerMixin
 from constants.weekdays import ALLOWED_WEEKDAYS
 from ....models import LessonData, LessonDataScoosoData
 
@@ -11,7 +11,7 @@ __all__ = [
 ALLOWED_DAYS_NUMBERS = [x[0] for x in ALLOWED_WEEKDAYS]
 
 
-class LessonDataScoosoScraperSerializer(ScoosoSerializerMixin):
+class LessonDataScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     class Meta:
         model = LessonData
         scooso_model = LessonDataScoosoData
