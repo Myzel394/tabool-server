@@ -5,7 +5,8 @@ from typing import *
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_lifecycle import BEFORE_CREATE, hook, LifecycleModel
+from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, hook, LifecycleModel
+from simple_email_confirmation.models import SimpleEmailConfirmationUserMixin
 
 from ..querysets import UserQuerySet
 
@@ -17,7 +18,7 @@ __all__ = [
 ]
 
 
-class User(AbstractUser, LifecycleModel):
+class User(SimpleEmailConfirmationUserMixin, AbstractUser, LifecycleModel):
     id = models.CharField(
         verbose_name=_("ID"),
         blank=True,
@@ -30,11 +31,6 @@ class User(AbstractUser, LifecycleModel):
         verbose_name=_("Email-Adresse"),
         unique=True,
     )  # type: str
-    
-    is_email_verified = models.BooleanField(
-        verbose_name=_("Email-Adresse verifiziert?"),
-        default=False
-    )  # type: bool
     
     username = None
     
@@ -65,6 +61,10 @@ class User(AbstractUser, LifecycleModel):
                 break
         
         self.id = random_id
+    
+    @hook(AFTER_CREATE)
+    def _hook_send_mail(self):
+        pass
     
     @property
     def payments(self) -> "UserPaymentQuerySet":

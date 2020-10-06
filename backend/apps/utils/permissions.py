@@ -10,7 +10,7 @@ __all__ = [
 
 class AuthenticationAndActivePermission(permissions.IsAuthenticated):
     def has_permission(self, request, view):
-        return super().has_permission(request, view) and request.user.is_email_verified
+        return super().has_permission(request, view) and request.user.is_confirmed
 
 
 def perm_to_permission(identifier: str) -> Permission:

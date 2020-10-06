@@ -52,7 +52,6 @@ class AddedAtMixin(models.Model):
     )
 
 
-# TODO: Add RandomIDMixin as inheritance!
 class UserModelRelationMixin(models.Model):
     class Meta:
         abstract = True

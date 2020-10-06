@@ -3,6 +3,7 @@ import string
 
 import names
 from django.contrib.auth import get_user_model
+from django.core import mail
 
 from apps.authentication.models import AccessToken
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
@@ -138,3 +139,8 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
             "user": user.id
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
+    
+    def test_user_email(self):
+        self.Create_user()
+        
+        self.assertEqual(len(mail.outbox), 1)

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django_common_utils.apps.Config",
     "django_bleach",
     "private_storage",
+    "simple_email_confirmation",
     
     "apps.relation_managers.apps.RelationManagersConfig",
     
@@ -214,8 +215,12 @@ EMAIL_PORT = 1025
 EMAIL_SUBJECT_PREFIX = ""
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
-EMAIL_HOST_PASSWORD = None
-EMAIL_HOST_USER = None
+
+SIMPLE_EMAIL_CONFIRMATION_KEY_LENGTH = 63
+
+EMAIL_MAIL_HTML = "authentication/emails/confirm.html"
+EMAIL_MAIL_PLAIN = "authentication/emails/confirm.txt"
+EMAIL_PAGE_TEMPLATE = "authentication/email_confirmation.html"
 
 # Private storage
 PRIVATE_STORAGE_PATH = LIB_DIR / "private_media"
