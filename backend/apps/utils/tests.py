@@ -35,6 +35,7 @@ class UserCreationTestMixin(TestCase):
                 "last_name": last_name,
                 "email": f"{first_name}.{last_name}@gmail.com",
                 "password": first_name,
+                "is_email_verified": True,
                 **kwargs
             }
         )

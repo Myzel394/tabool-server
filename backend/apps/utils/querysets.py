@@ -15,8 +15,7 @@ __all__ = [
 ]
 
 
-# TODO: Remove Inheritance in RelationQuerySetMixin
-class RelationQuerySetMixin(CustomQuerySetMixin.QuerySet):
+class RelationQuerySetMixin:
     ref_filter_statement: str
     related_model: StandardModelType
     ref_model: Type[CustomQuerySetMixin]

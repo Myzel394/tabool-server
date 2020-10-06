@@ -125,14 +125,14 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
         
         self.Login_user(user, password)
         
-        response = self.client.post("/api/change-password/", {
+        response = self.client.post("/api/auth/change-password/", {
             "old_password": password,
             "new_password": "".join(random.choices(string.ascii_letters + string.digits, k=20)),
             "user": user.id
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
         
-        response = self.client.post("/api/change-password/", {
+        response = self.client.post("/api/auth/change-password/", {
             "old_password": password + "abc",
             "new_password": password,
             "user": user.id

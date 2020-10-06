@@ -12,7 +12,6 @@ __all__ = [
 
 class UserRelationViewSetMixin(
     viewsets.mixins.UpdateModelMixin,
-    viewsets.mixins.RetrieveModelMixin,  # TODO: Make not retrievable, the serializers should return the data
     viewsets.GenericViewSet
 ):
     access_serializer: Type[serializers.ModelSerializer] = DefaultAccessSerializer

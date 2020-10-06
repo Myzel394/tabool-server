@@ -39,7 +39,7 @@ class PureMaterialParser(BaseParser):
     @classmethod
     def get_any_filename(cls, name: str) -> str:
         if cls.unnamed_material_filename_regex.match(name):
-            return Path(name).with_name(str(_(constants.UNNAMED_FILE_REPLACE_NAME)))
+            return str(_(constants.UNNAMED_FILE_REPLACE_NAME)) + Path(name).suffix
         return name
     
     @property

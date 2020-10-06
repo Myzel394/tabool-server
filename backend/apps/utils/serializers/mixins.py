@@ -2,6 +2,8 @@ from typing import *
 
 from rest_framework import serializers
 
+from apps.utils.text import camel_to_snake
+
 __all__ = [
     "RandomIDSerializerMixin", "AssociatedUserSerializerMixin", "ScoosoScraperSerializerMixin"
 ]
@@ -49,7 +51,7 @@ class ScoosoScraperSerializerMixin(serializers.Serializer):
         return validated_data
     
     def get_scooso_relation_field_name(self) -> str:
-        return getattr(self.Meta, "model_scooso_relation_field_name", None) or self.Meta.model.__name__.lower()
+        return getattr(self.Meta, "model_scooso_relation_field_name", None) or camel_to_snake(self.Meta.model.__name__)
     
     def create(self, validated_data) -> M:
         scooso_instance: S
@@ -69,21 +71,22 @@ class ScoosoScraperSerializerMixin(serializers.Serializer):
         }
         
         # Create instances
-        scooso_instance, _ = self.Meta.scooso_model.objects.get_or_create(
-            **scooso_data
-        )
         model_instance, _ = self.Meta.model.objects.get_or_create(
             **unique_data
         )
+        scooso_instance, _ = self.Meta.scooso_model.objects.get_or_create(
+            **{
+                field_name: model_instance,
+            }
+        )
         
         # Set values
-        for key, value in update_data.items():
-            setattr(model_instance, key, value)
-        
-        # Set relation
-        setattr(scooso_instance, field_name, model_instance)
-        # Save
+        for key, value in scooso_data.items():
+            setattr(scooso_instance, key, value)
         scooso_instance.save()
         
-        model_instance.refresh_from_db()
+        for key, value in update_data.items():
+            setattr(model_instance, key, value)
+        model_instance.save()
+        
         return model_instance

@@ -2,6 +2,7 @@ from datetime import date as d_date
 from typing import *
 
 from django.conf import settings
+from django_common_utils.libraries.models.mixins import CustomQuerySetMixin
 
 from apps.utils.date import find_next_date_by_weekday
 from apps.utils.querysets import RelationQuerySetMixin
@@ -16,7 +17,7 @@ __all__ = [
 
 
 # noinspection PyTypeChecker
-class LessonQuerySet(RelationQuerySetMixin):
+class LessonQuerySet(CustomQuerySetMixin.QuerySet, RelationQuerySetMixin):
     ref_filter_statement = "lesson_data__course"
     related_model = UserLessonRelation
     

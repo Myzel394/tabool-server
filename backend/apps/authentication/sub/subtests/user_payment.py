@@ -1,11 +1,7 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Permission
 
 from apps.authentication.mixins.tests import UserPaymentTestMixin
-from apps.authentication.models import UserPayment
 from apps.utils import ClientTestMixin
-from apps.utils.perms import perm_to_permission
-from ... import constants
 
 User = get_user_model()
 

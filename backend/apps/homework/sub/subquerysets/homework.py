@@ -3,6 +3,7 @@ from typing import *
 
 from django.conf import settings
 from django.db.models import Q
+from django_common_utils.libraries.models.mixins import CustomQuerySetMixin
 
 from apps.utils.querysets import RelationQuerySetMixin
 from ...models.user_relations.homework import UserHomeworkRelation
@@ -17,7 +18,7 @@ __all__ = [
 
 
 # noinspection PyTypeChecker
-class HomeworkQuerySet(RelationQuerySetMixin):
+class HomeworkQuerySet(CustomQuerySetMixin.QuerySet, RelationQuerySetMixin):
     ref_filter_statement = "lesson__lesson_data__course"
     related_model = UserHomeworkRelation
     

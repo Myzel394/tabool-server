@@ -43,7 +43,7 @@ urlpatterns = [
     path("api/", include(router.urls)),
     path("api/", include("rest_framework.urls")),
     
-    path("api/change-password/", PasswordChangeView.as_view()),
+    path("api/auth/change-password/", PasswordChangeView.as_view()),
     path("api/auth/registration/", RegisterView.as_view()),
     path("api/auth/student/", StudentView.as_view()),
     path("api/auth/login/", LoginView.as_view()),

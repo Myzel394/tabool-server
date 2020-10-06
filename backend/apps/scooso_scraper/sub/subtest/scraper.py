@@ -1,6 +1,6 @@
 import json
 import random
-import uuid
+import string
 from datetime import date, datetime
 from pathlib import Path
 from pprint import pp
@@ -70,7 +70,7 @@ class SomeTests(DummyUser):
     def test_upload_material(self):
         time_id = 29743
         target_date = date(2020, 10, 1)
-        filename = str(uuid.uuid4()) + ".txt"
+        filename = str("".join(random.choices(string.ascii_letters + string.digits, k=10))) + ".txt"
         content = lorem.text()
         material_type = MaterialTypeOptions.HOMEWORK
         
@@ -166,3 +166,19 @@ class ForeignSerializerTest(DummyUser):
         teacher = teachers.get(scooso_id=lesson['teacher']['scooso_id'])
         
         print(teacher)
+    
+    def test_multiple_import(self):
+        import_teachers()
+        
+        start_count = TeacherScoosoData.objects.count()
+        
+        random_lesson = random.choice(self.timetable['lessons'])
+        teacher = self.scraper.import_teacher(random_lesson['teacher'])
+        
+        self.assertTrue(hasattr(teacher, "teacherscoosodata"))
+        self.assertEqual(start_count + 1, TeacherScoosoData.objects.count())
+        
+        teacher = self.scraper.import_teacher(random_lesson['teacher'])
+        
+        self.assertTrue(hasattr(teacher, "teacherscoosodata"))
+        self.assertEqual(start_count + 1, TeacherScoosoData.objects.count())
