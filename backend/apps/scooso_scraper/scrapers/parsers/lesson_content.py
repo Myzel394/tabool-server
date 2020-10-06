@@ -28,7 +28,7 @@ class PureLessonContentParser(BaseParser):
     def is_valid(self) -> bool:
         try:
             return type(self.json["item"]) is dict
-        except KeyError:
+        except:
             return False
     
     @property

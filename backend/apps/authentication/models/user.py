@@ -17,9 +17,6 @@ __all__ = [
 ]
 
 
-# TODO: Admin pages hinzufüen!
-
-
 class User(AbstractUser, LifecycleModel):
     id = models.CharField(
         verbose_name=_("ID"),

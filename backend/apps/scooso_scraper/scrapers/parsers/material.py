@@ -69,7 +69,7 @@ class PureMaterialParser(BaseParser):
     def is_valid(self) -> bool:
         try:
             return len(self.json["tables"].get("items", [])) > 0
-        except:  # TODO: Make except general for every error!
+        except:
             return False
 
 # TODO: Add celery tasks!
