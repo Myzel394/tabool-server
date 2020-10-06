@@ -3,7 +3,10 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.authentication.views import LoginView, LogoutView, PasswordChangeView, RegisterView, UserPaymentViewSet
+from apps.authentication.views import (
+    LoginView, LogoutView, PasswordChangeView, RegisterView, StudentView,
+    UserPaymentViewSet,
+)
 from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet, ModificationViewSet
 from apps.homework.views import HomeworkViewSet, MaterialDownloadView, UserHomeworkRelationViewSet
 from apps.lesson.views import (
@@ -41,9 +44,10 @@ urlpatterns = [
     path("api/", include("rest_framework.urls")),
     
     path("api/change-password/", PasswordChangeView.as_view()),
-    path("api/registration/", RegisterView.as_view()),
-    path("api/login/", LoginView.as_view()),
-    path("api/logout/", LogoutView.as_view()),
+    path("api/auth/registration/", RegisterView.as_view()),
+    path("api/auth/student/", StudentView.as_view()),
+    path("api/auth/login/", LoginView.as_view()),
+    path("api/auth/logout/", LogoutView.as_view()),
     
     path("", include("apps.main.urls")),
     path("admin/", admin.site.urls),

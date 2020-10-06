@@ -1,7 +1,15 @@
 __all__ = [
-    "CannotChangeTokenError"
+    "CannotChangeTokenError", "CannotChangeUserError", "UserNotActivatedError"
 ]
 
 
 class CannotChangeTokenError(Exception):
+    pass
+
+
+class CannotChangeUserError(Exception):
+    pass
+
+
+class UserNotActivatedError(Exception):
     pass

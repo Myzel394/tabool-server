@@ -1,4 +1,5 @@
 from .authentication import *
 from .extra import *
-from .user_payment import *
+from .student import *
 from .user import *
+from .user_payment import *

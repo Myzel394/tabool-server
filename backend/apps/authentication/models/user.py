@@ -34,6 +34,11 @@ class User(AbstractUser, LifecycleModel):
         unique=True,
     )  # type: str
     
+    is_email_verified = models.BooleanField(
+        verbose_name=_("Email-Adresse verifiziert?"),
+        default=False
+    )  # type: bool
+    
     username = None
     
     USERNAME_FIELD = "email"
@@ -63,7 +68,7 @@ class User(AbstractUser, LifecycleModel):
                 break
         
         self.id = random_id
-        
+    
     @property
     def payments(self) -> "UserPaymentQuerySet":
         return self.userpayment_set.all()

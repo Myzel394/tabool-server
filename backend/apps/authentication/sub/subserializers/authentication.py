@@ -4,12 +4,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from .student import StudentSerializer
 from ... import constants
-from ...models import AccessToken, ScoosoData
+from ...models import AccessToken
 from ...validators import email_not_in_use, token_exists, token_not_in_use
 
 __all__ = [
-    "LoginSerializer", "RegisterSerializer"
+    "LoginSerializer", "RegisterSerializer", "FullRegisterSerializer"
 ]
 
 User = get_user_model()
@@ -56,10 +57,6 @@ class RegisterSerializer(serializers.Serializer):
         validators=[validate_password]
     )
     
-    scooso_username = serializers.CharField()
-    
-    scooso_password = serializers.CharField()
-    
     token = serializers.CharField(
         validators=[token_exists, token_not_in_use],
         min_length=constants.TOKEN_LENGTH
@@ -70,13 +67,16 @@ class RegisterSerializer(serializers.Serializer):
             validated_data["email"],
             validated_data["password"],
         )
-        scooso_data = ScoosoData.objects.create(
-            user=user,
-            username=validated_data["scooso_username"],
-            password=validated_data["scooso_password"]
-        )
         token = AccessToken.objects.get(token=validated_data["token"])
         token.user = user
         token.save()
         
         return user
+
+
+class FullRegisterSerializer(serializers.Serializer):
+    scooso_username = serializers.CharField()
+    scooso_password = serializers.CharField()
+    user = serializers.CharField()
+    
+    student = StudentSerializer()

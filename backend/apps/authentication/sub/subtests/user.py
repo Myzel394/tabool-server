@@ -63,7 +63,7 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
             "scooso_password": self.Get_random_password(),
         }
         # Simple creation check
-        response = self.client.post("/api/registration/", default_data, content_type="application/json")
+        response = self.client.post("/api/auth/registration/", default_data, content_type="application/json")
         self.assertStatusOk(response.status_code)
         
         invalid_data = [
@@ -79,7 +79,7 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
             use_data = default_data.copy()
             use_data.update(invalid)
             
-            response = self.client.post("/api/registration/", use_data, content_type="application/json")
+            response = self.client.post("/api/auth/registration/", use_data, content_type="application/json")
             self.assertStatusNotOk(response.status_code)
     
     def test_invalid_creation(self):
@@ -96,7 +96,7 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
             use_data = default_data.copy()
             use_data.update(invalid)
             
-            response = self.client.post("/api/registration/", use_data, content_type="application/json")
+            response = self.client.post("/api/auth/registration/", use_data, content_type="application/json")
             self.assertStatusNotOk(response.status_code)
     
     def test_creation(self):
@@ -106,7 +106,7 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
         password = self.Get_random_password()
         email = f"{first_name}.{last_name}@gmail.com"
         
-        response = self.client.post("/api/registration/", {
+        response = self.client.post("/api/auth/registration/", {
             "email": email,
             "password": password,
             "scooso_username": first_name,
