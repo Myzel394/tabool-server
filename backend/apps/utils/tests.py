@@ -13,6 +13,9 @@ from apps.utils.date import find_next_date_by_weekday
 from apps.utils.time import dummy_datetime_from_target
 from constants import weekdays
 
+if TYPE_CHECKING:
+    from apps.authentication.models import User
+
 __all__ = [
     "UserCreationTestMixin", "StartTimeEndTimeTestMixin", "ClientTestMixin", "joinkwargs"
 ]
@@ -20,7 +23,7 @@ __all__ = [
 
 class UserCreationTestMixin(TestCase):
     @staticmethod
-    def Create_user(**kwargs) -> settings.AUTH_USER_MODEL:
+    def Create_user(is_confirmed: bool = True, **kwargs) -> settings.AUTH_USER_MODEL:
         Model = get_user_model()
         first_name = names.get_first_name()
         while True:
@@ -29,16 +32,20 @@ class UserCreationTestMixin(TestCase):
             if not Model.objects.filter(last_name__iexact=last_name).exists():
                 break
         
-        return Model.objects.create_user(
+        user: "User" = Model.objects.create_user(
             **{
                 "first_name": first_name,
                 "last_name": last_name,
                 "email": f"{first_name}.{last_name}@gmail.com",
                 "password": first_name,
-                "is_email_verified": True,
                 **kwargs
             }
         )
+        
+        if is_confirmed:
+            user.confirm_email(user.confirmation_key)
+        
+        return user
     
     def Login_user(
             self,
