@@ -216,7 +216,7 @@ EMAIL_SUBJECT_PREFIX = ""
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
 
-SIMPLE_EMAIL_CONFIRMATION_KEY_LENGTH = 63
+SIMPLE_EMAIL_CONFIRMATION_KEY_LENGTH = 40
 
 EMAIL_MAIL_HTML = "authentication/emails/confirm.html"
 EMAIL_MAIL_PLAIN = "authentication/emails/confirm.txt"

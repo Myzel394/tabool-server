@@ -48,7 +48,7 @@ urlpatterns = [
     path("api/auth/student/", StudentView.as_view()),
     path("api/auth/login/", LoginView.as_view()),
     path("api/auth/logout/", LogoutView.as_view()),
-    path("api/email/confirmation", email_confirmation),
+    path("api/email/confirmation/", email_confirmation),
     
     path("", include("apps.main.urls")),
     path("admin/", admin.site.urls),

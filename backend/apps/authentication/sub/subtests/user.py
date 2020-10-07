@@ -144,3 +144,31 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
         self.Create_user()
         
         self.assertEqual(len(mail.outbox), 1)
+    
+    def test_email_verification(self):
+        user = self.Create_user(False)
+        
+        with self.Login_user_as_context(user, user.first_name) as _:
+            response = self.client.post(
+                f"/api/email/confirmation/",
+                {
+                    "confirmation_key": "a"
+                },
+                content_type="application/json"
+            )
+            self.assertStatusNotOk(response.status_code)
+            user.refresh_from_db()
+            self.assertEqual(user.is_confirmed, False)
+            
+            print(user.confirmation_key)
+            
+            response = self.client.post(
+                f"/api/email/confirmation/",
+                {
+                    "confirmation_key": user.confirmation_key
+                },
+                content_type="application/json"
+            )
+            self.assertStatusOk(response.status_code)
+            user.refresh_from_db()
+            self.assertEqual(user.is_confirmed, True)

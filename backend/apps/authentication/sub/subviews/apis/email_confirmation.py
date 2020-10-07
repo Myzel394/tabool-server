@@ -1,8 +1,10 @@
 from typing import *
 
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import gettext_lazy as _
 from django_hint import RequestType
 from rest_framework import status
-from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -15,16 +17,21 @@ __all__ = [
 
 
 @api_view(["POST"])
-@authentication_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def email_confirmation(request: RequestType):
     user: "User" = request.user
     
-    if (key := "confirmation_key") in request.POST:
-        confirmation_key = request.POST[key]
+    if (key := "confirmation_key") in request.data:
+        confirmation_key = request.data[key]
         
-        user.confirm_email(confirmation_key)
+        try:
+            user.confirm_email(confirmation_key)
+        except ObjectDoesNotExist:
+            return Response({
+                "detail": _("Der Email-Bestätigungscode ist falsch.")
+            }, status=status.HTTP_400_BAD_REQUEST)
         
-        if user.is_confirmed:
-            return Response()
-    
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response()
+    return Response({
+        "detail": _("Der Email-Bestätigungscode fehlt.")
+    }, status=status.HTTP_400_BAD_REQUEST)
