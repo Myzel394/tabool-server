@@ -7,12 +7,11 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import BaseParser
 from ... import constants
+from ...utils import get_safe_filename
 
 __all__ = [
     "PureMaterialParser", "PureMaterialParserDataType"
 ]
-
-from ...utils import get_safe_filename
 
 
 class MaterialType(TypedDict):

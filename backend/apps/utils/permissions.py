@@ -1,8 +1,6 @@
 from django.contrib.auth.models import Permission
 from rest_framework import permissions
 
-# TODO: Add Email verification
-
 __all__ = [
     "AuthenticationAndActivePermission"
 ]

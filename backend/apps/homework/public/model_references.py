@@ -1,7 +1,8 @@
 from apps.homework import constants
 
 __all__ = [
-    "HOMEWORK"
+    "HOMEWORK", "MATERIAL"
 ]
 
 HOMEWORK = f"{constants.APP_LABEL}.Homework"
+MATERIAL = f"{constants.APP_LABEL}.Material"
