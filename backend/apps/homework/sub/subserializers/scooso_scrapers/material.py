@@ -1,11 +1,34 @@
 from rest_framework import serializers
 
-from ....models import Material
+from apps.utils.serializers import ScoosoScraperSerializerMixin
+from ....models import Material, MaterialScoosoData
+
+__all__ = [
+    "MaterialScoosoScraperSerializer"
+]
 
 
-class MaterialScoosoScraperSerializer(serializers.ModelSerializer):
+class MaterialScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     class Meta:
         model = Material
+        scooso_model = MaterialScoosoData
         fields = [
-            ""
+            "scooso_id", "owner_id", "created_at"
         ]
+    
+    scooso_id = serializers.IntegerField(min_value=0)
+    owner_id = serializers.IntegerField(min_value=0)
+    filename = serializers.CharField()
+    created_at = serializers.DateTimeField()
+    
+    def pop_scooso_data(self, validated_data: dict) -> dict:
+        return {
+            "scooso_id": validated_data.pop("scooso_id"),
+            "owner_id": validated_data.pop("owner_id")
+        }
+    
+    def rename_data(self, validated_data: dict) -> dict:
+        return {
+            "added_at": validated_data["created_at"],
+            "lesson": validated_data["lesson"]
+        }

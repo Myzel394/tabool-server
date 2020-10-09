@@ -1,4 +1,3 @@
-import os
 import sys
 from datetime import date, datetime
 from pathlib import Path
@@ -48,7 +47,7 @@ def validate_material_file(data: bytes):
                 "Die Datei wurde abgelehnt, weil sie manipuliert wurde."
             ))
     
-    path = Path().joinpath(f"tmp/{datetime.now().strftime('%d%m%Y_%H%M%S')}")
+    path = Path().joinpath(f"/tmp/{datetime.now().strftime('%d%m%Y_%H%M%S')}")
     
     path.parent.mkdir(parents=True, exist_ok=True)
     path.touch(exist_ok=True)

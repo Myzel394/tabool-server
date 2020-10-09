@@ -70,7 +70,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         )
         
         response = self.client.get("/api/homework/", {
-            "lesson": lesson.id
+            "lesson": lesson.scooso_id
         }, content_type="application/json")
         
         self.assertStatusOk(response.status_code)
@@ -79,7 +79,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             .objects \
             .all() \
             .from_user(self.logged_user) \
-            .filter(lesson__id=lesson.id)
+            .filter(lesson__id=lesson.scooso_id)
         expected_data = HomeworkListSerializer(expected_homeworks, many=True).data
         actual_data = response.data["results"]
         

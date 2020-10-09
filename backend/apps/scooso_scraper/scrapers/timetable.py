@@ -1,31 +1,33 @@
 from datetime import date, timedelta
+from pathlib import Path
 from typing import *
 
-from apps.lesson.models import Course, Lesson, LessonData, Modification, Room, Subject, Teacher
-from apps.lesson.sub.subserializers import (
+from apps.lesson.models import Course, Lesson, LessonData, LessonScoosoData, Modification, Room, Subject, Teacher
+from apps.lesson.serializers import (
     CourseScoosoScraperSerializer, LessonDataScoosoScraperSerializer, LessonScoosoScraperSerializer,
-    RoomScoosoScraperSerializer,
-    SubjectScoosoScraperSerializer,
-    TeacherScoosoScraperSerializer,
+    RoomScoosoScraperSerializer, SubjectScoosoScraperSerializer, TeacherScoosoScraperSerializer,
 )
+from . import MaterialRequest
 from .parsers import PureTimetableParser, PureTimetableParserDataType
+from .parsers.material import MaterialType
 from .parsers.timetable import (
-    CourseType, EventType, LessonType, ModificationType, RoomType, SingleEventType, SingleLessonType,
+    CourseType, EventType, LessonType, ModificationType, RoomType, SingleEventType,
+    SingleLessonType,
     SingleModificationType, SubjectType, TeacherType,
 )
 from .request import Request
 from .. import constants
 from ..utils import build_url, import_from_scraper
+from ...event.models import Event
+from ...event.options import ModificationTypeOptions
+from ...event.sub.subserializers import EventScoosoScraperSerializer
+from ...event.sub.subserializers.scooso_scrapers.modification import ModificationScoosoScraperSerializer
+from ...homework.models import Material
+from ...homework.sub.subserializers.scooso_scrapers.material import MaterialScoosoScraperSerializer
 
 __all__ = [
     "TimetableRequest"
 ]
-
-from ...event.models import Event
-from ...event.options import ModificationTypeOptions
-
-from ...event.sub.subserializers import EventScoosoScraperSerializer
-from ...event.sub.subserializers.scooso_scrapers.modification import ModificationScoosoScraperSerializer
 
 
 class TimetableRequest(Request):
@@ -89,6 +91,10 @@ class TimetableRequest(Request):
     def import_modification(data: ModificationType, **kwargs) -> Modification:
         return import_from_scraper(ModificationScoosoScraperSerializer, data, **kwargs)
     
+    @staticmethod
+    def import_material(data: MaterialType, **kwargs) -> Material:
+        return import_from_scraper(MaterialScoosoScraperSerializer, data, **kwargs)
+    
     @classmethod
     def import_lesson_from_scraper(cls, lesson: SingleLessonType) -> Lesson:
         room = cls.import_room(lesson['room'], none_on_error=True)
@@ -129,3 +135,32 @@ class TimetableRequest(Request):
         )
         
         return modification
+    
+    def import_materials_from_lesson(self, lesson: Lesson) -> List[Material]:
+        materials_list = []
+        scooso_data: LessonScoosoData = lesson.lessonscoosodata
+        
+        scraper = MaterialRequest(self.username, self.password)
+        materials = scraper.get_materials(
+            time_id=scooso_data.time_id,
+            targeted_date=lesson.date
+        )
+        
+        # Get all materials
+        for material in materials['materials']:
+            scraper = MaterialRequest(self.username, self.password)
+            path = scraper.download_material(
+                material['scooso_id'],
+                Path(f"/tmp/download_material/{material['scooso_id']}/{material['filename']}")
+            )
+            # TODO: Save file in correct path and update path on `file`!
+            
+            material_instance = self.import_material(
+                material,
+                lesson=lesson,
+            )
+            material_instance.file.save(path.name, content)
+            
+            materials_list.append(material_instance)
+        
+        return materials_list

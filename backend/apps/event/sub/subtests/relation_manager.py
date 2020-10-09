@@ -22,7 +22,7 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
             event = Event.objects.first()
             
             response = self.client.patch(
-                f"/api/user-relation/event/{event.id}/",
+                f"/api/user-relation/event/{event.scooso_id}/",
                 {
                     "ignore": True
                 },

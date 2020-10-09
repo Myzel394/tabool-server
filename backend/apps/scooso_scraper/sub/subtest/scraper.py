@@ -7,6 +7,7 @@ from pprint import pp
 
 import lorem
 
+from apps.homework.models import MaterialScoosoData
 from apps.lesson.models import TeacherScoosoData
 from ...actions import import_teachers
 from ...mixins.tests.dummy_data import DummyUser
@@ -47,7 +48,7 @@ class SomeTests(DummyUser):
     
     def test_material(self):
         material_id = 73893
-        download_path = Path(f"./tmp/scooso_scraper/materials/random_file.txt")
+        download_path = Path(f"/tmp/scooso_scraper/materials/random_file.txt")
         scraper = MaterialRequest(self.username, self.password)
         
         scraper.download_material(material_id, download_path)
@@ -61,9 +62,9 @@ class SomeTests(DummyUser):
         )
         random_material = random.choice(materials['materials'])
         
-        download_path = Path(f"./tmp/scooso_scraper/materials/{random_material['filename']}")
+        download_path = Path(f"/tmp/scooso_scraper/materials/{random_material['filename']}")
         
-        path = scraper.download_material(random_material['id'], download_path)
+        path = scraper.download_material(random_material['scooso_id'], download_path)
         
         self.assertTrue(path.exists())
     
@@ -166,6 +167,31 @@ class ForeignSerializerTest(DummyUser):
         teacher = teachers.get(scooso_id=lesson['teacher']['scooso_id'])
         
         print(teacher)
+    
+    def test_create_material(self):
+        materials_subject_ids = [
+            material['subject']['scooso_id']
+            for material in self.timetable['materials_data']
+        ]
+        lessons_with_materials = [
+            lesson
+            for lesson in self.timetable['lessons']
+            if lesson['subject']['scooso_id'] in materials_subject_ids
+        ]
+        
+        chosen_material = random.choice(self.timetable['materials_data'])
+        chosen_lesson = [
+            lesson
+            for lesson in lessons_with_materials
+            if lesson['subject']['scooso_id'] == chosen_material['subject']['scooso_id']
+        ][0]
+        lesson = self.scraper.import_lesson_from_scraper(chosen_lesson)
+        
+        materials = self.scraper.import_materials_from_lesson(lesson)
+        
+        # Check
+        random_material = random.choice(materials)
+        material_scooso_data: MaterialScoosoData = random_material.materialscoosodata
     
     def test_multiple_import(self):
         import_teachers()

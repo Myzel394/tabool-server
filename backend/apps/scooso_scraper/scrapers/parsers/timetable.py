@@ -70,7 +70,7 @@ class EventType(TypedDict):
     title: str
 
 
-class MaterialType(TypedDict):
+class MaterialListDataType(TypedDict):
     calendar_id: int
     time_id: int
     target_date: date
@@ -88,7 +88,7 @@ class SingleFreePeriodType(TypedDict):
 
 
 class SingleMaterialDataType(TypedDict):
-    material: MaterialType
+    material: MaterialListDataType
     subject: SubjectType
 
 
@@ -247,7 +247,6 @@ class PureTimetableParser(BaseParser):
         lessons = []
         events = []
         modifications = []
-        free_periods = []
         materials = []
         
         for thing in self.json["tables"]["schedule"]:

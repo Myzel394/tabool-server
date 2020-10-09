@@ -10,12 +10,12 @@ from ... import constants
 from ...utils import get_safe_filename
 
 __all__ = [
-    "PureMaterialParser", "PureMaterialParserDataType"
+    "PureMaterialParser"
 ]
 
 
 class MaterialType(TypedDict):
-    id: int
+    scooso_id: int
     filename: str
     owner_id: Optional[int]
     created_at: Optional[datetime]
@@ -48,7 +48,7 @@ class PureMaterialParser(BaseParser):
         
         for item in items:
             data.append({
-                "id": item["id"],
+                "scooso_id": item["id"],
                 "filename": self.get_any_filename(
                     self.constrain_filename(
                         get_safe_filename(item["name"])

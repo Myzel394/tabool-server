@@ -3,10 +3,12 @@ from datetime import date
 from enum import Enum
 from pathlib import Path
 
+from magic import Magic
 from secure_file_detection import detector
 from secure_file_detection.exceptions import *
 
-from .parsers import PureMaterialParser, PureMaterialParserDataType
+from .parsers import PureMaterialParser
+from .parsers.material import PureMaterialParserDataType
 from .parsers.material_download import MaterialFileParser
 from .parsers.material_upload import MaterialUploadParser
 from .request import Request
@@ -25,6 +27,8 @@ class MaterialTypeOptions(Enum):
 
 
 class MaterialRequest(Request):
+    magic = Magic(mime=True)
+    
     @staticmethod
     def constrain_filename(file: Path) -> Path:
         true_type = detector.detect_true_type(file)
@@ -32,10 +36,14 @@ class MaterialRequest(Request):
         
         return file.with_suffix(extension)
     
-    @staticmethod
-    def create_file(original_path: Path, data: bytes) -> Path:
+    @classmethod
+    def create_file(cls, original_path: Path, data: bytes) -> Path:
         # Preparation
+        mime_type = cls.magic.from_buffer(data)
+        extension = mimetypes.guess_extension(mime_type, False)
+        
         original_path = original_path.with_name(get_safe_filename(original_path.name))
+        original_path = original_path.with_suffix(extension)
         original_path.parent.mkdir(exist_ok=True, parents=True)
         
         with original_path.open("wb") as file:
