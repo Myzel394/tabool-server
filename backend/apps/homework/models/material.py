@@ -17,9 +17,14 @@ class Material(RandomIDMixin, AddedAtMixin):
     # TODO: Add secure file detection!
     file = models.FileField(
         verbose_name=_("Datei"),
+        blank=True,
+        null=True
     )
     
     name = models.CharField(
         verbose_name=_("Dateiname"),
         max_length=255,
     )
+
+    def __str__(self):
+        return f"{self.name}"
