@@ -7,7 +7,6 @@ from pprint import pp
 
 import lorem
 
-from apps.homework.models import MaterialScoosoData
 from apps.lesson.models import TeacherScoosoData
 from ...actions import import_teachers
 from ...mixins.tests.dummy_data import DummyUser
@@ -42,7 +41,7 @@ class SomeTests(DummyUser):
         
         scraper = TimetableRequest(self.username, self.password)
         scraper.login()
-        data = scraper.get_timetable()
+        data = scraper.get_timetable(start_date=date(2020, 10, 5), end_date=date(2020, 10, 10))
         
         self.data = data
     
@@ -110,7 +109,7 @@ class ForeignSerializerTest(DummyUser):
         import_teachers()
         self.scraper = TimetableRequest(self.username, self.password)
         self.scraper.login()
-        self.timetable = self.scraper.get_timetable()
+        self.timetable = self.scraper.get_timetable(start_date=date(2020, 10, 5), end_date=date(2020, 10, 10))
     
     def test_timetable(self):
         # Creation
@@ -188,10 +187,15 @@ class ForeignSerializerTest(DummyUser):
         lesson = self.scraper.import_lesson_from_scraper(chosen_lesson)
         
         materials = self.scraper.import_materials_from_lesson(lesson)
+        print("{count} materials imported".format(count=len(materials)))
         
         # Check
         random_material = random.choice(materials)
-        material_scooso_data: MaterialScoosoData = random_material.materialscoosodata
+        path = Path(random_material.file.path)
+        self.assertTrue(path.exists())
+        
+        random_material.delete()
+        self.assertFalse(path.exists())
     
     def test_multiple_import(self):
         import_teachers()

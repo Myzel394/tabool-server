@@ -23,6 +23,7 @@ from ...event.options import ModificationTypeOptions
 from ...event.sub.subserializers import EventScoosoScraperSerializer
 from ...event.sub.subserializers.scooso_scrapers.modification import ModificationScoosoScraperSerializer
 from ...homework.models import Material
+from ...homework.public import *
 from ...homework.sub.subserializers.scooso_scrapers.material import MaterialScoosoScraperSerializer
 
 __all__ = [
@@ -149,17 +150,18 @@ class TimetableRequest(Request):
         # Get all materials
         for material in materials['materials']:
             scraper = MaterialRequest(self.username, self.password)
-            path = scraper.download_material(
-                material['scooso_id'],
-                Path(f"/tmp/download_material/{material['scooso_id']}/{material['filename']}")
-            )
-            # TODO: Save file in correct path and update path on `file`!
             
             material_instance = self.import_material(
                 material,
                 lesson=lesson,
             )
-            material_instance.file.save(path.name, content)
+            
+            path = scraper.download_material(
+                material['scooso_id'],
+                Path(build_material_upload_to(material['filename'], material_instance))
+            )
+            
+            material_instance.file = str(path)
             
             materials_list.append(material_instance)
         
