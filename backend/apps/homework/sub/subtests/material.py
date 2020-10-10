@@ -80,3 +80,14 @@ class MaterialTest(MaterialTestMixin, ClientTestMixin):
         with self.Login_user_as_context() as user:
             response = self.client.get(url)
             self.assertStatusNotOk(response.status_code)
+
+
+class APITest(ClientTestMixin, MaterialTestMixin):
+    def test_material(self):
+        with self.Login_user_as_context() as user:
+            material = self.Create_material()
+            
+            response = self.client.get(
+                f"/api/material/{material.id}/"
+            )
+            self.assertStatusOk(response.status_code)

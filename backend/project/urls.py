@@ -1,4 +1,6 @@
 import private_storage.urls
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
@@ -8,7 +10,7 @@ from apps.authentication.views import (
     UserPaymentViewSet,
 )
 from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet, ModificationViewSet
-from apps.homework.views import HomeworkViewSet, MaterialDownloadView, UserHomeworkRelationViewSet
+from apps.homework.views import HomeworkViewSet, MaterialDownloadView, MaterialViewSet, UserHomeworkRelationViewSet
 from apps.lesson.views import (
     CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet,
     UserSubjectRelationViewSet,
@@ -28,6 +30,7 @@ router.register("subject", SubjectViewSet, basename="Subject")
 router.register("teacher", TeacherViewSet, basename="Teacher")
 router.register("news", NewsViewSet, basename="News")
 router.register("user-payment", UserPaymentViewSet, basename="PaidUser")
+router.register("material", MaterialViewSet, basename="Material")
 
 # TODO: Add user uploads & downloads
 router.register("user-relation/lesson", UserLessonRelationViewSet, basename="UserLessonRelation")
@@ -36,20 +39,20 @@ router.register("user-relation/event", EventUserRelationViewSet, basename="Event
 router.register("user-relation/subject", UserSubjectRelationViewSet, basename="UserSubjectRelation")
 
 urlpatterns = [
-    # Static access
-    path("private-media/", MaterialDownloadView.as_view()),
-    path("private-media/", include(private_storage.urls)),
+                  # Static access
+                  path("private-media/", MaterialDownloadView.as_view()),
+                  path("private-media/", include(private_storage.urls)),
     
-    path("api/", include(router.urls)),
-    path("api/", include("rest_framework.urls")),
+                  path("api/", include(router.urls)),
+                  path("api/", include("rest_framework.urls")),
     
-    path("api/auth/change-password/", PasswordChangeView.as_view()),
-    path("api/auth/registration/", RegisterView.as_view()),
-    path("api/auth/student/", StudentView.as_view()),
-    path("api/auth/login/", LoginView.as_view()),
-    path("api/auth/logout/", LogoutView.as_view()),
-    path("api/email/confirmation/", email_confirmation),
+                  path("api/auth/change-password/", PasswordChangeView.as_view()),
+                  path("api/auth/registration/", RegisterView.as_view()),
+                  path("api/auth/student/", StudentView.as_view()),
+                  path("api/auth/login/", LoginView.as_view()),
+                  path("api/auth/logout/", LogoutView.as_view()),
+                  path("api/email/confirmation/", email_confirmation),
     
-    path("", include("apps.main.urls")),
-    path("admin/", admin.site.urls),
-]
+                  path("", include("apps.main.urls")),
+                  path("admin/", admin.site.urls),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

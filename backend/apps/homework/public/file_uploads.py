@@ -10,5 +10,5 @@ __all__ = [
 ]
 
 
-def build_material_upload_to(filename: str, instance: Optional["Material"] = None, *args, **kwargs) -> str:
+def build_material_upload_to(instance: "Material", filename: str, *args, **kwargs) -> str:
     return build_path(filename, "uploads/material/", instance=instance)

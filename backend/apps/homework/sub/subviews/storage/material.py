@@ -1,6 +1,6 @@
 from private_storage.views import PrivateStorageDetailView
 
-from ...models import Material
+from apps.homework.models import Material
 
 __all__ = [
     "MaterialDownloadView"

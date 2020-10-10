@@ -158,7 +158,7 @@ class TimetableRequest(Request):
             
             path = scraper.download_material(
                 material['scooso_id'],
-                Path(build_material_upload_to(material['filename'], material_instance))
+                Path(build_material_upload_to(material_instance, material['filename']))
             )
             
             material_instance.file = str(path)
