@@ -8,6 +8,7 @@ from django_lifecycle import AFTER_DELETE, BEFORE_UPDATE, hook, LifecycleModel
 from apps.authentication.public import *
 from apps.lesson.public import *
 from ..exceptions import *
+from ..querysets import SubmissionQuerySet
 
 __all__ = [
     "Submission"
@@ -19,6 +20,8 @@ class Submission(RandomIDMixin, CreationDateMixin, LifecycleModel):
         verbose_name = _("Einreichung")
         verbose_name_plural = _("Einreichungen")
         ordering = ("lesson", "upload_at")
+    
+    objects = SubmissionQuerySet.as_manager()
     
     user = models.ForeignKey(
         USER,
@@ -51,7 +54,7 @@ class Submission(RandomIDMixin, CreationDateMixin, LifecycleModel):
     
     is_uploading = models.BooleanField(
         verbose_name=_("Wird hochgeladen"),
-        help_text=_("Wenn ja, dann versucht der Server die Datei gerade hochzuladen."),
+        help_text=_("Wenn ja, dann versucht der Server gerade die Datei hochzuladen."),
         default=False
     )
     

@@ -6,14 +6,14 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from apps.authentication.views import (
-    email_confirmation, LoginView, LogoutView, PasswordChangeView, RegisterView, StudentView,
-    UserPaymentViewSet,
+    email_confirmation, LoginView, LogoutView, PasswordChangeView, RegisterView, StudentView, UserPaymentViewSet,
 )
 from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet, ModificationViewSet
-from apps.homework.views import HomeworkViewSet, MaterialDownloadView, MaterialViewSet, UserHomeworkRelationViewSet
+from apps.homework.views import (
+    HomeworkViewSet, MaterialDownloadView, MaterialViewSet, SubmissionViewSet, UserHomeworkRelationViewSet,
+)
 from apps.lesson.views import (
-    CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet,
-    UserSubjectRelationViewSet,
+    CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet, UserSubjectRelationViewSet,
 )
 from apps.news.views import NewsViewSet
 from apps.timetable.views import TimetableViewSet
@@ -31,6 +31,7 @@ router.register("teacher", TeacherViewSet, basename="Teacher")
 router.register("news", NewsViewSet, basename="News")
 router.register("user-payment", UserPaymentViewSet, basename="PaidUser")
 router.register("material", MaterialViewSet, basename="Material")
+router.register("submission", SubmissionViewSet, basename="Submission")
 
 # TODO: Add user uploads & downloads
 router.register("user-relation/lesson", UserLessonRelationViewSet, basename="UserLessonRelation")
