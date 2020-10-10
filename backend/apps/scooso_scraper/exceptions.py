@@ -1,8 +1,12 @@
-class LoginFailed(Exception):
+class ConnectionFailed(Exception):
     pass
 
 
-class RequestFailed(Exception):
+class LoginFailed(ConnectionFailed):
+    pass
+
+
+class RequestFailed(ConnectionFailed):
     pass
 
 
@@ -14,5 +18,5 @@ class FileException(Exception):
     pass
 
 
-class FileManipulatedException(Exception):
+class FileManipulatedException(FileException):
     pass
