@@ -22,6 +22,7 @@ class AssociatedUserSerializerMixin(serializers.ModelSerializer):
     
     def create(self, validated_data):
         validated_data["associated_user"] = self.context["request"].user
+        return super().create(validated_data)
 
 
 M = TypeVar("M")

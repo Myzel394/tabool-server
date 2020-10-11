@@ -3,7 +3,7 @@ from pathlib import Path
 from rest_framework import serializers
 
 from apps.lesson.public.serializer_fields import LessonField
-from apps.utils.serializers import RandomIDSerializerMixin
+from apps.utils.serializers import AssociatedUserSerializerMixin, RandomIDSerializerMixin
 from ...models import Submission
 
 __all__ = [
@@ -25,7 +25,7 @@ class SubmissionListSerializer(RandomIDSerializerMixin):
         return Path(instance.file.path).name
 
 
-class SubmissionDetailSerializer(RandomIDSerializerMixin):
+class SubmissionDetailSerializer(AssociatedUserSerializerMixin, RandomIDSerializerMixin):
     class Meta:
         model = Submission
         fields = [

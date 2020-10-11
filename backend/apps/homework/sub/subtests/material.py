@@ -91,5 +91,3 @@ class APITest(ClientTestMixin, MaterialTestMixin):
                 f"/api/material/{material.id}/"
             )
             self.assertStatusOk(response.status_code)
-
-# TODO: Add submission tests!
