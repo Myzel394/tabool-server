@@ -2,6 +2,8 @@ import random
 import string
 from pathlib import Path
 
+from django.core.files.uploadedfile import SimpleUploadedFile
+
 from apps.homework.mixins.tests.submission import SubmissionTestMixin
 from apps.utils import ClientTestMixin
 
@@ -22,19 +24,25 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin):
     
     def test_api_post(self):
         lesson = self.Create_lesson()
-        path = Path("/tmp/tabool/uploaded_file.txt")
+        file = SimpleUploadedFile(
+            "file.txt",
+            "".join(random.choices(string.ascii_letters + string.digits, k=1024 * 5)).encode(),
+            "text/plain"
+        )
+        
+        path = Path("/tmp/tabool/test.txt")
         path.parent.mkdir(exist_ok=True, parents=True)
         path.touch(exist_ok=True)
         path.write_text("".join(random.choices(string.ascii_letters + string.digits, k=1024 * 5)))
         
-        response = self.client.post(
-            "/api/submission/",
-            {
-                "lesson": lesson.id,
-                "file": path.read_text()
-            },
-            format="multipart",
-            content_type="multipart/form-data"
-        )
+        with path.open() as opened_file:
+            response = self.client.post(
+                "/api/submission/",
+                {
+                    "lesson": lesson.id,
+                    "file": opened_file
+                },
+                content_type="multipart/form-data"
+            )
         print(response.data)
-        self.assertStatusOk(response.status_code)
+        self.assertStatusOk(response.status_code)  # Error
