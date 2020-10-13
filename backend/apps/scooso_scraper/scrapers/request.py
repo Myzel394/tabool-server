@@ -24,6 +24,14 @@ class Request(ABC):
         self.client = TorRequest()
         self.client.session.headers = get_headers()
     
+    def __enter__(self):
+        self.login()
+        
+        return self
+    
+    def __exit__(self, *args, **kwargs):
+        self.logout()
+    
     # Utils
     def build_url(self, url: str, data: dict) -> str:
         use_data = data.copy()

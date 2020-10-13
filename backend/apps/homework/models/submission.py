@@ -10,11 +10,13 @@ from apps.lesson.public import *
 from ..exceptions import *
 from ..public import build_submission_upload_to
 from ..querysets import SubmissionQuerySet
+from ...scooso_scraper.scrapers.material import MaterialRequest, MaterialTypeOptions
 from ...utils import AssociatedUserMixin
 from ...utils.fields import SafeFileField
 
 if TYPE_CHECKING:
     from datetime import datetime
+    from django.db.models.fields.files import FieldFile
     from apps.lesson.models import Lesson
 
 __all__ = [
@@ -41,7 +43,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         verbose_name=_("Datei"),
         upload_to=build_submission_upload_to,
         max_length=1023
-    )  # type: SafeFileField
+    )  # type: FieldFile
     
     upload_at = models.DateTimeField(
         verbose_name=_("Hochladedatum"),
@@ -80,3 +82,20 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
             lesson=self.lesson,
             upload_date=self.upload_at
         )
+    
+    def upload_file(self) -> None:
+        user = self.associated_user
+        
+        time_id = self.lesson.lessonscoosodata.time_id
+        targeted_date = self.lesson.date
+        filename = self.file.name
+        content = Path(self.file.path).read_text()
+        
+        with MaterialRequest(user.scoosodata.username, user.scoosodata.password) as scraper:
+            scraper.upload_material(
+                time_id=time_id,
+                target_date=targeted_date,
+                filename=filename,
+                data=content,
+                material_type=MaterialTypeOptions.HOMEWORK
+            )

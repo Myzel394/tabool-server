@@ -7,7 +7,7 @@ from apps.lesson.serializers import (
     CourseScoosoScraperSerializer, LessonDataScoosoScraperSerializer, LessonScoosoScraperSerializer,
     RoomScoosoScraperSerializer, SubjectScoosoScraperSerializer, TeacherScoosoScraperSerializer,
 )
-from . import MaterialRequest
+from .material import MaterialRequest
 from .parsers import PureTimetableParser, PureTimetableParserDataType
 from .parsers.material import MaterialType
 from .parsers.timetable import (
