@@ -65,10 +65,16 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
                 self.assertStatusOk(response.status_code)
             else:
                 self.assertStatusNotOk(response.status_code)
-    
-    def test_upload(self):
-        time_id = 29743
-        target_date = date(2020, 10, 1)
+
+
+class ApiTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
+    def setUp(self) -> None:
+        self.logged_user = self.Login_user()
+        self.__class__.associated_user = self.logged_user
+        self.load_dummy_user()
+        
+        self.time_id = 29743
+        self.target_date = date(2020, 10, 1)
         
         user_scooso_data = ScoosoData.objects.create(
             user=self.logged_user,
@@ -76,18 +82,20 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
             password=self.password
         )
         
-        lesson = self.Create_lesson(
-            date=target_date
+        self.lesson = self.Create_lesson(
+            date=self.target_date
         )
         scooso_data = LessonScoosoData.objects.create(
-            lesson=lesson,
-            time_id=time_id
+            lesson=self.lesson,
+            time_id=self.time_id
         )
-        
+    
+    def test_upload(self):
         submission = self.Create_submission(
-            lesson=lesson,
+            lesson=self.lesson,
             associated_user=self.logged_user
         )
+        
         submission.upload_file()
         
         # Check
@@ -95,8 +103,8 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
         
         with MaterialRequest(username=self.username, password=self.password) as scraper:
             materials = scraper.get_materials(
-                time_id=time_id,
-                targeted_date=target_date,
+                time_id=self.time_id,
+                targeted_date=self.target_date,
                 material_type=MaterialTypeOptions.HOMEWORK
             )
         
@@ -105,3 +113,40 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
             for material in materials['materials']
         ]
         self.assertIn(filename, available_filenames)
+    
+    def test_upload_api(self):
+        submission = self.Create_submission(
+            lesson=self.lesson,
+            associated_user=self.logged_user
+        )
+        
+        response = self.client.get(
+            f"/api/submission/{submission.id}/upload/"
+        )
+        self.assertStatusOk(response.status_code)
+        self.assertEqual(response.data["upload_status"], "RESTING")
+        
+        response = self.client.post(
+            f"/api/submission/{submission.id}/upload/"
+        )
+        self.assertStatusOk(response.status_code)
+        self.assertEqual(response.data["upload_status"], "PENDING")
+    
+    def test_upload_api_second(self):
+        submission = self.Create_submission(
+            lesson=self.lesson,
+            associated_user=self.logged_user
+        )
+        submission.upload_file()
+        
+        response = self.client.get(
+            f"/api/submission/{submission.id}/upload/"
+        )
+        self.assertStatusOk(response.status_code)
+        self.assertEqual(response.data["upload_status"], "UPLOADED")
+        
+        response = self.client.post(
+            f"/api/submission/{submission.id}/upload/"
+        )
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.data["upload_status"], "UPLOADED")

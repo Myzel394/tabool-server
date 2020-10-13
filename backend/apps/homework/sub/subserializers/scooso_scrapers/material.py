@@ -13,13 +13,11 @@ class MaterialScoosoScraperSerializer(ScoosoScraperSerializerMixin):
         model = Material
         scooso_model = MaterialScoosoData
         fields = [
-            "scooso_id", "owner_id", "created_at"
+            "scooso_id", "owner_id", "filename", "created_at"
         ]
     
     scooso_id = serializers.IntegerField(min_value=0)
     owner_id = serializers.IntegerField(min_value=0)
-    filename = serializers.CharField()
-    created_at = serializers.DateTimeField()
     
     def pop_scooso_data(self, validated_data: dict) -> dict:
         return {
@@ -30,5 +28,6 @@ class MaterialScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     def rename_data(self, validated_data: dict) -> dict:
         return {
             "added_at": validated_data["created_at"],
-            "lesson": validated_data["lesson"]
+            "lesson": validated_data["lesson"],
+            "name": validated_data["filename"]
         }

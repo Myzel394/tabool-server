@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.scooso_scraper import constants as scraper_constants
+from apps.scooso_scraper.scrapers.material import MaterialRequest
 from apps.scooso_scraper.utils import build_url
 from apps.utils import ScoosoDataMixin
 from ...public import *
@@ -36,7 +37,6 @@ class MaterialScoosoData(ScoosoDataMixin):
     
     def build_download_url(self, user: "User") -> str:
         # TODO: Find better solution!
-        from apps.scooso_scraper.scrapers import MaterialRequest
         scraper = MaterialRequest(user.scoosodata.username, user.scoosodata.password)
         
         url = build_url(

@@ -38,7 +38,6 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         on_delete=models.CASCADE,
     )  # type: Lesson
     
-    # TODO: Create SafeFileField!
     file = SafeFileField(
         verbose_name=_("Datei"),
         upload_to=build_submission_upload_to,
@@ -84,18 +83,29 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         )
     
     def upload_file(self) -> None:
-        user = self.associated_user
-        
-        time_id = self.lesson.lessonscoosodata.time_id
-        targeted_date = self.lesson.date
-        filename = self.file.name
-        content = Path(self.file.path).read_text()
-        
-        with MaterialRequest(user.scoosodata.username, user.scoosodata.password) as scraper:
-            scraper.upload_material(
-                time_id=time_id,
-                target_date=targeted_date,
-                filename=filename,
-                data=content,
-                material_type=MaterialTypeOptions.HOMEWORK
-            )
+        if not self.is_uploading and not self.is_uploaded:
+            self.is_uploading = True
+            
+            user = self.associated_user
+            
+            time_id = self.lesson.lessonscoosodata.time_id
+            targeted_date = self.lesson.date
+            filename = self.file.name
+            content = Path(self.file.path).read_text()
+            
+            try:
+                with MaterialRequest(user.scoosodata.username, user.scoosodata.password) as scraper:
+                    scraper.upload_material(
+                        time_id=time_id,
+                        target_date=targeted_date,
+                        filename=filename,
+                        data=content,
+                        material_type=MaterialTypeOptions.HOMEWORK
+                    )
+            except BaseException as exception:
+                raise exception
+            else:
+                self.is_uploaded = True
+            finally:
+                self.is_uploading = False
+                self.save()
