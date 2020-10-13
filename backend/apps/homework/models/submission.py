@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -10,6 +11,11 @@ from ..exceptions import *
 from ..public import build_submission_upload_to
 from ..querysets import SubmissionQuerySet
 from ...utils import AssociatedUserMixin
+from ...utils.fields import SafeFileField
+
+if TYPE_CHECKING:
+    from datetime import datetime
+    from apps.lesson.models import Lesson
 
 __all__ = [
     "Submission"
@@ -28,31 +34,32 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         LESSON,
         verbose_name=lesson_single,
         on_delete=models.CASCADE,
-    )
+    )  # type: Lesson
     
     # TODO: Create SafeFileField!
-    file = models.FileField(
+    file = SafeFileField(
         verbose_name=_("Datei"),
-        upload_to=build_submission_upload_to
-    )
+        upload_to=build_submission_upload_to,
+        max_length=1023
+    )  # type: SafeFileField
     
     upload_at = models.DateTimeField(
         verbose_name=_("Hochladedatum"),
         help_text=_("Wann soll die Datei hochgeladen werden?"),
         blank=True,
         null=True
-    )
+    )  # type: datetime
     
     is_uploaded = models.BooleanField(
         verbose_name=_("Hochgeladen?"),
         default=False
-    )
+    )  # type: bool
     
     is_uploading = models.BooleanField(
         verbose_name=_("Wird hochgeladen"),
         help_text=_("Wenn ja, dann versucht der Server gerade die Datei hochzuladen."),
         default=False
-    )
+    )  # type: bool
     
     @hook(BEFORE_UPDATE)
     def _hook_validate_upload_at_not_already_uploaded(self):

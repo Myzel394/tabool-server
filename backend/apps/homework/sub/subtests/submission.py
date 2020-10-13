@@ -1,6 +1,5 @@
 import random
 import string
-from pathlib import Path
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -23,26 +22,39 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin):
         self.assertStatusOk(response.status_code)
     
     def test_api_post(self):
+        DATA = "".join(random.choices(string.ascii_letters + string.digits, k=1024 * 5)).encode()
+        HTML = """
+            <html>
+                <body>
+                    <h1>Hello</h1>
+                </body>
+            </html>
+        """.encode()
+        
         lesson = self.Create_lesson()
-        file = SimpleUploadedFile(
-            "file.txt",
-            "".join(random.choices(string.ascii_letters + string.digits, k=1024 * 5)).encode(),
-            "text/plain"
-        )
         
-        path = Path("/tmp/tabool/test.txt")
-        path.parent.mkdir(exist_ok=True, parents=True)
-        path.touch(exist_ok=True)
-        path.write_text("".join(random.choices(string.ascii_letters + string.digits, k=1024 * 5)))
-        
-        with path.open() as opened_file:
+        for data, mimetype, is_status_ok in (
+                (DATA, "text/plain", True),
+                (DATA, "image/png", True),
+                (DATA, "random_mime_type", True),
+                (HTML, "text/html", False),
+                (HTML, "text/plain", False),
+                (HTML, "image/png", False),
+        ):
+            print(mimetype)
             response = self.client.post(
                 "/api/submission/",
-                {
+                data={
                     "lesson": lesson.id,
-                    "file": opened_file
-                },
-                content_type="multipart/form-data"
+                    "file": SimpleUploadedFile(
+                        "file.txt",
+                        data,
+                        mimetype
+                    )
+                }
             )
-        print(response.data)
-        self.assertStatusOk(response.status_code)  # Error
+            print(response.data)
+            if is_status_ok:
+                self.assertStatusOk(response.status_code)
+            else:
+                self.assertStatusNotOk(response.status_code)

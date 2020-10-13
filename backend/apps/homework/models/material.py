@@ -10,6 +10,7 @@ from apps.lesson.public import *
 from apps.utils.models import AddedAtMixin
 from ..public import *
 from ..querysets import MaterialQuerySet
+from ...utils.fields import SafeFileField
 
 if TYPE_CHECKING:
     from apps.lesson.models import Lesson
@@ -31,12 +32,13 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     )  # type: Lesson
     
     # TODO: Add secure file detection!
-    file = models.FileField(
+    file = SafeFileField(
         verbose_name=_("Datei"),
         blank=True,
         null=True,
-        upload_to=build_material_upload_to
-    )
+        upload_to=build_material_upload_to,
+        max_length=1023
+    )  # type: SafeFileField
     
     name = models.CharField(
         verbose_name=_("Dateiname"),

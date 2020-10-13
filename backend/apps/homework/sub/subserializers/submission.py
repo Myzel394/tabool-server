@@ -31,5 +31,8 @@ class SubmissionDetailSerializer(AssociatedUserSerializerMixin, RandomIDSerializ
         fields = [
             "lesson", "file", "upload_at", "is_uploaded", "id"
         ]
+        read_only_fields = [
+            "is_uploaded", "id"
+        ]
     
     lesson = LessonField()

@@ -11,8 +11,8 @@ __all__ = [
 
 
 def build_material_upload_to(instance: "Material", filename: str, *args, **kwargs) -> str:
-    return build_path(filename, "scooso_downloads/material/", instance=instance)
+    return build_path(filename, "scooso_downloads/materials/", instance=instance)
 
 
 def build_submission_upload_to(instance: "Submission", filename: str, *args, **kwargs) -> str:
-    return build_path(filename, "scooso_uploads/submission/", instance=instance)
+    return build_path(filename, "submissions/", instance=instance)

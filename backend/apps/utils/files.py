@@ -19,11 +19,11 @@ def build_path(
     now = datetime.now()
     
     if instance:
-        prefix += "/" + getattr(instance, "folder_name", instance.id)
+        prefix += getattr(instance, "folder_name", instance.id)
     
     return settings.MEDIA_ROOT.joinpath(
         prefix + "/" +
         "/".join(str(x) for x in [now.year, now.month, now.day, now.hour]) +
         suffix + "/" +
         filename
-    )
+    ).relative_to(settings.MEDIA_ROOT)

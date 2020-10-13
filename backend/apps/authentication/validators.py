@@ -13,7 +13,7 @@ __all__ = [
 
 def token_exists(value: str):
     if not AccessToken.objects.only("token").filter(token=value).exists():
-        raise ValidationError(_("Zugangscode nicht gültig"))
+        raise ValidationError(_("Der Zugangscode ist nicht gültig"))
 
 
 def token_not_in_use(value: str):

@@ -59,7 +59,8 @@ class RegisterSerializer(serializers.Serializer):
     
     token = serializers.CharField(
         validators=[token_exists, token_not_in_use],
-        min_length=constants.TOKEN_LENGTH
+        min_length=constants.TOKEN_LENGTH,
+        max_length=constants.TOKEN_LENGTH
     )
     
     def create(self, validated_data):
