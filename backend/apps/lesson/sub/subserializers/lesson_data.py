@@ -1,6 +1,7 @@
+from apps.school_data.public.serializer_fields import RoomField
 from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import LessonData
-from ...public.serializer_fields import CourseField, RoomField
+from ...public.serializer_fields import CourseField
 
 __all__ = [
     "LessonDataListSerializer", "LessonDataDetailSerializer"

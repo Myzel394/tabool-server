@@ -4,8 +4,8 @@ from datetime import date
 
 import lorem
 
-from apps.lesson.mixins.tests import RoomTestMixin, SubjectTestMixin
 from apps.lesson.mixins.tests.course import CourseTestMixin
+from apps.school_data.mixins.tests import RoomTestMixin, SubjectTestMixin
 from apps.utils import joinkwargs
 from apps.utils.date import find_next_date_by_weekday
 from ...models import Classtest

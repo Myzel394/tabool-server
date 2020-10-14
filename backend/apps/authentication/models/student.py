@@ -5,10 +5,10 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
+from apps.school_data.public import *
 from .. import constants
 from ..exceptions import CannotChangeUserError, UserNotActivatedError
 from ..public import *
-from ...lesson.public import *
 
 if TYPE_CHECKING:
     from . import User

@@ -1,8 +1,8 @@
 import random
 from abc import ABC
 
+from apps.school_data.models import Subject
 from apps.utils.tests import joinkwargs, UserCreationTestMixin
-from ...models import Subject
 
 __all__ = [
     "SubjectTestMixin"

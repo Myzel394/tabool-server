@@ -1,8 +1,8 @@
-from apps.utils.serializers import WritableAllFieldMixin, WritableFromUserFieldMixin
-from ..models import Course, Lesson, LessonData, Room, Subject, Teacher
+from apps.utils.serializers import WritableFromUserFieldMixin
+from ..models import Course, Lesson, LessonData
 
 __all__ = [
-    "CourseField", "LessonField", "LessonDataField", "RoomField", "SubjectField", "TeacherField"
+    "CourseField", "LessonField", "LessonDataField"
 ]
 
 
@@ -16,15 +16,3 @@ class LessonField(WritableFromUserFieldMixin):
 
 class LessonDataField(WritableFromUserFieldMixin):
     model = LessonData
-
-
-class RoomField(WritableAllFieldMixin):
-    model = Room
-
-
-class SubjectField(WritableAllFieldMixin):
-    model = Subject
-
-
-class TeacherField(WritableAllFieldMixin):
-    model = Teacher

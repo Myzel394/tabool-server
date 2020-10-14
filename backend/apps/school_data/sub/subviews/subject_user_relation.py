@@ -1,6 +1,6 @@
 from apps.utils.viewsets import UserRelationViewSetMixin
-from ....models import Subject
-from ....serializers import UserSubjectRelationSerializer
+from ...models import Subject
+from ...serializers import UserSubjectRelationSerializer
 
 __all__ = [
     "UserSubjectRelationViewSet"

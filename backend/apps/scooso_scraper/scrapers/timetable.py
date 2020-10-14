@@ -3,29 +3,32 @@ from typing import *
 
 from django.conf import settings
 
-from apps.lesson.models import Course, Lesson, LessonData, LessonScoosoData, Modification, Room, Subject, Teacher
+from apps.event.models import Event, Modification
+from apps.event.options import ModificationTypeOptions
+from apps.event.sub.subserializers import EventScoosoScraperSerializer
+from apps.event.sub.subserializers.scooso_scrapers.modification import ModificationScoosoScraperSerializer
+from apps.homework.models import Material
+from apps.homework.public import *
+from apps.homework.sub.subserializers.scooso_scrapers.material import MaterialScoosoScraperSerializer
+from apps.lesson.models import Course, Lesson, LessonData, LessonScoosoData
 from apps.lesson.serializers import (
     CourseScoosoScraperSerializer, LessonDataScoosoScraperSerializer, LessonScoosoScraperSerializer,
-    RoomScoosoScraperSerializer, SubjectScoosoScraperSerializer, TeacherScoosoScraperSerializer,
+)
+from apps.school_data.models import Room, Subject, Teacher
+from apps.school_data.serializers import (
+    RoomScoosoScraperSerializer, SubjectScoosoScraperSerializer,
+    TeacherScoosoScraperSerializer,
 )
 from .material import MaterialRequest
 from .parsers import PureTimetableParser, PureTimetableParserDataType
 from .parsers.material import MaterialType
 from .parsers.timetable import (
-    CourseType, EventType, LessonType, ModificationType, RoomType, SingleEventType,
-    SingleLessonType,
+    CourseType, EventType, LessonType, ModificationType, RoomType, SingleEventType, SingleLessonType,
     SingleModificationType, SubjectType, TeacherType,
 )
 from .request import Request
 from .. import constants
 from ..utils import build_url, import_from_scraper
-from ...event.models import Event
-from ...event.options import ModificationTypeOptions
-from ...event.sub.subserializers import EventScoosoScraperSerializer
-from ...event.sub.subserializers.scooso_scrapers.modification import ModificationScoosoScraperSerializer
-from ...homework.models import Material
-from ...homework.public import *
-from ...homework.sub.subserializers.scooso_scrapers.material import MaterialScoosoScraperSerializer
 
 __all__ = [
     "TimetableRequest"

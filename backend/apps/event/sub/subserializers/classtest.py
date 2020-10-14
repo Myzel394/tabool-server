@@ -1,4 +1,5 @@
-from apps.lesson.public.serializer_fields import CourseField, RoomField
+from apps.lesson.public.serializer_fields import CourseField
+from apps.school_data.public.serializer_fields import RoomField
 from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Classtest
 

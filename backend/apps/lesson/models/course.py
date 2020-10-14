@@ -7,9 +7,10 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import *
 from django_lifecycle import AFTER_SAVE, hook, LifecycleModel
 
+import apps.school_data.public.model_references
+import apps.school_data.public.model_verbose_functions
 from apps.homework.models import Homework
 from .lesson import Lesson
-from ..public import model_references, model_verbose_functions
 from ..querysets import CourseQuerySet
 
 if TYPE_CHECKING:
@@ -36,14 +37,14 @@ class Course(RandomIDMixin, LifecycleModel):
     )  # type: get_user_model()
     
     subject = models.ForeignKey(
-        model_references.SUBJECT,
-        verbose_name=model_verbose_functions.subject_single,
+        apps.school_data.public.model_references.SUBJECT,
+        verbose_name=apps.school_data.public.model_verbose_functions.subject_single,
         on_delete=models.CASCADE,
     )  # type: Subject
     
     teacher = models.ForeignKey(
-        model_references.TEACHER,
-        verbose_name=model_verbose_functions.teacher_single,
+        apps.school_data.public.model_references.TEACHER,
+        verbose_name=apps.school_data.public.model_verbose_functions.teacher_single,
         blank=True,
         null=True,
         on_delete=models.SET_NULL,

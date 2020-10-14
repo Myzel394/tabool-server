@@ -10,7 +10,7 @@ from ...models.user_relations.homework import UserHomeworkRelation
 
 if TYPE_CHECKING:
     from ...models import Homework
-    from apps.lesson.models import Subject
+    from apps.school_data.models import Subject
 
 __all__ = [
     "HomeworkQuerySet"

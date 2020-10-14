@@ -6,11 +6,11 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 
 from apps.event.options import ModificationTypeOptions
 from apps.event.sub.subquerysets.modification import ModificationQuerySet
-from apps.lesson.public import *
+from apps.school_data.public import *
 
 if TYPE_CHECKING:
     from datetime import datetime
-    from apps.lesson.models import Room, Subject, Teacher
+    from apps.school_data.models import Room, Subject, Teacher
 
 __all__ = [
     "Modification"

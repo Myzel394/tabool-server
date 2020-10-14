@@ -4,8 +4,8 @@ from abc import ABC
 import names
 from django.test import TestCase
 
+from apps.school_data.models import Teacher
 from apps.utils.tests import joinkwargs
-from ...models import Teacher
 
 __all__ = [
     "TeacherTestMixin"

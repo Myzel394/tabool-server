@@ -1,8 +1,7 @@
+from apps.school_data.mixins.tests.subject import SubjectTestMixin
+from apps.school_data.mixins.tests.teacher import TeacherTestMixin
 from apps.utils.tests import joinkwargs
-from .teacher import TeacherTestMixin
-from .subject import SubjectTestMixin
 from ...models.course import Course
-
 
 __all__ = [
     "CourseTestMixin"

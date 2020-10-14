@@ -1,17 +1,18 @@
 from rest_framework import serializers
 
-from apps.lesson.models import Room, RoomScoosoData
+from apps.lesson import constants
 from apps.utils.serializers.mixins import ScoosoScraperSerializerMixin
+from ....models import Subject, SubjectScoosoData
 
 __all__ = [
-    "RoomScoosoScraperSerializer"
+    "SubjectScoosoScraperSerializer"
 ]
 
 
-class RoomScoosoScraperSerializer(ScoosoScraperSerializerMixin):
+class SubjectScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     class Meta:
-        model = Room
-        scooso_model = RoomScoosoData
+        model = Subject
+        scooso_model = SubjectScoosoData
     
     code = serializers.CharField()
     
@@ -22,7 +23,11 @@ class RoomScoosoScraperSerializer(ScoosoScraperSerializerMixin):
         }
     
     def rename_data(self, validated_data: dict) -> dict:
+        code = validated_data.pop("code")
+        
         return {
-            "place": validated_data.pop("code"),
+            "short_name": code,
+            "name": constants.SUBJECT_NAMES_MAPPING[code],
+            "color": constants.SUBJECT_COLORS_MAPPING[code],
             **validated_data
         }

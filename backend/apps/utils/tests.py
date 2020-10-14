@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from apps.authentication.models import User
 
 __all__ = [
-    "UserCreationTestMixin", "StartTimeEndTimeTestMixin", "ClientTestMixin", "joinkwargs"
+    "UserCreationTestMixin", "StartTimeEndTimeTestMixin", "ClientTestMixin", "joinkwargs", "DateUtilsTestMixin"
 ]
 
 

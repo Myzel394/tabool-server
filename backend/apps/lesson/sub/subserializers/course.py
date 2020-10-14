@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
+from apps.school_data.public.serializer_fields import SubjectField, TeacherField
 from apps.utils.serializers import RandomIDSerializerMixin
 from ...models import Course
-from ...public.serializer_fields import SubjectField, TeacherField
 
 
 class CourseListSerializer(RandomIDSerializerMixin):

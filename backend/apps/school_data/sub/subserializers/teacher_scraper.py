@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.lesson.models import Teacher
+from ...models import Teacher
 
 __all__ = [
     "TeacherScraperSerializer"

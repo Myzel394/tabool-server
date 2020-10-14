@@ -2,7 +2,7 @@ from abc import ABC
 
 import lorem
 
-from apps.lesson.mixins.tests import RoomTestMixin
+from apps.school_data.mixins.tests import RoomTestMixin
 from apps.utils.tests import DateUtilsTestMixin, joinkwargs, StartTimeEndTimeTestMixin
 from ...models import Event
 

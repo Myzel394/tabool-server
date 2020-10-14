@@ -1,7 +1,7 @@
 from django_common_utils.libraries.utils import field_verbose, model_verbose
 from django_filters import rest_framework as filters
 
-from apps.lesson.models import Room
+from apps.school_data.models import Room
 from ...models import Event, UserEventRelation
 
 __all__ = [

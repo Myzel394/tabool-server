@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.authentication.models.student import Student
-from apps.lesson.public.serializer_fields import TeacherField
+from apps.school_data.public.serializer_fields import TeacherField
 
 __all__ = [
     "StudentSerializer"

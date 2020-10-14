@@ -1,7 +1,8 @@
 from django_common_utils.libraries.utils import model_verbose
 from django_filters import rest_framework as filters
 
-from apps.lesson.models import Course, Subject
+from apps.lesson.models import Course
+from apps.school_data.models import Subject
 from ...models import Classtest
 
 __all__ = [

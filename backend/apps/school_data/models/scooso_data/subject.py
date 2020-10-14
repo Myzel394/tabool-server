@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.lesson.public import *
 from apps.utils import ScoosoDataMixin
+from ...public import *
 
 __all__ = [
     "SubjectScoosoData"

@@ -11,7 +11,7 @@ from constants import maxlength
 from ..public import *
 
 if TYPE_CHECKING:
-    from .lesson_data import LessonData
+    from apps.lesson.models.lesson_data import LessonData
 
 __all__ = [
     "Teacher"

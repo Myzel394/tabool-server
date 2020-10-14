@@ -1,10 +1,10 @@
 from datetime import time
 
-from ..models import Course, Lesson, Room, Subject, Teacher
+from ..models import Course, Lesson
 from ...utils.admin import DefaultAdminInlineMixin
 
 __all__ = [
-    "CourseAdminInline", "LessonAdminInline", "SubjectAdminInline", "RoomAdminInline"
+    "CourseAdminInline", "LessonAdminInline"
 ]
 
 
@@ -48,24 +48,3 @@ class LessonAdminInline(DefaultAdminInlineMixin):
     
     def get_lesson_end_time(self, obj: Lesson) -> time:
         return obj.lesson_data.end_time
-
-
-class SubjectAdminInline(DefaultAdminInlineMixin):
-    model = Subject
-    fieldset_fields = {
-        "default": ["name", "color", "!..."]
-    }
-
-
-class RoomAdminInline(DefaultAdminInlineMixin):
-    model = Room
-    fieldset_fields = {
-        "default": ["place", "!..."]
-    }
-
-
-class TeacherAdminInline(DefaultAdminInlineMixin):
-    model = Teacher
-    fieldset_fields = {
-        "default": ["first_name", "last_name", "short_name", "email"],
-    }

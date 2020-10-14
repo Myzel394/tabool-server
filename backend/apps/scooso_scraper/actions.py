@@ -1,7 +1,7 @@
 from typing import *
 
+from apps.school_data.models import Teacher
 from .other_scrapers.scrape_teachers import scrape_teachers
-from ..lesson.models import Teacher
 
 __all__ = [
     "import_teachers"

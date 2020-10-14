@@ -7,7 +7,7 @@ from pprint import pp
 
 import lorem
 
-from apps.lesson.models import TeacherScoosoData
+from apps.school_data.models import TeacherScoosoData
 from ...actions import import_teachers
 from ...mixins.tests.dummy_data import DummyUser
 from ...scrapers.lesson_content import HomeworkRequest

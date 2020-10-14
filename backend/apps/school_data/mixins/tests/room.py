@@ -3,8 +3,8 @@ from abc import ABC
 
 from django.test import TestCase
 
+from apps.school_data.models import Room
 from apps.utils.tests import joinkwargs
-from ...models import Room
 
 __all__ = [
     "RoomTestMixin"

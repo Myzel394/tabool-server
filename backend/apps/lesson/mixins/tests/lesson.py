@@ -4,11 +4,11 @@ from typing import *
 
 from dateutil.rrule import MINUTELY, rrule
 
+from apps.school_data.mixins.tests.room import RoomTestMixin
 from apps.utils.tests import joinkwargs, StartTimeEndTimeTestMixin
 from apps.utils.time import dummy_datetime_from_target
 from constants.weekdays import ALLOWED_WEEKDAYS
 from .course import CourseTestMixin
-from .room import RoomTestMixin
 from ...models import Lesson, LessonData
 
 __all__ = [
@@ -57,7 +57,7 @@ class LessonTestMixin(
     ) -> List[LessonData]:
         start_time = start_time or time(hour=7, minute=55)
         end_time = end_time or (
-                    dummy_datetime_from_target(time(hour=13, minute=10)) - timedelta(minutes=duration)).time()
+                dummy_datetime_from_target(time(hour=13, minute=10)) - timedelta(minutes=duration)).time()
         
         lessons = []
         

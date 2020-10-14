@@ -1,7 +1,8 @@
 from django_common_utils.libraries.utils import field_verbose, model_verbose
 from django_filters import rest_framework as filters
 
-from apps.lesson.models import Lesson, Subject
+from apps.lesson.models import Lesson
+from apps.school_data.models import Subject
 from ...models import Homework, UserHomeworkRelation
 
 __all__ = [
@@ -35,7 +36,7 @@ class HomeworkFilterSet(filters.FilterSet):
         field_name="userhomeworkrelation__completed",
         label=field_verbose(UserHomeworkRelation, "completed")
     )
-
+    
     ignore = filters.BooleanFilter(
         field_name="userhomeworkrelation__ignore",
         label=field_verbose(UserHomeworkRelation, "ignore")

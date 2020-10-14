@@ -9,7 +9,7 @@ from apps.utils.fields import ColorField
 from ...public import *
 
 if TYPE_CHECKING:
-    from .. import Subject
+    from apps.school_data.models import Subject
 
 __all__ = [
     "UserSubjectRelation"

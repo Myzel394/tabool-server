@@ -1,4 +1,4 @@
-from apps.lesson.public.serializer_fields import RoomField
+from apps.school_data.public.serializer_fields import RoomField
 from apps.utils.serializers import RandomIDSerializerMixin, UserRelationField
 from .user_relations import UserEventRelationSerializer
 from ...models import Event

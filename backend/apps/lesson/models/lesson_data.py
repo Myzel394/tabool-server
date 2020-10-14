@@ -4,6 +4,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 
+import apps.school_data.public.model_references
+import apps.school_data.public.model_verbose_functions
 from apps.utils.fields.weekday import WeekdayField
 from apps.utils.time import dummy_datetime_from_target
 from constants import weekdays
@@ -29,11 +31,11 @@ class LessonData(RandomIDMixin):
     objects = LessonDataQuerySet.as_manager()
     
     room = models.ForeignKey(
-        model_references.ROOM,
+        apps.school_data.public.model_references.ROOM,
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        verbose_name=model_verbose_functions.room_single,
+        verbose_name=apps.school_data.public.model_verbose_functions.room_single,
     )  # type: Room
     
     course = models.ForeignKey(

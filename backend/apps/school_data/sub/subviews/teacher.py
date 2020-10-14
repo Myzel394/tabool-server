@@ -1,10 +1,10 @@
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 
-from apps.utils.viewsets.mixins import RetrieveAllMixin
-from ...subpaginations import LargeSetPagination
-from ....models import Teacher
-from ....serializers import TeacherDetailSerializer, TeacherListSerializer
+from apps.utils.viewsets import RetrieveAllMixin
+from ...models import Teacher
+from ...paginations import LargeSetPagination
+from ...serializers import TeacherDetailSerializer, TeacherListSerializer
 
 __all__ = [
     "TeacherViewSet"

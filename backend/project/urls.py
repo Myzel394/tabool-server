@@ -12,10 +12,9 @@ from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventVi
 from apps.homework.views import (
     HomeworkViewSet, MaterialDownloadView, MaterialViewSet, SubmissionViewSet, UserHomeworkRelationViewSet,
 )
-from apps.lesson.views import (
-    CourseViewSet, RoomViewSet, SubjectViewSet, TeacherViewSet, UserLessonRelationViewSet, UserSubjectRelationViewSet,
-)
+from apps.lesson.views import CourseViewSet, UserLessonRelationViewSet
 from apps.news.views import NewsViewSet
+from apps.school_data.views import RoomViewSet, SubjectViewSet, TeacherViewSet, UserSubjectRelationViewSet
 from apps.timetable.views import TimetableViewSet
 
 router = DefaultRouter()
@@ -33,7 +32,6 @@ router.register("user-payment", UserPaymentViewSet, basename="PaidUser")
 router.register("material", MaterialViewSet, basename="Material")
 router.register("submission", SubmissionViewSet, basename="Submission")
 
-# TODO: Add user uploads & downloads
 router.register("user-relation/lesson", UserLessonRelationViewSet, basename="UserLessonRelation")
 router.register("user-relation/homework", UserHomeworkRelationViewSet, basename="UserHomeworkRelation")
 router.register("user-relation/event", EventUserRelationViewSet, basename="EventUserRelation")

@@ -1,6 +1,6 @@
-from apps.lesson.models import Modification
-from apps.lesson.public.serializer_fields import RoomField, SubjectField, TeacherField
+from apps.school_data.public.serializer_fields import RoomField, SubjectField, TeacherField
 from apps.utils.serializers import RandomIDSerializerMixin
+from ...models import Modification
 
 __all__ = [
     "ModificationListSerializer", "ModificationDetailSerializer"

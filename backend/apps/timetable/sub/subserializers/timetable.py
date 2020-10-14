@@ -1,5 +1,6 @@
 from apps.lesson.models import LessonData
-from apps.lesson.public.serializer_fields import CourseField, RoomField
+from apps.lesson.public.serializer_fields import CourseField
+from apps.school_data.public.serializer_fields import RoomField
 from apps.timetable.models import Timetable
 from apps.utils.serializers import RandomIDSerializerMixin
 

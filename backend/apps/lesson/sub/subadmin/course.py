@@ -2,8 +2,8 @@ from django.contrib import admin
 from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 
 from apps.authentication.public.admin_inlines import UserAdminInline
+from apps.school_data.public.admin_inlines import SubjectAdminInline
 from ...models import Course
-from ...public.admin_inlines import SubjectAdminInline
 
 
 @admin.register(Course)

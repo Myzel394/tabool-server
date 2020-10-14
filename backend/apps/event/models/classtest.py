@@ -12,11 +12,13 @@ from apps.history_extras.extras.user_information import UserInformationHistorica
 from apps.utils.validators import validate_weekday_in_lesson_data_available
 from ..querysets import ClasstestQuerySet
 from ...lesson.public import *
+from ...school_data.public.model_references import ROOM
+from ...school_data.public.model_verbose_functions import room_single
 from ...utils import format_datetime
 
 if TYPE_CHECKING:
     from datetime import date, datetime
-    from apps.lesson.models import Room, Course
+    from apps.school_data.models import Room, Course
 
 __all__ = [
     "Classtest"

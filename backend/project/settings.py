@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "apps.relation_managers.apps.RelationManagersConfig",
     
     "apps.authentication",
+    "apps.school_data",
     "apps.lesson",
     "apps.event",
     "apps.homework",

@@ -8,14 +8,15 @@ from django_common_utils.libraries.models.mixins import CreationDateMixin, Rando
 from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
-from apps.lesson.public import *
 from apps.utils.validators import validate_weekday_in_lesson_data_available
 from constants import maxlength
 from ..sub.subquerysets import EventQuerySet
+from ...school_data.public.model_references import ROOM
+from ...school_data.public.model_verbose_functions import room_single
 
 if TYPE_CHECKING:
     from datetime import datetime, time, timedelta
-    from apps.lesson.models import Room
+    from apps.school_data.models import Room
     from . import UserEventRelation
 
 __all__ = [

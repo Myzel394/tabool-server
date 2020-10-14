@@ -12,7 +12,7 @@ from constants import maxlength
 from ..querysets import SubjectQuerySet
 
 if TYPE_CHECKING:
-    from ..models import Lesson
+    from apps.lesson.models import Lesson
 
 __all__ = [
     "Subject"
@@ -42,6 +42,7 @@ class Subject(RandomIDMixin, ColorMixin, HandlerMixin):
     
     @property
     def lessons_data(self) -> QueryType["Lesson"]:
+        # noinspection PyUnresolvedReferences
         return self.lessondata_set.all()
     
     @staticmethod
