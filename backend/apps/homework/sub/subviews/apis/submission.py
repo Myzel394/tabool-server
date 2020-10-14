@@ -8,7 +8,6 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 
-from apps.utils.threads import run_in_thread
 from ....filters import SubmissionFilterSet
 from ....models import Submission
 from ....serializers import SubmissionDetailSerializer, SubmissionListSerializer
@@ -37,6 +36,7 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         PENDING = "PENDING"
         UPLOADED = "UPLOADED"
         RESTING = "RESTING"
+        FAILED = "FAILED"
         
         submission = self.get_object()
         
@@ -51,9 +51,14 @@ class SubmissionViewSet(viewsets.ModelViewSet):
             }, status=status.HTTP_202_ACCEPTED)
         
         if request.method == "POST":
-            run_in_thread(submission.upload_file)
+            try:
+                submission.upload_file()
+            except:
+                return Response({
+                    "upload_status": FAILED
+                }, status=status.HTTP_202_ACCEPTED)
             return Response({
-                "upload_status": PENDING
+                "upload_status": UPLOADED
             }, status=status.HTTP_200_OK)
         elif request.method == "GET":
             return Response({

@@ -1,3 +1,5 @@
+from pprint import pp
+
 import lorem
 
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
@@ -196,6 +198,13 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
                 response.data["results"]
             )
             self.assertNotIn(private_homework, homeworks)
+    
+    def test_homework_relation(self):
+        homework = self.Create_homework()
+        
+        response = self.client.get(f"/api/homework/{homework.id}/")
+        data = response.data
+        pp(data)
 
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):

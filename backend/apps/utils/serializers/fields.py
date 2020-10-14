@@ -8,7 +8,7 @@ from rest_framework import serializers
 
 __all__ = [
     "RetrieveObjectByIDSerializerField", "WritableSerializerMethodField", "WritableIDField",
-    "WritableFromUserFieldMixin", "WritableAllFieldMixin"
+    "WritableFromUserFieldMixin", "WritableAllFieldMixin", "UserRelationField"
 ]
 
 from rest_framework.fields import empty
@@ -122,3 +122,16 @@ class WritableAllFieldMixin(WritableIDField, ABC):
         return cls.model.objects.only(cls.lookup_field).get(**{
             cls.lookup_field: key
         })
+
+
+class UserRelationField(serializers.SerializerMethodField):
+    def __init__(self, serializer: Type[serializers.Serializer], *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self.serializer = serializer
+    
+    def to_representation(self, value):
+        user = self.context["request"].user
+        relation = value.user_relations.get(user=user)
+        
+        return self.serializer(relation).data

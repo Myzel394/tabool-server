@@ -1,11 +1,10 @@
 import random
 import string
-from pathlib import Path
 
 import lorem
-from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 
-from apps.homework.models import build_material_upload_to, Material
+from apps.homework.models import Material
 from apps.lesson.mixins.tests import LessonTestMixin
 from apps.utils import joinkwargs
 
@@ -25,15 +24,14 @@ class MaterialTestMixin(LessonTestMixin):
                 {
                     "lesson": cls.Create_lesson,
                     "name": lambda: filename,
+                    "file": lambda: SimpleUploadedFile(
+                        filename,
+                        (lorem.paragraph() * 3).encode(),
+                        "text/plain"
+                    )
                 },
                 kwargs
             )
         )
-        path = Path(build_material_upload_to(material, filename))
-        path.parent.mkdir(exist_ok=True, parents=True)
-        path.touch(exist_ok=True)
-        path.write_bytes((lorem.paragraph() * 3).encode())
-        material.file = str(path.relative_to(settings.MEDIA_ROOT))
-        material.save()
         
         return material

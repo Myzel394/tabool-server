@@ -28,12 +28,12 @@ class TestNotPrivileged(ClientTestMixin, UserPaymentTestMixin):
         
         # Not owner
         response = self.client.get(
-            f"/api/user-payment/{self.not_pay_user.scooso_id}/"
+            f"/api/user-payment/{self.not_pay_user.id}/"
         )
         self.assertEqual(response.status_code, 404)
         
         # Owner
         response = self.client.get(
-            f"/api/user-payment/{self.logged_user.payments[0].scooso_id}/"
+            f"/api/user-payment/{self.logged_user.payments[0].id}/"
         )
         self.assertStatusOk(response.status_code)

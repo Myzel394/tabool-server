@@ -34,6 +34,14 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
             <html>
                 <body>
                     <h1>Hello</h1>
+                    <h1>Hello</h1>
+                    <h1>Hello</h1>
+                    <h1>Hello</h1>
+                    <h1>Hello</h1>
+                    <h1>Hello</h1>
+                    <h1>Hello</h1>
+                    <h1>Hello</h1>
+                    <h1>Hello</h1>
                 </body>
             </html>
         """.encode()
@@ -130,7 +138,7 @@ class ApiTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
             f"/api/submission/{submission.id}/upload/"
         )
         self.assertStatusOk(response.status_code)
-        self.assertEqual(response.data["upload_status"], "PENDING")
+        self.assertEqual(response.data["upload_status"], "UPLOADED")
     
     def test_upload_api_second(self):
         submission = self.Create_submission(

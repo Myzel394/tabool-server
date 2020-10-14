@@ -31,7 +31,6 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         on_delete=models.CASCADE,
     )  # type: Lesson
     
-    # TODO: Add secure file detection!
     file = SafeFileField(
         verbose_name=_("Datei"),
         blank=True,
@@ -62,3 +61,7 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     @property
     def folder_name(self) -> str:
         return self.lesson.lesson_data.course.name
+    
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)

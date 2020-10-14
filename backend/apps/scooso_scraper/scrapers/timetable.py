@@ -1,6 +1,7 @@
 from datetime import date, timedelta
-from pathlib import Path
 from typing import *
+
+from django.conf import settings
 
 from apps.lesson.models import Course, Lesson, LessonData, LessonScoosoData, Modification, Room, Subject, Teacher
 from apps.lesson.serializers import (
@@ -158,7 +159,7 @@ class TimetableRequest(Request):
             
             path = scraper.download_material(
                 material['scooso_id'],
-                Path(build_material_upload_to(material_instance, material['filename']))
+                settings.MEDIA_ROOT / build_material_upload_to(material_instance, material['filename'])
             )
             
             material_instance.file = str(path)

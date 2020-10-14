@@ -31,7 +31,7 @@ class ModelTest(ClasstestTestMixin, ClientTestMixin):
             response = self.client.post("/api/classtest/", {
                 "information": "Bebi",
                 "targeted_date": find_next_date_by_weekday(date.today() + timedelta(days=5), 1),
-                "course": course.scooso_id,
+                "course": course.id,
             }, content_type="application/json")
         
         self.assertStatusOk(response.status_code)

@@ -1,4 +1,4 @@
-from apps.utils.serializers import RandomIDSerializerMixin
+from apps.utils.serializers import RandomIDSerializerMixin, UserRelationField
 from .user_relations import UserSubjectRelationSerializer
 from ...models import Subject
 
@@ -17,4 +17,4 @@ class SubjectDetailSerializer(RandomIDSerializerMixin):
             "id", "user_relation"
         ]
     
-    user_relation = UserSubjectRelationSerializer(read_only=True)
+    user_relation = UserRelationField(UserSubjectRelationSerializer)

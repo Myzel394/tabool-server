@@ -10,8 +10,10 @@ import lorem
 from apps.lesson.models import TeacherScoosoData
 from ...actions import import_teachers
 from ...mixins.tests.dummy_data import DummyUser
-from ...scrapers import HomeworkRequest, MaterialRequest, MaterialTypeOptions, TimetableRequest
+from ...scrapers.lesson_content import HomeworkRequest
+from ...scrapers.material import MaterialRequest, MaterialTypeOptions
 from ...scrapers.parsers import PureTimetableParser
+from ...scrapers.timetable import TimetableRequest
 
 
 class ParserTest(DummyUser):
@@ -192,6 +194,7 @@ class ForeignSerializerTest(DummyUser):
         # Check
         random_material = random.choice(materials)
         path = Path(random_material.file.path)
+        print(path)
         self.assertTrue(path.exists())
         
         random_material.delete()

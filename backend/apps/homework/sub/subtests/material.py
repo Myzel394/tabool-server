@@ -8,14 +8,30 @@ from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from apps.utils import ClientTestMixin
-from ... import constants
+from constants import upload_sizes
 from ...mixins.tests import MaterialTestMixin
 from ...utils import get_file_dates, set_file_dates
 
 
 class MaterialTest(MaterialTestMixin, ClientTestMixin):
     def test_size(self):
+        ok_data = "".join(random.choices(
+            string.ascii_letters,
+            k=random.randint(
+                int(upload_sizes.MIN_UPLOAD_SIZE * 1.1),
+                int(upload_sizes.MAX_UPLOAD_SIZE * .9)
+            )
+        ))
+        print("Testing ok data")
+        self.Create_material(
+            file=SimpleUploadedFile(
+                "file.txt",
+                ok_data.encode(),
+            )
+        )
+        
         with self.assertRaises(ValidationError):
+            print("Testing too small data")
             self.Create_material(
                 file=SimpleUploadedFile(
                     "file.txt",
@@ -26,27 +42,16 @@ class MaterialTest(MaterialTestMixin, ClientTestMixin):
         with self.assertRaises(ValidationError):
             big_data = "".join(random.choices(
                 string.ascii_letters,
-                k=int(constants.MAX_UPLOAD_SIZE * 1.1)
+                k=int(upload_sizes.MAX_UPLOAD_SIZE * 1.1)
             ))
             
+            print("Testing too big data")
             self.Create_material(
                 file=SimpleUploadedFile(
                     "file.txt",
                     big_data.encode()
                 )
             )
-        
-        small_data = "".join(random.choices(
-            string.ascii_letters,
-            k=int(constants.MAX_UPLOAD_SIZE * .1)
-        ))
-        
-        self.Create_material(
-            file=SimpleUploadedFile(
-                "file.txt",
-                small_data.encode()
-            )
-        )
     
     def test_utils(self):
         path = Path.cwd().joinpath("test.txt")

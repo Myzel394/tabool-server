@@ -5,51 +5,63 @@ from pathlib import Path
 from typing import *
 
 from django.core.exceptions import ValidationError
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
+from django.db.models.fields.files import FieldFile
 from django.utils.translation import gettext_lazy as _
 from secure_file_detection import detector
 from secure_file_detection.constants import SUPPORTED_MIMETYPES
 from secure_file_detection.exceptions import *
+
+from constants import upload_sizes
 
 __all__ = [
     "SafeFileField"
 ]
 
 
-class MimetypeValidator:
+class SafeFileValidator:
+    TOO_SMALL_ERROR_MESSAGE = _(
+        "Aus Sicherheitsgründen können keine Dateien hochgeladen werden, die kleiner als {min_size_bytes} bytes groß "
+        "sind."
+    )
+    TOO_BIG_ERROR_MESSAGE = _(
+        "Es können keine Dateien hochgeladen werden, die größer als {max_siz_mib} MiB groß sind."
+    )
+    MANIPULATED_FILE_ERROR_MESSAGE = _(
+        "Die Datei scheint manipuliert zu sein. Sie kann daher zur Sicherheit nicht gespeichert werden."
+    )
     NOT_SUPPORTED_ERROR_MESSAGE = _(
         "Dieses Dateiformat wird aus Sicherheitsgründen nicht unterstützt. Du musst die Datei selber auf Scooso "
         "hochladen."
     )
-    MANIPULATED_FILE_ERROR_MESSAGE = _(
-        "Diese Datei scheint manipuliert zu sein. Wenn du kein Hacker bist, solltest du die Datei am besten löschen."
-    )
     
-    def __init__(self, mimetypes):
+    def __init__(
+            self,
+            mimetypes: Iterable[str],
+            min_size: int = upload_sizes.MIN_UPLOAD_SIZE,
+            max_size: int = upload_sizes.MAX_UPLOAD_SIZE
+    ):
         self.mimetypes = mimetypes
+        self.min_size = min_size
+        self.max_size = max_size
     
-    def __call__(self, file: InMemoryUploadedFile):
-        with self.create_temp_path(file.name) as path:
-            data = file.read()
-            path.write_bytes(data)
-            
+    def __call__(self, file: FieldFile):
+        size = file.size
+        
+        if size < self.min_size:
+            raise ValidationError(self.TOO_SMALL_ERROR_MESSAGE.format(
+                min_size_bytes=self.min_size
+            ))
+        elif size > self.max_size:
+            raise ValidationError(self.TOO_BIG_ERROR_MESSAGE.format(
+                max_siz_mib=int(self.max_size / 1000 / 1000)
+            ))
+        
+        with self.create_temp_path(file.name, file.open("rb").read()) as path:
             mime_type = self.get_mimetype(path)
             new_path = self.rename_file(path, mime_type)
         
         return new_path
-    
-    @staticmethod
-    @contextmanager
-    def create_temp_path(suffix: str = "") -> ContextManager[Path]:
-        temp_path = Path(f"/tmp/tabool/safe_file_temp_{datetime.now().strftime('%Y%m%D.%H:%M:%S')}{suffix}")
-        temp_path.parent.mkdir(exist_ok=True, parents=True)
-        temp_path.touch(exist_ok=True)
-        
-        try:
-            yield temp_path
-        finally:
-            temp_path.unlink(missing_ok=True)
     
     @classmethod
     def get_mimetype(cls, path: Path) -> str:
@@ -71,11 +83,32 @@ class MimetypeValidator:
         
         path.rename(path.with_suffix(extension))
         return path
+    
+    @staticmethod
+    @contextmanager
+    def create_temp_path(name: str, data: bytes) -> ContextManager[Path]:
+        temp_path = Path(f"/tmp/tabool/safe_file_temp_{datetime.now().strftime('%Y%m%D.%H:%M:%S')}{name}")
+        temp_path.parent.mkdir(exist_ok=True, parents=True)
+        temp_path.touch(exist_ok=True)
+        
+        temp_path.write_bytes(data)
+        
+        try:
+            yield temp_path
+        finally:
+            temp_path.unlink(missing_ok=True)
 
 
 class SafeFileField(models.FileField):
-    def __init__(self, valid_mimetypes: Optional[Iterable[str]] = None, *args, **kwargs):
+    def __init__(
+            self,
+            valid_mimetypes: Optional[Iterable[str]] = None,
+            min_size: int = upload_sizes.MIN_UPLOAD_SIZE,
+            max_size: int = upload_sizes.MAX_UPLOAD_SIZE,
+            *args,
+            **kwargs
+    ):
         super().__init__(*args, **kwargs)
         
         valid_mimetypes = valid_mimetypes or SUPPORTED_MIMETYPES
-        self.validators.append(MimetypeValidator(valid_mimetypes))
+        self.validators.append(SafeFileValidator(valid_mimetypes, min_size, max_size))

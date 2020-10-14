@@ -8,7 +8,7 @@ __all__ = [
 
 def run_in_thread(
         target: Callable,
-        daemonic: bool = True,
+        daemonic: bool = False,
         args: Optional[list] = None,
         kwargs: Optional[dict] = None,
 ) -> Thread:

@@ -1,4 +1,4 @@
-from apps.utils.serializers import RandomIDSerializerMixin
+from apps.utils.serializers import RandomIDSerializerMixin, UserRelationField
 from .user_relations import UserLessonRelationSerializer
 from ...models import Lesson
 from ...public.serializer_fields import LessonDataField
@@ -28,6 +28,6 @@ class LessonDetailSerializer(RandomIDSerializerMixin):
             "lesson_data", "date", "id", "user_relation"
         ]
     
-    user_relation = UserLessonRelationSerializer(read_only=True)
+    user_relation = UserRelationField(UserLessonRelationSerializer)
     
     lesson_data = LessonDataField()

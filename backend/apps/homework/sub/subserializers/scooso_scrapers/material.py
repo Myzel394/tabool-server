@@ -18,6 +18,8 @@ class MaterialScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     
     scooso_id = serializers.IntegerField(min_value=0)
     owner_id = serializers.IntegerField(min_value=0)
+    created_at = serializers.DateTimeField()
+    filename = serializers.CharField()
     
     def pop_scooso_data(self, validated_data: dict) -> dict:
         return {

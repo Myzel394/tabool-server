@@ -1,5 +1,5 @@
 from apps.lesson.public.serializer_fields import RoomField
-from apps.utils.serializers import RandomIDSerializerMixin
+from apps.utils.serializers import RandomIDSerializerMixin, UserRelationField
 from .user_relations import UserEventRelationSerializer
 from ...models import Event
 
@@ -26,6 +26,6 @@ class EventDetailSerializer(RandomIDSerializerMixin):
             "user_relation", "id"
         ]
     
-    user_relation = UserEventRelationSerializer(read_only=True)
+    user_relation = UserRelationField(UserEventRelationSerializer)
     
     room = RoomField(required=False)
