@@ -13,6 +13,8 @@ __all__ = [
     "APITest", "QuerySetTest"
 ]
 
+from project.urls import API_VERSION
+
 
 class APITest(HomeworkTestMixin, ClientTestMixin):
     def setUp(self) -> None:
@@ -22,7 +24,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
     def test_receive(self):
         homework = self.Create_homework()
         
-        response = self.client.get("/api/homework/")
+        response = self.client.get(f"/api/{API_VERSION}/data/homework/")
         
         self.assertStatusOk(response.status_code)
         
@@ -39,7 +41,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         homework.delete()
         
         response = self.client.post(
-            "/api/homework/",
+            f"/api/{API_VERSION}/data/homework/",
             HomeworkDetailSerializerTest(homework).data,
             content_type="application/json"
         )
@@ -53,7 +55,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         new_information = lorem.sentence()
         
         response = self.client.patch(
-            f"/api/homework/{homework.id}/",
+            f"/api/{API_VERSION}/data/homework/{homework.id}/",
             {
                 "information": new_information
             },
@@ -71,7 +73,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             lesson=lesson
         )
         
-        response = self.client.get("/api/homework/", {
+        response = self.client.get(f"/api/{API_VERSION}/data/homework/", {
             "lesson": lesson.scooso_id
         }, content_type="application/json")
         
@@ -97,7 +99,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         relation.completed = True
         relation.save()
         
-        response = self.client.get("/api/homework/", {
+        response = self.client.get(f"/api/{API_VERSION}/data/homework/", {
             "completed": False
         }, content_type="application/json")
         expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=False).distinct()
@@ -108,7 +110,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             HomeworkListSerializer(expected, many=True).data
         )
         
-        response = self.client.get("/api/homework/", {
+        response = self.client.get(f"/api/{API_VERSION}/data/homework/", {
             "completed": True
         }, content_type="application/json")
         expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=True).distinct()
@@ -147,7 +149,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         homework.delete()
         
         self.client.post(
-            "/api/homework/",
+            f"/api/{API_VERSION}/data/homework/",
             HomeworkDetailSerializerTest(homework).data,
             content_type="application/json"
         )
@@ -166,7 +168,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         self.client.logout()
         with self.Login_user_as_context(first_user):
             self.client.post(
-                "/api/homework/",
+                f"/api/{API_VERSION}/data/homework/",
                 HomeworkDetailSerializerTest(private_homework).data,
                 content_type="application/json"
             )
@@ -177,7 +179,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         # Should return public + private
         with self.Login_user_as_context(first_user):
-            response = self.client.get("/api/homework/")
+            response = self.client.get(f"/api/{API_VERSION}/data/homework/")
             homeworks = Homework.objects.from_user(first_user).distinct()
             
             self.assertStatusOk(response.status_code)
@@ -189,7 +191,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         # Should return only public
         with self.Login_user_as_context(second_user):
-            response = self.client.get("/api/homework/")
+            response = self.client.get(f"/api/{API_VERSION}/data/homework/")
             homeworks = Homework.objects.from_user(second_user).distinct()
             
             self.assertStatusOk(response.status_code)
@@ -202,7 +204,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
     def test_homework_relation(self):
         homework = self.Create_homework()
         
-        response = self.client.get(f"/api/homework/{homework.id}/")
+        response = self.client.get(f"/api/{API_VERSION}/data/homework/{homework.id}/")
         data = response.data
         pp(data)
 

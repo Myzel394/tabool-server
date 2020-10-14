@@ -6,6 +6,7 @@ from apps.lesson.models import Lesson
 from apps.lesson.serializers import LessonListSerializer
 from apps.timetable.models import Timetable
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
+from project.urls import API_VERSION
 from ..subserializers import TimetableDetailSerializer
 from ...mixins.tests.timetable import TimetableTestMixin
 
@@ -34,7 +35,7 @@ class APITest(TimetableTestMixin, ClientTestMixin):
         
         expected_data = TimetableDetailSerializer(timetable).data
         response = self.client.get(
-            f"/api/timetable/{timetable.id}/"
+            f"/api/{API_VERSION}/data/timetable/{timetable.id}/"
         )
         actual_data = response.data
         
@@ -46,7 +47,7 @@ class APITest(TimetableTestMixin, ClientTestMixin):
         self.Login_user()
         
         response = self.client.get(
-            "/api/timetable/"
+            f"/api/{API_VERSION}/data/timetable/"
         )
         self.assertEqual(response.status_code, 200)
         
@@ -56,7 +57,7 @@ class APITest(TimetableTestMixin, ClientTestMixin):
         timetable = self.Create_timetable()
         
         response = self.client.get(
-            f"/api/timetable/{timetable.id}/lessons/",
+            f"/api/{API_VERSION}/data/timetable/{timetable.id}/lessons/",
             {
                 "start_date": date.today(),
                 "end_date": date.today() + timedelta(days=3)

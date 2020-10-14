@@ -7,6 +7,7 @@ from django.core import mail
 
 from apps.authentication.models import AccessToken
 from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
+from project.urls import API_VERSION
 from ... import constants
 
 __all__ = [
@@ -64,7 +65,11 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
             "scooso_password": self.Get_random_password(),
         }
         # Simple creation check
-        response = self.client.post("/api/auth/registration/", default_data, content_type="application/json")
+        response = self.client.post(
+            f"/api/{API_VERSION}/auth/registration/",
+            default_data,
+            content_type="application/json"
+        )
         self.assertStatusOk(response.status_code)
         
         invalid_data = [
@@ -80,7 +85,11 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
             use_data = default_data.copy()
             use_data.update(invalid)
             
-            response = self.client.post("/api/auth/registration/", use_data, content_type="application/json")
+            response = self.client.post(
+                f"/api/{API_VERSION}/auth/registration/",
+                use_data,
+                content_type="application/json"
+            )
             self.assertStatusNotOk(response.status_code)
     
     def test_invalid_creation(self):
@@ -97,7 +106,11 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
             use_data = default_data.copy()
             use_data.update(invalid)
             
-            response = self.client.post("/api/auth/registration/", use_data, content_type="application/json")
+            response = self.client.post(
+                f"/api/{API_VERSION}/auth/registration/",
+                use_data,
+                content_type="application/json"
+            )
             self.assertStatusNotOk(response.status_code)
     
     def test_creation(self):
@@ -107,7 +120,7 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
         password = self.Get_random_password()
         email = f"{first_name}.{last_name}@gmail.com"
         
-        response = self.client.post("/api/auth/registration/", {
+        response = self.client.post(f"/api/{API_VERSION}/auth/registration/", {
             "email": email,
             "password": password,
             "scooso_username": first_name,
@@ -126,14 +139,14 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
         
         self.Login_user(user, password)
         
-        response = self.client.post("/api/auth/change-password/", {
+        response = self.client.post(f"/api/{API_VERSION}/auth/change-password/", {
             "old_password": password,
             "new_password": "".join(random.choices(string.ascii_letters + string.digits, k=20)),
             "user": user.id
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
         
-        response = self.client.post("/api/auth/change-password/", {
+        response = self.client.post(f"/api/{API_VERSION}/auth/change-password/", {
             "old_password": password + "abc",
             "new_password": password,
             "user": user.id
@@ -150,7 +163,7 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
         
         with self.Login_user_as_context(user, user.first_name) as _:
             response = self.client.post(
-                f"/api/email/confirmation/",
+                f"/api/{API_VERSION}/auth/confirmation/",
                 {
                     "confirmation_key": "a"
                 },
@@ -163,7 +176,7 @@ class ModelTest(UserCreationTestMixin, ClientTestMixin):
             print(user.confirmation_key)
             
             response = self.client.post(
-                f"/api/email/confirmation/",
+                f"/api/{API_VERSION}/auth/confirmation/",
                 {
                     "confirmation_key": user.confirmation_key
                 },

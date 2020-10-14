@@ -17,6 +17,8 @@ from apps.news.views import NewsViewSet
 from apps.school_data.views import RoomViewSet, SubjectViewSet, TeacherViewSet, UserSubjectRelationViewSet
 from apps.timetable.views import TimetableViewSet
 
+API_VERSION = "1.0"
+
 router = DefaultRouter()
 router.register("timetable", TimetableViewSet, basename="Timetable")
 router.register("homework", HomeworkViewSet, basename="Homework")
@@ -32,25 +34,28 @@ router.register("user-payment", UserPaymentViewSet, basename="PaidUser")
 router.register("material", MaterialViewSet, basename="Material")
 router.register("submission", SubmissionViewSet, basename="Submission")
 
-router.register("user-relation/lesson", UserLessonRelationViewSet, basename="UserLessonRelation")
-router.register("user-relation/homework", UserHomeworkRelationViewSet, basename="UserHomeworkRelation")
-router.register("user-relation/event", EventUserRelationViewSet, basename="EventUserRelation")
-router.register("user-relation/subject", UserSubjectRelationViewSet, basename="UserSubjectRelation")
+user_relation_router = DefaultRouter()
+
+user_relation_router.register("lesson", UserLessonRelationViewSet, basename="UserLessonRelation")
+user_relation_router.register("homework", UserHomeworkRelationViewSet, basename="UserHomeworkRelation")
+user_relation_router.register("event", EventUserRelationViewSet, basename="EventUserRelation")
+user_relation_router.register("subject", UserSubjectRelationViewSet, basename="UserSubjectRelation")
 
 urlpatterns = [
                   # Static access
                   path("private-media/", MaterialDownloadView.as_view()),
                   path("private-media/", include(private_storage.urls)),
     
-                  path("api/", include(router.urls)),
-                  path("api/", include("rest_framework.urls")),
+                  path(f"api/{API_VERSION}/user-relation/", include(user_relation_router.urls)),
+                  path(f"api/{API_VERSION}/data/", include(router.urls)),
+                  path(f"api/{API_VERSION}/data/", include("rest_framework.urls")),
     
-                  path("api/auth/change-password/", PasswordChangeView.as_view()),
-                  path("api/auth/registration/", RegisterView.as_view()),
-                  path("api/auth/student/", StudentView.as_view()),
-                  path("api/auth/login/", LoginView.as_view()),
-                  path("api/auth/logout/", LogoutView.as_view()),
-                  path("api/email/confirmation/", email_confirmation),
+                  path(f"api/{API_VERSION}/auth/change-password/", PasswordChangeView.as_view()),
+                  path(f"api/{API_VERSION}/auth/registration/", RegisterView.as_view()),
+                  path(f"api/{API_VERSION}/auth/student/", StudentView.as_view()),
+                  path(f"api/{API_VERSION}/auth/login/", LoginView.as_view()),
+                  path(f"api/{API_VERSION}/auth/logout/", LogoutView.as_view()),
+                  path(f"api/{API_VERSION}/auth/confirmation/", email_confirmation),
     
                   path("", include("apps.main.urls")),
                   path("admin/", admin.site.urls),

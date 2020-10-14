@@ -1,5 +1,6 @@
 from apps.event.mixins.tests.event import EventTestMixin
 from apps.utils import ClientTestMixin, UserCreationTestMixin
+from project.urls import API_VERSION
 
 
 class UserRelationTest(UserCreationTestMixin, EventTestMixin, ClientTestMixin):
@@ -11,6 +12,6 @@ class UserRelationTest(UserCreationTestMixin, EventTestMixin, ClientTestMixin):
     
     def test_get(self):
         response = self.client.get(
-            f"/api/event/{self.event.id}/"
+            f"/api/{API_VERSION}/data/event/{self.event.id}/"
         )
         self.assertStatusOk(response.status_code)

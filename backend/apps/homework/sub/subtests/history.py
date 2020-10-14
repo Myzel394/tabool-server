@@ -1,5 +1,6 @@
 from apps.homework.mixins.tests.homework import HomeworkTestMixin
 from apps.utils import ClientTestMixin
+from project.urls import API_VERSION
 
 
 class HistoryTest(HomeworkTestMixin, ClientTestMixin):
@@ -7,7 +8,7 @@ class HistoryTest(HomeworkTestMixin, ClientTestMixin):
         with self.Login_user_as_context() as _:
             self.homework = self.Create_homework()
             response = self.client.patch(
-                f"/api/homework/{self.homework.id}/",
+                f"/api/{API_VERSION}/data/homework/{self.homework.id}/",
                 {
                     "information": "Das ist der erste Edit!"
                 },

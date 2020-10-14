@@ -2,6 +2,7 @@ from apps.event.mixins.tests.event import EventTestMixin
 from apps.event.models import Event, UserEventRelation
 from apps.event.sub.subserializers import EventListSerializer
 from apps.utils import ClientTestMixin, UserCreationTestMixin
+from project.urls import API_VERSION
 
 
 class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
@@ -22,7 +23,7 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
             event = Event.objects.first()
             
             response = self.client.patch(
-                f"/api/user-relation/event/{event.id}/",
+                f"/api/{API_VERSION}/user-relation/event/{event.id}/",
                 {
                     "ignore": True
                 },
@@ -33,7 +34,7 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
             
             # Get events
             response = self.client.get(
-                "/api/event/",
+                f"/api/{API_VERSION}/data/event/",
                 {
                     "ignore": True
                 },
@@ -53,7 +54,7 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
             
             # Get event
             response = self.client.get(
-                "/api/event/",
+                f"/api/{API_VERSION}/data/event/",
                 {
                     "ignore": False
                 },

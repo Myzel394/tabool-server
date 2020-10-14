@@ -11,6 +11,7 @@ from apps.lesson.models import LessonScoosoData
 from apps.scooso_scraper.mixins.tests.dummy_data import DummyUser
 from apps.scooso_scraper.scrapers.material import MaterialRequest, MaterialTypeOptions
 from apps.utils import ClientTestMixin
+from project.urls import API_VERSION
 
 
 class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
@@ -22,10 +23,10 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
     def test_api_get(self):
         submission = self.Create_submission()
         
-        response = self.client.get("/api/submission/")
+        response = self.client.get(f"/api/{API_VERSION}/data/submission/")
         self.assertStatusOk(response.status_code)
         
-        response = self.client.get(f"/api/submission/{submission.id}/")
+        response = self.client.get(f"/api/{API_VERSION}/data/submission/{submission.id}/")
         self.assertStatusOk(response.status_code)
     
     def test_api_post(self):
@@ -58,7 +59,7 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
         ):
             print(mimetype)
             response = self.client.post(
-                "/api/submission/",
+                f"/api/{API_VERSION}/data/submission/",
                 data={
                     "lesson": lesson.id,
                     "file": SimpleUploadedFile(
@@ -129,13 +130,13 @@ class ApiTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
         )
         
         response = self.client.get(
-            f"/api/submission/{submission.id}/upload/"
+            f"/api/{API_VERSION}/data/submission/{submission.id}/upload/"
         )
         self.assertStatusOk(response.status_code)
         self.assertEqual(response.data["upload_status"], "RESTING")
         
         response = self.client.post(
-            f"/api/submission/{submission.id}/upload/"
+            f"/api/{API_VERSION}/data/submission/{submission.id}/upload/"
         )
         self.assertStatusOk(response.status_code)
         self.assertEqual(response.data["upload_status"], "UPLOADED")
@@ -148,13 +149,13 @@ class ApiTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
         submission.upload_file()
         
         response = self.client.get(
-            f"/api/submission/{submission.id}/upload/"
+            f"/api/{API_VERSION}/data/submission/{submission.id}/upload/"
         )
         self.assertStatusOk(response.status_code)
         self.assertEqual(response.data["upload_status"], "UPLOADED")
         
         response = self.client.post(
-            f"/api/submission/{submission.id}/upload/"
+            f"/api/{API_VERSION}/data/submission/{submission.id}/upload/"
         )
         self.assertEqual(response.status_code, 202)
         self.assertEqual(response.data["upload_status"], "UPLOADED")

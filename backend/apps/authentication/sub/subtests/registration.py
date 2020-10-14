@@ -2,8 +2,9 @@ import random
 
 from apps.authentication.models import AccessToken, User
 from apps.authentication.models.student import Student
-from apps.lesson.mixins.tests import TeacherTestMixin
+from apps.school_data.mixins.tests import TeacherTestMixin
 from apps.utils import ClientTestMixin, UserCreationTestMixin
+from project.urls import API_VERSION
 from ... import constants
 
 
@@ -14,7 +15,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserCreationTestMixin)
         password = self.Get_random_password()
         
         response = self.client.post(
-            f"/api/auth/registration/",
+            f"/api/{API_VERSION}/auth/registration/",
             {
                 "token": token.token,
                 "email": email,
@@ -32,7 +33,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserCreationTestMixin)
         }
         
         response = self.client.post(
-            f"/api/auth/student/",
+            f"/api/{API_VERSION}/api/auth/student/",
             student_kwargs,
             content_type="application/json"
         )
@@ -52,7 +53,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserCreationTestMixin)
         self.assertEqual(Student.objects.all().count(), 1)
         
         response = self.client.post(
-            f"/api/auth/student/",
+            f"/api/{API_VERSION}/auth/student/",
             student_kwargs,
             content_type="application/json"
         )

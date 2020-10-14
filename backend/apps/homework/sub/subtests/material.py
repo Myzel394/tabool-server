@@ -9,6 +9,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 from apps.utils import ClientTestMixin
 from constants import upload_sizes
+from project.urls import API_VERSION
 from ...mixins.tests import MaterialTestMixin
 from ...utils import get_file_dates, set_file_dates
 
@@ -93,6 +94,6 @@ class APITest(ClientTestMixin, MaterialTestMixin):
             material = self.Create_material()
             
             response = self.client.get(
-                f"/api/material/{material.id}/"
+                f"/api/{API_VERSION}/data/material/{material.id}/"
             )
             self.assertStatusOk(response.status_code)
