@@ -5,18 +5,19 @@ from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.lesson.models import Lesson
 from apps.lesson.serializers import LessonListSerializer
 from apps.timetable.models import Timetable
-from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
+from apps.utils.tests import ClientTestMixin, UserTestMixin
 from project.urls import API_VERSION
 from ..subserializers import TimetableDetailSerializer
 from ...mixins.tests.timetable import TimetableTestMixin
 
 
-class ModelTest(LessonTestMixin, UserCreationTestMixin):
+class ModelTest(LessonTestMixin, UserTestMixin):
     def test_timetable(self):
         lessons = set(self.Create_lessons_data())
         
         timetable = Timetable.objects.create_with_lessons(
             lessons_data=lessons,
+            associated_user=self.Create_user()
         )
         
         timetable_lessons = set(timetable.lessons_data.all())

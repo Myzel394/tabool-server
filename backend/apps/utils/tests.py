@@ -17,11 +17,11 @@ if TYPE_CHECKING:
     from apps.authentication.models import User
 
 __all__ = [
-    "UserCreationTestMixin", "StartTimeEndTimeTestMixin", "ClientTestMixin", "joinkwargs", "DateUtilsTestMixin"
+    "UserTestMixin", "StartTimeEndTimeTestMixin", "ClientTestMixin", "joinkwargs", "DateUtilsTestMixin"
 ]
 
 
-class UserCreationTestMixin(TestCase):
+class UserTestMixin(TestCase):
     @staticmethod
     def Create_user(is_confirmed: bool = True, **kwargs) -> settings.AUTH_USER_MODEL:
         Model = get_user_model()

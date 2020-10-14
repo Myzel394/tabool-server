@@ -9,10 +9,8 @@ from apps.lesson.public import model_references, model_verbose_functions
 from apps.timetable.sub.subquerysets import TimetableQuerySet
 from apps.timetable.utils import create_designation_from_date
 from apps.timetable.validators import validate_lessons_dont_overlap
+from apps.utils import AssociatedUserMixin
 from constants import maxlength
-
-if TYPE_CHECKING:
-    pass
 
 __all__ = [
     "Timetable"
@@ -21,8 +19,10 @@ __all__ = [
 
 class Timetable(
     RandomIDMixin,
+    AssociatedUserMixin,
+    
     LifecycleModel,
-    CustomQuerySetMixin
+    CustomQuerySetMixin,
 ):
     class Meta:
         verbose_name = _("Stundenplan")
@@ -42,6 +42,11 @@ class Timetable(
         help_text=_("Die Bezeichnung für den Stundenplan"),
         blank=True
     )  # type: str
+    
+    school_year = models.PositiveSmallIntegerField(
+        verbose_name=_("Schuljahr"),
+        help_text=_("Das Jahr, indem das Schuljahr startet.")
+    )
     
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="designation")

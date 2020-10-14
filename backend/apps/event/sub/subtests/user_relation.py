@@ -1,9 +1,9 @@
 from apps.event.mixins.tests.event import EventTestMixin
-from apps.utils import ClientTestMixin, UserCreationTestMixin
+from apps.utils import ClientTestMixin, UserTestMixin
 from project.urls import API_VERSION
 
 
-class UserRelationTest(UserCreationTestMixin, EventTestMixin, ClientTestMixin):
+class UserRelationTest(UserTestMixin, EventTestMixin, ClientTestMixin):
     def setUp(self) -> None:
         self.logged_user = self.Login_user()
         self.__class__.associated_user = self.logged_user

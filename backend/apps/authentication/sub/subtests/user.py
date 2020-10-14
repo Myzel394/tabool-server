@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.core import mail
 
 from apps.authentication.models import AccessToken
-from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
+from apps.utils.tests import ClientTestMixin, UserTestMixin
 from project.urls import API_VERSION
 from ... import constants
 
@@ -15,7 +15,7 @@ __all__ = [
 ]
 
 
-class ModelTest(UserCreationTestMixin, ClientTestMixin):
+class ModelTest(UserTestMixin, ClientTestMixin):
     def test_create_user(self):
         User = get_user_model()
         user = User.objects.create_user(email='normal@user.com', password='foo')

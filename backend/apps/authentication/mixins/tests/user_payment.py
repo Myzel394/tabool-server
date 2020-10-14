@@ -1,12 +1,12 @@
 from apps.authentication.models import UserPayment
-from apps.utils import joinkwargs, UserCreationTestMixin
+from apps.utils import joinkwargs, UserTestMixin
 
 __all__ = [
     "UserPaymentTestMixin"
 ]
 
 
-class UserPaymentTestMixin(UserCreationTestMixin):
+class UserPaymentTestMixin(UserTestMixin):
     @classmethod
     def Create_user_payment(cls, **kwargs):
         return UserPayment.objects.create(
@@ -17,5 +17,3 @@ class UserPaymentTestMixin(UserCreationTestMixin):
                 kwargs
             )
         )
-    
-

@@ -1,7 +1,7 @@
 from apps.lesson.mixins.tests import LessonTestMixin
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.lesson.models import Course, Lesson, UserLessonRelation
-from apps.utils.tests import ClientTestMixin, UserCreationTestMixin
+from apps.utils.tests import ClientTestMixin, UserTestMixin
 
 __all__ = [
     "QuerySetTest"
@@ -16,7 +16,7 @@ class QuerySetTest(LessonTestMixin, AssociatedUserTestMixin):
         self.check_queryset_from_user(Course)
 
 
-class UserRelationTest(LessonTestMixin, ClientTestMixin, UserCreationTestMixin):
+class UserRelationTest(LessonTestMixin, ClientTestMixin, UserTestMixin):
     def setUp(self) -> None:
         self.logged_user = self.Login_user()
         self.__class__.associated_user = self.logged_user
@@ -64,7 +64,7 @@ class UserRelationTest(LessonTestMixin, ClientTestMixin, UserCreationTestMixin):
         self.assertEqual(UserLessonRelation.objects.all().count(), 1)
 
 
-class UserRelationCreationTest(LessonTestMixin, ClientTestMixin, UserCreationTestMixin):
+class UserRelationCreationTest(LessonTestMixin, ClientTestMixin, UserTestMixin):
     def test_relation(self):
         with self.Login_user_as_context() as user:
             lesson = self.Create_lesson()

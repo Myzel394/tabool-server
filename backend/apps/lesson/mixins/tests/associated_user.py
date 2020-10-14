@@ -4,10 +4,10 @@ from abc import ABC
 from django.db import models
 from django_hint import *
 
-from apps.utils.tests import UserCreationTestMixin
+from apps.utils.tests import UserTestMixin
 
 
-class AssociatedUserTestMixin(UserCreationTestMixin, ABC):
+class AssociatedUserTestMixin(UserTestMixin, ABC):
     def check_queryset_from_user(self, model: Type[models.Model], create_func: Optional[Callable] = None):
         # Constraining values
         snake_case_name = re.sub(r'(?<!^)(?=[A-Z])', '_', model.__name__).lower()

@@ -1,11 +1,11 @@
 from apps.event.mixins.tests.event import EventTestMixin
 from apps.event.models import Event, UserEventRelation
 from apps.event.sub.subserializers import EventListSerializer
-from apps.utils import ClientTestMixin, UserCreationTestMixin
+from apps.utils import ClientTestMixin, UserTestMixin
 from project.urls import API_VERSION
 
 
-class RelationTest(ClientTestMixin, EventTestMixin, UserCreationTestMixin):
+class RelationTest(ClientTestMixin, EventTestMixin, UserTestMixin):
     @staticmethod
     def get_ignore_and_qs():
         relations = UserEventRelation.objects.all()

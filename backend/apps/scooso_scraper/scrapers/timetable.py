@@ -29,6 +29,7 @@ from .parsers.timetable import (
 from .request import Request
 from .. import constants
 from ..utils import build_url, import_from_scraper
+from ...timetable.models import Timetable
 
 if TYPE_CHECKING:
     from apps.authentication.models import User
@@ -187,3 +188,26 @@ class TimetableRequest(Request):
             materials_list.append(material_instance)
         
         return materials_list
+    
+    def import_timetable_from_scraper(self, timetable: PureTimetableParserDataType, **kwargs) -> Timetable:
+        lessons = []
+        # Lessons
+        for lesson_data in timetable['lessons']:
+            lesson = self.import_lesson_from_scraper(lesson_data)
+            lessons.append(lesson)
+        
+        # Events
+        for event in timetable['events']:
+            self.import_event_from_scraper(event)
+        
+        # Modifications
+        for modification in timetable['modifications']:
+            self.import_modification_from_scraper(modification, course=lessons[0].lesson_data.course)
+        
+        # Timetable
+        lesson_data = [
+            lesson.lesson_data
+            for lesson in lessons
+        ]
+        
+        timetable = Timetable.objects.create

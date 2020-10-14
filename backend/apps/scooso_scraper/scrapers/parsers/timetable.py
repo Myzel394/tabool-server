@@ -101,8 +101,6 @@ class SingleModificationType(TypedDict):
     course: CourseType
     
     time_id: int
-    
-    # TODO: Add time_id, targeted_date etc as meta (or lesson)
 
 
 class PureTimetableParserDataType(TypedDict):

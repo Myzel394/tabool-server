@@ -3,12 +3,12 @@ import random
 from apps.authentication.models import AccessToken, User
 from apps.authentication.models.student import Student
 from apps.school_data.mixins.tests import TeacherTestMixin
-from apps.utils import ClientTestMixin, UserCreationTestMixin
+from apps.utils import ClientTestMixin, UserTestMixin
 from project.urls import API_VERSION
 from ... import constants
 
 
-class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserCreationTestMixin):
+class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin):
     def test_registration(self):
         token: AccessToken = AccessToken.objects.create()
         email = "mail@gmail.com"
