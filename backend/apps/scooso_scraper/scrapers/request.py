@@ -71,7 +71,7 @@ class Request(ABC):
             self,
             parser_class: Type[BaseParser],
             get_data: Callable,
-            attempts: int = 5,
+            attempts: int = 8,
     ):
         with self.client as tr:
             for _ in range(attempts):

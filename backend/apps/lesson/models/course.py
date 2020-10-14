@@ -15,7 +15,7 @@ from ..querysets import CourseQuerySet
 
 if TYPE_CHECKING:
     from django.contrib.auth import get_user_model
-    from . import Subject, Teacher
+    from apps.school_data.models import Subject, Teacher
 
 __all__ = [
     "Course"

@@ -30,6 +30,9 @@ from .request import Request
 from .. import constants
 from ..utils import build_url, import_from_scraper
 
+if TYPE_CHECKING:
+    from apps.authentication.models import User
+
 __all__ = [
     "TimetableRequest"
 ]
@@ -127,15 +130,29 @@ class TimetableRequest(Request):
             cls,
             modification: SingleModificationType,
             modification_type: int = ModificationTypeOptions.REPLACEMENT.value,
+            *,
+            user: Optional["User"] = None,
+            course: Optional[Course] = None,
     ) -> Modification:
+        assert user or course, "Either an user or a course must be given."
+        
         room = cls.import_room(modification['new_room'], none_on_error=True)
         teacher = cls.import_teacher(modification['new_teacher'])
         subject = cls.import_subject(modification['new_subject'])
+        
+        if not course:
+            course = Course.objects.get(
+                course_number=modification['course']['course_number'],
+                subject=subject,
+                participants__in=[user]
+            )
+        
         modification = cls.import_modification(
             modification['modification'],
             new_room=room,
             new_teacher=teacher,
             new_subject=subject,
+            course=course,
             modification_type=modification_type
         )
         

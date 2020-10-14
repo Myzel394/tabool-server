@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     "django_bleach",
     "private_storage",
     "simple_email_confirmation",
+    "channels",
+    "django_eventstream",
     
     "apps.relation_managers.apps.RelationManagersConfig",
     
@@ -71,6 +73,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     
     "simple_history.middleware.HistoryRequestMiddleware",
+    "django_grip.GripMiddleware",
 ]
 
 REST_FRAMEWORK = {
@@ -114,6 +117,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "project.wsgi.application"
+ASGI_APPLICATION = "project.routing.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -226,3 +230,7 @@ EMAIL_PAGE_TEMPLATE = "authentication/email_confirmation.html"
 
 # Private storage
 PRIVATE_STORAGE_PATH = LIB_DIR / "private_media"
+
+# Event stream
+EVENTSTREAM_STORAGE_CLASS = "django_eventstream.storage.DjangoModelStorage"
+# EVENTSTREAM_CHANNELMANAGER_CLASS = "apps.utils.authorization.UserActiveChannelManager"

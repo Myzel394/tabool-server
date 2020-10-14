@@ -93,10 +93,14 @@ class SingleMaterialDataType(TypedDict):
 
 
 class SingleModificationType(TypedDict):
-    modification: ModificationType
     new_subject: SubjectType
     new_teacher: TeacherType
     new_room: RoomType
+    
+    modification: ModificationType
+    course: CourseType
+    
+    time_id: int
     
     # TODO: Add time_id, targeted_date etc as meta (or lesson)
 
@@ -137,7 +141,8 @@ class PureTimetableParser(BaseParser):
     @classmethod
     def extract_course(cls, data: dict) -> Dict[str, Any]:
         return {
-            "course_number": int(data["coursenumber"]),
+            "course_number": data["coursenumber"],
+            "name": data["subject_code"]
         }
     
     @classmethod
@@ -214,10 +219,8 @@ class PureTimetableParser(BaseParser):
                 "code": new_room_code,
                 "scooso_id": new_room_id
             },
-            "new_course": {
-                "course_number": modification.get("coursenumber")
-            },
             "course": cls.extract_course(modification),
+            "time_id": modification["time_id"],
         }
     
     @classmethod

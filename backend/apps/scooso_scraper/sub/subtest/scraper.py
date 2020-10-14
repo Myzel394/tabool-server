@@ -7,6 +7,7 @@ from pprint import pp
 
 import lorem
 
+from apps.lesson.mixins.tests.course import CourseTestMixin
 from apps.school_data.models import TeacherScoosoData
 from ...actions import import_teachers
 from ...mixins.tests.dummy_data import DummyUser
@@ -104,7 +105,7 @@ class SomeTests(DummyUser):
         pp(homework)
 
 
-class ForeignSerializerTest(DummyUser):
+class ForeignSerializerTest(DummyUser, CourseTestMixin):
     def setUp(self) -> None:
         self.load_dummy_user()
         
@@ -144,7 +145,10 @@ class ForeignSerializerTest(DummyUser):
         event = TimetableRequest.import_event_from_scraper(random_event)
         # Modification
         random_modification = random.choice(self.timetable['modifications'])
-        event = TimetableRequest.import_modification_from_scraper(random_modification)
+        modification = TimetableRequest.import_modification_from_scraper(
+            random_modification,
+            course=self.Create_course()
+        )
     
     def test_materials(self):
         random_material_data = random.choice(self.timetable['materials_data'])
