@@ -3,11 +3,13 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_lifecycle import LifecycleModel
+from django_eventstream import send_event
+from django_lifecycle import AFTER_CREATE, AFTER_DELETE, AFTER_UPDATE, hook, LifecycleModel
 
 from apps.lesson.public import *
 from apps.school_data.public import *
 from ..options import ModificationTypeOptions
+from ..public import MODIFICATION_CHANNEL
 from ..querysets import ModificationQuerySet
 
 if TYPE_CHECKING:
@@ -77,3 +79,14 @@ class Modification(RandomIDMixin, LifecycleModel):
         verbose_name=_("Typ"),
         help_text=_("Art von Veränderung")
     )  # type: int
+    
+    @hook(AFTER_CREATE)
+    @hook(AFTER_DELETE)
+    @hook(
+        AFTER_UPDATE,
+        when_any=["new_room", "new_teacher", "new_subject", "start_datetime", "end_datetime", "information"]
+    )
+    def _hook_send_modification_changed_event(self):
+        send_event(MODIFICATION_CHANNEL, "modification", {
+            "course_id": self.course_id
+        })

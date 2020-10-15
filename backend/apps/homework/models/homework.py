@@ -5,8 +5,9 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers.mixins import TextOptimizerHandler
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import CreationDateMixin
+from django_eventstream import send_event
 from django_hint import QueryType
-from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
+from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 from simple_history.models import HistoricalRecords
 
 from apps.authentication.public import *
@@ -14,6 +15,7 @@ from apps.history_extras.extras import UserInformationHistoricalModel
 from apps.lesson.public import *
 from apps.utils import format_datetime, validate_weekday_in_lesson_data_available
 from .user_relations.homework import UserHomeworkRelation
+from ..public import HOMEWORK_CHANNEL
 from ..querysets import HomeworkQuerySet
 from ..validators import validate_only_future_days
 
@@ -28,7 +30,7 @@ __all__ = [
 ]
 
 
-class Homework(RandomIDMixin, CreationDateMixin):
+class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
     class Meta:
         verbose_name = _("Hausaufgabe")
         verbose_name_plural = _("Hausaufgaben")
@@ -81,6 +83,13 @@ class Homework(RandomIDMixin, CreationDateMixin):
     def _hook_due_date_validation(self):
         validate_only_future_days(self.due_date)
         validate_weekday_in_lesson_data_available(self.due_date)
+    
+    @hook(AFTER_CREATE)
+    def _hook_send_event(self):
+        if not self.is_private:
+            send_event(HOMEWORK_CHANNEL, "homework", {
+                "lesson_id": self.lesson_id
+            })
     
     @staticmethod
     def handlers():

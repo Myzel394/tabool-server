@@ -5,12 +5,19 @@ from django_common_utils.libraries.handlers.mixins import HTMLOptimizerHandler, 
 from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import EditCreationDateMixin
+from django_eventstream import send_event
+from django_lifecycle import AFTER_CREATE, hook, LifecycleModel
 
 from apps.authentication.public import *
+from apps.news.public.event_channels import NEWS_CHANNEL
 from constants import maxlength
 
+__all__ = [
+    "News"
+]
 
-class News(RandomIDMixin, HandlerMixin, EditCreationDateMixin):
+
+class News(RandomIDMixin, HandlerMixin, EditCreationDateMixin, LifecycleModel):
     class Meta:
         verbose_name = _("News")
         verbose_name_plural = _("News")
@@ -39,3 +46,7 @@ class News(RandomIDMixin, HandlerMixin, EditCreationDateMixin):
             "html": HTMLOptimizerHandler(),
             "title": TextOptimizerHandler()
         }
+    
+    @hook(AFTER_CREATE)
+    def _hook_send_event(self):
+        send_event(NEWS_CHANNEL, "news", {})
