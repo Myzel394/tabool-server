@@ -18,7 +18,7 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin
         self.load_lesson_upload()
     
     def test_api_get(self):
-        submission = self.Create_submission()
+        submission = self.Create_submission(lesson=self.lesson)
         
         response = self.client.get(f"/api/{API_VERSION}/data/submission/")
         self.assertStatusOk(response.status_code)

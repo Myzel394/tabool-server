@@ -179,4 +179,4 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     
     @property
     def folder_name(self) -> str:
-        return self.lesson.lesson_data.course.name
+        return f"{self.lesson.lesson_data.course.folder_name}/{self.id}"

@@ -9,6 +9,7 @@ from django_lifecycle import AFTER_SAVE, hook, LifecycleModel
 
 import apps.school_data.public.model_references
 import apps.school_data.public.model_verbose_functions
+from apps.authentication.models import Student
 from apps.homework.models import Homework
 from .lesson import Lesson
 from ..querysets import CourseQuerySet
@@ -16,6 +17,7 @@ from ..querysets import CourseQuerySet
 if TYPE_CHECKING:
     from django.contrib.auth import get_user_model
     from apps.school_data.models import Subject, Teacher
+    from apps.authentication.models import User
 
 __all__ = [
     "Course"
@@ -55,6 +57,9 @@ class Course(RandomIDMixin, LifecycleModel):
         default=1
     )  # type: int
     
+    # TODO: Add Global SSE!
+    # TODO: Add more modification event sends!
+    
     def __call_manage_relations_on_model(self, models: Iterable[StandardModelType]) -> None:
         participants = self.participants.all()
         participants_list = list(participants)
@@ -80,3 +85,14 @@ class Course(RandomIDMixin, LifecycleModel):
     @property
     def name(self) -> str:
         return f"{self.subject.name}{self.course_number}".lower()
+    
+    @property
+    def class_number(self) -> int:
+        participant: "User" = Student.objects.first()
+        
+        # noinspection PyUnresolvedReferences
+        return participant.student.class_number
+    
+    @property
+    def folder_name(self) -> str:
+        return f"{self.class_number}/{self.name}"
