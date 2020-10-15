@@ -17,7 +17,8 @@ class ModelTest(LessonTestMixin, UserTestMixin):
         
         timetable = Timetable.objects.create_with_lessons(
             lessons_data=lessons,
-            associated_user=self.Create_user()
+            associated_user=self.Create_user(),
+            school_year=date.today().year
         )
         
         timetable_lessons = set(timetable.lessons_data.all())

@@ -28,6 +28,11 @@ MATERIAL_UPLOAD_CONNECTION = {
     "dt_format": "%Y-%m-%d 00:00:00"
 }
 
+MATERIAL_DELETE_CONNECTION = {
+    "url": DEFAULT_QUERY_URL,
+    "method": "POST"
+}
+
 LESSON_CONTENT_CONNECTION = {
     "url": DEFAULT_QUERY_URL,
     "method": "POST",

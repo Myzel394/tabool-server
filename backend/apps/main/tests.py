@@ -1,11 +1,10 @@
 from datetime import date
 
-from apps.scooso_scraper.mixins.tests.dummy_data import DummyUser
 from apps.scooso_scraper.scrapers.timetable import TimetableRequest
 from apps.utils import UserTestMixin
 
 
-class FullTest(DummyUser, UserTestMixin):
+class FullTest(UserTestMixin):
     def setUp(self) -> None:
         self.load_dummy_user()
         self.logged_user = self.Create_user()

@@ -1,24 +1,21 @@
 import random
 import string
-from datetime import date
 from pathlib import Path
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from apps.authentication.models import ScoosoData
 from apps.homework.mixins.tests.submission import SubmissionTestMixin
-from apps.lesson.models import LessonScoosoData
-from apps.scooso_scraper.mixins.tests.dummy_data import DummyUser
+from apps.lesson.mixins.tests.lesson import LessonUploadTestMixin
 from apps.scooso_scraper.scrapers.material import MaterialRequest, MaterialTypeOptions
 from apps.utils import ClientTestMixin
 from project.urls import API_VERSION
 
 
-class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
+class SubmissionTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin):
     def setUp(self) -> None:
         self.logged_user = self.Login_user()
         self.__class__.associated_user = self.logged_user
-        self.load_dummy_user()
+        self.load_lesson_upload()
     
     def test_api_get(self):
         submission = self.Create_submission()
@@ -47,8 +44,6 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
             </html>
         """.encode()
         
-        lesson = self.Create_lesson()
-        
         for data, mimetype, is_status_ok in (
                 (DATA, "text/plain", True),
                 (DATA, "image/png", True),
@@ -61,7 +56,7 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
             response = self.client.post(
                 f"/api/{API_VERSION}/data/submission/",
                 data={
-                    "lesson": lesson.id,
+                    "lesson": self.lesson.id,
                     "file": SimpleUploadedFile(
                         "file.txt",
                         data,
@@ -76,28 +71,9 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
                 self.assertStatusNotOk(response.status_code)
 
 
-class ApiTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
+class ApiTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin):
     def setUp(self) -> None:
-        self.logged_user = self.Login_user()
-        self.__class__.associated_user = self.logged_user
-        self.load_dummy_user()
-        
-        self.time_id = 29743
-        self.target_date = date(2020, 10, 1)
-        
-        user_scooso_data = ScoosoData.objects.create(
-            user=self.logged_user,
-            username=self.username,
-            password=self.password
-        )
-        
-        self.lesson = self.Create_lesson(
-            date=self.target_date
-        )
-        scooso_data = LessonScoosoData.objects.create(
-            lesson=self.lesson,
-            time_id=self.time_id
-        )
+        self.load_lesson_upload()
     
     def test_upload(self):
         submission = self.Create_submission(
@@ -133,15 +109,15 @@ class ApiTest(SubmissionTestMixin, ClientTestMixin, DummyUser):
             f"/api/{API_VERSION}/data/submission/{submission.id}/upload/"
         )
         self.assertStatusOk(response.status_code)
-        self.assertEqual(response.data["upload_status"], "RESTING")
+        self.assertEqual("RESTING", response.data["upload_status"])
         
         response = self.client.post(
             f"/api/{API_VERSION}/data/submission/{submission.id}/upload/"
         )
         self.assertStatusOk(response.status_code)
-        self.assertEqual(response.data["upload_status"], "UPLOADED")
+        self.assertEqual("UPLOADED", response.data["upload_status"])
     
-    def test_upload_api_second(self):
+    def test_upload_api_get(self):
         submission = self.Create_submission(
             lesson=self.lesson,
             associated_user=self.logged_user

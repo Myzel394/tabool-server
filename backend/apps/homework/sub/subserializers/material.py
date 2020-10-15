@@ -1,10 +1,12 @@
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from apps.utils.serializers import RandomIDSerializerMixin
+from apps.lesson.public.serializer_fields import LessonField
+from apps.utils.serializers import PrivatizeSerializerMixin, RandomIDSerializerMixin
 from ...models import Material
 
 __all__ = [
-    "MaterialListSerializer", "MaterialDetailSerializer"
+    "MaterialListSerializer", "MaterialDetailSerializer", "UploadSerializer",
 ]
 
 
@@ -35,3 +37,8 @@ class MaterialDetailSerializer(RandomIDSerializerMixin):
     
     def get_file(self, instance: Material):
         return instance.file.url
+
+
+class UploadSerializer(PrivatizeSerializerMixin):
+    lesson = LessonField()
+    file = serializers.FileField(label=_("Datei"))

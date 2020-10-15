@@ -13,17 +13,16 @@ __all__ = [
 
 
 class SubmissionTestMixin(LessonTestMixin):
-    @classmethod
-    def Create_submission(cls, **kwargs) -> Submission:
+    def Create_submission(self, **kwargs) -> Submission:
         random_id = "".join(random.choices(string.ascii_letters + string.digits, k=4))
         
         return Submission.objects.create(
             **joinkwargs(
                 {
-                    "associated_user": cls.Create_user,
-                    "lesson": cls.Create_lesson,
+                    "associated_user": self.Create_user,
+                    "lesson": self.Create_lesson,
                     "file": lambda: SimpleUploadedFile(
-                        f"uploaded_file_{random_id}.txt",
+                        f"Hausaufgabe_{random_id}.txt",
                         "".join(random.choices(string.ascii_letters + string.digits, k=1024 * 5)).encode(),
                         "text/plain"
                     )

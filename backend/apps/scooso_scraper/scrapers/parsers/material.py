@@ -67,7 +67,7 @@ class PureMaterialParser(BaseParser):
     @property
     def is_valid(self) -> bool:
         try:
-            return len(self.json["tables"].get("items", [])) > 0
+            return len(self.json["tables"].get("items", [])) >= 0 and self.json["header"]["logType"] == 20
         except:
             return False
 

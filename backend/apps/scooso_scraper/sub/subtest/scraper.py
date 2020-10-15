@@ -1,17 +1,17 @@
 import json
+import os
 import random
 import string
 from datetime import date, datetime
 from pathlib import Path
-from pprint import pp
 
 import lorem
 
 from apps.lesson.mixins.tests.course import CourseTestMixin
+from apps.lesson.mixins.tests.lesson import LessonUploadTestMixin
 from apps.school_data.models import TeacherScoosoData
 from ...actions import import_teachers
 from ...mixins.tests.dummy_data import DummyUser
-from ...scrapers.lesson_content import HomeworkRequest
 from ...scrapers.material import MaterialRequest, MaterialTypeOptions
 from ...scrapers.parsers import PureTimetableParser
 from ...scrapers.timetable import TimetableRequest
@@ -38,52 +38,28 @@ class ParserTest(DummyUser):
         self.assertEqual(len(data["materials_data"]), 5)
 
 
-class SomeTests(DummyUser):
+class SomeTests(LessonUploadTestMixin):
     def setUp(self) -> None:
-        self.load_dummy_user()
+        self.load_lesson_upload()
         
-        scraper = TimetableRequest(self.username, self.password)
-        scraper.login()
-        data = scraper.get_timetable(start_date=date(2020, 10, 5), end_date=date(2020, 10, 10))
+        with TimetableRequest(self.username, self.password) as scraper:
+            data = scraper.get_timetable(
+                start_date=datetime.strptime(os.getenv("DATA_START_DATE"), os.getenv("DATE_FORMAT")).date(),
+                end_date=datetime.strptime(os.getenv("DATA_END_DATE"), os.getenv("DATE_FORMAT")).date()
+            )
         
         self.data = data
     
-    def test_material(self):
-        material_id = 73893
-        download_path = Path(f"/tmp/scooso_scraper/materials/random_file.txt")
-        scraper = MaterialRequest(self.username, self.password)
-        
-        scraper.download_material(material_id, download_path)
-    
-    def test_get_material(self):
-        random_material_data = random.choice(self.data['materials_data'])
-        scraper = MaterialRequest(self.username, self.password)
-        materials = scraper.get_materials(
-            random_material_data['material']['time_id'],
-            random_material_data['material']['target_date']
-        )
-        random_material = random.choice(materials['materials'])
-        
-        download_path = Path(f"/tmp/scooso_scraper/materials/{random_material['filename']}")
-        
-        path = scraper.download_material(random_material['scooso_id'], download_path)
-        
-        self.assertTrue(path.exists())
-    
     def test_upload_material(self):
-        time_id = 29743
-        target_date = date(2020, 10, 1)
         filename = str("".join(random.choices(string.ascii_letters + string.digits, k=10))) + ".txt"
         content = lorem.text()
         material_type = MaterialTypeOptions.HOMEWORK
         
-        scraper = MaterialRequest(self.username, self.password)
-        scraper.login()
-        
-        scraper.upload_material(time_id, target_date, filename, content, material_type)
+        with MaterialRequest(self.username, self.password) as scraper:
+            scraper.upload_material(self.time_id, self.target_date, filename, content, material_type)
         
         # Check if file exists
-        materials = scraper.get_materials(time_id, target_date, material_type)
+        materials = scraper.get_materials(self.time_id, self.target_date, material_type)
         names = [
             material['filename']
             for material in materials['materials']
@@ -92,20 +68,26 @@ class SomeTests(DummyUser):
             filename == name
             for name in names
         ])
+        print(filename, names)
         self.assertTrue(exists)
     
-    def test_homework(self):
-        time_id = 29501
-        targeted_date = datetime(2020, 9, 25, 9, 50)
-        scraper = HomeworkRequest(self.username, self.password)
-        scraper.login()
+    def test_delete_uploaded(self):
+        filename = str("".join(random.choices(string.ascii_letters + string.digits, k=10))) + ".txt"
+        content = lorem.text()
+        material_type = MaterialTypeOptions.HOMEWORK
         
-        homework = scraper.get_homework(time_id, targeted_date)
+        with MaterialRequest(self.username, self.password) as scraper:
+            previous_count = len(scraper.get_materials(self.time_id, self.target_date, material_type)['materials'])
+            scraper.upload_material(self.time_id, self.target_date, filename, content, material_type)
+            materials = scraper.get_materials(self.time_id, self.target_date, material_type)
+            material_id = materials['materials'][0]['scooso_id']
+            scraper.delete_material(material_id)
+            materials = scraper.get_materials(self.time_id, self.target_date, material_type)
         
-        pp(homework)
+        self.assertEqual(previous_count - 1, len(materials['materials']))
 
 
-class ForeignSerializerTest(DummyUser, CourseTestMixin):
+class ForeignSerializerTest(CourseTestMixin):
     def setUp(self) -> None:
         self.load_dummy_user()
         

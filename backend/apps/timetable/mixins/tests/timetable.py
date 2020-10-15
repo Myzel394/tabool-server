@@ -15,13 +15,12 @@ class TimetableTestMixin(
     UserTestMixin,
     ABC
 ):
-    @classmethod
-    def Create_timetable(cls, **kwargs) -> Timetable:
+    def Create_timetable(self, **kwargs) -> Timetable:
         return Timetable.objects.create_with_lessons(
             **joinkwargs(
                 {
-                    "lessons_data": cls.Create_lessons_data,
-                    "associated_user": cls.Create_user,
+                    "lessons_data": self.Create_lessons_data,
+                    "associated_user": self.Create_user,
                     "school_year": lambda: date.today().year
                 },
                 kwargs

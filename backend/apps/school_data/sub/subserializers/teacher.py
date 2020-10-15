@@ -12,7 +12,7 @@ __all__ = [
 class TeacherListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Teacher
-        fields = ["short_name", "id"]
+        fields = ["short_name", "last_name", "id"]
 
 
 class TeacherDetailSerializer(RandomIDSerializerMixin):

@@ -26,7 +26,11 @@ class SubmissionListSerializer(RandomIDSerializerMixin):
         return Path(instance.file.path).name
 
 
-class SubmissionDetailSerializer(AssociatedUserSerializerMixin, RandomIDSerializerMixin, PrivatizeSerializerMixin):
+class SubmissionDetailSerializer(
+    PrivatizeSerializerMixin,
+    AssociatedUserSerializerMixin,
+    RandomIDSerializerMixin,
+):
     class Meta:
         model = Submission
         fields = [

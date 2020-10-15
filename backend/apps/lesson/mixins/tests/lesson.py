@@ -1,3 +1,4 @@
+import os
 import random
 from datetime import datetime, time, timedelta
 from typing import *
@@ -5,14 +6,15 @@ from typing import *
 from dateutil.rrule import MINUTELY, rrule
 
 from apps.school_data.mixins.tests.room import RoomTestMixin
+from apps.scooso_scraper.mixins.tests.dummy_data import DummyUser
 from apps.utils.tests import joinkwargs, StartTimeEndTimeTestMixin
 from apps.utils.time import dummy_datetime_from_target
 from constants.weekdays import ALLOWED_WEEKDAYS
 from .course import CourseTestMixin
-from ...models import Lesson, LessonData
+from ...models import Lesson, LessonData, LessonScoosoData
 
 __all__ = [
-    "LessonTestMixin"
+    "LessonTestMixin", "LessonUploadTestMixin"
 ]
 
 
@@ -83,3 +85,21 @@ class LessonTestMixin(
                 lessons.append(lesson)
         
         return lessons
+
+
+class LessonUploadTestMixin(LessonTestMixin, DummyUser):
+    def load_lesson_upload(self):
+        self.logged_user = self.Login_user()
+        self.__class__.associated_user = self.logged_user
+        self.load_dummy_user()
+        
+        self.time_id = int(os.getenv("LESSON_ID"))
+        self.target_date = datetime.strptime(os.getenv("DATE"), "%Y.%m.%d").date()
+        
+        self.lesson = self.Create_lesson(
+            date=self.target_date
+        )
+        scooso_data = LessonScoosoData.objects.create(
+            lesson=self.lesson,
+            time_id=self.time_id
+        )

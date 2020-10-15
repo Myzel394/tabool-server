@@ -9,6 +9,7 @@ from secure_file_detection.exceptions import *
 
 from .parsers import PureMaterialParser
 from .parsers.material import PureMaterialParserDataType
+from .parsers.material_delete import MaterialDeleteParser
 from .parsers.material_download import MaterialFileParser
 from .parsers.material_upload import MaterialUploadParser
 from .request import Request
@@ -179,5 +180,31 @@ class MaterialRequest(Request):
         
         self.request_with_parser(
             parser_class=MaterialUploadParser,
+            get_data=get_data
+        )
+    
+    def delete_material(
+            self,
+            file_id: int
+    ) -> None:
+        url = constants.MATERIAL_UPLOAD_CONNECTION["url"]
+        method = constants.MATERIAL_UPLOAD_CONNECTION["method"]
+        
+        def get_data():
+            data = {
+                "cmd": 3000,
+                "subcmd": 30,
+                "varname": "files",
+                **self.login_data
+            }
+            suffix = f"&files[{file_id}]=on"
+            
+            return {
+                "url": build_url(url, data) + suffix,
+                "method": method
+            }
+        
+        self.request_with_parser(
+            parser_class=MaterialDeleteParser,
             get_data=get_data
         )

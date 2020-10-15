@@ -9,6 +9,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 
+from apps.authentication.models import ScoosoData
+from apps.scooso_scraper.mixins.tests.dummy_data import DummyUser
 from apps.utils.date import find_next_date_by_weekday
 from apps.utils.time import dummy_datetime_from_target
 from constants import weekdays
@@ -21,9 +23,13 @@ __all__ = [
 ]
 
 
-class UserTestMixin(TestCase):
-    @staticmethod
-    def Create_user(is_confirmed: bool = True, **kwargs) -> settings.AUTH_USER_MODEL:
+class UserTestMixin(DummyUser):
+    def Create_user(
+            self,
+            is_confirmed: bool = True,
+            create_scooso_data: bool = True,
+            **kwargs
+    ) -> settings.AUTH_USER_MODEL:
         Model = get_user_model()
         first_name = names.get_first_name()
         while True:
@@ -44,6 +50,13 @@ class UserTestMixin(TestCase):
         
         if is_confirmed:
             user.confirm_email(user.confirmation_key)
+        if create_scooso_data:
+            self.load_dummy_user()
+            scooso_data = ScoosoData.objects.create(
+                user=user,
+                username=self.username,
+                password=self.password
+            )
         
         return user
     

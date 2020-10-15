@@ -4,7 +4,6 @@ from typing import *
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from apps.utils.files import privatize_file
 from apps.utils.text import camel_to_snake
 
 __all__ = [
@@ -97,7 +96,7 @@ class ScoosoScraperSerializerMixin(serializers.Serializer):
         return model_instance
 
 
-class PrivatizeSerializerMixin:
+class PrivatizeSerializerMixin(serializers.ModelSerializer):
     privatize = serializers.BooleanField(
         label=_("Private Daten entfernen"),
         help_text=_("Entfernt private Daten und verschleiert Daten, die nicht entfernt werden können."),
@@ -110,23 +109,9 @@ class PrivatizeSerializerMixin:
         raise NotImplementedError()
     
     def create(self, validated_data):
-        privatize = validated_data.pop("privatize")
-        
-        instance = super().create(validated_data)
-        
-        if privatize:
-            for file in self.get_file_to_privatize(instance, validated_data):
-                privatize_file(file)
-        
-        return instance
+        validated_data.pop("privatize")
+        return super().create(validated_data)
     
     def update(self, instance, validated_data):
-        privatize = validated_data.pop("privatize")
-        
-        instance = super().update(instance, validated_data)
-        
-        if privatize:
-            for file in self.get_file_to_privatize(instance, validated_data):
-                privatize_file(file)
-        
-        return instance
+        validated_data.pop("privatize")
+        return super().update(instance, validated_data)

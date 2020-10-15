@@ -4,13 +4,18 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
-from django_lifecycle import AFTER_DELETE, BEFORE_UPDATE, hook, LifecycleModel
+from django_lifecycle import (
+    AFTER_CREATE, AFTER_DELETE, AFTER_UPDATE, BEFORE_UPDATE, hook,
+    LifecycleModel,
+)
 
 from apps.lesson.public import *
+from . import SubmissionScoosoData
 from ..exceptions import *
 from ..public import build_submission_upload_to
 from ..querysets import SubmissionQuerySet
 from ...scooso_scraper.scrapers.material import MaterialRequest, MaterialTypeOptions
+from ...scooso_scraper.scrapers.parsers.material import MaterialType
 from ...utils import AssociatedUserMixin
 from ...utils.fields import SafeFileField
 
@@ -56,11 +61,17 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         default=False
     )  # type: bool
     
-    is_uploading = models.BooleanField(
+    is_in_action = models.BooleanField(
         verbose_name=_("Wird hochgeladen"),
         help_text=_("Wenn ja, dann versucht der Server gerade die Datei hochzuladen."),
         default=False
     )  # type: bool
+    
+    @hook(AFTER_CREATE)
+    @hook(AFTER_UPDATE, when="file")
+    def _hook_get_scoosodata(self):
+        material = self._get_material_from_scooso()
+        self._create_material_from_scooso(material)
     
     @hook(BEFORE_UPDATE)
     def _hook_validate_upload_at_not_already_uploaded(self):
@@ -73,6 +84,9 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     @hook(AFTER_DELETE)
     def _hook_delete_file(self):
         Path(self.file.path).unlink(missing_ok=True)
+        
+        if self.is_uploaded:
+            self.delete_file(False)
     
     def __str__(self):
         # Translators: Diese Nachricht ist für den Admin-Bereich. Sie wird verwendet, um Einreichungen darzustellen.
@@ -82,19 +96,51 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
             upload_date=self.upload_at
         )
     
-    def upload_file(self) -> None:
-        if not self.is_uploading and not self.is_uploaded:
-            self.is_uploading = True
-            
-            user = self.associated_user
-            
-            time_id = self.lesson.lessonscoosodata.time_id
-            targeted_date = self.lesson.date
-            filename = self.file.name
-            content = Path(self.file.path).read_text()
+    def _get_material_from_scooso(self) -> MaterialType:
+        user = self.associated_user
+        
+        with MaterialRequest(user.scoosodata.username, user.scoosodata.password) as scraper:
+            materials = scraper.get_materials(
+                time_id=self.lesson.lessonscoosodata.time_id,
+                targeted_date=self.lesson.date,
+                material_type=MaterialTypeOptions.HOMEWORK
+            )
+        
+        materials = materials['materials']
+        
+        filename_materials = [
+            material
+            for material in materials
+            if material['filename'] == Path(self.file.path).name
+        ]
+        if len(filename_materials) > 0:
+            return filename_materials[0]
+        return sorted(materials, key=lambda x: x['created_at'], reverse=True)[0]
+    
+    def _create_material_from_scooso(self, data: MaterialType) -> SubmissionScoosoData:
+        scooso_data: SubmissionScoosoData
+        scooso_data, _ = SubmissionScoosoData.objects.get_or_create(submission=self)
+        scooso_data.scooso_id = data['scooso_id']
+        scooso_data.save()
+        
+        return scooso_data
+    
+    def upload_file(self, commit: bool = True) -> None:
+        if not self.is_in_action and not self.is_uploaded:
+            self.is_in_action = True
             
             try:
-                with MaterialRequest(user.scoosodata.username, user.scoosodata.password) as scraper:
+                user = self.associated_user
+                
+                time_id = self.lesson.lessonscoosodata.time_id
+                targeted_date = self.lesson.date
+                filename = self.file.name
+                content = Path(self.file.path).read_text()
+                
+                scraper = MaterialRequest(user.scoosodata.username, user.scoosodata.password)
+                scraper.login()
+                
+                try:
                     scraper.upload_material(
                         time_id=time_id,
                         target_date=targeted_date,
@@ -102,13 +148,34 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
                         data=content,
                         material_type=MaterialTypeOptions.HOMEWORK
                     )
-            except BaseException as exception:
-                raise exception
-            else:
+                except Exception as exception:
+                    raise exception
                 self.is_uploaded = True
             finally:
-                self.is_uploading = False
-                self.save()
+                self.is_in_action = False
+                if commit:
+                    self.save()
+    
+    def delete_file(self, commit: bool = True) -> None:
+        if not self.is_in_action and self.is_uploaded:
+            self.is_in_action = True
+            
+            try:
+                user = self.associated_user
+                file_id = self.submissionscoosodata.scooso_id
+                
+                scraper = MaterialRequest(user.scoosodata.username, user.scoosodata.password)
+                scraper.login()
+                
+                try:
+                    scraper.delete_material(file_id)
+                except Exception as exception:
+                    raise exception
+                self.is_uploaded = False
+            finally:
+                self.is_in_action = False
+                if commit:
+                    self.save()
     
     @property
     def folder_name(self) -> str:

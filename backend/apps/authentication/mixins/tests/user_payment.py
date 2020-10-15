@@ -7,12 +7,11 @@ __all__ = [
 
 
 class UserPaymentTestMixin(UserTestMixin):
-    @classmethod
-    def Create_user_payment(cls, **kwargs):
+    def Create_user_payment(self, **kwargs):
         return UserPayment.objects.create(
             **joinkwargs(
                 {
-                    "user": cls.Create_user,
+                    "user": self.Create_user,
                 },
                 kwargs
             )
