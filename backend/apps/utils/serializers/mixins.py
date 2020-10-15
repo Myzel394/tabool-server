@@ -1,11 +1,15 @@
+from abc import abstractmethod
 from typing import *
 
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from apps.utils.files import privatize_file
 from apps.utils.text import camel_to_snake
 
 __all__ = [
-    "RandomIDSerializerMixin", "AssociatedUserSerializerMixin", "ScoosoScraperSerializerMixin"
+    "RandomIDSerializerMixin", "AssociatedUserSerializerMixin", "ScoosoScraperSerializerMixin",
+    "PrivatizeSerializerMixin"
 ]
 
 
@@ -91,3 +95,38 @@ class ScoosoScraperSerializerMixin(serializers.Serializer):
         model_instance.save()
         
         return model_instance
+
+
+class PrivatizeSerializerMixin:
+    privatize = serializers.BooleanField(
+        label=_("Private Daten entfernen"),
+        help_text=_("Entfernt private Daten und verschleiert Daten, die nicht entfernt werden können."),
+        write_only=True,
+        default=True
+    )
+    
+    @abstractmethod
+    def get_file_to_privatize(self, instance, validated_data: Dict[str, Any]) -> List[str]:
+        raise NotImplementedError()
+    
+    def create(self, validated_data):
+        privatize = validated_data.pop("privatize")
+        
+        instance = super().create(validated_data)
+        
+        if privatize:
+            for file in self.get_file_to_privatize(instance, validated_data):
+                privatize_file(file)
+        
+        return instance
+    
+    def update(self, instance, validated_data):
+        privatize = validated_data.pop("privatize")
+        
+        instance = super().update(instance, validated_data)
+        
+        if privatize:
+            for file in self.get_file_to_privatize(instance, validated_data):
+                privatize_file(file)
+        
+        return instance

@@ -10,6 +10,7 @@ __all__ = [
     "urlpatterns"
 ]
 
+# TODO: Change url!
 urlpatterns = [
     url(
         r"^events/modification/",

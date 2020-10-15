@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from .... import constants
 from ....filters import SubmissionFilterSet
 from ....models import Submission
-from ....serializers import SubmissionDetailSerializer, SubmissionListSerializer
+from ....serializers import SubmissionDetailSerializer, SubmissionListSerializer, UploadSerializer
 
 __all__ = [
     "SubmissionViewSet"
@@ -31,6 +31,23 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             return SubmissionListSerializer
         return SubmissionDetailSerializer
+    
+    @action(detail=False, methods=["post"], url_path="upload-directly")
+    def upload_directly(self, request: RequestType):
+        data = request.data
+        serializer = UploadSerializer(data=data, context={
+            "request": request
+        })
+        
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        validated_data = serializer.validated_data
+        lesson = validated_data["lesson"]
+        
+        time_id = lesson.lessonscoosodata.time_id
+        targeted_date = lesson.date
+        filename = validated_data["file"]
     
     @action(detail=True, methods=["post", "get"])
     def upload(self, request: RequestType, pk: Optional[str] = None):

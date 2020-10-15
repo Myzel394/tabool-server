@@ -1,9 +1,10 @@
 from pathlib import Path
+from typing import *
 
 from rest_framework import serializers
 
 from apps.lesson.public.serializer_fields import LessonField
-from apps.utils.serializers import AssociatedUserSerializerMixin, RandomIDSerializerMixin
+from apps.utils.serializers import AssociatedUserSerializerMixin, PrivatizeSerializerMixin, RandomIDSerializerMixin
 from ...models import Submission
 
 __all__ = [
@@ -25,14 +26,17 @@ class SubmissionListSerializer(RandomIDSerializerMixin):
         return Path(instance.file.path).name
 
 
-class SubmissionDetailSerializer(AssociatedUserSerializerMixin, RandomIDSerializerMixin):
+class SubmissionDetailSerializer(AssociatedUserSerializerMixin, RandomIDSerializerMixin, PrivatizeSerializerMixin):
     class Meta:
         model = Submission
         fields = [
-            "lesson", "file", "upload_at", "is_uploaded", "id"
+            "lesson", "file", "privatize", "upload_at", "is_uploaded", "id"
         ]
         read_only_fields = [
             "is_uploaded", "id"
         ]
     
     lesson = LessonField()
+    
+    def get_file_to_privatize(self, instance: Submission, _) -> List[str]:
+        return [instance.file.path]

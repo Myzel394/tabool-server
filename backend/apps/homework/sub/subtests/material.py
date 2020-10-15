@@ -8,10 +8,10 @@ from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from apps.utils import ClientTestMixin
+from apps.utils.files import get_file_dates, set_file_dates
 from constants import upload_sizes
 from project.urls import API_VERSION
 from ...mixins.tests import MaterialTestMixin
-from ...utils import get_file_dates, set_file_dates
 
 
 class MaterialTest(MaterialTestMixin, ClientTestMixin):
