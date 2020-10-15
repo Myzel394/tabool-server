@@ -109,3 +109,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
             finally:
                 self.is_uploading = False
                 self.save()
+    
+    @property
+    def folder_name(self) -> str:
+        return self.lesson.lesson_data.course.name

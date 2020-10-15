@@ -8,6 +8,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 
+from .... import constants
 from ....filters import SubmissionFilterSet
 from ....models import Submission
 from ....serializers import SubmissionDetailSerializer, SubmissionListSerializer
@@ -33,34 +34,28 @@ class SubmissionViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=["post", "get"])
     def upload(self, request: RequestType, pk: Optional[str] = None):
-        PENDING = "PENDING"
-        UPLOADED = "UPLOADED"
-        RESTING = "RESTING"
-        FAILED = "FAILED"
-        
         submission = self.get_object()
         
         if submission.is_uploaded:
             return Response({
-                "upload_status": UPLOADED
+                "upload_status": constants.UPLOAD_STATUSES.UPLOADED
             }, status=status.HTTP_202_ACCEPTED)
         
         if submission.is_uploading:
             return Response({
-                "upload_status": PENDING
+                "upload_status": constants.UPLOAD_STATUSES.PENDING
             }, status=status.HTTP_202_ACCEPTED)
         
         if request.method == "POST":
             try:
                 submission.upload_file()
             except:
-                return Response({
-                    "upload_status": FAILED
-                }, status=status.HTTP_202_ACCEPTED)
-            return Response({
-                "upload_status": UPLOADED
-            }, status=status.HTTP_200_OK)
+                upload_status = constants.UPLOAD_STATUSES.FAILED
+            else:
+                upload_status = constants.UPLOAD_STATUSES.UPLOADED
         elif request.method == "GET":
-            return Response({
-                "upload_status": RESTING
-            }, status=status.HTTP_202_ACCEPTED)
+            upload_status = constants.UPLOAD_STATUSES.RESTING
+        
+        return Response({
+            "upload_status": upload_status
+        }, status=status.HTTP_200_OK)
