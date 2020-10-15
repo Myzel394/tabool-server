@@ -1,19 +1,15 @@
 from datetime import date, datetime, time
 from typing import *
 
+from constants import dates
+
 AnyDatetimeModule = Union[date, datetime, time]
 
 
-def format_datetime(value: AnyDatetimeModule, /, format: Optional[str] = None) -> str:
-    # TODO: ADd as constants!
-    default_formats = {
-        date: "%d.%m.%Y",
-        datetime: "%d.%m.%Y, %H:%M",
-        time: "%H:%M"
-    }
-    format = format or default_formats[type(value)]
+def format_datetime(value: AnyDatetimeModule, /, formats: Optional[str] = None) -> str:
+    formats = formats or dates.FORMATS[type(value)]
     
-    return value.strftime(format)
+    return value.strftime(formats)
 
 
 def dummy_datetime_from_target(target: Union[date, datetime, time]) -> datetime:
