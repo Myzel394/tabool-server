@@ -39,3 +39,6 @@ class UserHomeworkRelation(RandomIDMixin, UserModelRelationMixin):
         default=False,
         verbose_name=_("Ignorieren")
     )
+    
+    def __str__(self):
+        return self.homework

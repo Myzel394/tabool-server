@@ -35,6 +35,9 @@ class MaterialScoosoData(ScoosoDataMixin):
         null=True
     )
     
+    def __str__(self):
+        return self.material
+    
     def build_download_url(self, user: "User") -> str:
         # TODO: Find better solution!
         scraper = MaterialRequest(user.scoosodata.username, user.scoosodata.password)

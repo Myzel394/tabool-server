@@ -78,3 +78,12 @@ class UserRelationCreationTest(LessonTestMixin, ClientTestMixin, UserTestMixin):
             course.save()
             
             self.assertEqual(UserLessonRelation.objects.all().count(), 0)
+    
+    def test_string(self):
+        print(self.Create_teacher())
+        print(self.Create_room())
+        print(self.Create_subject())
+        print(self.Create_course())
+        print(self.Create_lesson())
+        print(self.Create_lesson_data())
+        print(self.Create_user())

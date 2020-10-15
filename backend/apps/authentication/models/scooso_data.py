@@ -32,3 +32,6 @@ class ScoosoData(RandomIDMixin):
         max_length=127,
         verbose_name=_("Passwort")
     )
+    
+    def __str__(self):
+        return self.user

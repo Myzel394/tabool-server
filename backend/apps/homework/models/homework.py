@@ -13,7 +13,7 @@ from simple_history.models import HistoricalRecords
 from apps.authentication.public import *
 from apps.history_extras.extras import UserInformationHistoricalModel
 from apps.lesson.public import *
-from apps.utils import format_datetime, validate_weekday_in_lesson_data_available
+from apps.utils import validate_weekday_in_lesson_data_available
 from .user_relations.homework import UserHomeworkRelation
 from ..public import HOMEWORK_CHANNEL
 from ..querysets import HomeworkQuerySet
@@ -99,8 +99,17 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
     
     def __str__(self):
         if self.due_date:
-            return f"{model_verbose(self.__class__)}: {self.lesson} bis {format_datetime(self.due_date)}"
-        return f"{model_verbose(self.__class__)}: {self.lesson}"
+            return _("{lesson} (Typ: {type}) bis {due_date} (Privat: {is_private}").format(
+                lesson=self.lesson,
+                type=self.type,
+                due_date=self.due_date,
+                is_private=self.private_to_user is not None
+            )
+        return _("{lesson} (Typ: {type}, Privat: {is_private})").format(
+            lesson=self.lesson,
+            type=self.type,
+            is_private=self.private_to_user is not None
+        )
     
     @property
     def is_private(self) -> bool:

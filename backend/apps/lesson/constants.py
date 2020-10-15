@@ -34,7 +34,6 @@ SUBJECT_NAMES_MAPPING = dicti(
     spk=_("Sport"),
     g=_("Geschichte"),
     bk=_("Kunst"),
-    # TODO: Add more!
 )
 SUBJECT_COLORS_MAPPING = dicti(
     E="#14A5FF",

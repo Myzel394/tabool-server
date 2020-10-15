@@ -18,7 +18,8 @@ from ...utils import format_datetime
 
 if TYPE_CHECKING:
     from datetime import date, datetime
-    from apps.school_data.models import Room, Course
+    from apps.school_data.models import Room
+    from apps.lesson.models import Course
 
 __all__ = [
     "Classtest"
@@ -63,6 +64,12 @@ class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
         bases=[UserInformationHistoricalModel]
     )
     
+    def __str__(self):
+        return _("{course} am {targeted_date}").format(
+            course_str=self.course,
+            targeted_date=format_datetime(self.targeted_date)
+        )
+    
     @staticmethod
     def handlers():
         return {
@@ -77,9 +84,3 @@ class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     @property
     def edited_at(self) -> "datetime":
         return self.history.latest().history_date
-    
-    def __str__(self):
-        return _("{course} am {targeted_date_formatted}").format(
-            course_str=self.course,
-            targeted_date_formatted=format_datetime(self.targeted_date)
-        )

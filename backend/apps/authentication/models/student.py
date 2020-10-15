@@ -46,6 +46,13 @@ class Student(RandomIDMixin, LifecycleModel):
         on_delete=models.SET_NULL,
     )
     
+    def __str__(self):
+        return _("{user} in Klasse {class_number} mit Lehrer {teacher}").format(
+            user=self.user,
+            class_number=self.class_number,
+            teacher=self.main_teacher
+        )
+    
     @hook(BEFORE_UPDATE, when="user", has_changed=True)
     def _hook_validate_user_cant_change(self):
         raise CannotChangeUserError(_("Der Benutzer kann nicht verändert werden."))

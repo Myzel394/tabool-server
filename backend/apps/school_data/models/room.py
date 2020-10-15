@@ -3,7 +3,6 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_common_utils.libraries.utils import model_verbose
 from django_hint import *
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
@@ -30,7 +29,7 @@ class Room(RandomIDMixin, LifecycleModel):
     )  # type: str
     
     def __str__(self):
-        return f"{model_verbose(self.__class__)}: {self.place}"
+        return self.place
     
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)

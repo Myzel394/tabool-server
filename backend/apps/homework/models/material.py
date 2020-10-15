@@ -7,7 +7,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_lifecycle import AFTER_DELETE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.lesson.public import *
-from apps.utils.models import AddedAtMixin
+from apps.utils.models import AddedAtMixin, model_verbose
 from ..public import *
 from ..querysets import MaterialQuerySet
 from ...utils.fields import SafeFileField
@@ -47,7 +47,11 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     )  # type: str
     
     def __str__(self):
-        return f"{self.name}"
+        return _("{material_model_verbose} {name} für {lesson}").format(
+            material_model_verbose=model_verbose(self),
+            name=self.name,
+            lesson=self.lesson
+        )
     
     @hook(AFTER_DELETE)
     def _hook_delete_file(self):

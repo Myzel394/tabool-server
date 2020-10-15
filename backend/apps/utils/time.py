@@ -5,9 +5,10 @@ AnyDatetimeModule = Union[date, datetime, time]
 
 
 def format_datetime(value: AnyDatetimeModule, /, format: Optional[str] = None) -> str:
+    # TODO: ADd as constants!
     default_formats = {
-        date: "%d. %m. %Y",
-        datetime: "%d. %m. %Y, %H:%M",
+        date: "%d.%m.%Y",
+        datetime: "%d.%m.%Y, %H:%M",
         time: "%H:%M"
     }
     format = format or default_formats[type(value)]

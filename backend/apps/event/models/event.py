@@ -13,6 +13,7 @@ from constants import maxlength
 from ..sub.subquerysets import EventQuerySet
 from ...school_data.public.model_references import ROOM
 from ...school_data.public.model_verbose_functions import room_single
+from ...utils import format_datetime
 
 if TYPE_CHECKING:
     from datetime import datetime, time, timedelta
@@ -52,6 +53,13 @@ class Event(RandomIDMixin, CreationDateMixin, HandlerMixin):
     end_datetime = models.DateTimeField(
         verbose_name=_("Ende")
     )  # type: datetime
+    
+    def __str__(self):
+        return _("{title} vom {start_datetime} bis {end_datetime}").format(
+            title=self.title,
+            start_datetime=format_datetime(self.start_datetime),
+            end_datetime=format_datetime(self.end_datetime)
+        )
     
     @staticmethod
     def handlers():

@@ -36,3 +36,6 @@ class UserSubjectRelation(RandomIDMixin, UserModelRelationMixin):
         blank=True,
         null=True,
     )
+    
+    def __str__(self):
+        return self.subject

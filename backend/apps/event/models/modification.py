@@ -80,6 +80,13 @@ class Modification(RandomIDMixin, LifecycleModel):
         help_text=_("Art von Veränderung")
     )  # type: int
     
+    def __str__(self):
+        return _("{course} vom {start_datetime} bis {end_datetime}").format(
+            course=self.course,
+            start_datetime=self.start_datetime,
+            end_datetime=self.end_datetime
+        )
+    
     @hook(AFTER_CREATE)
     @hook(AFTER_DELETE)
     @hook(

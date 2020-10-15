@@ -41,7 +41,11 @@ class User(SimpleEmailConfirmationUserMixin, AbstractUser, LifecycleModel):
     objects = UserQuerySet()
     
     def __str__(self):
-        return self.email
+        return _("{first_name} {last_name} (ID: {id})").format(
+            first_name=self.first_name,
+            last_name=self.last_name,
+            id=self.id
+        )
     
     @hook(BEFORE_CREATE)
     def _hook_create_id(self):

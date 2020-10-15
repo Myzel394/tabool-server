@@ -90,7 +90,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     
     def __str__(self):
         # Translators: Diese Nachricht ist für den Admin-Bereich. Sie wird verwendet, um Einreichungen darzustellen.
-        return _("{filename} für Stunde {lesson} (Hochladedatum: {upload_date})").format(
+        return _("{filename} für {lesson} (Hochladedatum: {upload_date})").format(
             filename=self.file.name,
             lesson=self.lesson,
             upload_date=self.upload_at

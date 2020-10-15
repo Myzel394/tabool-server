@@ -42,6 +42,9 @@ class AccessToken(RandomIDMixin, CreationDateMixin, LifecycleModel):
         editable=False,
     )  # type: str
     
+    def __str__(self):
+        return _("{user} vom {creation_date}").format(user=self.user, creation_date=self.created_at)
+    
     @hook(BEFORE_CREATE)
     def _hook_create_token(self):
         tokens = set(self.__class__.objects.values_list("token", flat=True))

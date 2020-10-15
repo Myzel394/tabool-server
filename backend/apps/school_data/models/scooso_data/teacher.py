@@ -30,4 +30,4 @@ class TeacherScoosoData(ScoosoDataMixin):
     )
     
     def __str__(self):
-        return f"{self.teacher}: {self.code} ({self.id})"
+        return self.teacher

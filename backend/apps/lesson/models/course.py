@@ -57,8 +57,11 @@ class Course(RandomIDMixin, LifecycleModel):
         default=1
     )  # type: int
     
-    # TODO: Add Global SSE!
-    # TODO: Add more modification event sends!
+    def __str__(self):
+        return _("{course_name}: {teacher}").format(
+            course_name=self.name,
+            teacher=self.teacher
+        )
     
     def __call_manage_relations_on_model(self, models: Iterable[StandardModelType]) -> None:
         participants = self.participants.all()
@@ -87,12 +90,14 @@ class Course(RandomIDMixin, LifecycleModel):
         return f"{self.subject.name}{self.course_number}".lower()
     
     @property
-    def class_number(self) -> int:
+    def folder_name(self) -> str:
+        if class_number := self.get_class_number():
+            return f"{class_number}/{self.name}"
+        return f"unknown/{self.name}"
+    
+    def get_class_number(self) -> Optional[int]:
         participant: "User" = Student.objects.first()
         
-        # noinspection PyUnresolvedReferences
-        return participant.student.class_number
-    
-    @property
-    def folder_name(self) -> str:
-        return f"{self.class_number}/{self.name}"
+        if student := getattr(participant, "student", None):
+            return student.class_number
+        return

@@ -40,6 +40,11 @@ class News(RandomIDMixin, HandlerMixin, EditCreationDateMixin, LifecycleModel):
         null=True
     )
     
+    def __str__(self):
+        return _("{title}").format(
+            title=self.title
+        )
+    
     @staticmethod
     def handlers():
         return {

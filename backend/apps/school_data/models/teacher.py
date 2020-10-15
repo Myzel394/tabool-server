@@ -56,7 +56,11 @@ class Teacher(RandomIDMixin, HandlerMixin):
     )
     
     def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.short_name})"
+        return _("{first_name} {last_name}, {short_name}").format(
+            first_name=self.first_name,
+            last_name=self.last_name,
+            short_name=self.short_name
+        )
     
     @property
     def lessons_data(self) -> QueryType["LessonData"]:

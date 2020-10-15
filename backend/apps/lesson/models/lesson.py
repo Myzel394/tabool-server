@@ -10,6 +10,7 @@ from .user_relations.lesson import UserLessonRelation
 from ..public import *
 from ..querysets import LessonQuerySet
 from ..validators import validate_lesson_weekday
+from ...utils import format_datetime
 
 if TYPE_CHECKING:
     from datetime import date as typing_date
@@ -40,6 +41,9 @@ class Lesson(RandomIDMixin):
     date = models.DateField(
         verbose_name=_("Datum")
     )  # type: typing_date
+    
+    def __str__(self):
+        return format_datetime(self.date)
     
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="date")

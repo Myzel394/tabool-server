@@ -34,3 +34,6 @@ class UserEventRelation(RandomIDMixin, UserModelRelationMixin):
         default=False,
         verbose_name=_("Ignorieren"),
     )  # type: bool
+    
+    def __str__(self):
+        return self.event

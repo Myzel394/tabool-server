@@ -3,6 +3,7 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
+from django_common_utils.libraries.utils import model_verbose
 
 import apps.school_data.public.model_references
 import apps.school_data.public.model_verbose_functions
@@ -56,6 +57,15 @@ class LessonData(RandomIDMixin):
         verbose_name=_("Wochentag"),
         choices=weekdays.ALLOWED_WEEKDAYS
     )  # type: int
+    
+    def __str__(self):
+        return _("{lesson_data_model_verbose}: {start_time} - {end_time}, {weekday}, {course}").format(
+            lesson_data_model_verbose=model_verbose(self),
+            start_time=self.start_time,
+            end_time=self.end_time,
+            weekday=self.weekday,
+            course=self.course
+        )
     
     @property
     def duration(self) -> int:

@@ -48,6 +48,9 @@ class Timetable(
         help_text=_("Das Jahr, indem das Schuljahr startet.")
     )
     
+    def __str__(self):
+        return self.designation
+    
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="designation")
     def _hook_constrain_designation(self):

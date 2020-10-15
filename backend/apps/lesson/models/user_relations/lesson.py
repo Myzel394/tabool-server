@@ -35,3 +35,6 @@ class UserLessonRelation(RandomIDMixin, UserModelRelationMixin):
         verbose_name=_("Anwesend?"),
         help_text=_("Bist du in dieser Stunde anwesend?")
     )  # type: bool
+    
+    def __str__(self):
+        return self.lesson
