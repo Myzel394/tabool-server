@@ -12,6 +12,7 @@ __all__ = [
 
 
 def send_email_verification(user: "User") -> None:
+    # TODO: Better solution!
     message = f"""
     Hi {user.first_name}!
 
@@ -27,4 +28,3 @@ def send_email_verification(user: "User") -> None:
         settings.DEFAULT_FROM_EMAIL,
         [user.email],
     )
-    # TODO: Add!

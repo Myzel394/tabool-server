@@ -186,7 +186,7 @@ class ForeignSerializerTest(CourseTestMixin):
         random_material.delete()
         self.assertFalse(path.exists())
     
-    # TODO: Check material files
+    # TODO: Check material saved filed (lib folder)
     
     def test_multiple_import(self):
         import_teachers()

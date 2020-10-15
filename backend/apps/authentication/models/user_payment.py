@@ -33,8 +33,6 @@ class UserPayment(RandomIDMixin):
         null=True
     )
     
-    # TODO: Add UserPayments!
-    
     @property
     def has_paid(self) -> bool:
         return self.paid_at is not None

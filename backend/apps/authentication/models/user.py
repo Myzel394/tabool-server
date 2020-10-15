@@ -19,6 +19,7 @@ __all__ = [
 ]
 
 
+# TODO: Add RandomIDMixin!
 class User(SimpleEmailConfirmationUserMixin, AbstractUser, LifecycleModel):
     id = models.CharField(
         verbose_name=_("ID"),

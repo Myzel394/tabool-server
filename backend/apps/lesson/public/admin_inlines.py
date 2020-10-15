@@ -36,7 +36,6 @@ class LessonAdminInline(DefaultAdminInlineMixin):
         "get_lesson_room", "get_lesson_course", "get_lesson_start_time", "get_lesson_end_time"
     ]
     
-    # TODO: Add __str__ for models!
     def get_lesson_room(self, obj: Lesson) -> str:
         return str(obj.lesson_data.room)
     
