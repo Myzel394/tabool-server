@@ -4,6 +4,7 @@ from typing import *
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from apps.utils.files import privatize_file
 from apps.utils.text import camel_to_snake
 
 __all__ = [
@@ -110,8 +111,14 @@ class PrivatizeSerializerMixin(serializers.ModelSerializer):
     
     def create(self, validated_data):
         validated_data.pop("privatize")
-        return super().create(validated_data)
+        instance = super().create(validated_data)
+        for file in self.get_file_to_privatize(instance, validated_data):
+            privatize_file(file)
+        return instance
     
     def update(self, instance, validated_data):
         validated_data.pop("privatize")
-        return super().update(instance, validated_data)
+        instance = super().create(validated_data)
+        for file in self.get_file_to_privatize(instance, validated_data):
+            privatize_file(file)
+        return instance
