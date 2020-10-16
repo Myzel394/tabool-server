@@ -13,8 +13,8 @@ __all__ = [
 
 
 class EventViewSet(viewsets.mixins.ListModelMixin, RetrieveFromUserMixin):
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     model = Event
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = EventFilterSet
     search_fields = ["title"]
     ordering_fields = ["start_datetime", "end_datetime"]

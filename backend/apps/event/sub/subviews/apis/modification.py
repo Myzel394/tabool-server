@@ -1,8 +1,11 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from apps.utils.viewsets.mixins import RetrieveFromUserMixin
-from ....serializers import ModificationDetailSerializer, ModificationListSerializer
+from ....filters import ModificationFilterSet
 from ....models import Modification
+from ....serializers import ModificationDetailSerializer, ModificationListSerializer
 
 __all__ = [
     "ModificationViewSet"
@@ -11,6 +14,10 @@ __all__ = [
 
 class ModificationViewSet(viewsets.mixins.ListModelMixin, RetrieveFromUserMixin):
     model = Modification
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = ModificationFilterSet
+    search_fields = ["information"]
+    ordering_fields = ["start_datetime", "end_datetime"]
     
     def get_serializer_class(self):
         if self.action == "list":
