@@ -5,17 +5,15 @@ from pathlib import Path
 from typing import *
 
 from django.core.exceptions import ValidationError
-from django.db import models
 from django.db.models.fields.files import FieldFile
 from django.utils.translation import gettext_lazy as _
 from secure_file_detection import detector
-from secure_file_detection.constants import SUPPORTED_MIMETYPES
 from secure_file_detection.exceptions import *
 
 from constants import upload_sizes
 
 __all__ = [
-    "SafeFileField"
+    "SafeFileValidator"
 ]
 
 
@@ -97,18 +95,3 @@ class SafeFileValidator:
             yield temp_path
         finally:
             temp_path.unlink(missing_ok=True)
-
-
-class SafeFileField(models.FileField):
-    def __init__(
-            self,
-            valid_mimetypes: Optional[Iterable[str]] = None,
-            min_size: int = upload_sizes.MIN_UPLOAD_SIZE,
-            max_size: int = upload_sizes.MAX_UPLOAD_SIZE,
-            *args,
-            **kwargs
-    ):
-        super().__init__(*args, **kwargs)
-        
-        valid_mimetypes = valid_mimetypes or SUPPORTED_MIMETYPES
-        self.validators.append(SafeFileValidator(valid_mimetypes, min_size, max_size))

@@ -10,7 +10,7 @@ from apps.authentication.views import (
 )
 from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet, ModificationViewSet
 from apps.homework.views import (
-    HomeworkViewSet, MaterialDownloadView, MaterialViewSet, SubmissionViewSet, UserHomeworkRelationViewSet,
+    HomeworkViewSet, MaterialViewSet, SubmissionViewSet, UserHomeworkRelationViewSet,
 )
 from apps.lesson.views import CourseViewSet, LessonViewSet, UserLessonRelationViewSet
 from apps.news.views import NewsViewSet
@@ -42,7 +42,6 @@ user_relation_router.register("subject", UserSubjectRelationViewSet, basename="U
 
 urlpatterns = [
                   # Static access
-                  path("private-media/", MaterialDownloadView.as_view()),
                   path("private-media/", include(private_storage.urls)),
     
                   path(f"api/{API_VERSION}/user-relation/", include(user_relation_router.urls)),

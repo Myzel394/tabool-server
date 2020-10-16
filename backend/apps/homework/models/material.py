@@ -4,16 +4,19 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
+from django_common_utils.libraries.utils import model_verbose
 from django_lifecycle import AFTER_DELETE, BEFORE_UPDATE, hook, LifecycleModel
+from private_storage.fields import PrivateFileField
 
 from apps.lesson.public import *
-from apps.utils.models import AddedAtMixin, model_verbose
+from apps.utils.models import AddedAtMixin
 from ..public import *
+from ..public.validators import safe_file_validator
 from ..querysets import MaterialQuerySet
-from ...utils.fields import SafeFileField
 
 if TYPE_CHECKING:
     from apps.lesson.models import Lesson
+    from django.db.models.fields.files import FieldFile
 
 
 # TODO: Add multiple databases!
@@ -31,13 +34,14 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         on_delete=models.CASCADE,
     )  # type: Lesson
     
-    file = SafeFileField(
+    file = PrivateFileField(
         verbose_name=_("Datei"),
         blank=True,
         null=True,
         upload_to=build_material_upload_to,
-        max_length=1023
-    )  # type: SafeFileField
+        max_length=1023,
+        validators=[safe_file_validator]
+    )  # type: FieldFile
     
     name = models.CharField(
         verbose_name=_("Dateiname"),

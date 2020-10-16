@@ -167,10 +167,10 @@ class ForeignSerializerTest(CourseTestMixin):
         
         imported_teacher = self.scraper.import_teacher(lesson['teacher'])
         
-        teachers = TeacherScoosoData.objects.all()
-        teacher = teachers.get(scooso_id=lesson['teacher']['scooso_id'])
+        teachers_scooso_data = TeacherScoosoData.objects.all()
+        teacher_scooso_data = teachers_scooso_data.get(scooso_id=lesson['teacher']['scooso_id'])
         
-        print(teacher)
+        print(teacher_scooso_data)
     
     def test_create_material(self):
         materials_subject_ids = [

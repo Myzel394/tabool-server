@@ -30,4 +30,4 @@ class SubjectScoosoData(ScoosoDataMixin):
     )
     
     def __str__(self):
-        return self.subject
+        return str(self.subject)

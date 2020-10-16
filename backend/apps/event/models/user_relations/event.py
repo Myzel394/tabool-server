@@ -36,4 +36,4 @@ class UserEventRelation(RandomIDMixin, UserModelRelationMixin):
     )  # type: bool
     
     def __str__(self):
-        return self.event
+        return str(self.event)

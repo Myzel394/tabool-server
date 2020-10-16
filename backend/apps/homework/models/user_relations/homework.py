@@ -41,4 +41,4 @@ class UserHomeworkRelation(RandomIDMixin, UserModelRelationMixin):
     )
     
     def __str__(self):
-        return self.homework
+        return str(self.homework)

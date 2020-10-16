@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 
+from django.conf import settings
 from django.db.models import Model
 from django_hint import *
 from magic import Magic
@@ -28,14 +29,18 @@ def build_path(
         prefix: str = "",
         suffix: str = "",
         *,
-        instance: Optional[Model] = None
+        instance: Optional[Model] = None,
+        is_private: bool = False,
 ) -> str:
     now = datetime.now()
+    access_folder = settings.PRIVATE_STORAGE_FOLDER if is_private else settings.PUBLIC_STORAGE_FOLDER
     
     if instance:
         prefix += getattr(instance, "folder_name", instance.id)
     
-    path = build_str("", prefix, "/") + "/".join(str(x) for x in [now.year, now.month, now.day, now.hour]) \
+    path = build_str("", access_folder, "/") \
+           + build_str("", prefix, "/") \
+           + "/".join(str(x) for x in [now.year, now.month, now.day, now.hour]) \
            + build_str("", suffix, "/") + filename
     
     return path

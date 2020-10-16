@@ -29,4 +29,4 @@ class LessonDataScoosoData(RandomIDMixin):
     )
     
     def __str__(self):
-        return self.lesson_data
+        return str(self.lesson_data)

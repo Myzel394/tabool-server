@@ -22,4 +22,4 @@ class SubmissionScoosoData(ScoosoDataMixin):
     )
     
     def __str__(self):
-        return self.submission
+        return str(self.submission)

@@ -36,7 +36,7 @@ class MaterialScoosoData(ScoosoDataMixin):
     )
     
     def __str__(self):
-        return self.material
+        return str(self.material)
     
     def build_download_url(self, user: "User") -> str:
         # TODO: Find better solution!

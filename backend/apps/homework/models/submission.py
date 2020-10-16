@@ -8,16 +8,17 @@ from django_lifecycle import (
     AFTER_CREATE, AFTER_DELETE, AFTER_UPDATE, BEFORE_UPDATE, hook,
     LifecycleModel,
 )
+from private_storage.fields import PrivateFileField
 
 from apps.lesson.public import *
 from . import SubmissionScoosoData
 from ..exceptions import *
 from ..public import build_submission_upload_to
+from ..public.validators import safe_file_validator
 from ..querysets import SubmissionQuerySet
 from ...scooso_scraper.scrapers.material import MaterialRequest, MaterialTypeOptions
 from ...scooso_scraper.scrapers.parsers.material import MaterialType
 from ...utils import AssociatedUserMixin
-from ...utils.fields import SafeFileField
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -43,10 +44,11 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         on_delete=models.CASCADE,
     )  # type: Lesson
     
-    file = SafeFileField(
+    file = PrivateFileField(
         verbose_name=_("Datei"),
         upload_to=build_submission_upload_to,
-        max_length=1023
+        max_length=1023,
+        validators=[safe_file_validator]
     )  # type: FieldFile
     
     upload_at = models.DateTimeField(

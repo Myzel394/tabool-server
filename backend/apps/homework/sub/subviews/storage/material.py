@@ -10,10 +10,5 @@ __all__ = [
 class MaterialDownloadView(PrivateStorageDetailView):
     model = Material
     
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return super().get_queryset().user_accessible(self.request.user)
-        return None
-    
-    def can_access_file(self, _) -> bool:
+    def can_access_file(self, private_file):
         return True

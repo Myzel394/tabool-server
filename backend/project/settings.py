@@ -232,7 +232,10 @@ EMAIL_MAIL_PLAIN = "authentication/emails/confirm.txt"
 EMAIL_PAGE_TEMPLATE = "authentication/email_confirmation.html"
 
 # Private storage
-PRIVATE_STORAGE_PATH = LIB_DIR / "private_media"
+PRIVATE_STORAGE_FOLDER = "private"
+PUBLIC_STORAGE_FOLDER = "public"
+PRIVATE_STORAGE_PATH = LIB_DIR / PRIVATE_STORAGE_FOLDER
+PRIVATE_STORAGE_AUTH_FUNCTION = "apps.utils.private_storage.private_storage_access_check"
 
 # Event stream
 EVENTSTREAM_STORAGE_CLASS = "django_eventstream.storage.DjangoModelStorage"

@@ -30,4 +30,4 @@ class RoomScoosoData(ScoosoDataMixin):
     )
     
     def __str__(self):
-        return self.roo
+        return str(self.room)
