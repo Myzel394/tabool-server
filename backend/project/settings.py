@@ -82,11 +82,11 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.UserRateThrottle"
     ],
     "DEFAULT_THROTTLE_RATES": {
-        "anon": "5/second",
-        "user": "60/second"
+        "anon": os.getenv("THROTTLE_ANON"),
+        "user": os.getenv("THROTTLE_USER")
     },
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 25,
+    "PAGE_SIZE": int(os.getenv("DEFAULT_PAGE_SIZE")),
     "DEFAULT_PERMISSION_CLASSES": [
         "apps.utils.permissions.AuthenticationAndActivePermission"
     ]
@@ -155,7 +155,7 @@ LANGUAGE_CODE = "de-de"
 
 TIME_ZONE = "CET"
 
-USE_I18N = False
+USE_I18N = True
 USE_L10N = False
 USE_TZ = False
 
@@ -232,4 +232,4 @@ PRIVATE_STORAGE_PATH = LIB_DIR / "private_media"
 
 # Event stream
 EVENTSTREAM_STORAGE_CLASS = "django_eventstream.storage.DjangoModelStorage"
-# EVENTSTREAM_CHANNELMANAGER_CLASS = "apps.utils.authorization.UserActiveChannelManager"
+EVENTSTREAM_CHANNELMANAGER_CLASS = "apps.utils.authorization.UserActiveChannelManager"
