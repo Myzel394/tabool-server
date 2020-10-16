@@ -70,5 +70,3 @@ class PureMaterialParser(BaseParser):
             return len(self.json["tables"].get("items", [])) >= 0 and self.json["header"]["logType"] == 20
         except:
             return False
-
-# TODO: Add celery tasks!
