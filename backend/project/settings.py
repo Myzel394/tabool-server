@@ -55,16 +55,17 @@ INSTALLED_APPS = [
     "django_eventstream",
     "django_crontab",
     
-    "apps.relation_managers.apps.RelationManagersConfig",
+    "apps.django.utils.relation_managers.apps.RelationManagersConfig",
     
-    "apps.authentication",
-    "apps.school_data",
-    "apps.lesson",
-    "apps.event",
-    "apps.homework",
+    "apps.django.main.authentication",
+    "apps.django.main.school_data",
+    "apps.django.main.lesson",
+    "apps.django.main.event",
+    "apps.django.main.homework",
+    "apps.django.extra.scooso_scraper",
     
-    "apps.news",
-    "apps.main",
+    "apps.django.main.news",
+    "apps.django.core",
 ]
 
 MIDDLEWARE = [
@@ -93,15 +94,15 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": int(os.getenv("DEFAULT_PAGE_SIZE")),
     "DEFAULT_PERMISSION_CLASSES": [
-        "apps.utils.permissions.AuthenticationAndActivePermission"
+        "apps.django.utils.permissions.AuthenticationAndActivePermission"
     ]
 }
 
 CRONJOBS = [
-    (os.getenv("CRON_FETCH_TIMETABLE_DAY"), "apps.lesson.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT"), "apps.lesson.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_TIMETABLE_DAY_WEEKEND"), "apps.lesson.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT_WEEKEND"), "apps.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_TIMETABLE_DAY"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_TIMETABLE_DAY_WEEKEND"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT_WEEKEND"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
 ]
 
 AUTH_USER_MODEL = "authentication.User"
@@ -121,7 +122,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "apps.main.context_processors.constants_processor"
+                "apps.django.core.context_processors.constants_processor"
             ],
         },
     },
@@ -143,6 +144,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
+# TODO: Add password breaches tests!
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -243,8 +245,8 @@ EMAIL_PAGE_TEMPLATE = "authentication/email_confirmation.html"
 PRIVATE_STORAGE_FOLDER = "private"
 PUBLIC_STORAGE_FOLDER = "public"
 PRIVATE_STORAGE_PATH = LIB_DIR / PRIVATE_STORAGE_FOLDER
-PRIVATE_STORAGE_AUTH_FUNCTION = "apps.utils.private_storage.private_storage_access_check"
+PRIVATE_STORAGE_AUTH_FUNCTION = "apps.django.utils.private_storages.private_storage_access_check"
 
 # Event stream
 EVENTSTREAM_STORAGE_CLASS = "django_eventstream.storage.DjangoModelStorage"
-EVENTSTREAM_CHANNELMANAGER_CLASS = "apps.utils.authorization.UserActiveChannelManager"
+EVENTSTREAM_CHANNELMANAGER_CLASS = "apps.django.utils.authorizations.UserActiveChannelManager"

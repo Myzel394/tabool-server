@@ -5,18 +5,17 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.authentication.views import (
+from apps.django.main.authentication.views import (
     email_confirmation, LoginView, LogoutView, PasswordChangeView, RegisterView, StudentView, UserPaymentViewSet,
 )
-from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet, ModificationViewSet
-from apps.homework.views import (
+from apps.django.main.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet, ModificationViewSet
+from apps.django.main.homework.views import (
     HomeworkViewSet, MaterialDownloadView, MaterialViewSet, SubmissionViewSet, UserHomeworkRelationViewSet,
 )
-from apps.lesson.views import CourseViewSet, LessonViewSet, UserLessonRelationViewSet
-from apps.news.views import NewsViewSet
-from apps.school_data.views import RoomViewSet, SubjectViewSet, TeacherViewSet, UserSubjectRelationViewSet
-
-API_VERSION = "1.0"
+from apps.django.main.lesson.views import CourseViewSet, LessonViewSet, UserLessonRelationViewSet
+from apps.django.main.news.views import NewsViewSet
+from apps.django.main.school_data.views import RoomViewSet, SubjectViewSet, TeacherViewSet, UserSubjectRelationViewSet
+from constants.api import API_VERSION
 
 router = DefaultRouter()
 router.register("lesson", LessonViewSet, basename="Lesson")
@@ -56,6 +55,6 @@ urlpatterns = [
                   path(f"api/{API_VERSION}/auth/logout/", LogoutView.as_view()),
                   path(f"api/{API_VERSION}/auth/confirmation/", email_confirmation),
     
-                  path("", include("apps.main.urls")),
+                  path("", include("apps.django.core.urls")),
                   path("admin/", admin.site.urls),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

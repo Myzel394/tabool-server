@@ -1,4 +1,4 @@
-from apps.utils.fields.weekday import WeekdayChoices
+from apps.django.utils.fields import WeekdayChoices
 
 ALLOWED_WEEKDAYS = [
     choice
