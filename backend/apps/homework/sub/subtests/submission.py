@@ -1,5 +1,3 @@
-import random
-import string
 from pathlib import Path
 
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -7,11 +5,11 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from apps.homework.mixins.tests.submission import SubmissionTestMixin
 from apps.lesson.mixins.tests.lesson import LessonUploadTestMixin
 from apps.scooso_scraper.scrapers.material import MaterialRequest, MaterialTypeOptions
-from apps.utils import ClientTestMixin
+from apps.utils import ClientTestMixin, UtilsTestMixin
 from project.urls import API_VERSION
 
 
-class SubmissionTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin):
+class SubmissionTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin, UtilsTestMixin):
     def setUp(self) -> None:
         self.logged_user = self.Login_user()
         self.__class__.associated_user = self.logged_user
@@ -27,7 +25,7 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin
         self.assertStatusOk(response.status_code)
     
     def test_api_post(self):
-        DATA = "".join(random.choices(string.ascii_letters + string.digits, k=1024 * 5)).encode()
+        DATA = self.Random_data(1024 * 5)
         HTML = """
             <html>
                 <body>
@@ -58,7 +56,7 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin
                 data={
                     "lesson": self.lesson.id,
                     "file": SimpleUploadedFile(
-                        "file.txt",
+                        self.Random_filename(),
                         data,
                         mimetype
                     )

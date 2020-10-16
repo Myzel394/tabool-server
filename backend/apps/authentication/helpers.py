@@ -12,7 +12,6 @@ __all__ = [
 
 
 def send_email_verification(user: "User") -> None:
-    # TODO: Better solution!
     message = f"""
     Hi {user.first_name}!
 

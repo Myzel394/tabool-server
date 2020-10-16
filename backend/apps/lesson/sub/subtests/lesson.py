@@ -4,12 +4,11 @@ from apps.lesson.mixins.tests import LessonTestMixin
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.lesson.models import Course, Lesson, UserLessonRelation
 from apps.utils.tests import ClientTestMixin, UserTestMixin
+from project.urls import API_VERSION
 
 __all__ = [
     "QuerySetTest"
 ]
-
-from project.urls import API_VERSION
 
 
 class QuerySetTest(LessonTestMixin, AssociatedUserTestMixin):

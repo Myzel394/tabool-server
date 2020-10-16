@@ -19,7 +19,6 @@ if TYPE_CHECKING:
     from django.db.models.fields.files import FieldFile
 
 
-# TODO: Add multiple databases!
 class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     class Meta:
         verbose_name = _("Material")

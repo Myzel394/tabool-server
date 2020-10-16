@@ -10,6 +10,7 @@ import lorem
 from apps.lesson.mixins.tests.course import CourseTestMixin
 from apps.lesson.mixins.tests.lesson import LessonUploadTestMixin
 from apps.school_data.models import TeacherScoosoData
+from apps.utils import UtilsTestMixin
 from ...actions import import_teachers
 from ...mixins.tests.dummy_data import DummyUser
 from ...scrapers.material import MaterialRequest, MaterialTypeOptions
@@ -38,7 +39,7 @@ class ParserTest(DummyUser):
         self.assertEqual(len(data["materials_data"]), 5)
 
 
-class SomeTests(LessonUploadTestMixin):
+class SomeTests(LessonUploadTestMixin, UtilsTestMixin):
     def setUp(self) -> None:
         self.load_lesson_upload()
         self.scraper = TimetableRequest(self.username, self.password)
@@ -73,16 +74,19 @@ class SomeTests(LessonUploadTestMixin):
         self.assertTrue(exists)
     
     def test_delete_uploaded(self):
-        filename = str("".join(random.choices(string.ascii_letters + string.digits, k=10))) + ".txt"
+        filename = self.Random_filename()
         content = lorem.text()
         material_type = MaterialTypeOptions.HOMEWORK
         
         with MaterialRequest(self.username, self.password) as scraper:
             previous_count = len(scraper.get_materials(self.time_id, self.target_date, material_type)['materials'])
             scraper.upload_material(self.time_id, self.target_date, filename, content, material_type)
+            
             materials = scraper.get_materials(self.time_id, self.target_date, material_type)
             material_id = materials['materials'][0]['scooso_id']
+            
             scraper.delete_material(material_id)
+            
             materials = scraper.get_materials(self.time_id, self.target_date, material_type)
         
         self.assertEqual(previous_count - 1, len(materials['materials']))

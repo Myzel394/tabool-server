@@ -152,8 +152,7 @@ class PureTimetableParser(BaseParser):
             "lesson": {
                 "start_time": start_datetime.time(),
                 "end_time": end_datetime.time(),
-                "date": start_datetime.date(),  # TODO: Remove `weekday` here, it can be extracted from `date`
-                "weekday": start_datetime.date().weekday(),
+                "date": start_datetime.date(),
                 "time_id": lesson["time_id"],
                 "lesson_type": lesson["lessontype"]
             },

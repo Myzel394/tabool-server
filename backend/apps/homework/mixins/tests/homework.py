@@ -23,8 +23,6 @@ class HomeworkTestMixin(LessonTestMixin, ABC):
             random.choice(LessonData.objects.all().values_list("weekday", flat=True).distinct())
         )
     
-    # TODO: Test für Allowed weekdays machen, Test für zufällige Daten machen.
-    
     @classmethod
     def Create_homework(cls, **kwargs) -> Homework:
         return Homework.objects.create(

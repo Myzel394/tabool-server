@@ -25,6 +25,6 @@ class ClasstestTestMixin(RoomTestMixin, CourseTestMixin, SubjectTestMixin, ABC):
                     ),
                     "information": lambda: random.choice([None, lorem.sentence()]),
                 },
-                kwargs  # TODO: Add joinkwargs everywhere!
+                kwargs
             )
         )

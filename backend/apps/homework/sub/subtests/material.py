@@ -1,5 +1,4 @@
 import random
-import string
 from datetime import datetime
 from pathlib import Path
 
@@ -7,26 +6,24 @@ import lorem
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from apps.utils import ClientTestMixin
+from apps.utils import ClientTestMixin, UtilsTestMixin
 from apps.utils.files import get_file_dates, set_file_dates
 from constants import upload_sizes
 from project.urls import API_VERSION
 from ...mixins.tests import MaterialTestMixin
 
 
-class MaterialTest(MaterialTestMixin, ClientTestMixin):
+class MaterialTest(MaterialTestMixin, ClientTestMixin, UtilsTestMixin):
     def test_size(self):
-        ok_data = "".join(random.choices(
-            string.ascii_letters,
-            k=random.randint(
-                int(upload_sizes.MIN_UPLOAD_SIZE * 1.1),
-                int(upload_sizes.MAX_UPLOAD_SIZE * .9)
-            )
+        ok_data = self.Random_data(random.randint(
+            int(upload_sizes.MIN_UPLOAD_SIZE * 1.1),
+            int(upload_sizes.MAX_UPLOAD_SIZE * .9)
         ))
+        
         print("Testing ok data")
         self.Create_material(
             file=SimpleUploadedFile(
-                "file.txt",
+                self.Random_filename(),
                 ok_data.encode(),
             )
         )
@@ -35,22 +32,19 @@ class MaterialTest(MaterialTestMixin, ClientTestMixin):
             print("Testing too small data")
             self.Create_material(
                 file=SimpleUploadedFile(
-                    "file.txt",
+                    self.Random_filename(),
                     "".encode()
                 )
             )
         
         with self.assertRaises(ValidationError):
-            big_data = "".join(random.choices(
-                string.ascii_letters,
-                k=int(upload_sizes.MAX_UPLOAD_SIZE * 1.1)
-            ))
+            too_big_data = self.Random_data(int(upload_sizes.MAX_UPLOAD_SIZE * 1.1))
             
             print("Testing too big data")
             self.Create_material(
                 file=SimpleUploadedFile(
-                    "file.txt",
-                    big_data.encode()
+                    self.Random_filename(),
+                    too_big_data.encode()
                 )
             )
     
@@ -67,8 +61,6 @@ class MaterialTest(MaterialTestMixin, ClientTestMixin):
             self.assertEqual(dates['accessed_at'], new_date)
         finally:
             path.unlink()
-        
-        print()
     
     def test_private(self):
         material = self.Create_material()

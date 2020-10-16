@@ -1,21 +1,17 @@
-import random
-import string
-
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from apps.lesson.mixins.tests.lesson import LessonUploadTestMixin
 from apps.scooso_scraper.scrapers.material import MaterialRequest, MaterialTypeOptions
-from apps.utils import ClientTestMixin
+from apps.utils import ClientTestMixin, UtilsTestMixin
 from project.urls import API_VERSION
 
 
-class UploadTest(ClientTestMixin, LessonUploadTestMixin):
+class UploadTest(ClientTestMixin, LessonUploadTestMixin, UtilsTestMixin):
     def setUp(self) -> None:
         self.load_lesson_upload()
     
     def test_direct_scooso_upload(self):
-        filename = "upload_test_" + "".join(random.choices(string.ascii_letters + string.digits, k=5)) + ".txt"
-        data = "".join(random.choices(string.ascii_letters + string.digits, k=1024 * 5))
+        filename = self.Random_filename()
         
         response = self.client.post(
             f"/api/{API_VERSION}/data/submission/scooso/",
@@ -23,7 +19,7 @@ class UploadTest(ClientTestMixin, LessonUploadTestMixin):
                 "lesson": self.lesson.id,
                 "file": SimpleUploadedFile(
                     filename,
-                    data.encode()
+                    self.Random_data(1024 * 5).encode()
                 )
             }
         )

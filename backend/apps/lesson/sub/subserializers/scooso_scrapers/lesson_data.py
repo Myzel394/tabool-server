@@ -21,10 +21,7 @@ class LessonDataScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     
     start_time = serializers.TimeField()
     end_time = serializers.TimeField()
-    weekday = serializers.IntegerField(
-        min_value=min(ALLOWED_DAYS_NUMBERS),
-        max_value=max(ALLOWED_DAYS_NUMBERS)
-    )
+    date = serializers.DateField()
     
     def pop_scooso_data(self, validated_data: dict) -> dict:
         return {
@@ -33,7 +30,7 @@ class LessonDataScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     
     def get_unique_data(self, validated_data: dict) -> dict:
         return {
-            "weekday": validated_data["weekday"],
+            "weekday": validated_data["date"].weekday(),
             "start_time": validated_data["start_time"],
             "end_time": validated_data["end_time"],
             "course": validated_data["course"]
