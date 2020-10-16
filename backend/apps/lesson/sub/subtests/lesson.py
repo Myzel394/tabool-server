@@ -1,3 +1,5 @@
+from pprint import pp
+
 from apps.lesson.mixins.tests import LessonTestMixin
 from apps.lesson.mixins.tests.associated_user import AssociatedUserTestMixin
 from apps.lesson.models import Course, Lesson, UserLessonRelation
@@ -87,3 +89,22 @@ class UserRelationCreationTest(LessonTestMixin, ClientTestMixin, UserTestMixin):
         print(self.Create_lesson())
         print(self.Create_lesson_data())
         print(self.Create_user())
+
+
+class APITest(LessonTestMixin, ClientTestMixin):
+    def test_data(self):
+        with self.Login_user_as_context() as user:
+            for _ in range(10):
+                self.Create_lesson()
+            
+            response = self.client.get(f"/api/{API_VERSION}/data/lesson/")
+            self.assertStatusOk(response.status_code)
+            
+            pp(list(response.data["results"]))
+            
+            lesson_id = response.data["results"][0]["id"]
+            
+            response = self.client.get(f"/api/{API_VERSION}/data/lesson/{lesson_id}/")
+            self.assertStatusOk(response.status_code)
+            
+            pp(dict(response.data))

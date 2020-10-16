@@ -12,15 +12,14 @@ from apps.event.views import ClasstestViewSet, EventUserRelationViewSet, EventVi
 from apps.homework.views import (
     HomeworkViewSet, MaterialDownloadView, MaterialViewSet, SubmissionViewSet, UserHomeworkRelationViewSet,
 )
-from apps.lesson.views import CourseViewSet, UserLessonRelationViewSet
+from apps.lesson.views import CourseViewSet, LessonViewSet, UserLessonRelationViewSet
 from apps.news.views import NewsViewSet
 from apps.school_data.views import RoomViewSet, SubjectViewSet, TeacherViewSet, UserSubjectRelationViewSet
-from apps.timetable.views import TimetableViewSet
 
 API_VERSION = "1.0"
 
 router = DefaultRouter()
-router.register("timetable", TimetableViewSet, basename="Timetable")
+router.register("lesson", LessonViewSet, basename="Lesson")
 router.register("homework", HomeworkViewSet, basename="Homework")
 router.register("modification", ModificationViewSet, basename="Modification")
 router.register("classtest", ClasstestViewSet, basename="Classtest")

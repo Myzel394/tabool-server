@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     "apps.lesson",
     "apps.event",
     "apps.homework",
-    "apps.timetable",
     
     "apps.news",
     "apps.main",

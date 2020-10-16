@@ -29,6 +29,7 @@ class Lesson(RandomIDMixin):
         unique_together = (
             ("lesson_data", "date")
         )
+        ordering = ("date", "lesson_data__id")
     
     objects = LessonQuerySet.as_manager()
     

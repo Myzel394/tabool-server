@@ -24,9 +24,6 @@ class LessonDetailSerializer(RandomIDSerializerMixin):
         fields = [
             "lesson_data", "date", "id", "user_relation"
         ]
-        read_only = [
-            "lesson_data", "date", "id", "user_relation"
-        ]
     
     user_relation = UserRelationField(UserLessonRelationSerializer)
     
