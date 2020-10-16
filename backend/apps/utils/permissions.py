@@ -8,7 +8,7 @@ __all__ = [
 
 class AuthenticationAndActivePermission(permissions.IsAuthenticated):
     def has_permission(self, request, view):
-        return super().has_permission(request, view) and request.user.is_confirmed
+        return super().has_permission(request, view) and request.user.is_confirmed and request.user.is_active
 
 
 def perm_to_permission(identifier: str) -> Permission:

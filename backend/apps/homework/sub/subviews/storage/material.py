@@ -11,4 +11,4 @@ class MaterialDownloadView(PrivateStorageDetailView):
     model = Material
     
     def can_access_file(self, private_file):
-        return True
+        return True  # Just for test currently

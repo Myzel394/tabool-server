@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "simple_email_confirmation",
     "channels",
     "django_eventstream",
+    "django_crontab",
     
     "apps.relation_managers.apps.RelationManagersConfig",
     
@@ -95,6 +96,13 @@ REST_FRAMEWORK = {
         "apps.utils.permissions.AuthenticationAndActivePermission"
     ]
 }
+
+CRONJOBS = [
+    (os.getenv("CRON_FETCH_TIMETABLE_DAY"), "apps.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT"), "apps.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_TIMETABLE_DAY_WEEKEND"), "apps.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT_WEEKEND"), "apps.lesson.cron_jobs.fetch_timetable_from_users"),
+]
 
 AUTH_USER_MODEL = "authentication.User"
 

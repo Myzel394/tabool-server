@@ -9,7 +9,7 @@ from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, hook, LifecycleModel
 from simple_email_confirmation.models import SimpleEmailConfirmationUserMixin
 
 from ..helpers import send_email_verification
-from ..querysets import UserQuerySet
+from ..querysets import UserManager, UserQuerySet
 
 if TYPE_CHECKING:
     from ..querysets import UserPaymentQuerySet
@@ -38,7 +38,7 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     
-    objects = UserQuerySet()
+    objects = UserManager.from_queryset(UserQuerySet)()
     
     def __str__(self):
         return _("{first_name} {last_name} (ID: {id})").format(

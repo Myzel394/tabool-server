@@ -1,14 +1,18 @@
 from typing import *
 
 from django.contrib.auth.base_user import BaseUserManager
+from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 
 if TYPE_CHECKING:
     from ...models import User
 
+__all__ = [
+    "UserManager", "UserQuerySet"
+]
 
-class UserQuerySet(BaseUserManager):
+
+class UserManager(BaseUserManager):
     @classmethod
     def normalize_email(cls, email: str) -> str:
         return email.lower()
@@ -32,6 +36,13 @@ class UserQuerySet(BaseUserManager):
             raise ValueError(_("Superuser must have is_staff=True and is_superuser=True"))
         
         return self.create_user(email, password, **extra_fields)
-    
+
+
+class UserQuerySet(models.QuerySet):
     def active_users(self) -> "UserQuerySet":
-        return self.only("is_active").filter(is_active=True)
+        return self.only("is_active") \
+            .prefetch_related("email_address_set") \
+            .filter(is_active=True, email_address_set__confirmed_at__isnull=False)
+    
+    def with_scooso_data(self) -> "UserQuerySet":
+        return self.only("scoosodata").filter(scoosodata__isnull=False)

@@ -188,7 +188,7 @@ class TimetableRequest(Request):
         
         return materials_list
     
-    def import_timetable_from_scraper(self, timetable: PureTimetableParserDataType) -> List[LessonData]:
+    def import_timetable_from_scraper(self, timetable: PureTimetableParserDataType) -> List[Lesson]:
         lessons = []
         # Lessons
         for lesson_data in timetable['lessons']:
@@ -203,10 +203,4 @@ class TimetableRequest(Request):
         for modification in timetable['modifications']:
             self.import_modification_from_scraper(modification, course=lessons[0].lesson_data.course)
         
-        # Timetable
-        lesson_data = [
-            lesson.lesson_data
-            for lesson in lessons
-        ]
-        
-        return lesson_data
+        return lessons

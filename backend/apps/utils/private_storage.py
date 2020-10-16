@@ -6,5 +6,4 @@ __all__ = [
 
 
 def private_storage_access_check(private_file: PrivateFile) -> bool:
-    print("called private")
     return True

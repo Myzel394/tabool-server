@@ -185,3 +185,19 @@ class ModelTest(UserTestMixin, ClientTestMixin):
             self.assertStatusOk(response.status_code)
             user.refresh_from_db()
             self.assertEqual(user.is_confirmed, True)
+    
+    def test_filter_active_users(self):
+        confirmed_user = self.Create_user(is_confirmed=True)
+        not_confirmed_user = self.Create_user(is_confirmed=False)
+        no_scooso_data = self.Create_user(create_scooso_data=False)
+        
+        manager = get_user_model().objects
+        with_scooso_data = manager.with_scooso_data()
+        active_users = with_scooso_data.active_users()
+        
+        confirmed_users_qs = active_users
+        
+        self.assertEqual(1, confirmed_users_qs.count())
+        self.assertIn(confirmed_user, confirmed_users_qs)
+        self.assertNotIn(not_confirmed_user, confirmed_users_qs)
+        self.assertNotIn(no_scooso_data, confirmed_users_qs)

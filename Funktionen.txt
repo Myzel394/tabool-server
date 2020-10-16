@@ -1,5 +1,0 @@
-* Stundenplan
-* Vertretungen
-* Events
-* Hausaufgaben
-* Arbeiten
