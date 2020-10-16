@@ -41,12 +41,13 @@ class ParserTest(DummyUser):
 class SomeTests(LessonUploadTestMixin):
     def setUp(self) -> None:
         self.load_lesson_upload()
+        self.scraper = TimetableRequest(self.username, self.password)
+        self.scraper.login()
         
-        with TimetableRequest(self.username, self.password) as scraper:
-            data = scraper.get_timetable(
-                start_date=datetime.strptime(os.getenv("DATA_START_DATE"), os.getenv("DATE_FORMAT")).date(),
-                end_date=datetime.strptime(os.getenv("DATA_END_DATE"), os.getenv("DATE_FORMAT")).date()
-            )
+        data = self.scraper.get_timetable(
+            start_date=datetime.strptime(os.getenv("DATA_START_DATE"), os.getenv("DATE_FORMAT")).date(),
+            end_date=datetime.strptime(os.getenv("DATA_END_DATE"), os.getenv("DATE_FORMAT")).date()
+        )
         
         self.data = data
     
@@ -85,6 +86,22 @@ class SomeTests(LessonUploadTestMixin):
             materials = scraper.get_materials(self.time_id, self.target_date, material_type)
         
         self.assertEqual(previous_count - 1, len(materials['materials']))
+    
+    def test_download_material(self):
+        material_time_ids = [
+            material['material']['time_id']
+            for material in self.data['materials_data']
+        ]
+        
+        lessons_with_materials = [
+            lesson
+            for lesson in self.data['lessons']
+            if lesson['lesson']['time_id'] in material_time_ids
+        ]
+        lesson_data = lessons_with_materials[0]
+        lesson = self.scraper.import_lesson_from_scraper(lesson_data)
+        
+        self.scraper.import_materials_from_lesson(lesson)
 
 
 class ForeignSerializerTest(CourseTestMixin):
