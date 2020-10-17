@@ -53,6 +53,35 @@ class ModelTest(UserTestMixin, ClientTestMixin):
             User.objects.create_superuser(
                 email='super@user.com', password='foo', is_superuser=False)
     
+    def test_passwords(self):
+        access_token: AccessToken = AccessToken.objects.create()
+        first_name = "Josephine"
+        email = f"{first_name}@gmail.com"
+        default_data = {
+            "email": email,
+            "token": access_token.token,
+            "scooso_username": names.get_first_name(),
+            "scooso_password": self.Get_random_password(),
+        }
+        for password, is_valid in (
+                ("short", False),
+                ("aaaaaaaa", False),
+                ("12345678", False),
+                ("test1234", False),
+                ("test1234!", False),
+                (self.Get_random_password(), True),
+        ):
+            print("Testing password", password)
+            data = default_data | {
+                "password": password
+            }
+            response = self.client.post(
+                f"/api/{API_VERSION}/auth/registration/",
+                data,
+                content_type="application/json"
+            )
+            self.assertStatusOk(response.status_code) if is_valid else self.assertStatusNotOk(response.status_code)
+    
     def test_token(self):
         access_token: AccessToken = AccessToken.objects.create()
         password = self.Get_random_password()
