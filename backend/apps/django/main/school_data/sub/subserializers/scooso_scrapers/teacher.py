@@ -26,3 +26,8 @@ class TeacherScoosoScraperSerializer(ScoosoScraperSerializerMixin):
             "short_name": validated_data.pop("code"),
             **validated_data
         }
+    
+    def get_unique_data(self, validated_data: dict) -> dict:
+        return {
+            "short_name": validated_data["short_name"]
+        }

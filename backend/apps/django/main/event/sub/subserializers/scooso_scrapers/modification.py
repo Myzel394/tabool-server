@@ -1,5 +1,4 @@
-from rest_framework import serializers
-
+from apps.django.utils.serializers import GetOrCreateSerializerMixin
 from ....models import Modification
 
 __all__ = [
@@ -7,7 +6,7 @@ __all__ = [
 ]
 
 
-class ModificationScoosoScraperSerializer(serializers.ModelSerializer):
+class ModificationScoosoScraperSerializer(GetOrCreateSerializerMixin):
     class Meta:
         model = Modification
         fields = [

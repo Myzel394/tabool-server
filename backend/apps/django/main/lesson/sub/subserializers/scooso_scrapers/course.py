@@ -1,5 +1,4 @@
-from rest_framework import serializers
-
+from apps.django.utils.serializers import GetOrCreateSerializerMixin
 from ....models import Course
 
 __all__ = [
@@ -7,7 +6,7 @@ __all__ = [
 ]
 
 
-class CourseScoosoScraperSerializer(serializers.ModelSerializer):
+class CourseScoosoScraperSerializer(GetOrCreateSerializerMixin):
     class Meta:
         model = Course
         fields = [

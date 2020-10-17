@@ -26,3 +26,8 @@ class RoomScoosoScraperSerializer(ScoosoScraperSerializerMixin):
             "place": validated_data.pop("code"),
             **validated_data
         }
+    
+    def get_unique_data(self, validated_data: dict) -> dict:
+        return {
+            "place": validated_data["place"]
+        }

@@ -31,3 +31,9 @@ class SubjectScoosoScraperSerializer(ScoosoScraperSerializerMixin):
             "color": constants.SUBJECT_COLORS_MAPPING[code],
             **validated_data
         }
+    
+    def get_unique_data(self, validated_data: dict) -> dict:
+        return {
+            "short_name": validated_data["short_name"],
+            "name": validated_data["name"]
+        }

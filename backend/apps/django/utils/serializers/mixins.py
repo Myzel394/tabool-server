@@ -9,7 +9,7 @@ from apps.utils.texts import camel_to_snake
 
 __all__ = [
     "RandomIDSerializerMixin", "AssociatedUserSerializerMixin", "ScoosoScraperSerializerMixin",
-    "PrivatizeSerializerMixin"
+    "PrivatizeSerializerMixin", "GetOrCreateSerializerMixin"
 ]
 
 
@@ -122,3 +122,8 @@ class PrivatizeSerializerMixin(serializers.ModelSerializer):
         for file in self.get_file_to_privatize(instance, validated_data):
             privatize_file(file)
         return instance
+
+
+class GetOrCreateSerializerMixin(serializers.ModelSerializer):
+    def create(self, validated_data):
+        return self.Meta.model.objects.get_or_create(**validated_data)[0]

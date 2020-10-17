@@ -2,13 +2,14 @@ import json
 import os
 import random
 import string
-from datetime import date, datetime
+from datetime import datetime
 from pathlib import Path
 
 import lorem
 
 from apps.django.main.lesson.mixins.tests import *
-from apps.django.main.school_data.models import TeacherScoosoData
+from apps.django.main.lesson.models import LessonData
+from apps.django.main.school_data.models import Subject, TeacherScoosoData
 from apps.django.utils.tests import *
 from ...actions import import_teachers
 from ...mixins.tests import *
@@ -114,7 +115,9 @@ class ForeignSerializerTest(CourseTestMixin):
         import_teachers()
         self.scraper = TimetableRequest(self.username, self.password)
         self.scraper.login()
-        self.timetable = self.scraper.get_timetable(start_date=date(2020, 10, 5), end_date=date(2020, 10, 10))
+        self.start_date = datetime.strptime(os.getenv("DATA_START_DATE"), os.getenv("DATE_FORMAT"))
+        self.end_date = datetime.strptime(os.getenv("DATA_END_DATE"), os.getenv("DATE_FORMAT"))
+        self.timetable = self.scraper.get_timetable(start_date=self.start_date, end_date=self.end_date)
     
     def test_timetable(self):
         # Creation
@@ -221,3 +224,41 @@ class ForeignSerializerTest(CourseTestMixin):
         
         self.assertTrue(hasattr(teacher, "teacherscoosodata"))
         self.assertEqual(start_count + 1, TeacherScoosoData.objects.count())
+    
+    def test_no_duplicates_for_subjects(self):
+        subject = self.scraper.get_timetable(
+            start_date=self.start_date,
+            end_date=self.end_date)['lessons'][0]['subject']
+        self.scraper.import_subject(subject)
+        count = Subject.objects.all().count()
+        
+        subject = self.scraper.get_timetable(
+            start_date=self.start_date,
+            end_date=self.end_date)['lessons'][0]['subject']
+        self.scraper.import_subject(subject)
+        new_count = Subject.objects.all().count()
+        
+        self.assertEqual(count, new_count)
+    
+    def test_no_duplicates(self):
+        print("First fetch. Fixed date")
+        timetable = self.scraper.get_timetable(start_date=self.start_date, end_date=self.end_date)
+        self.scraper.import_timetable_from_scraper(timetable)
+        count = LessonData.objects.all().count()
+        print("Amount:", count)
+        
+        print("Second fetch. Fixed date")
+        timetable = self.scraper.get_timetable(start_date=self.start_date, end_date=self.end_date)
+        self.scraper.import_timetable_from_scraper(timetable)
+        new_count = LessonData.objects.all().count()
+        print("Amount:", new_count)
+        
+        self.assertEqual(count, new_count)
+        
+        print("Second fetch. Current date")
+        timetable = self.scraper.get_timetable()
+        self.scraper.import_timetable_from_scraper(timetable)
+        new_count = LessonData.objects.all().count()
+        print("Amount:", new_count)
+        
+        self.assertEqual(count, new_count)

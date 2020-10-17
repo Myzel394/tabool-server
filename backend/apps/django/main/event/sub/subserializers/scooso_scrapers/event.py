@@ -1,5 +1,4 @@
-from rest_framework import serializers
-
+from apps.django.utils.serializers import GetOrCreateSerializerMixin
 from ....models import Event
 
 __all__ = [
@@ -7,7 +6,7 @@ __all__ = [
 ]
 
 
-class EventScoosoScraperSerializer(serializers.ModelSerializer):
+class EventScoosoScraperSerializer(GetOrCreateSerializerMixin):
     class Meta:
         model = Event
         fields = [
