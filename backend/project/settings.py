@@ -232,7 +232,7 @@ BLEACH_STRIP_COMMENTS = True
 # EMAIL
 DEFAULT_FROM_EMAIL = "testfrom@gmail.com"
 SERVER_EMAIL = "test@gmail.com"
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = "127.0.0.1"
 EMAIL_PORT = 1025
 EMAIL_SUBJECT_PREFIX = ""

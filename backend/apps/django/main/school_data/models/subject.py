@@ -12,7 +12,7 @@ from constants import maxlength
 from ..querysets import SubjectQuerySet
 
 if TYPE_CHECKING:
-    from apps.django.main.lesson import Lesson
+    from apps.django.main.lesson.models import Lesson
 
 __all__ = [
     "Subject"

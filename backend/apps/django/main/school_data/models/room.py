@@ -10,7 +10,7 @@ from apps.django.utils.validators import validate_place
 from constants import maxlength
 
 if TYPE_CHECKING:
-    from apps.timetable import Lesson
+    from apps.django.main.lesson.models import Lesson
 
 __all__ = [
     "Room"
