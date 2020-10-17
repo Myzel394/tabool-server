@@ -1,5 +1,6 @@
 import random
 import string
+import time
 
 import names
 from django.contrib.auth import get_user_model
@@ -71,6 +72,7 @@ class ModelTest(UserTestMixin, ClientTestMixin):
                 ("test1234!", False),
                 (self.Get_random_password(), True),
         ):
+            time.sleep(.5)
             print("Testing password", password)
             data = default_data | {
                 "password": password

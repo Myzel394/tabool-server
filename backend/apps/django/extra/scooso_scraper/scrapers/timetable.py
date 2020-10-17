@@ -38,6 +38,21 @@ __all__ = [
 
 
 class TimetableRequest(Request):
+    def build_get_timetable_url(
+            self,
+            start_date: date,
+            end_date: date
+    ) -> str:
+        url = constants.TIMETABLE_CONNECTION["url"]
+        data = {
+            "cmd": 600,
+            "subcmd": 100,
+            "startDate": start_date.strftime(constants.TIMETABLE_CONNECTION["dt_format"]),
+            "endDate": end_date.strftime(constants.TIMETABLE_CONNECTION["dt_format"]),
+            **self.login_data
+        }
+        return build_url(url, data)
+    
     def get_timetable(
             self,
             start_date: Optional[date] = None,
@@ -45,25 +60,16 @@ class TimetableRequest(Request):
     ) -> PureTimetableParserDataType:
         start_date = start_date or date.today()
         end_date = end_date or start_date + timedelta(days=5)
-        url = constants.TIMETABLE_CONNECTION["url"]
-        method = constants.TIMETABLE_CONNECTION["method"]
-        
-        def get_data():
-            data = {
-                "cmd": 600,
-                "subcmd": 100,
-                "startDate": start_date.strftime(constants.TIMETABLE_CONNECTION["dt_format"]),
-                "endDate": end_date.strftime(constants.TIMETABLE_CONNECTION["dt_format"]),
-                **self.login_data
-            }
-            return {
-                "url": build_url(url, data),
-                "method": method
-            }
         
         return self.request_with_parser(
             parser_class=PureTimetableParser,
-            get_data=get_data
+            get_data=lambda: {
+                "url": self.build_get_timetable_url(
+                    start_date=start_date,
+                    end_date=end_date
+                ),
+                "method": constants.TIMETABLE_CONNECTION["method"]
+            }
         )
     
     @staticmethod

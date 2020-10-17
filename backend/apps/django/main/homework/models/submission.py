@@ -145,7 +145,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
                 try:
                     scraper.upload_material(
                         time_id=time_id,
-                        target_date=targeted_date,
+                        targeted_date=targeted_date,
                         filename=filename,
                         data=content,
                         material_type=MaterialTypeOptions.HOMEWORK

@@ -17,8 +17,8 @@ VALID_FILENAME_CHARS = f"_-.() %s%s" % (string.ascii_letters, string.digits)
 FILENAME_LENGTH_LIMIT = 255
 
 
-def build_url(url: str, data: dict) -> str:
-    return f"{url}?{parse.urlencode(data)}"
+def build_url(url: str, data: dict, suffix: str = "") -> str:
+    return f"{url}?{parse.urlencode(data)}{suffix}"
 
 
 def get_headers() -> dict:

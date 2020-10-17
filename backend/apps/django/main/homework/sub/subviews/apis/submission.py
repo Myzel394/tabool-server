@@ -67,7 +67,7 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         try:
             scraper.upload_material(
                 time_id=time_id,
-                target_date=targeted_date,
+                targeted_date=targeted_date,
                 filename=filename,
                 data=data,
                 material_type=material_type
