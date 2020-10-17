@@ -5,7 +5,8 @@ from django.utils.translation import gettext as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
-from apps.django.main.authentication.public.model_verbose_functions import *
+from apps.django.main.authentication.public import *
+from apps.django.main.authentication.public import model_verboses as auth_verbose
 from apps.django.utils.fields.color import ColorField
 from constants import colors
 
@@ -35,9 +36,8 @@ class AssociatedUserMixin(models.Model):
     
     associated_user = models.ForeignKey(
         USER,
-        verbose_name=user_single,
         on_delete=models.CASCADE,
-        editable=False
+        verbose_name=auth_verbose.USER
     )
 
 
@@ -58,8 +58,8 @@ class UserModelRelationMixin(models.Model):
     
     user = models.ForeignKey(
         USER,
-        verbose_name=user_single,
         on_delete=models.CASCADE,
+        verbose_name=auth_verbose.USER
     )
 
 

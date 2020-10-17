@@ -10,9 +10,9 @@ DEFAULT_TRACE_DATE = datetime(2001, 1, 1, 1, 1, 1)
 
 FORMATS = {
     # Translators: Formatierung für Daten (Datum). Befehle: https://strftime.org/
-    date: _("%d.%m.%Y"),
+    date.__name__: _("%d.%m.%Y"),
     # Translators: Formatierung für Daten + Uhrzeiten (Datum + Uhrzeit). Befehle: https://strftime.org/
-    datetime: _("%d.%m.%Y, %H:%M"),
+    datetime.__name__: _("%d.%m.%Y, %H:%M"),
     # Translators: Formatierung für Uhrzeiten (Uhrzeit). Befehle: https://strftime.org/
-    time: _("%H:%M")
+    time.__name__: _("%H:%M")
 }

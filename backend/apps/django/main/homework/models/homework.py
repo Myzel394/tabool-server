@@ -11,19 +11,21 @@ from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, BEFORE_UPDATE, hook, L
 from simple_history.models import HistoricalRecords
 
 from apps.django.main.authentication.public import *
+from apps.django.main.authentication.public import model_verboses as auth_verbose
 from apps.django.main.lesson.public import *
+from apps.django.main.lesson.public import model_verboses as lesson_verbose
 from apps.django.utils.history_extras.extras import UserInformationHistoricalModel
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
 from .user_relations.homework import UserHomeworkRelation
-from ..public import HOMEWORK_CHANNEL
+from ..public import HOMEWORK_CHANNEL, model_verboses
 from ..querysets import HomeworkQuerySet
 from ..validators import validate_only_future_days
 
 if TYPE_CHECKING:
     from datetime import date, datetime
     from . import UserHomeworkRelation
-    from apps.django.main.lesson import Lesson
-    from django.contrib.auth import get_user_model
+    from apps.django.main.lesson.models import Lesson
+    from apps.django.main.authentication.models import User
 
 __all__ = [
     "Homework"
@@ -32,8 +34,8 @@ __all__ = [
 
 class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
     class Meta:
-        verbose_name = _("Hausaufgabe")
-        verbose_name_plural = _("Hausaufgaben")
+        verbose_name = model_verboses.HOMEWORK
+        verbose_name_plural = model_verboses.HOMEWORK_PLURAL
         ordering = ("due_date", "type")
     
     objects = HomeworkQuerySet.as_manager()
@@ -41,21 +43,22 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
     lesson = models.ForeignKey(
         LESSON,
         on_delete=models.CASCADE,
-        verbose_name=lesson_single,
+        verbose_name=lesson_verbose.LESSON,
     )  # type: Lesson
     
     private_to_user = models.ForeignKey(
         USER,
-        verbose_name=user_single,
         on_delete=models.CASCADE,
+        verbose_name=auth_verbose.USER,
         blank=True,
         null=True,
-    )  # type: get_user_model()
+    )  # type: User
     
     due_date = models.DateField(
         verbose_name=_("Fälligkeitsdatum"),
         blank=True,
-        null=True
+        null=True,
+        validators=[validate_only_future_days, validate_weekday_in_lesson_data_available]
     )  # type: date
     
     information = models.TextField(
@@ -74,15 +77,14 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
     
     history = HistoricalRecords(
         cascade_delete_history=True,
-        excluded_fields=["private_to_user", "creation_date"],
+        excluded_fields=["private_to_user"],
         bases=[UserInformationHistoricalModel]
     )
     
     @hook(BEFORE_CREATE)
-    @hook(BEFORE_UPDATE, when="due_date")
-    def _hook_due_date_validation(self):
-        validate_only_future_days(self.due_date)
-        validate_weekday_in_lesson_data_available(self.due_date)
+    @hook(BEFORE_UPDATE, when="due_date", has_changed=True)
+    def _hook_full_clean(self):
+        self.full_clean()
     
     @hook(AFTER_CREATE)
     def _hook_send_event(self):

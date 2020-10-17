@@ -8,6 +8,9 @@ __all__ = [
 
 
 class ScoosoDataAdminInlineMixin(BaseAdminMixinsMixin, admin.StackedInline):
+    max_num = 1
+    min_num = 1
+    
     def get_section(self) -> Sections:
         return Sections([
             FieldsetList(
@@ -20,6 +23,9 @@ class ScoosoDataAdminInlineMixin(BaseAdminMixinsMixin, admin.StackedInline):
                 order=1,
                 appearance=None,
                 name="extra",
-                fields=["scooso_id"],
+                fields=[],
             )
         ])
+    
+    def has_delete_permission(self, request, obj=None):
+        return None

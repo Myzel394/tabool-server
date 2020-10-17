@@ -92,8 +92,6 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
     def test_filtering_relation(self):
         homework = self.Create_homework()
         completed_homework = self.Create_homework()
-        course = completed_homework.lesson.lesson_data.course
-        course.update_relations()
         
         relation = completed_homework.user_relations.get(user=self.logged_user)
         relation.completed = True

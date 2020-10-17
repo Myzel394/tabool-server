@@ -18,9 +18,13 @@ if settings.DEBUG:
     from apps.django.main.news.models import *
     
     
-    # TODO: Add flush function (flush function should delete all objects!)
+    def flush():
+        for model in [Room, Subject, Teacher, Course, Event, News, User]:
+            print(f"Deleting {model.__class__.__name__.lower()}s")
+            model.objects.all().delete()
     
-    def create_user(confirm: bool = True, scooso_data: bool = True):
+    
+    def create_user(confirm: bool = True, scooso_data: bool = True, staff: bool = False):
         load_dotenv()
         User = get_user_model()
         
@@ -39,6 +43,11 @@ if settings.DEBUG:
                 username=os.getenv("SCOOSO_USERNAME"),
                 password=os.getenv("SCOOSO_PASSWORD")
             )
+        if staff:
+            user.is_superuser = True
+            user.is_staff = True
+        
+        user.save()
         
         print("Email:", user.email)
         print("Password:", password)

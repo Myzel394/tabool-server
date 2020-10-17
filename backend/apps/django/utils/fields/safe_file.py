@@ -29,8 +29,7 @@ class SafeFileValidator:
         "Die Datei scheint manipuliert zu sein. Sie kann daher zur Sicherheit nicht gespeichert werden."
     )
     NOT_SUPPORTED_ERROR_MESSAGE = _(
-        "Dieses Dateiformat wird aus Sicherheitsgründen nicht unterstützt. Du musst die Datei selber auf Scooso "
-        "hochladen."
+        "Dieses Dateiformat wird aus Sicherheitsgründen nicht unterstützt."
     )
     
     def __init__(

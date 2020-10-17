@@ -8,10 +8,10 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import QueryType
 
 from constants import maxlength
-from ..public import *
+from ..public import model_verboses
 
 if TYPE_CHECKING:
-    from apps.django.main.lesson import LessonData
+    from apps.django.main.lesson.models import LessonData
 
 __all__ = [
     "Teacher"
@@ -20,8 +20,8 @@ __all__ = [
 
 class Teacher(RandomIDMixin, HandlerMixin):
     class Meta:
-        verbose_name = _("Lehrer")
-        verbose_name_plural = _("Lehrer")
+        verbose_name = model_verboses.TEACHER
+        verbose_name_plural = model_verboses.TEACHER_PLURAL
         ordering = ("last_name", "first_name", "short_name", "email")
     
     first_name = models.CharField(
@@ -48,12 +48,6 @@ class Teacher(RandomIDMixin, HandlerMixin):
         blank=True,
         null=True
     )  # type: str
-    
-    teaches_subjects = models.ManyToManyField(
-        SUBJECT,
-        verbose_name=_("Unterrichtsfächer"),
-        help_text=_("Dies sind Fächer, die vom Lehrer unterrichtet werden.")
-    )
     
     def __str__(self):
         return _("{first_name} {last_name}, {short_name}").format(

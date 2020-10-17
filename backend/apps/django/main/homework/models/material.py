@@ -1,16 +1,20 @@
+import mimetypes
 from pathlib import Path
 from typing import *
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_common_utils.libraries.utils import model_verbose
-from django_lifecycle import AFTER_DELETE, BEFORE_UPDATE, hook, LifecycleModel
+from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
+from django_common_utils.libraries.utils import listify, model_verbose
+from django_lifecycle import AFTER_DELETE, BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
+from magic import Magic
 from private_storage.fields import PrivateFileField
 
 from apps.django.main.lesson.public import *
-from apps.django.utils.models import AddedAtMixin
+from apps.django.main.lesson.public import model_verboses as lesson_verbose
 from ..public import *
+from ..public import model_verboses
 from ..public.validators import safe_file_validator
 from ..querysets import MaterialQuerySet
 
@@ -19,18 +23,18 @@ if TYPE_CHECKING:
     from django.db.models.fields.files import FieldFile
 
 
-class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
+class Material(RandomIDMixin, CreationDateMixin, LifecycleModel):
     class Meta:
-        verbose_name = _("Material")
-        verbose_name_plural = _("Materialien")
-        ordering = ("-added_at", "name")
+        verbose_name = model_verboses.MATERIAL
+        verbose_name_plural = model_verboses.MATERIAL_PLURAL
+        ordering = ("-created_at", "name")
     
     objects = MaterialQuerySet.as_manager()
     
     lesson = models.ForeignKey(
         LESSON,
-        verbose_name=lesson_single,
         on_delete=models.CASCADE,
+        verbose_name=lesson_verbose.LESSON
     )  # type: Lesson
     
     file = PrivateFileField(
@@ -56,19 +60,38 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
             lesson=self.lesson
         )
     
+    def clean(self):
+        if self.file.name is not None:
+            if self.name is None:
+                raise ValidationError(_("Dateiname fehlt!"))
+            
+            # Validate name extension
+            m = Magic(mime=True)
+            mimetype = m.from_buffer(self.file.open().read())
+            extensions = mimetypes.guess_all_extensions(mimetype, strict=False)
+            
+            extension = Path(self.name).suffix
+            
+            if extension not in extensions:
+                raise ValidationError(_(
+                    'Die Endung "{extension}" im angegebenen Dateinamen ist für die hochgeladene Datei nicht gültig. '
+                    'Wähle aus zwischen: {available_extensions}.'
+                ).format(
+                    extension=extension,
+                    available_extensions=listify(extensions)
+                ))
+        
+        return super().clean()
+    
     @hook(AFTER_DELETE)
     def _hook_delete_file(self):
         Path(self.file.path).unlink(missing_ok=True)
     
-    @hook(BEFORE_UPDATE, when_any=["name", "file"])
-    def _hook_validate_name_and_file(self):
-        if self.file is not None and self.name is None:
-            raise ValueError(_("Dateiname fehlt!"))
+    @hook(BEFORE_CREATE)
+    @hook(BEFORE_UPDATE, when_any=["name", "file"], has_changed=True)
+    def _hook_full_clean(self):
+        self.full_clean()
     
     @property
     def folder_name(self) -> str:
         return f"{self.lesson.lesson_data.course.folder_name}/{self.id}"
-    
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)

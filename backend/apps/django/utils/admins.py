@@ -1,10 +1,14 @@
+from datetime import datetime
+
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.fieldsets.admin import BaseAdminMixinsMixin
 from django_common_utils.libraries.fieldsets.sections import FieldsetList, Sections
 
+from apps.utils import format_datetime
+
 __all__ = [
-    "DefaultAdminInlineMixin"
+    "DefaultAdminInlineMixin", "build_date"
 ]
 
 
@@ -39,3 +43,7 @@ class DefaultAdminInlineMixin(BaseAdminMixinsMixin, admin.TabularInline):
                 ]
             )
         ])
+
+
+def build_date(start: datetime, end: datetime) -> str:
+    return f"{format_datetime(start)} - {format_datetime(end.time())}"

@@ -8,18 +8,20 @@ from django_common_utils.libraries.models.mixins import CreationDateMixin, Rando
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 from simple_history.models import HistoricalRecords
 
+from apps.django.main.lesson.public import model_verboses as lesson_verbose
+from apps.django.main.school_data.public import model_verboses as school_verbose
 from apps.django.utils.history_extras.extras import UserInformationHistoricalModel
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
 from apps.utils import format_datetime
+from ..public import model_verboses
 from ..querysets import ClasstestQuerySet
-from ...lesson.public import *
-from ...school_data.public.model_references import ROOM
-from ...school_data.public.model_verbose_functions import room_single
+from ...lesson.public.model_references import *
+from ...school_data.public.model_references import *
 
 if TYPE_CHECKING:
     from datetime import date, datetime
     from apps.django.main.school_data.models import Room
-    from apps.django.main.lesson import Course
+    from apps.django.main.lesson.models import Course
 
 __all__ = [
     "Classtest"
@@ -28,8 +30,8 @@ __all__ = [
 
 class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     class Meta:
-        verbose_name = _("Klassenarbeit")
-        verbose_name_plural = _("Klassenarbeiten")
+        verbose_name = model_verboses.CLASSTEST
+        verbose_name_plural = model_verboses.CLASSTEST_PLURAL
         ordering = ("targeted_date", "course", "room")
     
     objects = ClasstestQuerySet.as_manager()
@@ -37,20 +39,21 @@ class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     course = models.ForeignKey(
         COURSE,
         on_delete=models.CASCADE,
-        verbose_name=course_single,
+        verbose_name=lesson_verbose.COURSE
     )  # type: Course
     
     room = models.ForeignKey(
         ROOM,
         on_delete=models.CASCADE,
-        verbose_name=room_single,
+        verbose_name=school_verbose.ROOM,
         blank=True,
         null=True
     )  # type: Room
     
     targeted_date = models.DateField(
         verbose_name=_("Datum"),
-        help_text=_("Datum, wann die Klassenarbeit geschrieben wird.")
+        help_text=_("Datum, wann die Klassenarbeit geschrieben wird."),
+        validators=[validate_weekday_in_lesson_data_available]
     )  # type: date
     
     information = models.TextField(
@@ -66,7 +69,7 @@ class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     
     def __str__(self):
         return _("{course} am {targeted_date}").format(
-            course_str=self.course,
+            course=self.course,
             targeted_date=format_datetime(self.targeted_date)
         )
     
@@ -77,9 +80,9 @@ class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
         }
     
     @hook(BEFORE_CREATE)
-    @hook(BEFORE_UPDATE, when="targeted_date")
-    def _hook_validate_targeted_dae(self):
-        validate_weekday_in_lesson_data_available(self.targeted_date)
+    @hook(BEFORE_UPDATE, when="targeted_date", has_changed=True)
+    def _hook_full_clean(self):
+        self.full_clean()
     
     @property
     def edited_at(self) -> "datetime":

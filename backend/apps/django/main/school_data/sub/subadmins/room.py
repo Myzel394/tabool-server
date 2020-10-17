@@ -22,3 +22,4 @@ class RoomAdmin(DefaultAdminMixin):
         "default": ["place", "!..."]
     }
     inlines = [RoomScoosoDataAdminInline]
+    search_fields = ["place"]

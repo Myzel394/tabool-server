@@ -29,7 +29,7 @@ class MaterialScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     
     def rename_data(self, validated_data: dict) -> dict:
         return {
-            "added_at": validated_data["created_at"],
+            "created_at": validated_data["created_at"],
             "lesson": validated_data["lesson"],
             "name": validated_data["filename"]
         }

@@ -4,19 +4,20 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers.mixins import WhiteSpaceStripHandler
 from django_common_utils.libraries.handlers.models import HandlerMixin
-from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
+from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
+from apps.django.main.school_data.public import model_verboses as  school_verbose
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
 from apps.utils import format_datetime
 from constants import maxlength
+from ..public import model_verboses
 from ..sub.subquerysets import EventQuerySet
-from ...school_data.public.model_references import ROOM
-from ...school_data.public.model_verbose_functions import room_single
+from ...school_data.public.model_references import *
 
 if TYPE_CHECKING:
-    from datetime import datetime, time, timedelta
+    from datetime import datetime, time
     from apps.django.main.school_data.models import Room
     from . import UserEventRelation
 
@@ -25,18 +26,18 @@ __all__ = [
 ]
 
 
-class Event(RandomIDMixin, CreationDateMixin, HandlerMixin):
+class Event(RandomIDMixin, HandlerMixin):
     class Meta:
-        verbose_name = _("Event")
-        verbose_name_plural = _("Events")
+        verbose_name = model_verboses.EVENT
+        verbose_name_plural = model_verboses.EVENT_PLURAL
         ordering = ("title", "start_datetime", "end_datetime", "room")
     
     objects = EventQuerySet.as_manager()
     
     room = models.ForeignKey(
         ROOM,
-        verbose_name=room_single,
         on_delete=models.SET_NULL,
+        verbose_name=school_verbose.ROOM,
         blank=True,
         null=True,
     )  # type: Room
@@ -47,11 +48,13 @@ class Event(RandomIDMixin, CreationDateMixin, HandlerMixin):
     )  # type: str
     
     start_datetime = models.DateTimeField(
-        verbose_name=_("Start")
+        verbose_name=_("Start"),
+        validators=[validate_weekday_in_lesson_data_available]
     )  # type: datetime
     
     end_datetime = models.DateTimeField(
-        verbose_name=_("Ende")
+        verbose_name=_("Ende"),
+        validators=[validate_weekday_in_lesson_data_available]
     )  # type: datetime
     
     def __str__(self):
@@ -68,10 +71,9 @@ class Event(RandomIDMixin, CreationDateMixin, HandlerMixin):
         }
     
     @hook(BEFORE_CREATE)
-    @hook(BEFORE_UPDATE, when_any=["start_datetime", "end_datetime"])
-    def _hook_validate_dates(self):
-        validate_weekday_in_lesson_data_available(self.start_datetime)
-        validate_weekday_in_lesson_data_available(self.end_datetime)
+    @hook(BEFORE_UPDATE, when_any=["start_datetime", "end_datetime"], has_changed=True)
+    def _hook_full_clean(self):
+        self.full_clean()
     
     @property
     def user_relations(self) -> QueryType["UserEventRelation"]:
@@ -79,9 +81,5 @@ class Event(RandomIDMixin, CreationDateMixin, HandlerMixin):
     
     @property
     def is_all_day(self) -> bool:
-        start_datetime_begin = datetime.combine(
-            self.start_datetime.date(),
-            time.min
-        )
-        
-        return start_datetime_begin + timedelta(days=1) == self.end_datetime
+        return self.start_datetime == datetime.combine(self.start_datetime.date(), time.min) \
+               and self.end_datetime == datetime.combine(self.end_datetime.date(), time.max)

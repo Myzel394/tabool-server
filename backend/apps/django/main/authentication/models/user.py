@@ -41,10 +41,11 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     objects = UserManager.from_queryset(UserQuerySet)()
     
     def __str__(self):
-        return _("{first_name} {last_name} (ID: {id})").format(
+        return _("{first_name} {last_name}, {email_part} (ID: {id})").format(
             first_name=self.first_name,
             last_name=self.last_name,
-            id=self.id
+            id=self.id,
+            email_part=self.email.split("@", 1)[0]
         )
     
     @hook(BEFORE_CREATE)

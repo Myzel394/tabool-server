@@ -1,2 +1,2 @@
-from .access_token import *
+from .token import *
 from .user import *

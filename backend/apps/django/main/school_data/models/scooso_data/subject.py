@@ -1,8 +1,14 @@
+from typing import *
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.django.utils.models import ScoosoDataMixin
 from ...public import *
+from ...public import model_verboses
+
+if TYPE_CHECKING:
+    from .. import Subject
 
 __all__ = [
     "SubjectScoosoData"
@@ -11,23 +17,22 @@ __all__ = [
 
 class SubjectScoosoData(ScoosoDataMixin):
     class Meta:
-        verbose_name = _("Fach-Scooso-Daten")
-        verbose_name_plural = _("Fach-Scooso-Daten")
+        verbose_name = model_verboses.SUBJECT_SCOOSO
+        verbose_name_plural = model_verboses.SUBJECT_SCOOSO_PLURAL
         ordering = ("code", "scooso_id")
     
     subject = models.OneToOneField(
         SUBJECT,
-        verbose_name=subject_single,
         on_delete=models.CASCADE,
-        blank=True,
-    )
+        verbose_name=model_verboses.SUBJECT
+    )  # type: Subject
     
     code = models.CharField(
         verbose_name=_("Fach-Code"),
         max_length=127,
         blank=True,
         null=True
-    )
+    )  # type: str
     
     def __str__(self):
         return str(self.subject)

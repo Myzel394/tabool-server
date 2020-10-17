@@ -6,6 +6,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 
 from apps.django.utils.models import UserModelRelationMixin
 from ...public import *
+from ...public import model_verboses
 
 if TYPE_CHECKING:
     from .. import Lesson
@@ -17,8 +18,8 @@ __all__ = [
 
 class UserLessonRelation(RandomIDMixin, UserModelRelationMixin):
     class Meta:
-        verbose_name = _("Benutzer-Stunde-Beziehung")
-        verbose_name_plural = _("Benutzer-Stunden-Beziehungen")
+        verbose_name = model_verboses.LESSON_RELATION
+        verbose_name_plural = model_verboses.LESSON_RELATION_PLURAL
         unique_together = (
             ("lesson", "user")
         )
@@ -26,8 +27,8 @@ class UserLessonRelation(RandomIDMixin, UserModelRelationMixin):
     
     lesson = models.ForeignKey(
         LESSON,
-        verbose_name=lesson_single,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        verbose_name=model_verboses.LESSON
     )  # type: Lesson
     
     attendance = models.BooleanField(

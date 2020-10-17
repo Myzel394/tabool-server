@@ -1,4 +1,4 @@
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from typing import *
 
 from .base import BaseParser
@@ -131,8 +131,13 @@ class PureTimetableParser(BaseParser):
     
     @staticmethod
     def extract_room(data: dict) -> Dict[str, Any]:
+        location_code = str(data.get("location_code"))
+        
+        if (length := len(location_code)) < (max_length := 3) and location_code.isdigit():
+            location_code = ("0" * (max_length - length)) + location_code
+        
         return {
-            "code": str(data.get("location_code")),
+            "code": location_code,
             "scooso_id": data.get("location")
         }
     
@@ -164,11 +169,23 @@ class PureTimetableParser(BaseParser):
     
     @classmethod
     def get_event_data(cls, event: dict) -> Dict[str, Any]:
+        diff: timedelta = event["end_time"] - event["start_time"]
+        one_day_diff = datetime.combine(event["end_time"].date(), time.min) \
+                       - datetime.combine(event["start_time"].date(), time.min)
+        
+        is_all_day = event.get("allday", 1) == 1 or diff.microseconds == one_day_diff.microseconds
+        
+        if is_all_day:
+            start_datetime = datetime.combine(event["start_time"].date(), time.min)
+            end_datetime = datetime.combine(event["start_time"].date(), time.max)
+        else:
+            start_datetime = event["start_time"]
+            end_datetime = event["end_time"]
+        
         return {
             "event": {
-                "start_datetime": event["start_time"],
-                "end_datetime": event["end_time"],
-                "is_all_day": event.get("allday", 1) == 1,
+                "start_datetime": start_datetime,
+                "end_datetime": end_datetime,
                 "title": event.get("title") or None
             },
             "room": cls.extract_room(event)

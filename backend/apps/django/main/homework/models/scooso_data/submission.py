@@ -1,8 +1,8 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 from apps.django.utils.models import ScoosoDataMixin
 from ...public import *
+from ...public import model_verboses
 
 __all__ = [
     "SubmissionScoosoData"
@@ -11,14 +11,14 @@ __all__ = [
 
 class SubmissionScoosoData(ScoosoDataMixin):
     class Meta:
-        verbose_name = _("Einreichung-Scooso-Daten")
-        verbose_name_plural = _("Einreichung-Scooso-Daten")
+        verbose_name = model_verboses.SUBMISSION_SCOOSO
+        verbose_name_plural = model_verboses.SUBMISSION_SCOOSO_PLURAL
         ordering = ("submission", "scooso_id")
     
-    submission = models.ForeignKey(
+    submission = models.OneToOneField(
         SUBMISSION,
-        verbose_name=submission_single,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        verbose_name=model_verboses.SUBMISSION
     )
     
     def __str__(self):

@@ -17,7 +17,7 @@ class RoomTestMixin(TestCase, ABC):
         return Room.objects.create(
             **joinkwargs(
                 {
-                    "place": lambda: f"{random.choice(range(3 + 1))}{random.choice(list(range(99)))}",
+                    "place": lambda: f"{random.choice(range(3 + 1))}{random.choice(list(range(10, 99)))}",
                 },
                 kwargs
             )

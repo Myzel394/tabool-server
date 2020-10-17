@@ -1,47 +1,26 @@
 from django.contrib import admin
 from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 
-from ...models import AccessToken, User, UserPayment
+from ...models import Student, User
 
 __all__ = [
     "UserAdmin"
 ]
 
 
-class UserAccessTokenAdmin(admin.TabularInline):
-    model = AccessToken
-    fieldsets = [
-        ["", {
-            "fields": ["token", "created_at"]
-        }]
-    ]
-    readonly_fields = [
-        "token", "created_at"
-    ]
-    extra = 0
-    max_num = 1
-    can_delete = False
-
-
-class UserUserPaymentAdmin(admin.TabularInline):
-    model = UserPayment
-    fieldsets = [
-        ["", {
-            "fields": ["paid_at"]
-        }]
-    ]
-    extra = 0
+class StudentAdminInline(admin.StackedInline):
+    model = Student
+    fields = ["main_teacher", "class_number"]
+    min_num = 0
+    max_num = 0
+    autocomplete_fields = ["main_teacher"]
 
 
 @admin.register(User)
 class UserAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["first_name", "last_name", "email", "!..."],
-        "extra": ["is_staff", "is_active", "date_joined", "id", "!..."],
-        "created": []
+        "default": ["email", "id", "is_active", "!..."]
     }
-    inlines = [UserAccessTokenAdmin, UserUserPaymentAdmin]
-    search_fields = ["first_name", "last_name", "email", "id"]
-    list_display = ["first_name", "last_name", "email", "id"]
+    list_display = ["email", "id", "is_active", "is_confirmed"]
     list_filter = ["is_active"]
-    date_hierarchy = "date_joined"
+    inlines = [StudentAdminInline]

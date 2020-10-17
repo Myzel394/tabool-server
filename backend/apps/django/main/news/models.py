@@ -34,7 +34,6 @@ class News(RandomIDMixin, HandlerMixin, EditCreationDateMixin, LifecycleModel):
     
     author = models.ForeignKey(
         USER,
-        verbose_name=user_single,
         on_delete=models.SET_NULL,
         blank=True,
         null=True

@@ -7,9 +7,11 @@ from django_eventstream import send_event
 from django_lifecycle import AFTER_CREATE, AFTER_DELETE, AFTER_UPDATE, hook, LifecycleModel
 
 from apps.django.main.lesson.public import *
+from apps.django.main.lesson.public import model_verboses as lesson_verbose
 from apps.django.main.school_data.public import *
+from apps.django.main.school_data.public import model_verboses as school_verbose
 from ..options import ModificationTypeOptions
-from ..public import MODIFICATION_CHANNEL
+from ..public import model_verboses, MODIFICATION_CHANNEL
 from ..querysets import ModificationQuerySet
 
 if TYPE_CHECKING:
@@ -24,41 +26,41 @@ __all__ = [
 
 class Modification(RandomIDMixin, LifecycleModel):
     class Meta:
-        verbose_name = _("Veränderung")
-        verbose_name_plural = _("Veränderungen")
+        verbose_name = model_verboses.MODIFICATION
+        verbose_name_plural = model_verboses.MODIFICATION_PLURAL
         ordering = ("start_datetime",)
     
     objects = ModificationQuerySet.as_manager()
     
     course = models.ForeignKey(
         COURSE,
-        verbose_name=course_single,
         on_delete=models.CASCADE,
+        verbose_name=lesson_verbose.COURSE,
     )  # type: Course
     
     new_room = models.ForeignKey(
         ROOM,
-        verbose_name=room_single,
+        on_delete=models.SET_NULL,
+        verbose_name=school_verbose.ROOM,
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
     )  # type: Room
-    
-    new_teacher = models.ForeignKey(
-        TEACHER,
-        verbose_name=teacher_single,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-    )  # type: Teacher
     
     new_subject = models.ForeignKey(
         SUBJECT,
-        verbose_name=subject_single,
+        on_delete=models.SET_NULL,
+        verbose_name=school_verbose.SUBJECT,
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
     )  # type: Subject
+    
+    new_teacher = models.ForeignKey(
+        TEACHER,
+        on_delete=models.SET_NULL,
+        verbose_name=school_verbose.TEACHER,
+        blank=True,
+        null=True,
+    )  # type: Teacher
     
     start_datetime = models.DateTimeField(
         verbose_name=_("Start"),

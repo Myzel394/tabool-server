@@ -5,7 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 
 from apps.django.utils.models import UserModelRelationMixin
-from ...public import model_references, model_verbose_functions
+from ...public import *
+from ...public import model_verboses
 
 if TYPE_CHECKING:
     from ...models import Homework
@@ -17,17 +18,17 @@ __all__ = [
 
 class UserHomeworkRelation(RandomIDMixin, UserModelRelationMixin):
     class Meta:
-        verbose_name = _("Benutzer-Hausaufgabe-Beziehung")
-        verbose_name_plural = _("Benutzer-Hausaufgaben-Beziehungen")
+        verbose_name = model_verboses.HOMEWORK_RELATION
+        verbose_name_plural = model_verboses.HOMEWORK_RELATION_PLURAL
         unique_together = (
             ("homework", "user")
         )
         ordering = ("homework", "user")
     
     homework = models.ForeignKey(
-        model_references.HOMEWORK,
-        verbose_name=model_verbose_functions.homework_single,
+        HOMEWORK,
         on_delete=models.CASCADE,
+        verbose_name=model_verboses.HOMEWORK
     )  # type: Homework
     
     completed = models.BooleanField(

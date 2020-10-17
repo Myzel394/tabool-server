@@ -19,7 +19,6 @@ class MaterialTest(MaterialTestMixin, ClientTestMixin, UtilsTestMixin):
             int(upload_sizes.MIN_UPLOAD_SIZE * 1.1),
             int(upload_sizes.MAX_UPLOAD_SIZE * .9)
         ))
-        
         print("Testing ok data")
         self.Create_material(
             file=SimpleUploadedFile(
@@ -30,12 +29,13 @@ class MaterialTest(MaterialTestMixin, ClientTestMixin, UtilsTestMixin):
         
         with self.assertRaises(ValidationError):
             print("Testing too small data")
-            self.Create_material(
+            material = self.Create_material(
                 file=SimpleUploadedFile(
                     self.Random_filename(),
                     "".encode()
                 )
             )
+            material
         
         with self.assertRaises(ValidationError):
             too_big_data = self.Random_data(int(upload_sizes.MAX_UPLOAD_SIZE * 1.1))

@@ -1,8 +1,11 @@
+import calendar
 from datetime import date
 from typing import *
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+
+from apps.utils import format_datetime
 
 if TYPE_CHECKING:
     from .models import LessonData
@@ -13,7 +16,14 @@ __all__ = [
 
 
 def validate_lesson_weekday(actual_date: date, lesson: "LessonData"):
+    abbreviations = list(calendar.day_abbr)
+    
     if (weekday := actual_date.weekday()) != lesson.weekday:
         raise ValidationError(_(
-            "Der Wochentag für diese Schulstunde ist nicht gültig"
-        ).format(weekday=weekday, lesson_weekday=lesson.weekday))
+            "Der Wochentag für das Datum {date} ist ein {weekday}, der festgelegte Wochentag für die Stunde ist jedoch "
+            "{lesson_weekday}. Die Wochentage müssen gleich sein."
+        ).format(
+            date=format_datetime(actual_date),
+            weekday=abbreviations[weekday],
+            lesson_weekday=abbreviations[lesson.weekday]
+        ))

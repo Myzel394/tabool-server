@@ -5,10 +5,12 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import CreationDateMixin
 from django_common_utils.libraries.models.mixins.common import RandomIDMixin
 
+from ..public import model_verboses
 from ..querysets import UserPaymentQuerySet
 
 if TYPE_CHECKING:
     from ..public import *
+    from . import User
 
 __all__ = [
     "UserPayment"
@@ -17,8 +19,8 @@ __all__ = [
 
 class UserPayment(RandomIDMixin, CreationDateMixin):
     class Meta:
-        verbose_name = _("Benutzer-Bezahlung")
-        verbose_name_plural = _("Benutzer-Bezahlungen")
+        verbose_name = model_verboses.USER_PAYMENT
+        verbose_name_plural = model_verboses.USER_PAYMENT_PLURAL
         ordering = ("user",)
     
     objects = UserPaymentQuerySet()
@@ -26,13 +28,14 @@ class UserPayment(RandomIDMixin, CreationDateMixin):
     user = models.ForeignKey(
         "authentication.User",
         on_delete=models.CASCADE,
-    )
+        verbose_name=model_verboses.USER
+    )  # type: User
     
     paid_at = models.DateTimeField(
         verbose_name=_("Gezahlt um"),
         blank=True,
         null=True
-    )
+    )  # type: datetime
     
     @property
     def has_paid(self) -> bool:

@@ -6,11 +6,12 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
+from apps.utils import format_datetime
 from .user_relations.lesson import UserLessonRelation
 from ..public import *
+from ..public import model_verboses
 from ..querysets import LessonQuerySet
 from ..validators import validate_lesson_weekday
-from apps.utils import format_datetime
 
 if TYPE_CHECKING:
     from datetime import date as typing_date
@@ -24,19 +25,19 @@ __all__ = [
 
 class Lesson(RandomIDMixin):
     class Meta:
-        verbose_name = _("Stunde")
-        verbose_name_plural = _("Stunden")
+        verbose_name = model_verboses.LESSON
+        verbose_name_plural = model_verboses.LESSON_PLURAL
         unique_together = (
             ("lesson_data", "date")
         )
-        ordering = ("date", "lesson_data__id")
+        ordering = ("date", "lesson_data")
     
     objects = LessonQuerySet.as_manager()
     
     lesson_data = models.ForeignKey(
         LESSON_DATA,
-        verbose_name=lesson_data_single,
         on_delete=models.CASCADE,
+        verbose_name=model_verboses.LESSON_DATA
     )  # type: LessonData
     
     date = models.DateField(
@@ -46,10 +47,14 @@ class Lesson(RandomIDMixin):
     def __str__(self):
         return format_datetime(self.date)
     
-    @hook(BEFORE_CREATE)
-    @hook(BEFORE_UPDATE, when="date")
-    def _hook_validate_date(self):
+    def clean(self):
         validate_lesson_weekday(self.date, self.lesson_data)
+        return super().clean()
+    
+    @hook(BEFORE_CREATE)
+    @hook(BEFORE_UPDATE, when_any=["date", "lesson_data"], has_changed=True)
+    def _hook_full_clean(self):
+        self.full_clean()
     
     @property
     def homeworks(self) -> QueryType["Homework"]:

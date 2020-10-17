@@ -3,20 +3,21 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_common_utils.libraries.utils import model_verbose
 
-import apps.django.main.school_data.public.model_references
-import apps.django.main.school_data.public.model_verbose_functions
+from apps.django.main.school_data.public import *
+from apps.django.main.school_data.public import model_verboses as school_verbose
 from apps.django.utils.fields import WeekdayField
 from apps.utils.time import dummy_datetime_from_target
 from constants import weekdays
 from .lesson import Lesson
-from ..public import model_references, model_verbose_functions
-from ..sub.subquerysets import LessonDataQuerySet
+from ..public import *
+from ..public import model_verboses
+from ..querysets import LessonDataQuerySet
 
 if TYPE_CHECKING:
     from datetime import time
-    from . import Room, Course
+    from . import Course
+    from apps.django.main.school_data.models import Room
 
 __all__ = [
     "LessonData",
@@ -25,25 +26,25 @@ __all__ = [
 
 class LessonData(RandomIDMixin):
     class Meta:
-        verbose_name = _("Stunde")
-        verbose_name_plural = _("Stunden")
+        verbose_name = model_verboses.LESSON_DATA
+        verbose_name_plural = model_verboses.LESSON_DATA_PLURAL
         ordering = ("course", "start_time")
     
     objects = LessonDataQuerySet.as_manager()
     
+    course = models.ForeignKey(
+        COURSE,
+        on_delete=models.CASCADE,
+        verbose_name=model_verboses.COURSE,
+    )  # type: Course
+    
     room = models.ForeignKey(
-        apps.django.main.school_data.public.model_references.ROOM,
+        ROOM,
         on_delete=models.SET_NULL,
+        verbose_name=school_verbose.ROOM,
         blank=True,
         null=True,
-        verbose_name=apps.django.main.school_data.public.model_verbose_functions.room_single,
     )  # type: Room
-    
-    course = models.ForeignKey(
-        model_references.COURSE,
-        on_delete=models.CASCADE,
-        verbose_name=model_verbose_functions.course_single,
-    )  # type: Course
     
     start_time = models.TimeField(
         verbose_name=_("Startzeit"),
@@ -59,11 +60,10 @@ class LessonData(RandomIDMixin):
     )  # type: int
     
     def __str__(self):
-        return _("{lesson_data_model_verbose}: {start_time} - {end_time}, {weekday}, {course}").format(
-            lesson_data_model_verbose=model_verbose(self),
+        return _("{course}: {weekday} {start_time} - {end_time}").format(
             start_time=self.start_time,
             end_time=self.end_time,
-            weekday=self.weekday,
+            weekday=self.get_weekday_display(),
             course=self.course
         )
     

@@ -1,23 +1,21 @@
 from django.contrib import admin
-from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
+from django_common_utils.libraries.fieldsets.mixins import CreationDateAdminFieldsetMixin, DefaultAdminMixin
+from simple_history.admin import SimpleHistoryAdmin
 
 from ...models import Classtest
 
 __all__ = [
-    "Classtest"
+    "ClasstestAdmin"
 ]
 
 
 @admin.register(Classtest)
-class ClassTestAdmin(DefaultAdminMixin):
+class ClasstestAdmin(DefaultAdminMixin, SimpleHistoryAdmin):
     fieldset_fields = {
-        "default": ["targeted_date", "course", "room", "!..."],
-        "extra": ["information", "created_at", "!..."]
+        "default": ["course", "room", "targeted_date", "information", "!..."]
     }
-    list_display = ["__str__", "targeted_date", "course"]
-    search_fields = ["information"]
-    list_filter = ["course__subject", "room"]
-    date_hierarchy = "targeted_date"
-    inlines = [
-        CourseAdminInline, RoomAdminInline
-    ]
+    list_display = ["course", "room", "targeted_date"]
+    list_filter = ["course", "course", "course__subject"]
+    search_fields = ["information", "course", "targeted_date"]
+    autocomplete_fields = ["course", "room"]
+    mixins = [CreationDateAdminFieldsetMixin]

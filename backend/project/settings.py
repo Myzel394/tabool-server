@@ -99,6 +99,7 @@ REST_FRAMEWORK = {
     ]
 }
 
+# TODO: Add "clean empty folder" job!
 CRONJOBS = [
     (os.getenv("CRON_FETCH_TIMETABLE_DAY"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
     (os.getenv("CRON_FETCH_TIMETABLE_NIGHT"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),

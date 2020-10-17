@@ -1,0 +1,23 @@
+from django.utils.translation import gettext_lazy as _
+
+from apps.django.utils.translations import *
+
+__all__ = [
+    "COURSE", "COURSE_PLURAL", "LESSON", "LESSON_PLURAL", "LESSON_DATA", "LESSON_DATA_PLURAL", "LESSON_SCOOSO",
+    "LESSON_SCOOSO_PLURAL", "LESSON_DATA_SCOOSO", "LESSON_DATA_SCOOSO_PLURAL", "LESSON_RELATION",
+    "LESSON_RELATION_PLURAL"
+]
+
+COURSE = _("Kurs")
+COURSE_PLURAL = _("Kurse")
+
+LESSON = _("Stunde")
+LESSON_PLURAL = _("Stunden")
+
+LESSON_DATA = LESSON_DATA_PLURAL = _("Stunden-Daten")
+
+LESSON_SCOOSO, LESSON_SCOOSO_PLURAL = scooso_data(LESSON)
+
+LESSON_DATA_SCOOSO, LESSON_DATA_SCOOSO_PLURAL = scooso_data(LESSON_DATA)
+
+LESSON_RELATION, LESSON_RELATION_PLURAL = user_relation(LESSON)

@@ -5,19 +5,19 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import *
-from django_lifecycle import AFTER_SAVE, hook, LifecycleModel
+from django_lifecycle import LifecycleModel
 
-import apps.django.main.school_data.public.model_references
-import apps.django.main.school_data.public.model_verbose_functions
 from apps.django.main.authentication.models import Student
 from apps.django.main.homework.models import Homework
+from apps.django.main.school_data.public import *
+from apps.django.main.school_data.public import model_verboses as school_verbose
 from .lesson import Lesson
+from ..public import model_verboses
 from ..querysets import CourseQuerySet
 
 if TYPE_CHECKING:
     from django.contrib.auth import get_user_model
     from apps.django.main.school_data.models import Subject, Teacher
-    from apps.django.main.authentication.models import User
 
 __all__ = [
     "Course"
@@ -26,8 +26,9 @@ __all__ = [
 
 class Course(RandomIDMixin, LifecycleModel):
     class Meta:
-        verbose_name = _("Kurs")
-        verbose_name_plural = _("Kurse")
+        verbose_name = model_verboses.COURSE
+        verbose_name_plural = model_verboses.COURSE_PLURAL
+        ordering = ("subject", "teacher", "course_number")
     
     RELATION_MODELS = {Lesson, Homework}
     
@@ -39,17 +40,17 @@ class Course(RandomIDMixin, LifecycleModel):
     )  # type: get_user_model()
     
     subject = models.ForeignKey(
-        apps.django.main.school_data.public.model_references.SUBJECT,
-        verbose_name=apps.django.main.school_data.public.model_verbose_functions.subject_single,
+        SUBJECT,
         on_delete=models.CASCADE,
+        verbose_name=school_verbose.SUBJECT
     )  # type: Subject
     
     teacher = models.ForeignKey(
-        apps.django.main.school_data.public.model_references.TEACHER,
-        verbose_name=apps.django.main.school_data.public.model_verbose_functions.teacher_single,
+        TEACHER,
+        on_delete=models.SET_NULL,
+        verbose_name=school_verbose.TEACHER,
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
     )  # type: Teacher
     
     course_number = models.PositiveSmallIntegerField(
@@ -60,30 +61,8 @@ class Course(RandomIDMixin, LifecycleModel):
     def __str__(self):
         return _("{course_name}: {teacher}").format(
             course_name=self.name,
-            teacher=self.teacher
+            teacher=self.teacher or "-",
         )
-    
-    def __call_manage_relations_on_model(self, models: Iterable[StandardModelType]) -> None:
-        participants = self.participants.all()
-        participants_list = list(participants)
-        
-        for model in models:
-            model.objects.manage_relations(participants_list, self)
-    
-    @hook(AFTER_SAVE)
-    def _call_manage_relations_on_related_models(self) -> None:
-        self.__call_manage_relations_on_model(self.RELATION_MODELS)
-    
-    def update_relations(self, targeted_models: Optional[Set[StandardModelType]] = None) -> None:
-        if targeted_models:
-            assert all([
-                x in self.RELATION_MODELS
-                for x in targeted_models
-            ]), "Not all models were found in `self.RELATION_MODELS`. Maybe you forgot adding it?"
-        else:
-            targeted_models = self.RELATION_MODELS
-        
-        self.__call_manage_relations_on_model(targeted_models)
     
     @property
     def name(self) -> str:
@@ -96,8 +75,8 @@ class Course(RandomIDMixin, LifecycleModel):
         return f"unknown/{self.name}"
     
     def get_class_number(self) -> Optional[int]:
-        participant: "User" = Student.objects.first()
+        for participant in self.participants.all():
+            if student := getattr(participant, "student", None):  # type: Student
+                return student.class_number
         
-        if student := getattr(participant, "student", None):
-            return student.class_number
-        return
+        return None

@@ -1,11 +1,12 @@
 from pathlib import Path
 from typing import *
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
 from django_lifecycle import (
-    AFTER_CREATE, AFTER_DELETE, AFTER_UPDATE, BEFORE_UPDATE, hook,
+    AFTER_DELETE, BEFORE_UPDATE, hook,
     LifecycleModel,
 )
 from private_storage.fields import PrivateFileField
@@ -13,17 +14,17 @@ from private_storage.fields import PrivateFileField
 from apps.django.extra.scooso_scraper.scrapers.material import *
 from apps.django.extra.scooso_scraper.scrapers.parsers.material import MaterialType
 from apps.django.main.lesson.public import *
+from apps.django.main.lesson.public import model_verboses as lesson_verbose
 from apps.django.utils.models import AssociatedUserMixin
 from . import SubmissionScoosoData
-from ..exceptions import *
-from ..public import build_submission_upload_to
+from ..public import build_submission_upload_to, model_verboses
 from ..public.validators import safe_file_validator
 from ..querysets import SubmissionQuerySet
 
 if TYPE_CHECKING:
     from datetime import datetime
     from django.db.models.fields.files import FieldFile
-    from apps.django.main.lesson import Lesson
+    from apps.django.main.lesson.models import Lesson
 
 __all__ = [
     "Submission"
@@ -32,16 +33,16 @@ __all__ = [
 
 class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, LifecycleModel):
     class Meta:
-        verbose_name = _("Einreichung")
-        verbose_name_plural = _("Einreichungen")
+        verbose_name = model_verboses.SUBMISSION
+        verbose_name_plural = model_verboses.SUBMISSION_PLURAL
         ordering = ("lesson", "upload_at")
     
     objects = SubmissionQuerySet.as_manager()
     
     lesson = models.ForeignKey(
         LESSON,
-        verbose_name=lesson_single,
         on_delete=models.CASCADE,
+        verbose_name=lesson_verbose.LESSON
     )  # type: Lesson
     
     file = PrivateFileField(
@@ -69,19 +70,17 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         default=False
     )  # type: bool
     
-    @hook(AFTER_CREATE)
-    @hook(AFTER_UPDATE, when="file")
-    def _hook_get_scoosodata(self):
-        material = self._get_material_from_scooso()
-        self._create_material_from_scooso(material)
-    
-    @hook(BEFORE_UPDATE)
-    def _hook_validate_upload_at_not_already_uploaded(self):
+    def clean(self):
         if self.is_uploaded and self.has_changed("upload_at"):
-            raise FileAlreadyUploadedError(_(
+            raise ValidationError(_(
                 "Die Datei wurde bereits am {upload_date} hochgeladen. Das Hochladedatum kann daher nicht mehr "
                 "geändert werden."
             ), self.upload_at)
+        return super().clean()
+    
+    @hook(BEFORE_UPDATE, when="upload_at", has_changed=True)
+    def _hook_full_clean(self):
+        self.full_clean()
     
     @hook(AFTER_DELETE)
     def _hook_delete_file(self):
@@ -93,9 +92,9 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     def __str__(self):
         # Translators: Diese Nachricht ist für den Admin-Bereich. Sie wird verwendet, um Einreichungen darzustellen.
         return _("{filename} für {lesson} (Hochladedatum: {upload_date})").format(
-            filename=self.file.name,
+            filename=Path(self.file.path).name,
             lesson=self.lesson,
-            upload_date=self.upload_at
+            upload_date=self.upload_at or "-"
         )
     
     def _get_material_from_scooso(self) -> MaterialType:
@@ -153,6 +152,9 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
                 except Exception as exception:
                     raise exception
                 self.is_uploaded = True
+                
+                material = self._get_material_from_scooso()
+                self._create_material_from_scooso(material)
             finally:
                 self.is_in_action = False
                 if commit:

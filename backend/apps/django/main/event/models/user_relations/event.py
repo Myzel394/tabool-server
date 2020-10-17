@@ -6,6 +6,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 
 from apps.django.utils.models import UserModelRelationMixin
 from ...public import *
+from ...public import model_verboses
 
 if TYPE_CHECKING:
     from .. import Event
@@ -17,8 +18,8 @@ __all__ = [
 
 class UserEventRelation(RandomIDMixin, UserModelRelationMixin):
     class Meta:
-        verbose_name = _("Benutzer-Event-Beziehung")
-        verbose_name_plural = _("Benutzer-Event-Beziehungen")
+        verbose_name = model_verboses.EVENT_RELATION
+        verbose_name_plural = model_verboses.EVENT_RELATION_PLURAL
         unique_together = (
             ("event", "user")
         )
@@ -26,8 +27,8 @@ class UserEventRelation(RandomIDMixin, UserModelRelationMixin):
     
     event = models.ForeignKey(
         EVENT,
-        verbose_name=event_single,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        verbose_name=model_verboses.EVENT
     )  # type: Event
     
     ignore = models.BooleanField(

@@ -7,11 +7,6 @@ from apps.django.main.event.sub.subserializers import *
 from apps.django.main.lesson.mixins.tests import *
 from apps.django.utils.tests import *
 from apps.utils.dates import find_next_date_by_weekday
-
-__all__ = [
-    "ModelTest"
-]
-
 from constants.api import API_VERSION
 
 

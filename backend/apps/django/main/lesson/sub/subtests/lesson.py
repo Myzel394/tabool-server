@@ -27,7 +27,6 @@ class UserRelationTest(LessonTestMixin, ClientTestMixin, UserTestMixin):
     
     def test_relation_api(self):
         lesson = Lesson.objects.first()
-        lesson.lesson_data.course.update_relations()
         self.assertEqual(UserLessonRelation.objects.all().count(), 1)
         
         response = self.client.get(f"/api/{API_VERSION}/user-relation/lesson/{lesson.scooso_id}/")
@@ -51,7 +50,6 @@ class UserRelationTest(LessonTestMixin, ClientTestMixin, UserTestMixin):
         # Check whether other lessons weren't affected
         
         other_lesson = Lesson.objects.last()
-        other_lesson.lesson_data.course.update_relations()
         response = self.client.get(f"/api/{API_VERSION}/user-relation/lesson/{other_lesson.scooso_id}/")
         self.assertEqual(UserLessonRelation.objects.all().count(), 2)
         

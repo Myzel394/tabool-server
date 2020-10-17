@@ -1,4 +1,2 @@
-
-
-
-# TODO: Add admin pages later!
+# noinspection PyUnresolvedReferences
+from .sub.subadmins import *

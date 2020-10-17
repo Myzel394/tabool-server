@@ -8,6 +8,7 @@ from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.django.utils.validators import validate_place
 from constants import maxlength
+from ..public import model_verboses
 
 if TYPE_CHECKING:
     from apps.django.main.lesson.models import Lesson
@@ -19,13 +20,14 @@ __all__ = [
 
 class Room(RandomIDMixin, LifecycleModel):
     class Meta:
-        verbose_name = _("Raum")
-        verbose_name_plural = _("Räume")
+        verbose_name = model_verboses.ROOM
+        verbose_name_plural = model_verboses.ROOM_PLURAL
         ordering = ("place",)
     
     place = models.CharField(
         verbose_name=_("Ort"),
-        max_length=maxlength.ROOM
+        max_length=maxlength.ROOM,
+        validators=[validate_place]
     )  # type: str
     
     def __str__(self):
@@ -35,10 +37,10 @@ class Room(RandomIDMixin, LifecycleModel):
         return super().save(*args, **kwargs)
     
     @hook(BEFORE_CREATE)
-    @hook(BEFORE_UPDATE, when="place")
+    @hook(BEFORE_UPDATE, when="place", has_changed=True)
     def _hook_place_validation_and_constraining(self):
         self.place = self.place.upper()
-        validate_place(self.place)
+        self.full_clean()
     
     @property
     def lessons(self) -> QueryType["Lesson"]:

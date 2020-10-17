@@ -2,13 +2,14 @@ import random
 import string
 from typing import *
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from .. import constants
-from ..exceptions import CannotChangeTokenError
+from ..public import model_verboses
 from ..querysets import AccessTokenQuerySet
 
 if TYPE_CHECKING:
@@ -21,8 +22,8 @@ __all__ = [
 
 class AccessToken(RandomIDMixin, CreationDateMixin, LifecycleModel):
     class Meta:
-        verbose_name = _("Zugangszeichen")
-        verbose_name_plural = _("Zugangszeichen")
+        verbose_name = model_verboses.TOKEN
+        verbose_name_plural = model_verboses.TOKEN_PLURAL
         ordering = ("created_at",)
     
     objects = AccessTokenQuerySet()
@@ -30,6 +31,7 @@ class AccessToken(RandomIDMixin, CreationDateMixin, LifecycleModel):
     user = models.OneToOneField(
         "authentication.User",
         on_delete=models.CASCADE,
+        verbose_name=model_verboses.USER,
         blank=True,
         null=True
     )  # type: get_user_model()
@@ -44,6 +46,13 @@ class AccessToken(RandomIDMixin, CreationDateMixin, LifecycleModel):
     
     def __str__(self):
         return _("{user} vom {creation_date}").format(user=self.user, creation_date=self.created_at)
+    
+    def clean(self):
+        if self.has_changed("token"):
+            raise ValidationError(_(
+                "Der Zugangscode kann nicht geändert werden."
+            ))
+        return super().clean()
     
     @hook(BEFORE_CREATE)
     def _hook_create_token(self):
@@ -62,9 +71,6 @@ class AccessToken(RandomIDMixin, CreationDateMixin, LifecycleModel):
         
         self.token = token
     
-    @hook(BEFORE_UPDATE, when="token")
-    def _hook_prevent_token_change(self):
-        if self.has_changed("token"):
-            raise CannotChangeTokenError(_(
-                "Der Zugangscode kann nicht geändert werden."
-            ))
+    @hook(BEFORE_UPDATE, when="token", has_changed=True)
+    def _hook_full_clean(self):
+        self.full_clean()

@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.django.extra.scooso_scraper.scrapers.material import MaterialRequest
 from apps.django.utils.models import ScoosoDataMixin
 from ...public import *
+from ...public import model_verboses
 
 if TYPE_CHECKING:
     from apps.django.main.authentication.models import User
@@ -17,14 +18,14 @@ __all__ = [
 
 class MaterialScoosoData(ScoosoDataMixin):
     class Meta:
-        verbose_name = _("Material")
-        verbose_name_plural = _("Materialien")
+        verbose_name = model_verboses.MATERIAL_SCOOSO
+        verbose_name_plural = model_verboses.MATERIAL_SCOOSO_PLURAL
         ordering = ("material", "scooso_id")
     
     material = models.OneToOneField(
         MATERIAL,
-        verbose_name=material_single,
         on_delete=models.CASCADE,
+        verbose_name=model_verboses.MATERIAL
     )
     
     owner_id = models.PositiveSmallIntegerField(
