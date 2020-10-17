@@ -5,7 +5,7 @@ from typing import *
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
+from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_common_utils.libraries.utils import listify, model_verbose
 from django_lifecycle import AFTER_DELETE, BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 from magic import Magic
@@ -13,6 +13,7 @@ from private_storage.fields import PrivateFileField
 
 from apps.django.main.lesson.public import *
 from apps.django.main.lesson.public import model_verboses as lesson_verbose
+from apps.django.utils.models import AddedAtMixin
 from ..public import *
 from ..public import model_verboses
 from ..public.validators import safe_file_validator
@@ -23,11 +24,11 @@ if TYPE_CHECKING:
     from django.db.models.fields.files import FieldFile
 
 
-class Material(RandomIDMixin, CreationDateMixin, LifecycleModel):
+class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     class Meta:
         verbose_name = model_verboses.MATERIAL
         verbose_name_plural = model_verboses.MATERIAL_PLURAL
-        ordering = ("-created_at", "name")
+        ordering = ("-added_at", "name")
     
     objects = MaterialQuerySet.as_manager()
     

@@ -15,7 +15,7 @@ if settings.DEBUG:
     # noinspection PyUnresolvedReferences
     from apps.django.main.school_data.models import *
     # noinspection PyUnresolvedReferences
-    from apps.django.main.news.models import *
+    from apps.django.extra.news.models import *
     
     
     def flush():

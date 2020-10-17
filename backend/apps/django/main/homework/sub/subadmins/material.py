@@ -22,10 +22,10 @@ class MaterialAdmin(DefaultAdminMixin):
     fieldset_fields = {
         "default": ["lesson", "file", "name", "!..."]
     }
-    list_display = ["name", "created_at", "subject"]
+    list_display = ["name", "added_at", "subject"]
     list_filter = ["lesson__lesson_data__course", "lesson__lesson_data__course__subject"]
     autocomplete_fields = ["lesson"]
-    date_hierarchy = "created_at"
+    date_hierarchy = "added_at"
     mixins = [CreationDateAdminFieldsetMixin]
     inlines = [MaterialScoosoDataAdminInline]
     

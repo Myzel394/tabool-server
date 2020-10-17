@@ -4,9 +4,9 @@ from channels.http import AsgiHandler
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.conf.urls import url
 
+from apps.django.extra.news.public import NEWS_CHANNEL
 from apps.django.main.event.public import MODIFICATION_CHANNEL
 from apps.django.main.homework.public import HOMEWORK_CHANNEL
-from apps.django.main.news.public import NEWS_CHANNEL
 
 urlpatterns = [
     url(

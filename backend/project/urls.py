@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from apps.django.extra.news.views import NewsViewSet
 from apps.django.main.authentication.views import (
     email_confirmation, LoginView, LogoutView, PasswordChangeView, RegisterView, StudentView, UserPaymentViewSet,
 )
@@ -13,7 +14,6 @@ from apps.django.main.homework.views import (
     HomeworkViewSet, MaterialDownloadView, MaterialViewSet, SubmissionViewSet, UserHomeworkRelationViewSet,
 )
 from apps.django.main.lesson.views import CourseViewSet, LessonViewSet, UserLessonRelationViewSet
-from apps.django.main.news.views import NewsViewSet
 from apps.django.main.school_data.views import RoomViewSet, SubjectViewSet, TeacherViewSet, UserSubjectRelationViewSet
 from constants.api import API_VERSION
 

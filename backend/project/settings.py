@@ -63,9 +63,10 @@ INSTALLED_APPS = [
     "apps.django.main.lesson",
     "apps.django.main.event",
     "apps.django.main.homework",
-    "apps.django.extra.scooso_scraper",
     
-    "apps.django.main.news",
+    "apps.django.extra.scooso_scraper",
+    "apps.django.extra.news",
+    
     "apps.django.core",
 ]
 

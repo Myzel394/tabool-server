@@ -1,5 +1,6 @@
 import random
 import string
+from datetime import datetime
 
 import lorem
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -28,7 +29,8 @@ class MaterialTestMixin(LessonTestMixin):
                         filename,
                         (lorem.paragraph() * 3).encode(),
                         "text/plain"
-                    )
+                    ),
+                    "added_at": lambda: datetime.now()
                 },
                 kwargs
             )

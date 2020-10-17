@@ -11,11 +11,13 @@ __all__ = [
 ]
 
 
+# TODO: Add History!
+
 class MaterialViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = MaterialFilterSet
     search_fields = ["name"]
-    ordering_fields = ["created_at"]
+    ordering_fields = ["added_at"]
     
     def get_queryset(self):
         return Material.objects.user_accessible(self.request.user)

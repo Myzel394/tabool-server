@@ -13,7 +13,7 @@ class MaterialFilterSet(filters.FilterSet):
     class Meta:
         model = Material
         fields = {
-            "created_at": ["lte", "gte", "date__exact"]
+            "added_at": ["lte", "gte", "date__exact"]
         }
     
     lesson = filters.CharFilter(

@@ -8,8 +8,8 @@ from django_common_utils.libraries.models.mixins.date import EditCreationDateMix
 from django_eventstream import send_event
 from django_lifecycle import AFTER_CREATE, hook, LifecycleModel
 
+from apps.django.extra.news.public import *
 from apps.django.main.authentication.public import *
-from apps.django.main.news.public import *
 from constants import maxlength
 
 __all__ = [
