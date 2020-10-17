@@ -18,6 +18,5 @@ class ScoosoDataField(WritableFromUserFieldMixin):
     model = ScoosoData
 
 
-# TODO: Check UserField!
 class UserField(WritableAllFieldMixin):
     model = User

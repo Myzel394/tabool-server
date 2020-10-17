@@ -32,19 +32,17 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin):
             "class_number": random.choice(constants.AVAILABLE_CLASS_NUMBERS)
         }
         
-        # TODO: Check! status_code is 404
         response = self.client.post(
-            f"/api/{API_VERSION}/api/auth/student/",
+            f"/api/{API_VERSION}/auth/student/",
             student_kwargs,
             content_type="application/json"
         )
         self.assertEqual(response.status_code, 403)
         
-        user.is_email_verified = True
-        user.save()
+        user.confirm_email(user.confirmation_key)
         
         response = self.client.post(
-            f"/api/auth/student/",
+            f"/api/{API_VERSION}/auth/student/",
             student_kwargs,
             content_type="application/json"
         )
