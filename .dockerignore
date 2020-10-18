@@ -1,0 +1,9 @@
+exposes
+paint
+
+.dockerignore
+.gitignore
+docker-compose.yml
+Dockerfile
+login_procedure.txt
+

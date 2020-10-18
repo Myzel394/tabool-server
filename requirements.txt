@@ -1,3 +1,4 @@
+admin==0.0.1
 appdirs==1.4.4
 asgiref==3.2.10
 attrs==20.2.0
@@ -31,6 +32,7 @@ django-private-storage==2.2.2
 django-simple-email-confirmation==0.70
 django-simple-history==2.11.0
 djangorestframework==3.11.1
+drf-nested-routers==0.92
 drf-writable-nested==0.6.1
 et-xmlfile==1.0.1
 future==0.18.2
@@ -76,7 +78,7 @@ pytz==2020.1
 reportlab==3.5.53
 requests==2.24.0
 requests-toolbelt==0.9.1
-secure-file-detection==0.1.4
+secure-file-detection==0.1.5
 service-identity==18.1.0
 six==1.15.0
 sortedcontainers==2.2.2

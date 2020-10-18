@@ -9,6 +9,8 @@ __all__ = [
 
 
 def landing_page(request: RequestType):
-    return render(request, "main/../../../templates/main/index.html", {
-        "cookie_name": names.ACCESS_TOKEN_COOKIE_NAME
+    return render(request, "main/index.html", {
+        "constants": {
+            "names": names
+        }
     })
