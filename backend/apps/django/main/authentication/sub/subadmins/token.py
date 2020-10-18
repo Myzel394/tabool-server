@@ -8,7 +8,6 @@ __all__ = [
 ]
 
 
-# TODO: Rename AccessToken -> Token
 @admin.register(Token)
 class TokenAdmin(DefaultAdminMixin):
     fieldset_fields = {
