@@ -2,7 +2,7 @@ from django.db import models
 
 from apps.django.utils.models import ScoosoDataMixin
 from ...public import *
-from ...public import model_verboses
+from ...public import model_names
 
 __all__ = [
     "SubmissionScoosoData"
@@ -11,14 +11,14 @@ __all__ = [
 
 class SubmissionScoosoData(ScoosoDataMixin):
     class Meta:
-        verbose_name = model_verboses.SUBMISSION_SCOOSO
-        verbose_name_plural = model_verboses.SUBMISSION_SCOOSO_PLURAL
+        verbose_name = model_names.SUBMISSION_SCOOSO
+        verbose_name_plural = model_names.SUBMISSION_SCOOSO_PLURAL
         ordering = ("submission", "scooso_id")
     
     submission = models.OneToOneField(
         SUBMISSION,
         on_delete=models.CASCADE,
-        verbose_name=model_verboses.SUBMISSION
+        verbose_name=model_names.SUBMISSION
     )
     
     def __str__(self):

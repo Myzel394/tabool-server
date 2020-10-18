@@ -7,11 +7,11 @@ from django_eventstream import send_event
 from django_lifecycle import AFTER_CREATE, AFTER_DELETE, AFTER_UPDATE, hook, LifecycleModel
 
 from apps.django.main.lesson.public import *
-from apps.django.main.lesson.public import model_verboses as lesson_verbose
+from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.main.school_data.public import *
-from apps.django.main.school_data.public import model_verboses as school_verbose
+from apps.django.main.school_data.public import model_names as school_names
 from ..options import ModificationTypeOptions
-from ..public import model_verboses, MODIFICATION_CHANNEL
+from ..public import model_names, MODIFICATION_CHANNEL
 from ..querysets import ModificationQuerySet
 
 if TYPE_CHECKING:
@@ -26,8 +26,8 @@ __all__ = [
 
 class Modification(RandomIDMixin, LifecycleModel):
     class Meta:
-        verbose_name = model_verboses.MODIFICATION
-        verbose_name_plural = model_verboses.MODIFICATION_PLURAL
+        verbose_name = model_names.MODIFICATION
+        verbose_name_plural = model_names.MODIFICATION_PLURAL
         ordering = ("start_datetime",)
     
     objects = ModificationQuerySet.as_manager()
@@ -35,13 +35,13 @@ class Modification(RandomIDMixin, LifecycleModel):
     course = models.ForeignKey(
         COURSE,
         on_delete=models.CASCADE,
-        verbose_name=lesson_verbose.COURSE,
+        verbose_name=lesson_names.COURSE,
     )  # type: Course
     
     new_room = models.ForeignKey(
         ROOM,
         on_delete=models.SET_NULL,
-        verbose_name=school_verbose.ROOM,
+        verbose_name=school_names.ROOM,
         blank=True,
         null=True,
     )  # type: Room
@@ -49,7 +49,7 @@ class Modification(RandomIDMixin, LifecycleModel):
     new_subject = models.ForeignKey(
         SUBJECT,
         on_delete=models.SET_NULL,
-        verbose_name=school_verbose.SUBJECT,
+        verbose_name=school_names.SUBJECT,
         blank=True,
         null=True,
     )  # type: Subject
@@ -57,7 +57,7 @@ class Modification(RandomIDMixin, LifecycleModel):
     new_teacher = models.ForeignKey(
         TEACHER,
         on_delete=models.SET_NULL,
-        verbose_name=school_verbose.TEACHER,
+        verbose_name=school_names.TEACHER,
         blank=True,
         null=True,
     )  # type: Teacher

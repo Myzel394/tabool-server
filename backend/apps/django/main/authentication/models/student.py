@@ -7,10 +7,10 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.django.main.school_data.public import *
-from apps.django.main.school_data.public import model_verboses as school_verboses
+from apps.django.main.school_data.public import model_names as school_names
 from .. import constants
 from ..public import *
-from ..public import model_verboses
+from ..public import model_names
 
 if TYPE_CHECKING:
     from . import User
@@ -23,20 +23,20 @@ __all__ = [
 
 class Student(RandomIDMixin, LifecycleModel):
     class Meta:
-        verbose_name = model_verboses.STUDENT
-        verbose_name_plural = model_verboses.STUDENT_PLURAL
+        verbose_name = model_names.STUDENT
+        verbose_name_plural = model_names.STUDENT_PLURAL
         ordering = ("user", "class_number")
     
     user = models.OneToOneField(
         USER,
         on_delete=models.CASCADE,
-        verbose_name=model_verboses.USER,
+        verbose_name=model_names.USER,
     )  # type: User
     
     main_teacher = models.ForeignKey(
         TEACHER,
         on_delete=models.SET_NULL,
-        verbose_name=school_verboses.TEACHER,
+        verbose_name=school_names.TEACHER,
         blank=True,
         null=True,
     )  # type: Teacher

@@ -9,7 +9,7 @@ from django_hint import QueryType
 
 from apps.django.utils.models import ColorMixin
 from constants import maxlength
-from ..public import model_verboses
+from ..public import model_names
 from ..querysets import SubjectQuerySet
 
 if TYPE_CHECKING:
@@ -22,8 +22,8 @@ __all__ = [
 
 class Subject(RandomIDMixin, ColorMixin, HandlerMixin):
     class Meta:
-        verbose_name = model_verboses.SUBJECT
-        verbose_name_plural = model_verboses.SUBJECT_PLURAL
+        verbose_name = model_names.SUBJECT
+        verbose_name_plural = model_names.SUBJECT_PLURAL
         ordering = ("name",)
     
     objects = SubjectQuerySet.as_manager()

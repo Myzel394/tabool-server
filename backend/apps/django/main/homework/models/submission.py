@@ -14,10 +14,10 @@ from private_storage.fields import PrivateFileField
 from apps.django.extra.scooso_scraper.scrapers.material import *
 from apps.django.extra.scooso_scraper.scrapers.parsers.material import MaterialType
 from apps.django.main.lesson.public import *
-from apps.django.main.lesson.public import model_verboses as lesson_verbose
+from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.utils.models import AssociatedUserMixin
 from . import SubmissionScoosoData
-from ..public import build_submission_upload_to, model_verboses
+from ..public import build_submission_upload_to, model_names
 from ..public.validators import safe_file_validator
 from ..querysets import SubmissionQuerySet
 
@@ -33,8 +33,8 @@ __all__ = [
 
 class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, LifecycleModel):
     class Meta:
-        verbose_name = model_verboses.SUBMISSION
-        verbose_name_plural = model_verboses.SUBMISSION_PLURAL
+        verbose_name = model_names.SUBMISSION
+        verbose_name_plural = model_names.SUBMISSION_PLURAL
         ordering = ("lesson", "upload_at")
     
     objects = SubmissionQuerySet.as_manager()
@@ -42,7 +42,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     lesson = models.ForeignKey(
         LESSON,
         on_delete=models.CASCADE,
-        verbose_name=lesson_verbose.LESSON
+        verbose_name=lesson_names.LESSON
     )  # type: Lesson
     
     file = PrivateFileField(

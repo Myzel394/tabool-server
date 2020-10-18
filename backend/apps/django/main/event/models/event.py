@@ -8,11 +8,11 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
-from apps.django.main.school_data.public import model_verboses as  school_verbose
+from apps.django.main.school_data.public import model_names as school_names
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
 from apps.utils import format_datetime
 from constants import maxlength
-from ..public import model_verboses
+from ..public import model_names
 from ..sub.subquerysets import EventQuerySet
 from ...school_data.public.model_references import *
 
@@ -28,8 +28,8 @@ __all__ = [
 
 class Event(RandomIDMixin, HandlerMixin):
     class Meta:
-        verbose_name = model_verboses.EVENT
-        verbose_name_plural = model_verboses.EVENT_PLURAL
+        verbose_name = model_names.EVENT
+        verbose_name_plural = model_names.EVENT_PLURAL
         ordering = ("title", "start_datetime", "end_datetime", "room")
     
     objects = EventQuerySet.as_manager()
@@ -37,7 +37,7 @@ class Event(RandomIDMixin, HandlerMixin):
     room = models.ForeignKey(
         ROOM,
         on_delete=models.SET_NULL,
-        verbose_name=school_verbose.ROOM,
+        verbose_name=school_names.ROOM,
         blank=True,
         null=True,
     )  # type: Room

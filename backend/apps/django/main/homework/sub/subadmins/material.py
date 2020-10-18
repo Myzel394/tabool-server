@@ -2,7 +2,7 @@ from django.contrib import admin
 from django_common_utils.libraries.fieldsets.mixins import CreationDateAdminFieldsetMixin, DefaultAdminMixin
 
 from apps.django.extra.scooso_scraper.mixins.admins import ScoosoDataAdminInlineMixin
-from apps.django.main.school_data.public import model_verboses as school_verbose
+from apps.django.main.school_data.public import model_names as school_names
 from ...models import Material, MaterialScoosoData
 
 __all__ = [
@@ -32,4 +32,4 @@ class MaterialAdmin(DefaultAdminMixin):
     def subject(self, instance: Material):
         return instance.lesson.lesson_data.course.subject
     
-    subject.short_description = school_verbose.SUBJECT
+    subject.short_description = school_names.SUBJECT

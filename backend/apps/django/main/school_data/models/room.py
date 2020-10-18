@@ -8,7 +8,7 @@ from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.django.utils.validators import validate_place
 from constants import maxlength
-from ..public import model_verboses
+from ..public import model_names
 
 if TYPE_CHECKING:
     from apps.django.main.lesson.models import Lesson
@@ -20,8 +20,8 @@ __all__ = [
 
 class Room(RandomIDMixin, LifecycleModel):
     class Meta:
-        verbose_name = model_verboses.ROOM
-        verbose_name_plural = model_verboses.ROOM_PLURAL
+        verbose_name = model_names.ROOM
+        verbose_name_plural = model_names.ROOM_PLURAL
         ordering = ("place",)
     
     place = models.CharField(

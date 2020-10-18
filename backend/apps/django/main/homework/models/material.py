@@ -12,10 +12,10 @@ from magic import Magic
 from private_storage.fields import PrivateFileField
 
 from apps.django.main.lesson.public import *
-from apps.django.main.lesson.public import model_verboses as lesson_verbose
+from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.utils.models import AddedAtMixin
 from ..public import *
-from ..public import model_verboses
+from ..public import model_names
 from ..public.validators import safe_file_validator
 from ..querysets import MaterialQuerySet
 
@@ -26,8 +26,8 @@ if TYPE_CHECKING:
 
 class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     class Meta:
-        verbose_name = model_verboses.MATERIAL
-        verbose_name_plural = model_verboses.MATERIAL_PLURAL
+        verbose_name = model_names.MATERIAL
+        verbose_name_plural = model_names.MATERIAL_PLURAL
         ordering = ("-added_at", "name")
     
     objects = MaterialQuerySet.as_manager()
@@ -35,7 +35,7 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     lesson = models.ForeignKey(
         LESSON,
         on_delete=models.CASCADE,
-        verbose_name=lesson_verbose.LESSON
+        verbose_name=lesson_names.LESSON
     )  # type: Lesson
     
     file = PrivateFileField(

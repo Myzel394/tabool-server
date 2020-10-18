@@ -9,7 +9,7 @@ from django_common_utils.libraries.models.mixins import CreationDateMixin, Rando
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from .. import constants
-from ..public import model_verboses
+from ..public import model_names
 from ..querysets import AccessTokenQuerySet
 
 if TYPE_CHECKING:
@@ -22,8 +22,8 @@ __all__ = [
 
 class AccessToken(RandomIDMixin, CreationDateMixin, LifecycleModel):
     class Meta:
-        verbose_name = model_verboses.TOKEN
-        verbose_name_plural = model_verboses.TOKEN_PLURAL
+        verbose_name = model_names.TOKEN
+        verbose_name_plural = model_names.TOKEN_PLURAL
         ordering = ("created_at",)
     
     objects = AccessTokenQuerySet()
@@ -31,7 +31,7 @@ class AccessToken(RandomIDMixin, CreationDateMixin, LifecycleModel):
     user = models.OneToOneField(
         "authentication.User",
         on_delete=models.CASCADE,
-        verbose_name=model_verboses.USER,
+        verbose_name=model_names.USER,
         blank=True,
         null=True
     )  # type: get_user_model()

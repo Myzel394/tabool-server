@@ -9,7 +9,7 @@ from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 from apps.utils import format_datetime
 from .user_relations.lesson import UserLessonRelation
 from ..public import *
-from ..public import model_verboses
+from ..public import model_names
 from ..querysets import LessonQuerySet
 from ..validators import validate_lesson_weekday
 
@@ -25,8 +25,8 @@ __all__ = [
 
 class Lesson(RandomIDMixin):
     class Meta:
-        verbose_name = model_verboses.LESSON
-        verbose_name_plural = model_verboses.LESSON_PLURAL
+        verbose_name = model_names.LESSON
+        verbose_name_plural = model_names.LESSON_PLURAL
         unique_together = (
             ("lesson_data", "date")
         )
@@ -37,7 +37,7 @@ class Lesson(RandomIDMixin):
     lesson_data = models.ForeignKey(
         LESSON_DATA,
         on_delete=models.CASCADE,
-        verbose_name=model_verboses.LESSON_DATA
+        verbose_name=model_names.LESSON_DATA
     )  # type: LessonData
     
     date = models.DateField(

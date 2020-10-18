@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 
 from ...public import *
-from ...public import model_verboses
+from ...public import model_names
 
 if TYPE_CHECKING:
     from .. import LessonData
@@ -17,14 +17,14 @@ __all__ = [
 
 class LessonDataScoosoData(RandomIDMixin):
     class Meta:
-        verbose_name = model_verboses.LESSON_DATA_SCOOSO
-        verbose_name_plural = model_verboses.LESSON_DATA_SCOOSO_PLURAL
+        verbose_name = model_names.LESSON_DATA_SCOOSO
+        verbose_name_plural = model_names.LESSON_DATA_SCOOSO_PLURAL
         ordering = ("lesson_data", "lesson_type")
     
     lesson_data = models.OneToOneField(
         LESSON_DATA,
         on_delete=models.CASCADE,
-        verbose_name=model_verboses.LESSON_DATA,
+        verbose_name=model_names.LESSON_DATA,
         blank=True,
     )  # type: LessonData
     

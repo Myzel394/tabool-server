@@ -8,7 +8,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import QueryType
 
 from constants import maxlength
-from ..public import model_verboses
+from ..public import model_names
 
 if TYPE_CHECKING:
     from apps.django.main.lesson.models import LessonData
@@ -20,8 +20,8 @@ __all__ = [
 
 class Teacher(RandomIDMixin, HandlerMixin):
     class Meta:
-        verbose_name = model_verboses.TEACHER
-        verbose_name_plural = model_verboses.TEACHER_PLURAL
+        verbose_name = model_names.TEACHER
+        verbose_name_plural = model_names.TEACHER_PLURAL
         ordering = ("last_name", "first_name", "short_name", "email")
     
     first_name = models.CharField(

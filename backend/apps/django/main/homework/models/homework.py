@@ -11,13 +11,13 @@ from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, BEFORE_UPDATE, hook, L
 from simple_history.models import HistoricalRecords
 
 from apps.django.main.authentication.public import *
-from apps.django.main.authentication.public import model_verboses as auth_verbose
+from apps.django.main.authentication.public import model_names as auth_names
 from apps.django.main.lesson.public import *
-from apps.django.main.lesson.public import model_verboses as lesson_verbose
+from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.utils.history_extras.extras import UserInformationHistoricalModel
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
 from .user_relations.homework import UserHomeworkRelation
-from ..public import HOMEWORK_CHANNEL, model_verboses
+from ..public import HOMEWORK_CHANNEL, model_names
 from ..querysets import HomeworkQuerySet
 from ..validators import validate_only_future_days
 
@@ -34,8 +34,8 @@ __all__ = [
 
 class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
     class Meta:
-        verbose_name = model_verboses.HOMEWORK
-        verbose_name_plural = model_verboses.HOMEWORK_PLURAL
+        verbose_name = model_names.HOMEWORK
+        verbose_name_plural = model_names.HOMEWORK_PLURAL
         ordering = ("due_date", "type")
     
     objects = HomeworkQuerySet.as_manager()
@@ -43,13 +43,13 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
     lesson = models.ForeignKey(
         LESSON,
         on_delete=models.CASCADE,
-        verbose_name=lesson_verbose.LESSON,
+        verbose_name=lesson_names.LESSON,
     )  # type: Lesson
     
     private_to_user = models.ForeignKey(
         USER,
         on_delete=models.CASCADE,
-        verbose_name=auth_verbose.USER,
+        verbose_name=auth_names.USER,
         blank=True,
         null=True,
     )  # type: User

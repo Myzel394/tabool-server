@@ -7,7 +7,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from apps.django.utils.fields import ColorField
 from apps.django.utils.models import UserModelRelationMixin
 from ...public import *
-from ...public import model_verboses
+from ...public import model_names
 
 if TYPE_CHECKING:
     from apps.django.main.school_data.models import Subject
@@ -19,8 +19,8 @@ __all__ = [
 
 class UserSubjectRelation(RandomIDMixin, UserModelRelationMixin):
     class Meta:
-        verbose_name = model_verboses.SUBJECT_RELATION
-        verbose_name_plural = model_verboses.SUBJECT_RELATION_PLURAL
+        verbose_name = model_names.SUBJECT_RELATION
+        verbose_name_plural = model_names.SUBJECT_RELATION_PLURAL
         unique_together = (
             ("subject", "user")
         )
@@ -29,7 +29,7 @@ class UserSubjectRelation(RandomIDMixin, UserModelRelationMixin):
     subject = models.ForeignKey(
         SUBJECT,
         on_delete=models.CASCADE,
-        verbose_name=model_verboses.SUBJECT
+        verbose_name=model_names.SUBJECT
     )  # type: Subject
     
     color = ColorField(

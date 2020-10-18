@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.django.utils.models import ScoosoDataMixin
 from ...public import *
-from ...public import model_verboses
+from ...public import model_names
 
 if TYPE_CHECKING:
     from .. import Room
@@ -17,14 +17,14 @@ __all__ = [
 
 class RoomScoosoData(ScoosoDataMixin):
     class Meta:
-        verbose_name = model_verboses.ROOM_SCOOSO
-        verbose_name_plural = model_verboses.ROOM_SCOOSO_PLURAL
+        verbose_name = model_names.ROOM_SCOOSO
+        verbose_name_plural = model_names.ROOM_SCOOSO_PLURAL
         ordering = ("code", "scooso_id")
     
     room = models.OneToOneField(
         ROOM,
         on_delete=models.CASCADE,
-        verbose_name=model_verboses.ROOM
+        verbose_name=model_names.ROOM
     )  # type: Room
     
     code = models.CharField(

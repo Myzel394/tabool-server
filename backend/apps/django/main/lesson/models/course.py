@@ -10,9 +10,9 @@ from django_lifecycle import LifecycleModel
 from apps.django.main.authentication.models import Student
 from apps.django.main.homework.models import Homework
 from apps.django.main.school_data.public import *
-from apps.django.main.school_data.public import model_verboses as school_verbose
+from apps.django.main.school_data.public import model_names as school_names
 from .lesson import Lesson
-from ..public import model_verboses
+from ..public import model_names
 from ..querysets import CourseQuerySet
 
 if TYPE_CHECKING:
@@ -26,8 +26,8 @@ __all__ = [
 
 class Course(RandomIDMixin, LifecycleModel):
     class Meta:
-        verbose_name = model_verboses.COURSE
-        verbose_name_plural = model_verboses.COURSE_PLURAL
+        verbose_name = model_names.COURSE
+        verbose_name_plural = model_names.COURSE_PLURAL
         ordering = ("subject", "teacher", "course_number")
     
     RELATION_MODELS = {Lesson, Homework}
@@ -42,13 +42,13 @@ class Course(RandomIDMixin, LifecycleModel):
     subject = models.ForeignKey(
         SUBJECT,
         on_delete=models.CASCADE,
-        verbose_name=school_verbose.SUBJECT
+        verbose_name=school_names.SUBJECT
     )  # type: Subject
     
     teacher = models.ForeignKey(
         TEACHER,
         on_delete=models.SET_NULL,
-        verbose_name=school_verbose.TEACHER,
+        verbose_name=school_names.TEACHER,
         blank=True,
         null=True,
     )  # type: Teacher

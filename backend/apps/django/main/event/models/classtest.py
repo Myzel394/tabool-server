@@ -8,12 +8,12 @@ from django_common_utils.libraries.models.mixins import CreationDateMixin, Rando
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 from simple_history.models import HistoricalRecords
 
-from apps.django.main.lesson.public import model_verboses as lesson_verbose
-from apps.django.main.school_data.public import model_verboses as school_verbose
+from apps.django.main.lesson.public import model_names as lesson_names
+from apps.django.main.school_data.public import model_names as school_names
 from apps.django.utils.history_extras.extras import UserInformationHistoricalModel
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
 from apps.utils import format_datetime
-from ..public import model_verboses
+from ..public import model_names
 from ..querysets import ClasstestQuerySet
 from ...lesson.public.model_references import *
 from ...school_data.public.model_references import *
@@ -30,8 +30,8 @@ __all__ = [
 
 class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     class Meta:
-        verbose_name = model_verboses.CLASSTEST
-        verbose_name_plural = model_verboses.CLASSTEST_PLURAL
+        verbose_name = model_names.CLASSTEST
+        verbose_name_plural = model_names.CLASSTEST_PLURAL
         ordering = ("targeted_date", "course", "room")
     
     objects = ClasstestQuerySet.as_manager()
@@ -39,13 +39,13 @@ class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     course = models.ForeignKey(
         COURSE,
         on_delete=models.CASCADE,
-        verbose_name=lesson_verbose.COURSE
+        verbose_name=lesson_names.COURSE
     )  # type: Course
     
     room = models.ForeignKey(
         ROOM,
         on_delete=models.CASCADE,
-        verbose_name=school_verbose.ROOM,
+        verbose_name=school_names.ROOM,
         blank=True,
         null=True
     )  # type: Room

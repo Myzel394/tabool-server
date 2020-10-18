@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from fernet_fields import EncryptedCharField
 
-from ..public import model_verboses
+from ..public import model_names
 from ..querysets import ScoosoDataQuerySet
 
 __all__ = [
@@ -13,8 +13,8 @@ __all__ = [
 
 class ScoosoData(RandomIDMixin):
     class Meta:
-        verbose_name = model_verboses.SCOOSO_DATA
-        verbose_name_plural = model_verboses.SCOOSO_DATA_PLURAL
+        verbose_name = model_names.SCOOSO_DATA
+        verbose_name_plural = model_names.SCOOSO_DATA_PLURAL
         ordering = ("user",)
     
     objects = ScoosoDataQuerySet()
@@ -22,7 +22,7 @@ class ScoosoData(RandomIDMixin):
     user = models.OneToOneField(
         "authentication.User",
         on_delete=models.CASCADE,
-        verbose_name=model_verboses.USER,
+        verbose_name=model_names.USER,
     )
     
     username = EncryptedCharField(

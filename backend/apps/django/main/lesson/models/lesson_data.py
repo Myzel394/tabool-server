@@ -5,13 +5,13 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 
 from apps.django.main.school_data.public import *
-from apps.django.main.school_data.public import model_verboses as school_verbose
+from apps.django.main.school_data.public import model_names as school_names
 from apps.django.utils.fields import WeekdayField
 from apps.utils.time import dummy_datetime_from_target
 from constants import weekdays
 from .lesson import Lesson
 from ..public import *
-from ..public import model_verboses
+from ..public import model_names
 from ..querysets import LessonDataQuerySet
 
 if TYPE_CHECKING:
@@ -26,8 +26,8 @@ __all__ = [
 
 class LessonData(RandomIDMixin):
     class Meta:
-        verbose_name = model_verboses.LESSON_DATA
-        verbose_name_plural = model_verboses.LESSON_DATA_PLURAL
+        verbose_name = model_names.LESSON_DATA
+        verbose_name_plural = model_names.LESSON_DATA_PLURAL
         ordering = ("course", "start_time")
     
     objects = LessonDataQuerySet.as_manager()
@@ -35,13 +35,13 @@ class LessonData(RandomIDMixin):
     course = models.ForeignKey(
         COURSE,
         on_delete=models.CASCADE,
-        verbose_name=model_verboses.COURSE,
+        verbose_name=model_names.COURSE,
     )  # type: Course
     
     room = models.ForeignKey(
         ROOM,
         on_delete=models.SET_NULL,
-        verbose_name=school_verbose.ROOM,
+        verbose_name=school_names.ROOM,
         blank=True,
         null=True,
     )  # type: Room

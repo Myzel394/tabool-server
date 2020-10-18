@@ -6,7 +6,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 
 from apps.django.utils.models import UserModelRelationMixin
 from ...public import *
-from ...public import model_verboses
+from ...public import model_names
 
 if TYPE_CHECKING:
     from ...models import Homework
@@ -18,8 +18,8 @@ __all__ = [
 
 class UserHomeworkRelation(RandomIDMixin, UserModelRelationMixin):
     class Meta:
-        verbose_name = model_verboses.HOMEWORK_RELATION
-        verbose_name_plural = model_verboses.HOMEWORK_RELATION_PLURAL
+        verbose_name = model_names.HOMEWORK_RELATION
+        verbose_name_plural = model_names.HOMEWORK_RELATION_PLURAL
         unique_together = (
             ("homework", "user")
         )
@@ -28,7 +28,7 @@ class UserHomeworkRelation(RandomIDMixin, UserModelRelationMixin):
     homework = models.ForeignKey(
         HOMEWORK,
         on_delete=models.CASCADE,
-        verbose_name=model_verboses.HOMEWORK
+        verbose_name=model_names.HOMEWORK
     )  # type: Homework
     
     completed = models.BooleanField(

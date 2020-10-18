@@ -7,7 +7,7 @@ from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 from apps.django.extra.scooso_scraper.mixins.admins import ScoosoDataAdminInlineMixin
 from apps.utils import format_datetime
 from ...models import LessonData, LessonDataScoosoData
-from ...public import model_verboses
+from ...public import model_names
 
 __all__ = [
     "LessonDataAdmin"
@@ -34,7 +34,7 @@ class LessonDataAdmin(DefaultAdminMixin):
     def course_name(self, instance: LessonData):
         return instance.course.name
     
-    course_name.short_description = model_verboses.COURSE
+    course_name.short_description = model_names.COURSE
     
     def date(self, instance: LessonData):
         abbreviations = list(calendar.day_abbr)
