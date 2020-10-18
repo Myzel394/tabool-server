@@ -19,7 +19,7 @@ class StudentAdminInline(admin.StackedInline):
 @admin.register(User)
 class UserAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["email", "id", "is_active", "!..."]
+        "default": ["first_name", "last_name", "email", "id", "is_active", "!..."]
     }
     list_display = ["email", "id", "is_active", "is_confirmed"]
     list_filter = ["is_active"]
