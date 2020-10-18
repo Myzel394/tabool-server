@@ -59,7 +59,7 @@ class ModelTest(UserTestMixin, ClientTestMixin, DummyUser):
                 email='super@user.com', password='foo', is_superuser=False)
     
     def test_passwords(self):
-        access_token: AccessToken = AccessToken.objects.create()
+        access_token: Token = Token.objects.create()
         first_name = "Josephine"
         email = f"{first_name}@gmail.com"
         default_data = {
@@ -89,7 +89,7 @@ class ModelTest(UserTestMixin, ClientTestMixin, DummyUser):
             self.assertStatusOk(response.status_code) if is_valid else self.assertStatusNotOk(response.status_code)
     
     def test_token(self):
-        access_token: AccessToken = AccessToken.objects.create()
+        access_token: Token = Token.objects.create()
         password = self.Get_random_password()
         
         default_data = {

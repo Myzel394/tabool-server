@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 
-from ...models import AccessToken
+from ...models import Token
 
 __all__ = [
     "TokenAdmin"
@@ -9,7 +9,7 @@ __all__ = [
 
 
 # TODO: Rename AccessToken -> Token
-@admin.register(AccessToken)
+@admin.register(Token)
 class TokenAdmin(DefaultAdminMixin):
     fieldset_fields = {
         "default": ["user", "token", "!..."]

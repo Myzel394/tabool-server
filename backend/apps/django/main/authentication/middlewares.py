@@ -2,7 +2,7 @@ from django.http import HttpResponseForbidden
 from django.utils.translation import gettext_lazy as _
 from django_hint import RequestType
 
-from .models import AccessToken
+from .models import Token
 
 
 class EnsureAuthenticationToken:
@@ -29,4 +29,4 @@ class EnsureAuthenticationToken:
         except KeyError:
             return False
         
-        return AccessToken.objects.only("id").get(id=access_token).exists()
+        return Token.objects.only("id").get(id=access_token).exists()

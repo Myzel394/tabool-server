@@ -10,23 +10,23 @@ from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from .. import constants
 from ..public import model_names
-from ..querysets import AccessTokenQuerySet
+from ..querysets import TokenQuerySet
 
 if TYPE_CHECKING:
     from django.contrib.auth import get_user_model
 
 __all__ = [
-    "AccessToken"
+    "Token"
 ]
 
 
-class AccessToken(RandomIDMixin, CreationDateMixin, LifecycleModel):
+class Token(RandomIDMixin, CreationDateMixin, LifecycleModel):
     class Meta:
         verbose_name = model_names.TOKEN
         verbose_name_plural = model_names.TOKEN_PLURAL
         ordering = ("created_at",)
     
-    objects = AccessTokenQuerySet()
+    objects = TokenQuerySet()
     
     user = models.OneToOneField(
         "authentication.User",

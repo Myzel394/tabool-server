@@ -1,21 +1,9 @@
-from apps.django.utils.serializers import WritableAllFieldMixin, WritableFromUserFieldMixin
-from ..models import AccessToken, ScoosoData, User, UserPayment
+from apps.django.utils.serializers import WritableAllFieldMixin
+from ..models import User
 
 __all__ = [
-    "AccessTokenField", "UserPaymentField", "ScoosoDataField", "UserField"
+    "UserField"
 ]
-
-
-class AccessTokenField(WritableFromUserFieldMixin):
-    model = AccessToken
-
-
-class UserPaymentField(WritableFromUserFieldMixin):
-    model = UserPayment
-
-
-class ScoosoDataField(WritableFromUserFieldMixin):
-    model = ScoosoData
 
 
 class UserField(WritableAllFieldMixin):

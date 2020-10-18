@@ -35,7 +35,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin, DummyUs
         
         # Step 1 Token
         print("Step 1, Token")
-        token = AccessToken.objects.create()
+        token = Token.objects.create()
         
         # Step 2 Simple registration
         print("Step 2, Simple registration")
@@ -87,7 +87,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin, DummyUs
         response = self.client.post(f"/api/{API_VERSION}/auth/registration/", {
             "email": email,
             "password": password,
-            "token": AccessToken.objects.create().token
+            "token": Token.objects.create().token
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
     

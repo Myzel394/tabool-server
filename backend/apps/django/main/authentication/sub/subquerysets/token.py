@@ -6,10 +6,10 @@ if TYPE_CHECKING:
     from ...public import *
 
 __all__ = [
-    "AccessTokenQuerySet"
+    "TokenQuerySet"
 ]
 
 
-class AccessTokenQuerySet(BaseUserManager):
-    def from_user(self, user: "USER") -> "AccessTokenQuerySet":
+class TokenQuerySet(BaseUserManager):
+    def from_user(self, user: "USER") -> "TokenQuerySet":
         return self.only("user").filter(user=user)

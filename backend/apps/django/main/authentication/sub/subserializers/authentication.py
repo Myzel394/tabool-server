@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from ... import constants
-from ...models import AccessToken
+from ...models import Token
 from ...validators import email_not_in_use, token_exists, token_not_in_use
 
 __all__ = [
@@ -67,7 +67,7 @@ class RegisterSerializer(serializers.Serializer):
             validated_data["email"],
             validated_data["password"],
         )
-        token = AccessToken.objects.get(token=validated_data["token"])
+        token = Token.objects.get(token=validated_data["token"])
         token.user = user
         token.save()
         
