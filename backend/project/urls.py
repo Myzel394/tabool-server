@@ -3,58 +3,62 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
 
-from apps.django.extra.news.views import NewsViewSet
 from apps.django.main.authentication.views import (
-    email_confirmation, LoginView, LogoutView, PasswordChangeView, RegisterView, StudentView, UserPaymentViewSet,
+    email_confirmation, LoginView, LogoutView, PasswordChangeView, RegisterView, StudentView,
 )
-from apps.django.main.event.views import ClasstestViewSet, EventUserRelationViewSet, EventViewSet, ModificationViewSet
+from apps.django.main.event import routings as event_routers
+from apps.django.main.homework import routings as homework_routers
 from apps.django.main.homework.views import (
-    HomeworkViewSet, MaterialDownloadView, MaterialViewSet, SubmissionViewSet, UserHomeworkRelationViewSet,
+    MaterialDownloadView,
 )
-from apps.django.main.lesson.views import CourseViewSet, LessonViewSet, UserLessonRelationViewSet
-from apps.django.main.school_data.views import RoomViewSet, SubjectViewSet, TeacherViewSet, UserSubjectRelationViewSet
+from apps.django.main.lesson import routings as lesson_routers
+from apps.django.main.school_data import routings as school_routers
+from apps.django.utils.urls import build_patterns
 from constants.api import API_VERSION
 
-router = DefaultRouter()
-router.register("lesson", LessonViewSet, basename="Lesson")
-router.register("homework", HomeworkViewSet, basename="Homework")
-router.register("modification", ModificationViewSet, basename="Modification")
-router.register("classtest", ClasstestViewSet, basename="Classtest")
-router.register("event", EventViewSet, basename="Event")
-router.register("course", CourseViewSet, basename="Course")
-router.register("room", RoomViewSet, basename="Room")
-router.register("subject", SubjectViewSet, basename="Subject")
-router.register("teacher", TeacherViewSet, basename="Teacher")
-router.register("news", NewsViewSet, basename="News")
-router.register("user-payment", UserPaymentViewSet, basename="PaidUser")
-router.register("material", MaterialViewSet, basename="Material")
-router.register("submission", SubmissionViewSet, basename="Submission")
 
-user_relation_router = DefaultRouter()
+def build_url(prefix: str) -> str:
+    return f"api/{API_VERSION}/{prefix}/"
 
-user_relation_router.register("lesson", UserLessonRelationViewSet, basename="UserLessonRelation")
-user_relation_router.register("homework", UserHomeworkRelationViewSet, basename="UserHomeworkRelation")
-user_relation_router.register("event", EventUserRelationViewSet, basename="EventUserRelation")
-user_relation_router.register("subject", UserSubjectRelationViewSet, basename="UserSubjectRelation")
+
+data_patterns = build_patterns("data", [
+    event_routers.data_router.urls,
+    event_routers.classtest_router.urls,
+    event_routers.classtest_history_router.urls,
+    homework_routers.data_router.urls,
+    homework_routers.homework_router.urls,
+    homework_routers.homework_history_router.urls,
+    lesson_routers.data_router.urls,
+    school_routers.data_router.urls
+])
+
+relation_patterns = build_patterns("user-relation", [
+    event_routers.relation_router.urls,
+    homework_routers.relation_router.urls,
+    lesson_routers.relation_router.urls,
+    school_routers.relation_router.urls
+])
 
 urlpatterns = [
-                  # Static access
-                  path("private-media/", include(private_storage.urls)),
-                  path("materials-media/", MaterialDownloadView.as_view()),
+    # Static access
+    path("private-media/", include(private_storage.urls)),
+    path("materials-media/", MaterialDownloadView.as_view()),
     
-                  path(f"api/{API_VERSION}/user-relation/", include(user_relation_router.urls)),
-                  path(f"api/{API_VERSION}/data/", include(router.urls)),
-                  path(f"api/{API_VERSION}/data/", include("rest_framework.urls")),
+    # API
+    path(f"api/{API_VERSION}/data/", include("rest_framework.urls")),
     
-                  path(f"api/{API_VERSION}/auth/change-password/", PasswordChangeView.as_view()),
-                  path(f"api/{API_VERSION}/auth/registration/", RegisterView.as_view()),
-                  path(f"api/{API_VERSION}/auth/student/", StudentView.as_view()),
-                  path(f"api/{API_VERSION}/auth/login/", LoginView.as_view()),
-                  path(f"api/{API_VERSION}/auth/logout/", LogoutView.as_view()),
-                  path(f"api/{API_VERSION}/auth/confirmation/", email_confirmation),
+    path(f"api/{API_VERSION}/auth/change-password/", PasswordChangeView.as_view()),
+    path(f"api/{API_VERSION}/auth/registration/", RegisterView.as_view()),
+    path(f"api/{API_VERSION}/auth/student/", StudentView.as_view()),
+    path(f"api/{API_VERSION}/auth/login/", LoginView.as_view()),
+    path(f"api/{API_VERSION}/auth/logout/", LogoutView.as_view()),
+    path(f"api/{API_VERSION}/auth/confirmation/", email_confirmation),
     
-                  path("", include("apps.django.core.urls")),
-                  path("admin/", admin.site.urls),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("", include("apps.django.core.urls")),
+    path("admin/", admin.site.urls),
+]
+
+urlpatterns += data_patterns
+urlpatterns += relation_patterns
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -255,7 +255,7 @@ class ForeignSerializerTest(CourseTestMixin):
         
         self.assertEqual(count, new_count)
         
-        print("Second fetch. Current date")
+        print("Third fetch. Current date")
         timetable = self.scraper.get_timetable()
         self.scraper.import_timetable_from_scraper(timetable)
         new_count = LessonData.objects.all().count()

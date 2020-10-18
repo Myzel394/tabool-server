@@ -1,17 +1,21 @@
 from abc import ABC
+from typing import *
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 from django_hint import *
 from rest_framework import serializers
+from rest_framework.fields import empty
+
+if TYPE_CHECKING:
+    from apps.django.main.authentication.models import User
 
 __all__ = [
     "RetrieveObjectByIDSerializerField", "WritableSerializerMethodField", "WritableIDField",
-    "WritableFromUserFieldMixin", "WritableAllFieldMixin", "UserRelationField"
+    "WritableFromUserFieldMixin", "WritableAllFieldMixin", "UserRelationField", "HistoryUserField"
 ]
-
-from rest_framework.fields import empty
 
 
 class RetrieveObjectByIDSerializerField(serializers.CharField):
@@ -135,3 +139,14 @@ class UserRelationField(serializers.SerializerMethodField):
         relation = value.user_relations.get(user=user)
         
         return self.serializer(relation).data
+
+
+class HistoryUserField(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ["full_name", "id"]
+    
+    full_name = serializers.SerializerMethodField()
+    
+    def get_full_name(self, instance: "User"):
+        return instance.get_full_name()

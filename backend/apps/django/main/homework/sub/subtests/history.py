@@ -1,16 +1,38 @@
+from pprint import pp
+
 from apps.django.main.homework.mixins.tests import HomeworkTestMixin
 from apps.django.utils.tests import *
+from constants.api import API_VERSION
 
 
 class HistoryTest(HomeworkTestMixin, ClientTestMixin):
-    def test_history(self):
-        homework = self.Create_homework()
-        homework.information = "First Edit!"
-        homework.save()
-        homework.information = "Second Edit!"
-        homework.save()
+    def setUp(self) -> None:
+        self.logged_user = self.Login_user()
+        self.__class__.associated_user = self.logged_user
         
-        prev_record = homework.prev_record
-        latest = homework.history.latest()
+        self.first_content = "First Edit!"
+        self.second_content = "Second Edit!"
         
-        print()
+        self.homework = self.Create_homework()
+        response = self.client.patch(
+            f"/api/{API_VERSION}/data/homework/{self.homework.id}/",
+            {"information": self.first_content},
+            content_type="application/json"
+        )
+        self.assertStatusOk(response.status_code)
+        response = self.client.patch(
+            f"/api/{API_VERSION}/data/homework/{self.homework.id}/",
+            {"information": self.second_content},
+            content_type="application/json"
+        )
+        self.assertStatusOk(response.status_code)
+    
+    def test_get_history(self):
+        response = self.client.get(f"/api/{API_VERSION}/data/homework/{self.homework.id}/history/")
+        self.assertStatusOk(response.status_code)
+        
+        pp(response.data)
+        first_edit = response.data["results"][0]
+        response = self.client.get(f"/api/{API_VERSION}/data/homework/{self.homework.id}/history/{first_edit['pk']}/")
+        self.assertStatusOk(response.status_code)
+        pp(response.data)

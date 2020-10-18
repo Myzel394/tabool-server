@@ -3,13 +3,16 @@ from typing import *
 
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+from simple_history.models import ModelChange, ModelDelta
 
+from apps.django.utils.serializers import HistoryUserField
 from apps.utils.files import privatize_file
 from apps.utils.texts import camel_to_snake
 
 __all__ = [
     "RandomIDSerializerMixin", "AssociatedUserSerializerMixin", "ScoosoScraperSerializerMixin",
-    "PrivatizeSerializerMixin", "GetOrCreateSerializerMixin"
+    "PrivatizeSerializerMixin", "GetOrCreateSerializerMixin", "ModelHistoryListSerializerMixin",
+    "ModelHistoryDetailSerializerMixin"
 ]
 
 
@@ -127,3 +130,35 @@ class PrivatizeSerializerMixin(serializers.ModelSerializer):
 class GetOrCreateSerializerMixin(serializers.ModelSerializer):
     def create(self, validated_data):
         return self.Meta.model.objects.get_or_create(**validated_data)[0]
+
+
+class ModelHistoryListSerializerMixin(serializers.ModelSerializer):
+    class Meta:
+        fields = ["history_date", "history_user", "changes", "pk"]
+    
+    history_date = serializers.DateTimeField()
+    history_user = HistoryUserField()
+    changes = serializers.SerializerMethodField()
+    
+    def get_changes(self, instance) -> list[str]:
+        delta: ModelDelta = self.context["latest_history_instance"].diff_against(instance)
+        
+        return delta.changed_fields
+
+
+class ModelHistoryDetailSerializerMixin(serializers.ModelSerializer):
+    class Meta:
+        fields = ["history_date", "history_user", "changes", "pk"]
+    
+    history_date = serializers.DateTimeField()
+    history_user = HistoryUserField()
+    changes = serializers.SerializerMethodField()
+    
+    def get_changes(self, instance) -> dict:
+        delta: ModelDelta = self.context["latest_history_instance"].diff_against(instance)
+        changes: list[ModelChange] = delta.changes
+        
+        return {
+            change.field: change.new
+            for change in changes
+        }

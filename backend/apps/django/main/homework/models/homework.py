@@ -77,7 +77,7 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
     
     history = HistoricalRecords(
         cascade_delete_history=True,
-        excluded_fields=["private_to_user"],
+        excluded_fields=["private_to_user", "created_at"],
         bases=[UserInformationHistoricalModel]
     )
     
