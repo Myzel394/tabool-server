@@ -6,6 +6,7 @@ import names
 from django.contrib.auth import get_user_model
 from django.core import mail
 
+from apps.django.extra.scooso_scraper.mixins.tests import DummyUser
 from apps.django.main.authentication.models import *
 from apps.django.utils.tests import *
 from constants.api import API_VERSION
@@ -16,7 +17,10 @@ __all__ = [
 ]
 
 
-class ModelTest(UserTestMixin, ClientTestMixin):
+class ModelTest(UserTestMixin, ClientTestMixin, DummyUser):
+    def setUp(self) -> None:
+        self.load_dummy_user()
+    
     def test_create_user(self):
         User = get_user_model()
         user = User.objects.create_user(email='normal@user.com', password='foo')
@@ -143,23 +147,6 @@ class ModelTest(UserTestMixin, ClientTestMixin):
                 content_type="application/json"
             )
             self.assertStatusNotOk(response.status_code)
-    
-    def test_creation(self):
-        User = get_user_model()
-        first_name = names.get_first_name()
-        last_name = names.get_last_name()
-        password = self.Get_random_password()
-        email = f"{first_name}.{last_name}@gmail.com"
-        
-        response = self.client.post(f"/api/{API_VERSION}/auth/registration/", {
-            "email": email,
-            "password": password,
-            "scooso_username": first_name,
-            "scooso_password": password,
-            "token": AccessToken.objects.create().token
-        }, content_type="application/json")
-        self.assertStatusOk(response.status_code)
-        User.objects.get(email__iexact=email)
     
     def test_forgot_password(self):
         password = "awesome_password"

@@ -1,4 +1,3 @@
-from abc import ABC
 from dataclasses import dataclass
 from typing import *
 
@@ -15,7 +14,7 @@ __all__ = [
 
 
 @dataclass
-class Request(ABC):
+class Request:
     username: str
     password: str
     session: Optional[str] = None

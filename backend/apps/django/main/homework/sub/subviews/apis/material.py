@@ -11,8 +11,6 @@ __all__ = [
 ]
 
 
-# TODO: Add History!
-
 class MaterialViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = MaterialFilterSet

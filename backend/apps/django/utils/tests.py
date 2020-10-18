@@ -29,15 +29,12 @@ class UserTestMixin(DummyUser):
             self,
             is_confirmed: bool = True,
             create_scooso_data: bool = True,
+            is_active: bool = True,
             **kwargs
     ) -> settings.AUTH_USER_MODEL:
         Model = get_user_model()
         first_name = names.get_first_name()
-        while True:
-            last_name = names.get_last_name()
-            
-            if not Model.objects.filter(last_name__iexact=last_name).exists():
-                break
+        last_name = names.get_last_name()
         
         user: "User" = Model.objects.create_user(
             **{
@@ -53,11 +50,13 @@ class UserTestMixin(DummyUser):
             user.confirm_email(user.confirmation_key)
         if create_scooso_data:
             self.load_dummy_user()
-            scooso_data = ScoosoData.objects.create(
+            ScoosoData.objects.create(
                 user=user,
                 username=self.username,
                 password=self.password
             )
+        user.is_active = is_active
+        user.save()
         
         return user
     

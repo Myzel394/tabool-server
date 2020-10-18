@@ -88,22 +88,16 @@ class WritableIDField(serializers.Field):
         self.get_object = get_object or self.default_get_qs
         self.lookup_field = lookup_field
         self.many = many
-        self.__cached_object = None
-    
-    def run_validation(self, data=empty):
-        if data is not empty:
-            try:
-                self.__cached_object = self.get_object(data, self.context["request"], self)
-            except ObjectDoesNotExist:
-                self.fail("object_not_found")
-        
-        return super().run_validation(data)
     
     def to_representation(self, value):
         return getattr(value, self.lookup_field)
     
     def to_internal_value(self, data):
-        return self.__cached_object
+        if data is not empty:
+            try:
+                return self.get_object(data, self.context["request"], self)
+            except ObjectDoesNotExist:
+                self.fail("object_not_found", input=data)
 
 
 class WritableFromUserFieldMixin(WritableIDField, ABC):

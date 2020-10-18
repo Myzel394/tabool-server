@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from apps.django.main.authentication.views import (
-    email_confirmation, LoginView, LogoutView, PasswordChangeView, RegisterView, StudentView,
+    email_confirmation, FullRegisterView, LoginView, LogoutView, PasswordChangeView, RegisterView,
 )
 from apps.django.main.event import routers as event_routers
 from apps.django.main.homework import routers as homework_routers
@@ -50,7 +50,7 @@ urlpatterns = [
     
     path(f"api/{API_VERSION}/auth/change-password/", PasswordChangeView.as_view()),
     path(f"api/{API_VERSION}/auth/registration/", RegisterView.as_view()),
-    path(f"api/{API_VERSION}/auth/student/", StudentView.as_view()),
+    path(f"api/{API_VERSION}/auth/full-registration/", FullRegisterView.as_view()),
     path(f"api/{API_VERSION}/auth/login/", LoginView.as_view()),
     path(f"api/{API_VERSION}/auth/logout/", LogoutView.as_view()),
     path(f"api/{API_VERSION}/auth/confirmation/", email_confirmation),

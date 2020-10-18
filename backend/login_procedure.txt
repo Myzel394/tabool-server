@@ -1,0 +1,4 @@
+1. AccesToken holen
+2. Registrieren (E-Mail, Passwort)
+3. Bestätigen
+4. Restliche Daten ausfüllen

@@ -32,6 +32,10 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
         verbose_name=_("Email-Adresse"),
         unique=True,
     )  # type: str
+    has_filled_out_data = models.BooleanField(
+        default=False,
+        verbose_name=_("Daten ausgefüllt")
+    )
     
     username = None
     
@@ -75,3 +79,7 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     @property
     def payments(self) -> "UserPaymentQuerySet":
         return self.userpayment_set.all()
+    
+    @property
+    def is_scooso_data_valid(self) -> bool:
+        return self.first_name is not None

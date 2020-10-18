@@ -3,10 +3,13 @@ from rest_framework import generics, status, views
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ....serializers import LoginSerializer, RegisterSerializer, UserInformationSerializer
+from ....serializers import (
+    FullRegistrationSerializer, LoginSerializer, RegisterSerializer,
+    UserInformationSerializer,
+)
 
 __all__ = [
-    "LoginView", "LogoutView", "RegisterView"
+    "LoginView", "LogoutView", "RegisterView", "FullRegisterView"
 ]
 
 
@@ -59,3 +62,8 @@ class RegisterView(generics.CreateAPIView):
         
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class FullRegisterView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = FullRegistrationSerializer
