@@ -1,6 +1,4 @@
 import private_storage.urls
-from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
@@ -12,11 +10,10 @@ from apps.django.main.homework import routers as homework_routers
 from apps.django.main.lesson import routers as lesson_routers
 from apps.django.main.school_data import routers as school_routers
 from apps.django.utils.urls import build_patterns
-from constants.api import API_VERSION
 
 
 def build_url(prefix: str) -> str:
-    return f"api/{API_VERSION}/{prefix}/"
+    return f"api/{prefix}/"
 
 
 data_patterns = build_patterns("data", [
@@ -42,14 +39,14 @@ urlpatterns = [
     path("private-media/", include(private_storage.urls)),
     
     # API
-    path(f"api/{API_VERSION}/data/", include("rest_framework.urls")),
+    path(f"api/data/", include("rest_framework.urls")),
     
-    path(f"api/{API_VERSION}/auth/change-password/", PasswordChangeView.as_view()),
-    path(f"api/{API_VERSION}/auth/registration/", RegisterView.as_view()),
-    path(f"api/{API_VERSION}/auth/full-registration/", FullRegisterView.as_view()),
-    path(f"api/{API_VERSION}/auth/login/", LoginView.as_view()),
-    path(f"api/{API_VERSION}/auth/logout/", LogoutView.as_view()),
-    path(f"api/{API_VERSION}/auth/confirmation/", email_confirmation),
+    path(f"api/auth/change-password/", PasswordChangeView.as_view()),
+    path(f"api/auth/registration/", RegisterView.as_view()),
+    path(f"api/auth/full-registration/", FullRegisterView.as_view()),
+    path(f"api/auth/login/", LoginView.as_view()),
+    path(f"api/auth/logout/", LogoutView.as_view()),
+    path(f"api/auth/confirmation/", email_confirmation),
     
     path("", include("apps.django.core.urls")),
     path("admin/", admin.site.urls),
@@ -57,4 +54,3 @@ urlpatterns = [
 
 urlpatterns += data_patterns
 urlpatterns += relation_patterns
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

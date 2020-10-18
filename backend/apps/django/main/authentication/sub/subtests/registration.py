@@ -7,7 +7,6 @@ from apps.django.extra.scooso_scraper.mixins.tests import DummyUser
 from apps.django.main.authentication.models import *
 from apps.django.main.school_data.mixins.tests import *
 from apps.django.utils.tests import *
-from constants.api import API_VERSION
 from ... import constants
 
 
@@ -42,7 +41,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin, DummyUs
         password = self.Get_random_password()
         email = f"{names.get_first_name()}@gmail.com"
         
-        response = self.client.post(f"/api/{API_VERSION}/auth/registration/", {
+        response = self.client.post(f"/api/auth/registration/", {
             "email": email,
             "password": password,
             "token": token.token
@@ -62,7 +61,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin, DummyUs
         scooso_data = self.create_scooso_data()
         student_data = self.create_student_data()
         
-        response = self.client.post(f"/api/{API_VERSION}/auth/full-registration/", {
+        response = self.client.post(f"/api/auth/full-registration/", {
             "scoosodata": scooso_data,
             "student": student_data,
         }, content_type="application/json")
@@ -84,7 +83,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin, DummyUs
             email=email,
             password=password,
         )
-        response = self.client.post(f"/api/{API_VERSION}/auth/registration/", {
+        response = self.client.post(f"/api/auth/registration/", {
             "email": email,
             "password": password,
             "token": Token.objects.create().token
@@ -104,7 +103,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin, DummyUs
         scooso_data = self.create_scooso_data()
         student_data = self.create_student_data()
         
-        response = self.client.post(f"/api/{API_VERSION}/auth/full-registration/", {
+        response = self.client.post(f"/api/auth/full-registration/", {
             "scoosodata": scooso_data,
             "student": student_data,
         }, content_type="application/json")

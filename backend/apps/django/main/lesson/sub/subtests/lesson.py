@@ -4,7 +4,6 @@ from apps.django.main.lesson.mixins.tests import *
 from apps.django.main.lesson.mixins.tests.associated_user import *
 from apps.django.main.lesson.models import *
 from apps.django.utils.tests import *
-from constants.api import API_VERSION
 
 __all__ = [
     "QuerySetTest"
@@ -29,7 +28,7 @@ class UserRelationTest(LessonTestMixin, ClientTestMixin, UserTestMixin):
         lesson = Lesson.objects.first()
         self.assertEqual(UserLessonRelation.objects.all().count(), 1)
         
-        response = self.client.get(f"/api/{API_VERSION}/user-relation/lesson/{lesson.scooso_id}/")
+        response = self.client.get(f"/api/user-relation/lesson/{lesson.scooso_id}/")
         
         self.assertStatusOk(response.status_code)
         self.assertTrue(response.data["attendance"])
@@ -42,7 +41,7 @@ class UserRelationTest(LessonTestMixin, ClientTestMixin, UserTestMixin):
             content_type="application/json"
         )
         
-        response = self.client.get(f"/api/{API_VERSION}/user-relation/lesson/{lesson.scooso_id}/")
+        response = self.client.get(f"/api/user-relation/lesson/{lesson.scooso_id}/")
         
         self.assertStatusOk(response.status_code)
         self.assertFalse(response.data["attendance"])
@@ -50,7 +49,7 @@ class UserRelationTest(LessonTestMixin, ClientTestMixin, UserTestMixin):
         # Check whether other lessons weren't affected
         
         other_lesson = Lesson.objects.last()
-        response = self.client.get(f"/api/{API_VERSION}/user-relation/lesson/{other_lesson.scooso_id}/")
+        response = self.client.get(f"/api/user-relation/lesson/{other_lesson.scooso_id}/")
         self.assertEqual(UserLessonRelation.objects.all().count(), 2)
         
         self.assertStatusOk(response.status_code)
@@ -94,14 +93,14 @@ class APITest(LessonTestMixin, ClientTestMixin):
             for _ in range(10):
                 self.Create_lesson()
             
-            response = self.client.get(f"/api/{API_VERSION}/data/lesson/")
+            response = self.client.get(f"/api/data/lesson/")
             self.assertStatusOk(response.status_code)
             
             pp(list(response.data["results"]))
             
             lesson_id = response.data["results"][0]["id"]
             
-            response = self.client.get(f"/api/{API_VERSION}/data/lesson/{lesson_id}/")
+            response = self.client.get(f"/api/data/lesson/{lesson_id}/")
             self.assertStatusOk(response.status_code)
             
             pp(dict(response.data))

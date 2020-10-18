@@ -6,7 +6,6 @@ import lorem
 from apps.django.extra.scooso_scraper.scrapers.timetable import TimetableRequest
 from apps.django.main.homework.mixins.tests import HomeworkTestMixin
 from apps.django.utils.tests import *
-from constants.api import API_VERSION
 
 
 class FullTest(UserTestMixin):
@@ -43,7 +42,7 @@ class LargeUserTest(HomeworkTestMixin):
                     
                     start_time = datetime.now()
                     self.client.post(
-                        f"/api/{API_VERSION}/data/homework/",
+                        f"/api/data/homework/",
                         {
                             "lesson": lesson.id,
                             "information": lorem.text() * 4

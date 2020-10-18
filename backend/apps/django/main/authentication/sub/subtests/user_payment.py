@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 
 from apps.django.main.authentication.mixins.tests import UserPaymentTestMixin
 from apps.django.utils.tests import *
-from constants.api import API_VERSION
 
 User = get_user_model()
 
@@ -23,18 +22,18 @@ class TestNotPrivileged(ClientTestMixin, UserPaymentTestMixin):
     def test_access(self):
         # List access
         response = self.client.get(
-            f"/api/{API_VERSION}/data/user-payment/"
+            f"/api/data/user-payment/"
         )
         self.assertEqual(response.status_code, 404)
         
         # Not owner
         response = self.client.get(
-            f"/api/{API_VERSION}/data/user-payment/{self.not_pay_user.id}/"
+            f"/api/data/user-payment/{self.not_pay_user.id}/"
         )
         self.assertEqual(response.status_code, 404)
         
         # Owner
         response = self.client.get(
-            f"/api/{API_VERSION}/data/user-payment/{self.logged_user.payments[0].id}/"
+            f"/api/data/user-payment/{self.logged_user.payments[0].id}/"
         )
         self.assertStatusOk(response.status_code)

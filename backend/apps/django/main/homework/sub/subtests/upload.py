@@ -3,7 +3,6 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from apps.django.extra.scooso_scraper.scrapers.material import *
 from apps.django.main.lesson.mixins.tests import *
 from apps.django.utils.tests import *
-from constants.api import API_VERSION
 
 
 class UploadTest(ClientTestMixin, LessonUploadTestMixin, UtilsTestMixin):
@@ -14,7 +13,7 @@ class UploadTest(ClientTestMixin, LessonUploadTestMixin, UtilsTestMixin):
         filename = self.Random_filename()
         
         response = self.client.post(
-            f"/api/{API_VERSION}/data/submission/scooso/",
+            f"/api/data/submission/scooso/",
             {
                 "lesson": self.lesson.id,
                 "file": SimpleUploadedFile(

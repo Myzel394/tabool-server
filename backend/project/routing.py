@@ -11,7 +11,7 @@ from apps.django.main.homework.public import HOMEWORK_CHANNEL
 
 urlpatterns = [
     url(
-        r"^events/",
+        r"^api/events/",
         AuthMiddlewareStack(
             URLRouter(django_eventstream.routing.urlpatterns)
         ),

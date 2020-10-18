@@ -9,7 +9,6 @@ from django.core import mail
 from apps.django.extra.scooso_scraper.mixins.tests import DummyUser
 from apps.django.main.authentication.models import *
 from apps.django.utils.tests import *
-from constants.api import API_VERSION
 from ... import constants
 
 __all__ = [
@@ -82,7 +81,7 @@ class ModelTest(UserTestMixin, ClientTestMixin, DummyUser):
                 "password": password
             }
             response = self.client.post(
-                f"/api/{API_VERSION}/auth/registration/",
+                f"/api/auth/registration/",
                 data,
                 content_type="application/json"
             )
@@ -101,7 +100,7 @@ class ModelTest(UserTestMixin, ClientTestMixin, DummyUser):
         }
         # Simple creation check
         response = self.client.post(
-            f"/api/{API_VERSION}/auth/registration/",
+            f"/api/auth/registration/",
             default_data,
             content_type="application/json"
         )
@@ -121,7 +120,7 @@ class ModelTest(UserTestMixin, ClientTestMixin, DummyUser):
             use_data.update(invalid)
             
             response = self.client.post(
-                f"/api/{API_VERSION}/auth/registration/",
+                f"/api/auth/registration/",
                 use_data,
                 content_type="application/json"
             )
@@ -142,7 +141,7 @@ class ModelTest(UserTestMixin, ClientTestMixin, DummyUser):
             use_data.update(invalid)
             
             response = self.client.post(
-                f"/api/{API_VERSION}/auth/registration/",
+                f"/api/auth/registration/",
                 use_data,
                 content_type="application/json"
             )
@@ -157,14 +156,14 @@ class ModelTest(UserTestMixin, ClientTestMixin, DummyUser):
         
         self.Login_user(user, password)
         
-        response = self.client.post(f"/api/{API_VERSION}/auth/change-password/", {
+        response = self.client.post(f"/api/auth/change-password/", {
             "old_password": password,
             "new_password": "".join(random.choices(string.ascii_letters + string.digits, k=20)),
             "user": user.id
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
         
-        response = self.client.post(f"/api/{API_VERSION}/auth/change-password/", {
+        response = self.client.post(f"/api/auth/change-password/", {
             "old_password": password + "abc",
             "new_password": password,
             "user": user.id
@@ -181,7 +180,7 @@ class ModelTest(UserTestMixin, ClientTestMixin, DummyUser):
         
         with self.Login_user_as_context(user, user.first_name) as _:
             response = self.client.post(
-                f"/api/{API_VERSION}/auth/confirmation/",
+                f"/api/auth/confirmation/",
                 {
                     "confirmation_key": "a"
                 },
@@ -194,7 +193,7 @@ class ModelTest(UserTestMixin, ClientTestMixin, DummyUser):
             print(user.confirmation_key)
             
             response = self.client.post(
-                f"/api/{API_VERSION}/auth/confirmation/",
+                f"/api/auth/confirmation/",
                 {
                     "confirmation_key": user.confirmation_key
                 },

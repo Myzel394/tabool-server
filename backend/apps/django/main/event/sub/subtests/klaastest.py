@@ -7,7 +7,6 @@ from apps.django.main.event.sub.subserializers import *
 from apps.django.main.lesson.mixins.tests import *
 from apps.django.utils.tests import *
 from apps.utils.dates import find_next_date_by_weekday
-from constants.api import API_VERSION
 
 
 class ModelTest(ClasstestTestMixin, ClientTestMixin):
@@ -24,7 +23,7 @@ class ModelTest(ClasstestTestMixin, ClientTestMixin):
         with self.Login_user_as_context() as user:
             course = self.Create_course()
             
-            response = self.client.post(f"/api/{API_VERSION}/data/classtest/", {
+            response = self.client.post(f"/api/data/classtest/", {
                 "information": "Bebi",
                 "targeted_date": find_next_date_by_weekday(date.today() + timedelta(days=5), 1),
                 "course": course.id,
@@ -47,7 +46,7 @@ class ModelTest(ClasstestTestMixin, ClientTestMixin):
                 targeted_date__lte=targeted_date).count())
             
             response = self.client.get(
-                f"/api/{API_VERSION}/data/classtest/",
+                f"/api/data/classtest/",
                 {
                     filter_statement: targeted_date
                 },

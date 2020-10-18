@@ -15,7 +15,7 @@ constantly==15.1.0
 cryptography==3.1.1
 cssselect2==0.3.0
 daphne==2.5.0
-Django==3.1.1
+Django==3.1.2
 django-bleach==0.6.1
 django-ckeditor==5.9.0
 django-colorfield==0.3.2
@@ -65,6 +65,7 @@ PyHamcrest==2.0.2
 PyJWT==1.7.1
 pyOpenSSL==19.1.0
 pyparsing==2.4.7
+psycopg2-binary
 PySocks==1.7.1
 pytest==6.1.1
 pytest-asyncio==0.14.0

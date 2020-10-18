@@ -1,6 +1,5 @@
 from apps.django.main.event.mixins.tests import *
 from apps.django.utils.tests import *
-from constants.api import API_VERSION
 
 
 class UserRelationTest(UserTestMixin, EventTestMixin, ClientTestMixin):
@@ -12,6 +11,6 @@ class UserRelationTest(UserTestMixin, EventTestMixin, ClientTestMixin):
     
     def test_get(self):
         response = self.client.get(
-            f"/api/{API_VERSION}/data/event/{self.event.id}/"
+            f"/api/data/event/{self.event.id}/"
         )
         self.assertStatusOk(response.status_code)

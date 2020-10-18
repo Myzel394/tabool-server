@@ -2,7 +2,6 @@ from apps.django.main.event.mixins.tests import *
 from apps.django.main.event.models import *
 from apps.django.main.event.sub.subserializers import *
 from apps.django.utils.tests import *
-from constants.api import API_VERSION
 
 
 class RelationTest(ClientTestMixin, EventTestMixin, UserTestMixin):
@@ -23,7 +22,7 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserTestMixin):
             event = Event.objects.first()
             
             response = self.client.patch(
-                f"/api/{API_VERSION}/user-relation/event/{event.id}/",
+                f"/api/user-relation/event/{event.id}/",
                 {
                     "ignore": True
                 },
@@ -34,7 +33,7 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserTestMixin):
             
             # Get events
             response = self.client.get(
-                f"/api/{API_VERSION}/data/event/",
+                f"/api/data/event/",
                 {
                     "ignore": True
                 },
@@ -54,7 +53,7 @@ class RelationTest(ClientTestMixin, EventTestMixin, UserTestMixin):
             
             # Get event
             response = self.client.get(
-                f"/api/{API_VERSION}/data/event/",
+                f"/api/data/event/",
                 {
                     "ignore": False
                 },
