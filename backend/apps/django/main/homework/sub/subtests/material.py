@@ -63,22 +63,29 @@ class MaterialTest(MaterialTestMixin, ClientTestMixin, UtilsTestMixin):
             path.unlink()
     
     def test_private(self):
-        material = self.Create_material()
-        
         with self.Login_user_as_context() as user:
-            course = material.lesson.lesson_data.course
-            course.participants.add(user)
-            course.save()
+            material = self.Create_material()
             
-            # TODO: Private-storage check!
             url = material.file.url
             
             response = self.client.get(url)
             self.assertStatusOk(response.status_code)
         
+        # User not in any lesson
         with self.Login_user_as_context() as user:
             response = self.client.get(url)
             self.assertStatusNotOk(response.status_code)
+        
+        # User in other lesson
+        with self.Login_user_as_context() as user:
+            material = self.Create_material()
+            
+            response = self.client.get(url)
+            self.assertStatusNotOk(response.status_code)
+        
+        # Not authenticated
+        response = self.client.get(url)
+        self.assertStatusNotOk(response.status_code)
 
 
 class APITest(ClientTestMixin, MaterialTestMixin):

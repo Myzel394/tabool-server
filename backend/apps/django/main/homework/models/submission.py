@@ -25,6 +25,7 @@ if TYPE_CHECKING:
     from datetime import datetime
     from django.db.models.fields.files import FieldFile
     from apps.django.main.lesson.models import Lesson
+    from apps.django.main.authentication.models import User
 
 __all__ = [
     "Submission"
@@ -77,6 +78,9 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
                 "geändert werden."
             ), self.upload_at)
         return super().clean()
+    
+    def can_user_access_file(self, user: "User") -> bool:
+        return user.id == self.associated_user_id
     
     @hook(BEFORE_UPDATE, when="upload_at", has_changed=True)
     def _hook_full_clean(self):

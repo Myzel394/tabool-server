@@ -9,9 +9,6 @@ from apps.django.main.authentication.views import (
 )
 from apps.django.main.event import routers as event_routers
 from apps.django.main.homework import routers as homework_routers
-from apps.django.main.homework.views import (
-    MaterialDownloadView,
-)
 from apps.django.main.lesson import routers as lesson_routers
 from apps.django.main.school_data import routers as school_routers
 from apps.django.utils.urls import build_patterns
@@ -43,7 +40,6 @@ relation_patterns = build_patterns("user-relation", [
 urlpatterns = [
     # Static access
     path("private-media/", include(private_storage.urls)),
-    path("materials-media/", MaterialDownloadView.as_view()),
     
     # API
     path(f"api/{API_VERSION}/data/", include("rest_framework.urls")),

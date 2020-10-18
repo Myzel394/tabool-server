@@ -20,6 +20,9 @@ from ..public.validators import safe_file_validator
 from ..querysets import MaterialQuerySet
 
 if TYPE_CHECKING:
+    from apps.django.main.authentication.models import User
+
+if TYPE_CHECKING:
     from apps.django.main.lesson.models import Lesson
     from django.db.models.fields.files import FieldFile
 
@@ -83,6 +86,9 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
                 ))
         
         return super().clean()
+    
+    def can_user_access_file(self, user: "User") -> bool:
+        return self.lesson.lesson_data.course.participants.only("id").filter(id=user.id).exists()
     
     @hook(AFTER_DELETE)
     def _hook_delete_file(self):

@@ -28,7 +28,7 @@ class FullTest(UserTestMixin):
 
 class LargeUserTest(HomeworkTestMixin):
     def setUp(self) -> None:
-        self.test = True
+        self.test = False
     
     def test_large_user_time_needed(self):
         if self.test:
