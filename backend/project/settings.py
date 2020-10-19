@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "channels",
     "django_eventstream",
     "django_crontab",
+    "corsheaders",
     
     "apps.django.utils.relation_managers.apps.RelationManagersConfig",
     
@@ -81,6 +82,7 @@ MIDDLEWARE = [
     
     "simple_history.middleware.HistoryRequestMiddleware",
     "django_grip.GripMiddleware",
+    "corsheaders.middleware.CorsMiddleware"
 ]
 
 REST_FRAMEWORK = {
@@ -261,3 +263,5 @@ PRIVATE_STORAGE_AUTH_FUNCTION = "apps.django.utils.private_storages.private_stor
 # Event stream
 EVENTSTREAM_STORAGE_CLASS = "django_eventstream.storage.DjangoModelStorage"
 EVENTSTREAM_CHANNELMANAGER_CLASS = "apps.django.utils.authorizations.UserActiveChannelManager"
+
+CORS_ORIGIN_ALLOW_ALL = DEBUG

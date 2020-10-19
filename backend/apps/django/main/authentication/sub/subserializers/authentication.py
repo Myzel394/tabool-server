@@ -53,7 +53,8 @@ class RegisterSerializer(serializers.Serializer):
     )
     
     password = serializers.CharField(
-        validators=[validate_password]
+        validators=[validate_password],
+        style={"input_type": "password"}
     )
     
     token = serializers.CharField(
