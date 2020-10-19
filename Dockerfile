@@ -1,7 +1,7 @@
 FROM python:3.9
 
 # Workdir
-WORKDIR /usr/src/app
+WORKDIR /app/
 
 # Environmental variables
 ENV PYTHONDONTWRITEBYTECODE 1

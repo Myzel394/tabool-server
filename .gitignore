@@ -284,3 +284,4 @@ exposes
 **/exposes
 login_procedure.txt
 venv
+postgres_data
