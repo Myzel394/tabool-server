@@ -19,8 +19,10 @@ class StudentAdminInline(admin.StackedInline):
 @admin.register(User)
 class UserAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["first_name", "last_name", "email", "id", "is_active", "!..."]
+        "default": ["first_name", "last_name", "email", "id", "is_active", "!..."],
+        "advanced": ["confirmation_key", "last_login"]
     }
     list_display = ["email", "id", "is_active", "is_confirmed"]
     list_filter = ["is_active"]
+    readonly_fields = ["confirmation_key", "last_login"]
     inlines = [StudentAdminInline]

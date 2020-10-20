@@ -60,7 +60,8 @@ class RegisterSerializer(serializers.Serializer):
     token = serializers.CharField(
         validators=[token_exists, token_not_in_use],
         min_length=constants.TOKEN_LENGTH,
-        max_length=constants.TOKEN_LENGTH
+        max_length=constants.TOKEN_LENGTH,
+        help_text=_("Dein Zugangscode, damit wir wissen, dass nur Schüler die App verwenden.")
     )
     
     def create(self, validated_data):

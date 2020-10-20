@@ -19,6 +19,29 @@ body {
     background: #f0f0f0;
 }
 
+.flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (min-width: 400px) {
+    .flex {
+        flex-direction: row;
+    }
+}
+
+@media (min-width: 600px) {
+    .flex {
+        justify-content: center;
+    }
+
+    h1 {
+        margin-left: 1em;
+    }
+}
+
 .container {
     background: #fff;
     padding: 2em;
@@ -35,6 +58,11 @@ body {
     }
 }
 
+h1 {
+    margin-top: .4em;
+    margin-bottom: .4em;
+}
+
 h1, h2 {
     color: #444;
     font-size: 4rem;
@@ -42,10 +70,6 @@ h1, h2 {
     text-align: center;
 
     animation: animateTitle 1s cubic-bezier(.04, .37, .34, .84);
-}
-
-h1 {
-    margin-top: 0;
 }
 
 h2 {
@@ -62,7 +86,7 @@ p, i, li {
 .advantages {
     display: flex;
     flex-direction: column;
-    padding: 1em;
+    padding: 1em .3em;
 }
 
 @keyframes flyInAnimation {
@@ -118,6 +142,14 @@ p, i, li {
 
 .advantages > .advantage:nth-child(10) {
     animation-delay: .8s
+}
+
+.advantages > .advantage:nth-child(11) {
+    animation-delay: .9s
+}
+
+.advantages > .advantage:nth-child(12) {
+    animation-delay: 1s
 }
 
 .advantage > i {

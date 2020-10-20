@@ -19,8 +19,8 @@ def token_exists(value: str):
 def token_not_in_use(value: str):
     if Token.objects.only("token", "user").filter(token=value).exclude(user=None).exists():
         raise ValidationError(
-            _("Dieser Zugangscode wurde bereits verwendet. Du kannst Zugangscode nur für einen Account "
-              "verwenden. Wenn dein Zugangscode von jemand anderem verwendet wurde, kontaktiere uns.")
+            _("Dieser Zugangscode wurde bereits verwendet. Du kannst Zugangscodes nur für einen Account "
+              "verwenden. Wenn dein Zugangscode von jemand anderem verwendet wurde, kontaktiere uns bitte.")
         )
 
 
