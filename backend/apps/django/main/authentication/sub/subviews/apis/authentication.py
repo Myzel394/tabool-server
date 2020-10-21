@@ -1,8 +1,10 @@
 from django.contrib.auth import login, logout
 from rest_framework import generics, status, views
+from rest_framework.metadata import SimpleMetadata
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from ...subserializers.full_registration import ScoosoDataRegistrationSerializer, StudentRegistrationSerializer
 from ....serializers import (
     FullRegistrationSerializer, LoginSerializer, RegisterSerializer,
     UserInformationSerializer,
@@ -67,3 +69,15 @@ class RegisterView(generics.CreateAPIView):
 class FullRegisterView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = FullRegistrationSerializer
+    
+    def options(self, request, *args, **kwargs):
+        metadata = SimpleMetadata()
+        
+        return Response({
+            "actions": {
+                "POST": {
+                    "student": metadata.get_serializer_info(StudentRegistrationSerializer()),
+                    "scoosodata": metadata.get_serializer_info(ScoosoDataRegistrationSerializer())
+                }
+            }
+        })

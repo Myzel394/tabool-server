@@ -20,7 +20,6 @@ class EmailConfirmation(views.APIView):
     
     def post(self, request: RequestType):
         user: "User" = request.user
-        print(user)
         
         if (key := "confirmation_key") in request.data:
             confirmation_key = request.data[key]

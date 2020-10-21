@@ -19,7 +19,7 @@ class TeacherDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Teacher
         fields = [
-            "first_name", "last_name", "short_name", "email", "teaches_subjects", "id"
+            "first_name", "last_name", "short_name", "email", "id"
         ]
     
     teaches_subjects = serializers.ListField(child=SubjectField())

@@ -1,5 +1,3 @@
-from typing import *
-
 from apps.django.main.school_data.models import Teacher
 from .other_scrapers.scrape_teachers import scrape_teachers
 
@@ -8,7 +6,7 @@ __all__ = [
 ]
 
 
-def import_teachers() -> List[Teacher]:
+def import_teachers() -> list[Teacher]:
     teachers = scrape_teachers()
     teachers_added = []
     

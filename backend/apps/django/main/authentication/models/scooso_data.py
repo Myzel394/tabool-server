@@ -31,12 +31,14 @@ class ScoosoData(RandomIDMixin, LifecycleModel):
     
     username = EncryptedCharField(
         max_length=127,
-        verbose_name=_("Benutzername")
+        verbose_name=_("Scooso-Benutzername"),
+        help_text=_("Der Scooso-Benutername wird verschlüsselt gespeichert"),
     )
     
     password = EncryptedCharField(
         max_length=127,
-        verbose_name=_("Passwort")
+        verbose_name=_("Scooso-Passwort"),
+        help_text=_("Das Scooso-Password wird verschlüsselt gespeichert"),
     )
     
     def fetch_user_data(self):

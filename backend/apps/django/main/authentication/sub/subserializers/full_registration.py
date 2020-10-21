@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from apps.django.main.school_data.public.serializer_fields import TeacherField
@@ -24,7 +25,7 @@ class StudentRegistrationSerializer(serializers.ModelSerializer):
             "class_number", "main_teacher"
         ]
     
-    main_teacher = TeacherField()
+    main_teacher = TeacherField(label=_("Klassenlehrer/Stammkursleiter"))
 
 
 class FullRegistrationSerializer(serializers.ModelSerializer):
