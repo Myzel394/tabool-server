@@ -6,7 +6,7 @@ from apps.django.main.school_data.public.serializer_fields import TeacherField
 from ...models import ScoosoData, Student
 
 __all__ = [
-    "FullRegistrationSerializer"
+    "FullRegistrationSerializer", "ScoosoDataRegistrationSerializer", "StudentRegistrationSerializer"
 ]
 
 

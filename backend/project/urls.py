@@ -2,8 +2,9 @@ import private_storage.urls
 from django.contrib import admin
 from django.urls import include, path
 
+from apps.django.main.authentication.sub.subviews.apis.register import FullRegisterView, RegisterView
 from apps.django.main.authentication.views import (
-    EmailConfirmation, FullRegisterView, IsAuthenticatedView, LoginView, LogoutView, PasswordChangeView, RegisterView,
+    EmailConfirmation, IsAuthenticatedView, LoginView, LogoutView, PasswordChangeView,
 )
 from apps.django.main.event import routers as event_routers
 from apps.django.main.homework import routers as homework_routers
