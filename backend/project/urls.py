@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from apps.django.main.authentication.views import (
-    EmailConfirmation, FullRegisterView, LoginView, LogoutView, PasswordChangeView, RegisterView,
+    EmailConfirmation, FullRegisterView, IsAuthenticatedView, LoginView, LogoutView, PasswordChangeView, RegisterView,
 )
 from apps.django.main.event import routers as event_routers
 from apps.django.main.homework import routers as homework_routers
@@ -47,6 +47,7 @@ urlpatterns = [
     path(f"api/auth/login/", LoginView.as_view()),
     path(f"api/auth/logout/", LogoutView.as_view()),
     path(f"api/auth/confirmation/", EmailConfirmation.as_view()),
+    path(f"api/auth/authentication-check/", IsAuthenticatedView.as_view()),
     
     path("", include("apps.django.core.urls")),
     path("admin/", admin.site.urls),

@@ -1,8 +1,10 @@
 from django.contrib.auth import login, logout
+from django_hint import RequestType
 from rest_framework import generics, status, views
 from rest_framework.metadata import SimpleMetadata
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from ...subserializers.full_registration import ScoosoDataRegistrationSerializer, StudentRegistrationSerializer
 from ....serializers import (
@@ -11,7 +13,7 @@ from ....serializers import (
 )
 
 __all__ = [
-    "LoginView", "LogoutView", "RegisterView", "FullRegisterView"
+    "LoginView", "LogoutView", "RegisterView", "FullRegisterView", "IsAuthenticatedView"
 ]
 
 
@@ -80,4 +82,11 @@ class FullRegisterView(generics.CreateAPIView):
                     "scoosodata": metadata.get_serializer_info(ScoosoDataRegistrationSerializer())
                 }
             }
+        })
+
+
+class IsAuthenticatedView(APIView):
+    def get(self, request: RequestType):
+        return Response({
+            "is_authenticated": request.user.is_authenticated
         })
