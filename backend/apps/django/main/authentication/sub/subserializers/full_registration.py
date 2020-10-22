@@ -58,6 +58,7 @@ class FullRegistrationSerializer(serializers.ModelSerializer):
         scooso_serializer.is_valid(raise_exception=True)
         
         # Action
+        # TODO: Doesnt work
         student_serializer.save()
         scooso_serializer.save()
         
