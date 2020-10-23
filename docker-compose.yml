@@ -17,5 +17,3 @@ services:
     image: postgres
     env_file:
       - ./prod.env
-volumes:
-  postgres_data:
