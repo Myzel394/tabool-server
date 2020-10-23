@@ -65,10 +65,7 @@ class Student(RandomIDMixin, LifecycleModel):
         
         return super().clean()
     
-    @hook(BEFORE_UPDATE, when="user", has_changed=True)
-    def _hook_full_clean(self):
-        self.full_clean()
-    
     @hook(BEFORE_CREATE)
-    def _hook_validate_user_activated(self):
+    @hook(BEFORE_UPDATE, when="user", has_changed=True)
+    def _hook_call_full_clean(self):
         self.full_clean()

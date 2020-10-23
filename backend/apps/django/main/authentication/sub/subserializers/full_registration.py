@@ -1,9 +1,16 @@
+from typing import *
+
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from apps.django.main.school_data.public.serializer_fields import TeacherField
 from ...models import ScoosoData, Student
+
+if TYPE_CHECKING:
+    from apps.django.main.authentication.models import User
 
 __all__ = [
     "FullRegistrationSerializer", "ScoosoDataRegistrationSerializer", "StudentRegistrationSerializer"
@@ -36,12 +43,19 @@ class FullRegistrationSerializer(serializers.ModelSerializer):
     student = serializers.DictField(write_only=True)
     scoosodata = serializers.DictField(write_only=True)
     
+    def _get_model(self, user: "User", model: Type[models.Model]) -> models.Model:
+        try:
+            return model.objects.only("user__id").get(user__id=user.id)
+        except ObjectDoesNotExist:
+            return model(user=user)
+    
     def create(self, validated_data):
         # Preparation
         user = self.context["request"].user
+        student = self._get_model(user, Student)
+        scooso = self._get_model(user, ScoosoData)
         
         # Check
-        student = getattr(user, "student", Student(user=user))
         student_serializer = StudentRegistrationSerializer(
             instance=student,
             data=validated_data["student"],
@@ -49,7 +63,6 @@ class FullRegistrationSerializer(serializers.ModelSerializer):
         )
         student_serializer.is_valid(raise_exception=True)
         
-        scooso = getattr(user, "scoosodata", ScoosoData(user=user))
         scooso_serializer = ScoosoDataRegistrationSerializer(
             instance=scooso,
             data=validated_data["scoosodata"],
@@ -58,7 +71,6 @@ class FullRegistrationSerializer(serializers.ModelSerializer):
         scooso_serializer.is_valid(raise_exception=True)
         
         # Action
-        # TODO: Doesnt work
         student_serializer.save()
         scooso_serializer.save()
         
