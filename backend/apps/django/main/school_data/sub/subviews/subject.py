@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from apps.django.utils.viewsets import RetrieveAllMixin
 from ...models import Subject
@@ -12,8 +12,9 @@ __all__ = [
 
 
 class SubjectViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["name"]
     serializer_class = SubjectDetailSerializer
     model = Subject
     pagination_class = LargeSetPagination
+    ordering_fields = ["name", "short_name"]

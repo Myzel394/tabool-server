@@ -40,9 +40,7 @@ class News(RandomIDMixin, HandlerMixin, EditCreationDateMixin, LifecycleModel):
     )
     
     def __str__(self):
-        return _("{title}").format(
-            title=self.title
-        )
+        return self.title
     
     @staticmethod
     def handlers():

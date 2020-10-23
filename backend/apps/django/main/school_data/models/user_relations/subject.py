@@ -3,6 +3,7 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
+from django_lifecycle import BEFORE_CREATE, hook, LifecycleModel
 
 from apps.django.utils.fields import ColorField
 from apps.django.utils.models import UserModelRelationMixin
@@ -17,7 +18,7 @@ __all__ = [
 ]
 
 
-class UserSubjectRelation(RandomIDMixin, UserModelRelationMixin):
+class UserSubjectRelation(RandomIDMixin, UserModelRelationMixin, LifecycleModel):
     class Meta:
         verbose_name = model_names.SUBJECT_RELATION
         verbose_name_plural = model_names.SUBJECT_RELATION_PLURAL
@@ -40,3 +41,8 @@ class UserSubjectRelation(RandomIDMixin, UserModelRelationMixin):
     
     def __str__(self):
         return str(self.subject)
+    
+    @hook(BEFORE_CREATE)
+    def _hook_set_color(self):
+        if self.color is None:
+            self.color = self.subject.color

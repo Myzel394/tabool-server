@@ -11,7 +11,7 @@ class SubjectDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Subject
         fields = [
-            "name", "short_name", "color", "id", "user_relation"
+            "name", "short_name", "id", "user_relation"
         ]
         read_only_fields = [
             "id", "user_relation"

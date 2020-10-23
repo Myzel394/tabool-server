@@ -49,11 +49,14 @@ class ScoosoData(RandomIDMixin, LifecycleModel):
             first_name = data["first_name"]
             last_name = data["last_name"]
         except:
+            send_event(USER_NAMES_FETCHED_CHANNEL, "fail", {
+                "id": user.id
+            })
             pass
         else:
             user.first_name = first_name
             user.last_name = last_name
-            send_event(USER_NAMES_FETCHED_CHANNEL, "user_data_fetched", {
+            send_event(USER_NAMES_FETCHED_CHANNEL, "success", {
                 "id": user.id
             })
         finally:

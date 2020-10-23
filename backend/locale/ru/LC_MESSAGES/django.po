@@ -1,0 +1,715 @@
+#  _        _                 _
+# | |      | |               | |
+# | |_ __ _| |__   ___   ___ | |
+# | __/ _` | '_ \ / _ \ / _ \| |
+# | || (_| | |_) | (_) | (_) | |
+#  \__\__,_|_.__/ \___/ \___/|_|
+#
+# Übersetzung für: RUSSISCH
+#
+# Wie ist diese Datei aufgebaut?
+#   -> Jeder zu übersetzende Text enthält einen Eintrag in dieser Datei.
+#   -> Jeder Eintrag besteht hat dieses Format:
+#       msgid <Deutscher Text>
+#       msgstr <Dein Text>
+#
+# Wie übersetze ich einen Eintrag?
+#   -> Du übersetzt den Text von "msgid" in "msgstr".
+#   -> Du darfst nur " (Anführungszeichen) benutzen.
+#   -> "msgid" ist der deutsche Text
+#   -> "msgstr" ist deine Übersetzung
+#   -> "msgid" DARF NICHT VERÄNDERT WERDEN!!!
+#   -> NUR "msgstr" DARF VERÄNDERT WERDEN!!!
+#
+# Wie gehe ich mit langen Übersetzungen und Texten um?
+#   -> Lange Texte können aufgeteilt werden.
+#   -> Dabei gehst du wie folgt vor:
+#       1. Nach "msgstr" kommen zwei Anführungszeichen ("").
+#       2. Deinen Text schreibst du dann dadrunter in so viele Zeilen, wie du brauchst.
+#       3. Jede Zeile startet und endet mit einem Anführungszeichen
+#   -> Wichtig dabei zu wissen:
+#       -> Die einzelnen Zeilen werden intern wieder zusammengefasst.
+#           D.h. du könntest theoretisch 50 Zeilen Abstand zwischen zwei Übersetzungsteilen machen,
+#           am Ende wäre keine Zeile dazwischen.
+#
+# Wie füge ich Zeilenumbrüche, Anführungszeichen und spezielle Zeichen hinzu?
+#   -> Anführungszeichen kannst du hinzufügen, indem du einen Schrägstrich nach rechts direkt davor schreibst.
+#   -> Zeilenumbrüche fügst du mit dieser Ausnahme hinzu: "\n"
+#   -> Spezielle Zeichen kannst du ganz normal einfügen.
+#
+# Was beduetet dieses "{model}", "%(project_name)s" und so weiter?
+#   -> Diese Zeichen sind Platzhalter. Häufig kommt dieses Format vor: "{<name>}".
+#       Wenn es dir hilft kannst du dir irgendeinen Text vorstellen.
+#       Wichtig dabei ist:
+#           Beim Format: "%(<name>)<format>" steht nach der Klammer ein Buchstabe (meist "s" oder "d").
+#           Dieser Buchstabe ist nicht ausversehen da, der muss auch kopiert werden!
+#
+#
+# Beispiel:
+#    msgid "Superschnelle App"
+#    msgstr "Super efficient app"
+#
+#    msgid "Das ist ein super langer Text der niemals enden wird bla bla bla."
+#    msgstr ""
+#    "This is a super long text"
+#    "that is never going to end"
+#    "bla bla bla."
+#
+#    msgid "Hallo {username}. Hast du schon %(project_name)s getestet?"
+#    msgstr ""
+#    "Hello {username}. Have you already testes %(project_name)s?"
+#
+#
+# Fragen?
+#    -> Kontaktiere mich über:
+#    -> Signal/Threema/Telegram/Whatsapp: +49 1575 6035018
+#    -> E-Mail: miguel.kra@gmail.com
+
+
+# Diese Übersetzung kann ignoriert werden
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-23 16:51+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+msgid "Benachrichtigung bei Änderungen"
+msgstr ""
+
+msgid "Offline verfügbar"
+msgstr ""
+
+msgid "Superschnelle App"
+msgstr ""
+
+msgid "Sauwenig mobile Daten"
+msgstr ""
+
+msgid "Kein Ausspionieren mehr möglich"
+msgstr ""
+
+msgid "Sicheres Speichern der Daten"
+msgstr ""
+
+msgid "Hausaufgaben einfach verwalten"
+msgstr ""
+
+msgid "Materialien verzögert hochladen"
+msgstr ""
+
+msgid "Effizient dank neuester Technologie"
+msgstr ""
+
+msgid "Einfach zu benutzen"
+msgstr ""
+
+msgid "Multikulturell"
+msgstr ""
+
+msgid "Dark-Mode"
+msgstr ""
+
+#, python-format
+msgid "%(project_name)s runterladen"
+msgstr ""
+
+#, python-format
+msgid ""
+"%(project_name)s kann ganz einfach über den Browser installiert werden. "
+"Folge dazu diesen wenigen Schritten:"
+msgstr ""
+
+msgid "Lade dir Chrome herunter"
+msgstr ""
+
+msgid "Du kannst auf deinem Computer direkt auf die App zugreifen."
+msgstr ""
+
+msgid "Öffne die App,"
+msgstr ""
+
+msgid ""
+"Tippe rechts neben der Suchleiste auf die drei Punkte und installiere die "
+"App indem du auf \"Zum Startbildschirm hinzufügen\" tippst."
+msgstr ""
+
+msgid "News"
+msgstr ""
+
+msgid "Titel"
+msgstr ""
+
+msgid "HTML"
+msgstr ""
+
+msgid "Zugangstoken fehlt oder nicht gültig!"
+msgstr ""
+
+msgid "Scooso-Benutzername"
+msgstr ""
+
+msgid "Der Scooso-Benutername wird verschlüsselt gespeichert"
+msgstr ""
+
+msgid "Scooso-Passwort"
+msgstr ""
+
+msgid "Das Scooso-Password wird verschlüsselt gespeichert"
+msgstr ""
+
+msgid "Klassenstufe"
+msgstr ""
+
+#, python-brace-format
+msgid "{user} in Klasse {class_number} mit Lehrer {teacher}"
+msgstr ""
+
+msgid "Der Benutzer ist noch nicht aktiviert!"
+msgstr ""
+
+msgid "Der Benutzer kann nicht verändert werden."
+msgstr ""
+
+msgid "Token"
+msgstr ""
+
+#, python-brace-format
+msgid "{user} vom {creation_date}"
+msgstr ""
+
+msgid "Der Zugangscode kann nicht geändert werden."
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Email-Adresse"
+msgstr ""
+
+msgid "Daten ausgefüllt"
+msgstr ""
+
+#, python-brace-format
+msgid "{first_name} {last_name}, {email_part} (ID: {id})"
+msgstr ""
+
+msgid "Gezahlt um"
+msgstr ""
+
+msgid "Scooso-Daten"
+msgstr ""
+
+msgid "Schüler"
+msgstr ""
+
+msgid "Benutzer"
+msgstr ""
+
+msgid "Bezahlung"
+msgstr ""
+
+msgid "Bezahlungen"
+msgstr ""
+
+msgid "[Kein Benutzer]"
+msgstr ""
+
+msgid "Email nicht angegeben."
+msgstr ""
+
+msgid "Superuser must have is_staff=True and is_superuser=True"
+msgstr ""
+
+msgid "Die E-Mail ist falsch eingegeben."
+msgstr ""
+
+msgid "Das Passwort ist falsch."
+msgstr ""
+
+msgid "Dein Account ist noch nicht aktiviert."
+msgstr ""
+
+msgid "Dein Zugangscode, damit wir wissen, dass nur Schüler die App verwenden."
+msgstr ""
+
+msgid "Das Passwort ist das gleiche wie das alte!"
+msgstr ""
+
+msgid "Das Passwort ist falsch!"
+msgstr ""
+
+msgid "Klassenlehrer/Stammkursleiter"
+msgstr ""
+
+msgid "Der Email-Bestätigungscode ist falsch."
+msgstr ""
+
+msgid "Der Email-Bestätigungscode fehlt."
+msgstr ""
+
+msgid "Der Zugangscode ist nicht gültig"
+msgstr ""
+
+msgid ""
+"Dieser Zugangscode wurde bereits verwendet. Du kannst Zugangscodes nur für "
+"einen Account verwenden. Wenn dein Zugangscode von jemand anderem verwendet "
+"wurde, kontaktiere uns bitte."
+msgstr ""
+
+msgid "Diese E-Mail wurde bereits registriert."
+msgstr ""
+
+msgid "Datum"
+msgstr ""
+
+msgid "Datum, wann die Klassenarbeit geschrieben wird."
+msgstr ""
+
+msgid "Informationen"
+msgstr ""
+
+#, python-brace-format
+msgid "{course} am {targeted_date}"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "Ende"
+msgstr ""
+
+#, python-brace-format
+msgid "{title} vom {start_datetime} bis {end_datetime}"
+msgstr ""
+
+msgid "Information"
+msgstr ""
+
+msgid "Typ"
+msgstr ""
+
+msgid "Art von Veränderung"
+msgstr ""
+
+#, python-brace-format
+msgid "{course} vom {start_datetime} bis {end_datetime}"
+msgstr ""
+
+msgid "Ignorieren"
+msgstr ""
+
+msgid "Vertretung"
+msgstr ""
+
+msgid "Freistunde"
+msgstr ""
+
+msgid "Selbstorganisiertes Lernen"
+msgstr ""
+
+msgid "Klassenarbeit"
+msgstr ""
+
+msgid "Klassenarbeiten"
+msgstr ""
+
+msgid "Event"
+msgstr ""
+
+msgid "Events"
+msgstr ""
+
+msgid "Veränderung"
+msgstr ""
+
+msgid "Veränderungen"
+msgstr ""
+
+msgid "Fälligkeitsdatum"
+msgstr ""
+
+msgid "Hausaufgaben-Typ"
+msgstr ""
+
+msgid "Beispiel: Vortag, Hausaufgabe, Protokoll, Hausarbeit"
+msgstr ""
+
+#, python-brace-format
+msgid "{lesson} (Typ: {type}) bis {due_date} (Privat: {is_private}"
+msgstr ""
+
+#, python-brace-format
+msgid "{lesson} (Typ: {type}, Privat: {is_private})"
+msgstr ""
+
+msgid "Datei"
+msgstr ""
+
+msgid "Dateiname"
+msgstr ""
+
+#, python-brace-format
+msgid "{material_model_verbose} {name} für {lesson}"
+msgstr ""
+
+msgid "Dateiname fehlt!"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Die Endung \"{extension}\" im angegebenen Dateinamen ist für die "
+"hochgeladene Datei nicht gültig. Wähle aus zwischen: {available_extensions}."
+msgstr ""
+
+msgid "Besitzer-Scooso-ID"
+msgstr ""
+
+msgid "Hochladedatum"
+msgstr ""
+
+msgid "Wann soll die Datei hochgeladen werden?"
+msgstr ""
+
+msgid "Hochgeladen?"
+msgstr ""
+
+msgid "Wird hochgeladen"
+msgstr ""
+
+msgid "Wenn ja, dann versucht der Server gerade die Datei hochzuladen."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Die Datei wurde bereits am {upload_date} hochgeladen. Das Hochladedatum kann "
+"daher nicht mehr geändert werden."
+msgstr ""
+
+#. Translators: Diese Nachricht ist für den Admin-Bereich. Sie wird verwendet, um Einreichungen darzustellen.
+#, python-brace-format
+msgid "{filename} für {lesson} (Hochladedatum: {upload_date})"
+msgstr ""
+
+msgid "Erledigt"
+msgstr ""
+
+msgid "Hausaufgabe"
+msgstr ""
+
+msgid "Hausaufgaben"
+msgstr ""
+
+msgid "Material"
+msgstr ""
+
+msgid "Materialien"
+msgstr ""
+
+msgid "Einreichung"
+msgstr ""
+
+msgid "Einreichungen"
+msgstr ""
+
+msgid "Privat"
+msgstr ""
+
+msgid "Es sind nur zukünftige Daten erlaubt!"
+msgstr ""
+
+msgid "Englisch"
+msgstr ""
+
+msgid "Mathe"
+msgstr ""
+
+msgid "Deutsch"
+msgstr ""
+
+msgid "Französisch"
+msgstr ""
+
+msgid "Latein"
+msgstr ""
+
+msgid "Spanisch"
+msgstr ""
+
+msgid "Informatik"
+msgstr ""
+
+msgid "Chemie"
+msgstr ""
+
+msgid "Physik"
+msgstr ""
+
+msgid "Biologie"
+msgstr ""
+
+msgid "Sozialkunde-Erdkunde"
+msgstr ""
+
+msgid "Sozialkunde"
+msgstr ""
+
+msgid "Erdkunde"
+msgstr ""
+
+msgid "Katholische Religion"
+msgstr ""
+
+msgid "Ethik"
+msgstr ""
+
+msgid "Evangelische Religion"
+msgstr ""
+
+msgid "Musik"
+msgstr ""
+
+msgid "Darstellendes Spiel"
+msgstr ""
+
+msgid "Sport"
+msgstr ""
+
+msgid "Geschichte"
+msgstr ""
+
+msgid "Kunst"
+msgstr ""
+
+msgid "Teilnehmer"
+msgstr ""
+
+msgid "Kursnummer"
+msgstr ""
+
+#, python-brace-format
+msgid "{course_name}: {teacher}"
+msgstr ""
+
+msgid "Startzeit"
+msgstr ""
+
+msgid "Endzeit"
+msgstr ""
+
+msgid "Wochentag"
+msgstr ""
+
+#, python-brace-format
+msgid "{course}: {weekday} {start_time} - {end_time}"
+msgstr ""
+
+msgid "Time-ID"
+msgstr ""
+
+msgid "Stundentyp"
+msgstr ""
+
+msgid "Anwesend?"
+msgstr ""
+
+msgid "Bist du in dieser Stunde anwesend?"
+msgstr ""
+
+msgid "Kurs"
+msgstr ""
+
+msgid "Kurse"
+msgstr ""
+
+msgid "Stunde"
+msgstr ""
+
+msgid "Stunden"
+msgstr ""
+
+msgid "Stunden-Daten"
+msgstr ""
+
+msgid "Teilnehmeranzahl"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Der Wochentag für das Datum {date} ist ein {weekday}, der festgelegte "
+"Wochentag für die Stunde ist jedoch {lesson_weekday}. Die Wochentage müssen "
+"gleich sein."
+msgstr ""
+
+msgid "Ort"
+msgstr ""
+
+msgid "Raum-Code"
+msgstr ""
+
+msgid "Fach-Code"
+msgstr ""
+
+msgid "Lehrer-Code"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Kurzer Name"
+msgstr ""
+
+msgid "Vorname"
+msgstr ""
+
+msgid "Letzter Name"
+msgstr ""
+
+msgid "Kürzel"
+msgstr ""
+
+msgid "E-Mail"
+msgstr ""
+
+#, python-brace-format
+msgid "{first_name} {last_name}, {short_name}"
+msgstr ""
+
+msgid "Farbe"
+msgstr ""
+
+msgid "Raum"
+msgstr ""
+
+msgid "Räume"
+msgstr ""
+
+msgid "Fach"
+msgstr ""
+
+msgid "Fächer"
+msgstr ""
+
+msgid "Lehrer"
+msgstr ""
+
+msgid "Extra-Einstellungen"
+msgstr ""
+
+msgid "Einstellung sichtbar nach Erstellung des Objekts."
+msgstr ""
+
+msgid "Feld für Farbe"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Aus Sicherheitsgründen können keine Dateien hochgeladen werden, die kleiner "
+"als {min_size_bytes} bytes groß sind."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Es können keine Dateien hochgeladen werden, die größer als {max_siz_mib} MiB "
+"groß sind."
+msgstr ""
+
+msgid ""
+"Die Datei scheint manipuliert zu sein. Sie kann daher zur Sicherheit nicht "
+"gespeichert werden."
+msgstr ""
+
+msgid "Dieses Dateiformat wird aus Sicherheitsgründen nicht unterstützt."
+msgstr ""
+
+msgid "Montag"
+msgstr ""
+
+msgid "Dienstag"
+msgstr ""
+
+msgid "Mittwoch"
+msgstr ""
+
+msgid "Donnerstag"
+msgstr ""
+
+msgid "Freitag"
+msgstr ""
+
+msgid "Samstag"
+msgstr ""
+
+msgid "Sonntag"
+msgstr ""
+
+msgid "Feld für einen Wochentag"
+msgstr ""
+
+msgid "IP-Adresse"
+msgstr ""
+
+msgid "Hinzugefügt"
+msgstr ""
+
+msgid "Scooso-ID"
+msgstr ""
+
+msgid "Das Objekt wurde nicht gefunden"
+msgstr ""
+
+msgid "Private Daten entfernen"
+msgstr ""
+
+msgid ""
+"Entfernt private Daten und verschleiert Daten, die nicht entfernt werden "
+"können."
+msgstr ""
+
+#, python-brace-format
+msgid "{model}-Scooso-Daten"
+msgstr ""
+
+#, python-brace-format
+msgid "{model}-Benutzer-Beziehung"
+msgstr ""
+
+#, python-brace-format
+msgid "{model}-Benutzer-Beziehungen"
+msgstr ""
+
+msgid "Dieser Raum ist nicht gültig."
+msgstr ""
+
+msgid "Dieser Wochentag ist nicht gültig."
+msgstr ""
+
+#. Translators: Formatierung für Daten (Datum). Befehle: https://strftime.org/
+msgid "%d.%m.%Y"
+msgstr ""
+
+#. Translators: Formatierung für Daten + Uhrzeiten (Datum + Uhrzeit). Befehle: https://strftime.org/
+msgid "%d.%m.%Y, %H:%M"
+msgstr ""
+
+#. Translators: Formatierung für Uhrzeiten (Uhrzeit). Befehle: https://strftime.org/
+msgid "%H:%M"
+msgstr ""
+
+msgid ""
+"Dieses Passwort wurde bereits schon mal gehackt! Das Passwort muss "
+"einzigartig sein."
+msgstr ""
+
+msgid "Dein Passwort muss einzigartig sein."
+msgstr ""

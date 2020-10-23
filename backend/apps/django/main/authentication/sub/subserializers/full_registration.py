@@ -1,11 +1,12 @@
 from typing import *
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from apps.django.extra.scooso_scraper.scrapers.request import LoginFailed, Request
 from apps.django.main.school_data.public.serializer_fields import TeacherField
 from ...models import ScoosoData, Student
 
@@ -23,6 +24,20 @@ class ScoosoDataRegistrationSerializer(serializers.ModelSerializer):
         fields = [
             "username", "password"
         ]
+    
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        
+        # Check if login is successful
+        scraper = Request(username=attrs["username"], password=attrs["password"])
+        try:
+            scraper.login()
+        except LoginFailed:
+            raise ValidationError(
+                _("Mit diesen Anmeldedaten konnte ich mich bei Scooso nicht anmelden.")
+            )
+        
+        return data
 
 
 class StudentRegistrationSerializer(serializers.ModelSerializer):
