@@ -2,6 +2,7 @@ from datetime import date, timedelta
 from typing import *
 
 from apps.django.extra.scooso_scraper.scrapers.timetable import TimetableRequest
+from apps.utils import find_next_date_by_weekday
 
 if TYPE_CHECKING:
     from apps.django.main.lesson.models import Lesson
@@ -32,15 +33,20 @@ def yield_lessons_with_materials(
             yield lesson
 
 
-def fetch_timetable(user: "User"):
-    today = date.today()
+def fetch_timetable(user: "User") -> None:
+    next_monday = find_next_date_by_weekday(date.today(), weekday=0)
     scooso_data: "ScoosoData" = user.scoosodata
     
     login_data = {
         "username": scooso_data.username,
         "password": scooso_data.password
     }
-    start_dates = [today, today + timedelta(days=7), today + timedelta(days=14), today + timedelta(days=21)]
+    start_dates = [
+        next_monday,
+        next_monday + timedelta(days=7),
+        next_monday + timedelta(days=14),
+        next_monday + timedelta(days=21)
+    ]
     
     with TimetableRequest(**login_data) as scraper:
         for start_date in start_dates:

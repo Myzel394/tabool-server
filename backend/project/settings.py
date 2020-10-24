@@ -104,6 +104,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
     ),
+    "EXCEPTION_HANDLER": "apps.django.utils.permissions.unauthorized_handler"
 }
 
 CRONJOBS = [

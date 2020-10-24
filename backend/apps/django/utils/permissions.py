@@ -1,10 +1,21 @@
-from rest_framework import permissions
+from rest_framework import exceptions, permissions, status, views
 
 __all__ = [
-    "AuthenticationAndActivePermission"
+    "AuthenticationAndActivePermission", "unauthorized_handler"
 ]
 
 
 class AuthenticationAndActivePermission(permissions.IsAuthenticated):
     def has_permission(self, request, view):
-        return super().has_permission(request, view) and request.user.is_confirmed and request.user.is_active
+        # Authenticated
+        if request.user and request.user.is_authenticated:
+            return request.user.is_confirmed and request.user.is_active
+
+
+def unauthorized_handler(exc, context):
+    response = views.exception_handler(exc, context)
+    
+    if isinstance(exc, (exceptions.AuthenticationFailed, exceptions.NotAuthenticated)):
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+    
+    return response
