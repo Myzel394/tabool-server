@@ -14,6 +14,7 @@ from ..querysets import SubjectQuerySet
 
 if TYPE_CHECKING:
     from apps.django.main.lesson.models import Lesson
+    from . import UserSubjectRelation
 
 __all__ = [
     "Subject"
@@ -51,3 +52,7 @@ class Subject(RandomIDMixin, ColorMixin, HandlerMixin):
         return {
             "name": WhiteSpaceStripHandler()
         }
+    
+    @property
+    def user_relations(self) -> QueryType["UserSubjectRelation"]:
+        return self.usersubjectrelation_set.all()

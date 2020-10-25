@@ -16,7 +16,7 @@ class CourseAdmin(DefaultAdminMixin):
     fieldset_fields = {
         "default": ["participants", "subject", "teacher", "course_number", "!..."],
     }
-    list_display = ["name", "subject", "teacher", "class_number", "participants_count"]
+    list_display = ["__str__", "subject", "teacher", "class_number", "participants_count"]
     list_filter = ["subject", "teacher"]
     filter_horizontal = ["participants"]
     autocomplete_fields = ["subject", "teacher"]

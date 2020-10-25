@@ -45,7 +45,10 @@ class Lesson(RandomIDMixin):
     )  # type: typing_date
     
     def __str__(self):
-        return format_datetime(self.date)
+        return _("{date}, {course}").format(
+            date=format_datetime(self.date),
+            course=self.lesson_data.course
+        )
     
     def clean(self):
         validate_lesson_weekday(self.date, self.lesson_data)

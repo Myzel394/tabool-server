@@ -258,7 +258,31 @@ class ForeignSerializerTest(CourseTestMixin):
         print("Third fetch. Current date")
         timetable = self.scraper.get_timetable()
         self.scraper.import_timetable_from_scraper(timetable)
-        new_count = LessonData.objects.all().count()
-        print("Amount:", new_count)
+        today_count = LessonData.objects.all().count()
+        print("Amount:", today_count)
         
-        self.assertEqual(count, new_count)
+        print("Fourth fetch. Current date")
+        timetable = self.scraper.get_timetable()
+        self.scraper.import_timetable_from_scraper(timetable)
+        new_today_count = LessonData.objects.all().count()
+        print("Amount:", new_today_count)
+        
+        self.assertEqual(today_count, new_today_count)
+
+
+class DummyTest(DummyUser):
+    def setUp(self) -> None:
+        # Load data
+        self.load_dummy_user()
+        
+        with Path(__file__).parent.joinpath("jsons/0211_0611.json").open() as file:
+            data = file.read()
+        
+        self.data = json.loads(data)
+    
+    def test_parser_offline(self):
+        parser = PureTimetableParser(self.data)
+        self.assertTrue(parser.is_valid)
+        data = parser.data
+        
+        print(data)

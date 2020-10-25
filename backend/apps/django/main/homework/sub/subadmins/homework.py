@@ -17,7 +17,7 @@ class HomeworkAdmin(DefaultAdminMixin, SimpleHistoryAdmin):
         "default": ["lesson", "due_date", "information", "type", "!..."],
         "extra": ["private_to_user", "!..."]
     }
-    list_display = ["lesson", "subject", "due_date", "is_private"]
+    list_display = ["__str__", "lesson", "subject", "due_date", "is_private"]
     list_filter = ["lesson__lesson_data__course", "lesson__lesson_data__course__subject"]
     search_fields = ["information", "type"]
     autocomplete_fields = ["lesson"]

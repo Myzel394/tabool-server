@@ -53,7 +53,10 @@ def fetch_timetable(user: "User") -> None:
             end_date = start_date + timedelta(days=5)
             
             data = scraper.get_timetable(start_date, end_date)
-            lessons = scraper.import_timetable_from_scraper(data)
+            lessons = scraper.import_timetable_from_scraper(data, [user])
             
             for lesson in yield_lessons_with_materials(data, lessons):
-                scraper.import_materials_from_lesson(lesson)
+                try:
+                    scraper.import_materials_from_lesson(lesson)
+                except Exception:
+                    continue

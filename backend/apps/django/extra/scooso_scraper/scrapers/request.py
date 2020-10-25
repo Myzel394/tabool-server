@@ -84,12 +84,13 @@ class Request:
                 
                 response = tr.session.request(url=url, **data)
                 
-                parser_instance = parser_class(response.content)
+                if response.status_code == 200:
+                    parser_instance = parser_class(response.content)
+                    
+                    if parser_instance.is_valid:
+                        break
                 
-                if parser_instance.is_valid:
-                    break
-                
-                # Maybe login session is not valid anymore
+                # Maybe session is not valid anymore
                 self.login()
             else:
                 raise RequestFailed()
@@ -101,5 +102,5 @@ class Request:
         return {
             "logSessionId": self.session,
             "client": "rwg",
-            "sc_version": 6
+            "sc_version": 6,
         }

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from ...models import User
 
 __all__ = [
-    "UserInformationSerializer", "UserDetailSerializer"
+    "UserInformationSerializer", "UserDetailSerializer", "UserAuthenticationSerializer"
 ]
 
 
@@ -20,4 +20,12 @@ class UserDetailSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "first_name"
+        ]
+
+
+class UserAuthenticationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "has_filled_out_data", "is_confirmed"
         ]

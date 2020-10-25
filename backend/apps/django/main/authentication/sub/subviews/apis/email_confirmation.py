@@ -28,10 +28,10 @@ class EmailConfirmation(views.APIView):
                 user.confirm_email(confirmation_key)
             except ObjectDoesNotExist:
                 return Response({
-                    "detail": [_("Der Email-Bestätigungscode ist falsch.")]
+                    "confirmation_key": [_("Der Email-Bestätigungscode ist falsch.")]
                 }, status=status.HTTP_400_BAD_REQUEST)
             
             return Response()
         return Response({
-            "detail": [_("Der Email-Bestätigungscode fehlt.")]
+            "confirmation_key": [_("Der Email-Bestätigungscode fehlt.")]
         }, status=status.HTTP_400_BAD_REQUEST)

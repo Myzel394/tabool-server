@@ -4,7 +4,6 @@ from typing import *
 from django.conf import settings
 
 from apps.django.main.event.models import Event, Modification
-from apps.django.main.event.options import ModificationTypeOptions
 from apps.django.main.event.serializers import EventScoosoScraperSerializer, ModificationScoosoScraperSerializer
 from apps.django.main.homework.models import Material
 from apps.django.main.homework.public import *
@@ -47,16 +46,17 @@ class TimetableRequest(Request):
         data = {
             "cmd": 600,
             "subcmd": 100,
-            "startDate": start_date.strftime(constants.TIMETABLE_CONNECTION["dt_format"]),
-            "endDate": end_date.strftime(constants.TIMETABLE_CONNECTION["dt_format"]),
+            "itemType": 1,
             **self.login_data
         }
-        return build_url(url, data)
+        return build_url(url, data) \
+               + f"&startDate={start_date.strftime(constants.TIMETABLE_CONNECTION['dt_format'])}" \
+               + f"&endDate={end_date.strftime(constants.TIMETABLE_CONNECTION['dt_format'])}"
     
     def get_timetable(
             self,
-            start_date: Optional[date] = None,
-            end_date: Optional[date] = None
+            start_date: date = None,
+            end_date: date = None,
     ) -> PureTimetableParserDataType:
         start_date = start_date or date.today()
         end_date = end_date or start_date + timedelta(days=5)
@@ -109,11 +109,17 @@ class TimetableRequest(Request):
         return import_from_scraper(MaterialScoosoScraperSerializer, data, **kwargs)
     
     @classmethod
-    def import_lesson_from_scraper(cls, lesson: SingleLessonType) -> Lesson:
+    def import_lesson_from_scraper(cls, lesson: SingleLessonType, participants: list["User"] = None) -> Lesson:
         room = cls.import_room(lesson['room'], none_on_error=True)
         subject = cls.import_subject(lesson['subject'], none_on_error=True)
         teacher = cls.import_teacher(lesson['teacher'], none_on_error=True)
-        course = cls.import_course(lesson['course'], none_on_error=True, subject=subject, teacher=teacher)
+        course = cls.import_course(
+            lesson['course'],
+            none_on_error=True,
+            subject=subject,
+            teacher=teacher,
+            participants=participants
+        )
         lesson_data = cls.import_lesson_data(
             lesson['lesson'],
             room=room,
@@ -134,10 +140,9 @@ class TimetableRequest(Request):
     def import_modification_from_scraper(
             cls,
             modification: SingleModificationType,
-            modification_type: int = ModificationTypeOptions.REPLACEMENT.value,
             *,
             user: Optional["User"] = None,
-            course: Optional[Course] = None,
+            course: Course = None,
     ) -> Modification:
         assert user or course, "Either an user or a course must be given."
         
@@ -145,20 +150,12 @@ class TimetableRequest(Request):
         teacher = cls.import_teacher(modification['new_teacher'])
         subject = cls.import_subject(modification['new_subject'])
         
-        if not course:
-            course = Course.objects.get(
-                course_number=modification['course']['course_number'],
-                subject=subject,
-                participants__in=[user]
-            )
-        
         modification = cls.import_modification(
             modification['modification'],
             new_room=room,
             new_teacher=teacher,
             new_subject=subject,
             course=course,
-            modification_type=modification_type
         )
         
         return modification
@@ -188,16 +185,21 @@ class TimetableRequest(Request):
             )
             
             material_instance.file = str(path)
+            material_instance.save()
             
             materials_list.append(material_instance)
         
         return materials_list
     
-    def import_timetable_from_scraper(self, timetable: PureTimetableParserDataType) -> List[Lesson]:
+    def import_timetable_from_scraper(
+            self,
+            timetable: PureTimetableParserDataType,
+            participants: list["User"] = None,
+    ) -> List[Lesson]:
         lessons = []
         # Lessons
         for lesson_data in timetable['lessons']:
-            lesson = self.import_lesson_from_scraper(lesson_data)
+            lesson = self.import_lesson_from_scraper(lesson_data, participants)
             lessons.append(lesson)
         
         # Events
@@ -206,6 +208,12 @@ class TimetableRequest(Request):
         
         # Modifications
         for modification in timetable['modifications']:
-            self.import_modification_from_scraper(modification, course=lessons[0].lesson_data.course)
+            lesson_scooso = LessonScoosoData.objects.only("time_id").get(
+                time_id=modification['time_id'],
+                lesson__date=modification['modification']['start_datetime'].date()
+            )
+            course = lesson_scooso.lesson.lesson_data.course
+            
+            self.import_modification_from_scraper(modification, course=course)
         
         return lessons

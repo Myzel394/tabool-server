@@ -1,6 +1,7 @@
 from datetime import date, datetime, time, timedelta
 from typing import *
 
+from apps.django.main.event.options import ModificationTypeOptions
 from .base import BaseParser
 
 __all__ = [
@@ -8,9 +9,17 @@ __all__ = [
 ]
 
 LESSON_TYPES = {
-    "lesson": [100],
-    "event": [1],
-    "modification": [1030, 1040, 1050, 1060]
+    "lesson": {100},
+    "event": {1},
+    "modification": {1010, 1030, 1040, 1050, 1060}
+}
+
+LESSON_TYPES_MODIFICATION_TYPE_MAP = {
+    1010: ModificationTypeOptions.REPLACEMENT,
+    1030: ModificationTypeOptions.REPLACEMENT,
+    1040: ModificationTypeOptions.REPLACEMENT,
+    1050: ModificationTypeOptions.FREE_PERIOD,
+    1060: ModificationTypeOptions.SELF_LEARN,
 }
 
 
@@ -48,8 +57,8 @@ class LessonType(TypedDict):
 
 class ModificationType(TypedDict):
     information: Optional[str]
-    start_time: time
-    end_time: time
+    start_datetime: datetime
+    end_datetime: datetime
 
 
 class PeriodType(TypedDict):
@@ -219,7 +228,8 @@ class PureTimetableParser(BaseParser):
             "modification": {
                 "information": information,
                 "start_datetime": start_time,
-                "end_datetime": end_time
+                "end_datetime": end_time,
+                "modification_type": LESSON_TYPES_MODIFICATION_TYPE_MAP[modification["type"]]
             },
             "new_subject": {
                 "code": new_subject_code,
@@ -259,6 +269,18 @@ class PureTimetableParser(BaseParser):
         except:
             return False
     
+    @staticmethod
+    def is_lesson(thing: dict) -> bool:
+        return thing.get("lessontype", None) == 100 or "lessontype" in thing and "new_subject" not in thing
+    
+    @staticmethod
+    def is_event(thing: dict) -> bool:
+        return "lessontype" not in thing and "event_id" in thing and "new_subject" not in thing
+    
+    @staticmethod
+    def is_modification(thing: dict) -> bool:
+        return "new_subject" in thing
+    
     @property
     def data(self) -> PureTimetableParserDataType:
         lessons = []
@@ -267,12 +289,11 @@ class PureTimetableParser(BaseParser):
         materials = []
         
         for thing in self.json["tables"]["schedule"]:
-            lesson_type = thing["type"]
-            if lesson_type in LESSON_TYPES["lesson"]:
+            if self.is_lesson(thing):
                 lessons.append(self.get_lesson_data(thing))
-            elif lesson_type in LESSON_TYPES["event"]:
+            elif self.is_event(thing):
                 events.append(self.get_event_data(thing))
-            elif lesson_type in LESSON_TYPES["modification"]:
+            elif self.is_modification(thing):
                 modifications.append(self.get_modification_data(thing))
             
             if data := self.get_material_data(thing):

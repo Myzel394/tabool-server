@@ -14,7 +14,7 @@ class ClasstestAdmin(DefaultAdminMixin, SimpleHistoryAdmin):
     fieldset_fields = {
         "default": ["course", "room", "targeted_date", "information", "!..."]
     }
-    list_display = ["course", "room", "targeted_date"]
+    list_display = ["__str__", "course", "room", "targeted_date"]
     list_filter = ["course", "course", "course__subject"]
     search_fields = ["information", "course", "targeted_date"]
     autocomplete_fields = ["course", "room"]

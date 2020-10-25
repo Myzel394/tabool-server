@@ -12,3 +12,17 @@ class CourseScoosoScraperSerializer(GetOrCreateSerializerMixin):
         fields = [
             "course_number",
         ]
+    
+    def create(self, validated_data):
+        participants = validated_data.pop("participants") or []
+        instance: Course = super().create(validated_data)
+        instance.participants.add(*participants)
+        
+        return instance
+    
+    def update(self, instance, validated_data):
+        participants = validated_data.pop("participants") or []
+        instance: Course = super().update(instance, validated_data)
+        instance.participants.add(*participants)
+        
+        return instance

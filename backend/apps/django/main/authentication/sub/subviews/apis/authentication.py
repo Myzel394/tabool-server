@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ....serializers import (
-    LoginSerializer, UserInformationSerializer,
+    LoginSerializer, UserAuthenticationSerializer,
 )
 
 __all__ = [
@@ -13,18 +13,15 @@ __all__ = [
 
 
 class LoginView(views.APIView):
-    permission_classes = [
-        ~IsAuthenticated
-    ]
+    permission_classes = []
     
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
-        user = validated_data["user"]
+        user = serializer.validated_data["user"]
         
         login(request, user)
-        user_data = UserInformationSerializer(user).data
+        user_data = UserAuthenticationSerializer(user).data
         
         return Response(user_data)
 

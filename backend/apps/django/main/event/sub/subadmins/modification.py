@@ -17,7 +17,7 @@ class ModificationAdmin(DefaultAdminMixin):
         "default": ["course", "new_room", "new_subject", "new_teacher", "start_datetime", "end_datetime",
                     "information", "modification_type"]
     }
-    list_display = ["course", "modifications", "date"]
+    list_display = ["__str__", "course", "modifications", "date"]
     list_filter = ["course", "course__subject"]
     autocomplete_fields = ["new_room", "new_subject", "new_teacher"]
     search_fields = ["information", "modification_type", "course"]

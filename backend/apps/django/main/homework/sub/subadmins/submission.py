@@ -25,7 +25,7 @@ class SubmissionAdmin(DefaultAdminMixin):
     }
     autocomplete_fields = ["lesson"]
     list_filter = ["is_uploaded", "lesson__lesson_data__course", "lesson__lesson_data__course__subject"]
-    list_display = ["lesson", "subject", "upload_at"]
+    list_display = ["__str__", "lesson", "subject", "upload_at"]
     mixins = [CreationDateAdminFieldsetMixin]
     readonly_fields = ["is_uploaded"]
     inlines = [SubmissionScoosoDataAdminInline]

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "django_eventstream",
     "django_crontab",
     "corsheaders",
+    "django_object_actions",
     
     "apps.django.utils.relation_managers.apps.RelationManagersConfig",
     

@@ -79,7 +79,8 @@ class Modification(RandomIDMixin, LifecycleModel):
     modification_type = models.PositiveSmallIntegerField(
         choices=ModificationTypeOptions.choices,
         verbose_name=_("Typ"),
-        help_text=_("Art von Veränderung")
+        help_text=_("Art von Veränderung"),
+        default=ModificationTypeOptions.REPLACEMENT.value
     )  # type: int
     
     def __str__(self):
