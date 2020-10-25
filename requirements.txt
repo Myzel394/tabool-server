@@ -20,6 +20,7 @@ django-bleach==0.6.1
 django-ckeditor==5.9.0
 django-colorfield==0.3.2
 django-common-utils==1.7.2
+django-cors-headers==3.5.0
 django-crontab==0.7.1
 django-eventstream==3.1.0
 django-fernet-fields==0.6
@@ -28,6 +29,7 @@ django-grip==3.0.0
 django-hint==0.1.5
 django-js-asset==1.2.2
 django-lifecycle==0.7.7
+django-object-actions==3.0.1
 django-private-storage==2.2.2
 django-simple-email-confirmation==0.70
 django-simple-history==2.11.0
@@ -54,6 +56,7 @@ packaging==20.4
 pdfminer.six==20200726
 Pillow==7.2.0
 pluggy==0.13.1
+psycopg2-binary==2.8.6
 pubcontrol==3.0.0
 pwned-passwords-django==1.4.1
 py==1.9.0
@@ -65,7 +68,6 @@ PyHamcrest==2.0.2
 PyJWT==1.7.1
 pyOpenSSL==19.1.0
 pyparsing==2.4.7
-psycopg2-binary
 PySocks==1.7.1
 pytest==6.1.1
 pytest-asyncio==0.14.0
