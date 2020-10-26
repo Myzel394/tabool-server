@@ -21,10 +21,11 @@ def post_save_manager(instance, **kwargs):
     update_related_managers_relations(instance, **kwargs)
 
 
-def post_save_user_manager(instance, *args, **kwargs):
-    for manager_classes in related_managers.values():
-        for manager_class in manager_classes:
-            manager_class.create_relations_with_given_user(instance)
+def post_save_user_manager(instance, created: bool, *args, **kwargs):
+    if created:
+        for manager_classes in related_managers.values():
+            for manager_class in manager_classes:
+                manager_class.create_relations_with_given_user(instance)
 
 
 def post_save_related_manager(instance, sender: Type[Model], created: bool, **kwargs):
