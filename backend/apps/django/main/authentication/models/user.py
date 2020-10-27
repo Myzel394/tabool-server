@@ -32,10 +32,16 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
         verbose_name=_("Email-Adresse"),
         unique=True,
     )  # type: str
+    
     has_filled_out_data = models.BooleanField(
         default=False,
         verbose_name=_("Daten ausgefüllt")
-    )
+    )  # type: bool
+    
+    is_being_setup = models.BooleanField(
+        default=True,
+        verbose_name=_("Wird gerade konfiguriert")
+    )  # type: bool
     
     username = None
     

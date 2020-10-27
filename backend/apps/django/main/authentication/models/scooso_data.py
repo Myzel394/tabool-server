@@ -56,9 +56,6 @@ class ScoosoData(RandomIDMixin, LifecycleModel):
         else:
             user.first_name = first_name
             user.last_name = last_name
-            send_event(USER_NAMES_FETCHED_CHANNEL, "success", {
-                "id": user.id
-            })
         finally:
             user.save()
     
