@@ -2,6 +2,7 @@ from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationF
 from .user_relations import UserLessonRelationSerializer
 from ...models import Lesson
 from ...public.serializer_fields import LessonDataField
+from ...serializers import LessonDataListSerializer, LessonDataDetailSerializer
 
 __all__ = [
     "LessonListSerializer", "LessonDetailSerializer", "LessonDetailSerializer"
@@ -15,7 +16,7 @@ class LessonListSerializer(RandomIDSerializerMixin):
             "lesson_data", "date", "id"
         ]
     
-    lesson_data = LessonDataField()
+    lesson_data = LessonDataListSerializer()
 
 
 class LessonDetailSerializer(RandomIDSerializerMixin):
@@ -27,4 +28,4 @@ class LessonDetailSerializer(RandomIDSerializerMixin):
     
     user_relation = UserRelationField(UserLessonRelationSerializer)
     
-    lesson_data = LessonDataField()
+    lesson_data = LessonDataDetailSerializer()
