@@ -1,8 +1,7 @@
 from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField
+from .lesson_data import LessonDataDetailSerializer, LessonDataListSerializer
 from .user_relations import UserLessonRelationSerializer
 from ...models import Lesson
-from ...public.serializer_fields import LessonDataField
-from ...serializers import LessonDataListSerializer, LessonDataDetailSerializer
 
 __all__ = [
     "LessonListSerializer", "LessonDetailSerializer", "LessonDetailSerializer"

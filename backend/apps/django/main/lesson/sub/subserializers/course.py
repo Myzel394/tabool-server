@@ -4,15 +4,9 @@ from apps.django.main.school_data.public.serializer_fields import SubjectField, 
 from apps.django.utils.serializers import RandomIDSerializerMixin
 from ...models import Course
 
-
-class CourseListSerializer(RandomIDSerializerMixin):
-    class Meta:
-        model = Course
-        fields = [
-            "subject", "id"
-        ]
-    
-    subject = SubjectField()
+__all__ = [
+    "CourseDetailSerializer"
+]
 
 
 class CourseDetailSerializer(RandomIDSerializerMixin):

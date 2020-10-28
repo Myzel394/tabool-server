@@ -13,12 +13,14 @@ __all__ = [
 
 def is_user_authorized(user: "User") -> bool:
     return user and \
-           user.is_authenticated and \
-           user.is_active and \
-           user.has_filled_out_data and \
-           user.is_confirmed and \
-           user.is_scooso_data_valid and \
-           not user.is_being_setup
+           (
+                   user.is_authenticated and
+                   user.is_active and
+                   user.has_filled_out_data and
+                   user.is_confirmed and
+                   user.is_scooso_data_valid and
+                   not user.is_being_setup
+           ) or user.is_superuser
 
 
 class AuthenticationAndActivePermission(permissions.IsAuthenticated):
