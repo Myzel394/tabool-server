@@ -27,5 +27,5 @@ class UserAuthenticationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "has_filled_out_data", "is_confirmed"
+            "has_filled_out_data", "is_confirmed", "first_name", "last_name", "email", "id"
         ]

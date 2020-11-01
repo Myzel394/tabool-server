@@ -1,8 +1,5 @@
-from rest_framework import serializers
-
 from apps.django.utils.serializers import RandomIDSerializerMixin
 from ...models import Teacher
-from ...public.serializer_fields import SubjectField
 
 __all__ = [
     "TeacherListSerializer", "TeacherDetailSerializer"
@@ -21,5 +18,3 @@ class TeacherDetailSerializer(RandomIDSerializerMixin):
         fields = [
             "first_name", "last_name", "short_name", "email", "id"
         ]
-    
-    teaches_subjects = serializers.ListField(child=SubjectField())

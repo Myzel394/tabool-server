@@ -1,21 +1,17 @@
-import random
-
 from django.db import models
 from django.utils.translation import gettext as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.django.main.authentication.public import *
 from apps.django.main.authentication.public import model_names as auth_names
 from apps.django.utils.fields.color import ColorField
-from constants import colors
 
 __all__ = [
     "ColorMixin", "AssociatedUserMixin", "AddedAtMixin", "UserModelRelationMixin", "ScoosoDataMixin"
 ]
 
 
-class ColorMixin(LifecycleModel):
+class ColorMixin(models.Model):
     class Meta:
         abstract = True
     
@@ -23,11 +19,6 @@ class ColorMixin(LifecycleModel):
         verbose_name=_("Farbe"),
         blank=True,
     )
-    
-    @hook(BEFORE_CREATE)
-    @hook(BEFORE_UPDATE, when="color")
-    def _hook_before_save_color(self):
-        self.color = self.color or random.sample(colors.BEAUTIFUL_COLORS, 1)[0]
 
 
 class AssociatedUserMixin(models.Model):

@@ -11,6 +11,11 @@ __all__ = [
 ]
 
 
+class AuthenticationAndActivePermission(permissions.IsAuthenticated):
+    def has_permission(self, request, view):
+        return is_user_authorized(request.user)
+
+
 def is_user_authorized(user: "User") -> bool:
     return user and \
            (
@@ -21,11 +26,6 @@ def is_user_authorized(user: "User") -> bool:
                    user.is_scooso_data_valid and
                    not user.is_being_setup
            ) or user.is_superuser
-
-
-class AuthenticationAndActivePermission(permissions.IsAuthenticated):
-    def has_permission(self, request, view):
-        return is_user_authorized(request.user)
 
 
 def unauthorized_handler(exc, context):

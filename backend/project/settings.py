@@ -268,7 +268,7 @@ PRIVATE_STORAGE_AUTH_FUNCTION = "apps.django.utils.private_storages.private_stor
 
 # Event stream
 EVENTSTREAM_STORAGE_CLASS = "django_eventstream.storage.DjangoModelStorage"
-EVENTSTREAM_CHANNELMANAGER_CLASS = "apps.django.utils.authorizations.UserActiveChannelManager"
+EVENTSTREAM_CHANNELMANAGER_CLASS = "apps.django.utils.permissions.UserActiveChannelManager"
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = default_headers + (

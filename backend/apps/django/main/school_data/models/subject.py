@@ -6,9 +6,11 @@ from django_common_utils.libraries.handlers.mixins import WhiteSpaceStripHandler
 from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import QueryType
+from django_lifecycle import BEFORE_CREATE, BEFORE_SAVE, hook, LifecycleModel
 
 from apps.django.utils.models import ColorMixin
 from constants import maxlength
+from .. import constants
 from ..public import model_names
 from ..querysets import SubjectQuerySet
 
@@ -21,7 +23,7 @@ __all__ = [
 ]
 
 
-class Subject(RandomIDMixin, ColorMixin, HandlerMixin):
+class Subject(RandomIDMixin, ColorMixin, LifecycleModel, HandlerMixin):
     class Meta:
         verbose_name = model_names.SUBJECT
         verbose_name_plural = model_names.SUBJECT_PLURAL
@@ -41,6 +43,11 @@ class Subject(RandomIDMixin, ColorMixin, HandlerMixin):
     
     def __str__(self):
         return self.name
+    
+    @hook(BEFORE_CREATE)
+    @hook(BEFORE_SAVE)
+    def _hook_set_color(self):
+        self.color = self.color or constants.SUBJECT_COLORS_MAPPING[self.short_name]
     
     @property
     def lessons_data(self) -> QueryType["Lesson"]:

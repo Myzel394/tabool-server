@@ -67,6 +67,7 @@ class FullRegisterView(generics.CreateAPIView):
         user: "User" = serializer.instance
         
         user.scoosodata.fetch_user_data()
+        logout(request)
         
         return Response(
             UserInformationSerializer(serializer.instance).data,
