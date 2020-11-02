@@ -11,12 +11,8 @@ class ModificationListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Modification
         fields = [
-            "start_datetime", "end_datetime", "new_subject", "new_teacher", "new_room", "id"
+            "start_datetime", "end_datetime", "modification_type", "id"
         ]
-    
-    new_subject = SubjectField()
-    new_teacher = TeacherField()
-    new_room = RoomField()
 
 
 class ModificationDetailSerializer(RandomIDSerializerMixin):

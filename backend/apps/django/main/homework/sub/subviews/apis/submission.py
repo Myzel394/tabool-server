@@ -37,6 +37,8 @@ class SubmissionViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=["post"])
     def scooso(self, request: RequestType):
+        """Uploads a given file directly to Scooso."""
+        
         # Preparation
         user = request.user
         data = request.data
