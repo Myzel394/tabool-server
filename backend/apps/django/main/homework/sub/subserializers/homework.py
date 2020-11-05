@@ -27,7 +27,7 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin):
             "lesson", "is_private", "due_date", "information", "type", "created_at", "id", "user_relation"
         ]
         read_only_fields = [
-            "created_at", "edited_at", "id", "user_relation"
+            "created_at", "id", "user_relation"
         ]
     
     is_private = WritableSerializerMethodField(

@@ -147,8 +147,8 @@ class TimetableRequest(Request):
         assert user or course, "Either an user or a course must be given."
         
         room = cls.import_room(modification['new_room'], none_on_error=True)
-        teacher = cls.import_teacher(modification['new_teacher'])
-        subject = cls.import_subject(modification['new_subject'])
+        teacher = cls.import_teacher(modification['new_teacher'], none_on_error=True)
+        subject = cls.import_subject(modification['new_subject'], none_on_error=True)
         
         modification = cls.import_modification(
             modification['modification'],

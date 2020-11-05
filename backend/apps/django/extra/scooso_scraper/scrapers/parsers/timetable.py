@@ -16,6 +16,7 @@ LESSON_TYPES = {
 
 LESSON_TYPES_MODIFICATION_TYPE_MAP = {
     1010: ModificationTypeOptions.REPLACEMENT,
+    1020: ModificationTypeOptions.ROOM_CHANGE,
     1030: ModificationTypeOptions.REPLACEMENT,
     1040: ModificationTypeOptions.REPLACEMENT,
     1050: ModificationTypeOptions.FREE_PERIOD,
@@ -216,8 +217,8 @@ class PureTimetableParser(BaseParser):
         
         new_subject_code = modification.get("subject_code")
         new_subject_id = modification.get("subject")
-        new_room_code = modification.get("new_location_code")
-        new_room_id = modification.get("new_location")
+        new_room_code = modification.get("location_code")
+        new_room_id = modification.get("location")
         new_teacher_code = modification.get("old_teacher_code")
         new_teacher_id = modification.get("old_teacher")
         

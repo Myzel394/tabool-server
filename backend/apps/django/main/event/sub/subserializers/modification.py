@@ -23,6 +23,6 @@ class ModificationDetailSerializer(RandomIDSerializerMixin):
             "modification_type", "id"
         ]
     
-    new_subject = SubjectField()
-    new_teacher = TeacherField()
-    new_room = RoomField()
+    new_subject = SubjectField(required=False)
+    new_teacher = TeacherField(required=False)
+    new_room = RoomField(required=False)

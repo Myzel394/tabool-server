@@ -15,6 +15,12 @@ class RoomScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     
     code = serializers.CharField()
     
+    @staticmethod
+    def constrain_place(given_place: str) -> str:
+        if given_place.isdigit():
+            return "0" * (3 - len(given_place)) + given_place
+        return given_place
+    
     def pop_scooso_data(self, validated_data: dict) -> dict:
         return {
             "scooso_id": validated_data.pop("scooso_id"),
@@ -23,7 +29,7 @@ class RoomScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     
     def rename_data(self, validated_data: dict) -> dict:
         return {
-            "place": validated_data.pop("code"),
+            "place": self.constrain_place(validated_data.pop("code")),
             **validated_data
         }
     
