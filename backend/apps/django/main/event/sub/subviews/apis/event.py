@@ -16,7 +16,7 @@ class EventViewSet(viewsets.mixins.ListModelMixin, RetrieveFromUserMixin):
     model = Event
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = EventFilterSet
-    search_fields = ["title"]
+    search_fields = ["title", "information"]
     ordering_fields = ["start_datetime", "end_datetime"]
     
     def get_serializer_class(self):

@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from django_common_utils.libraries.utils.text import create_short
+
 
 from apps.django.main.lesson.public.serializer_fields import LessonField
 from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField, WritableSerializerMethodField
@@ -14,10 +16,15 @@ class HomeworkListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Homework
         fields = [
-            "lesson", "due_date", "id"
+            "lesson", "due_date", "id", "truncated_information"
         ]
     
     lesson = LessonField()
+
+    truncated_information = serializers.SerializerMethodField()
+    
+    def get_truncated_information(self, instance: Homework) -> str:
+        return create_short(instance.information)
 
 
 class HomeworkDetailSerializer(RandomIDSerializerMixin):

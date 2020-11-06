@@ -1,6 +1,8 @@
 from apps.django.main.lesson.public.serializer_fields import CourseField
 from apps.django.main.school_data.public.serializer_fields import RoomField
 from apps.django.utils.serializers import RandomIDSerializerMixin
+from django_common_utils.libraries.utils.text import create_short
+
 from ...models import Classtest
 
 __all__ = [
@@ -12,10 +14,15 @@ class ClasstestListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Classtest
         fields = [
-            "course", "targeted_date", "id"
+            "course", "targeted_date", "truncated_information", "id"
         ]
     
     course = CourseField()
+    
+    truncated_information = serializers.SerializerMethodField()
+    
+    def get_truncated_information(self, instance: Classtest) -> str:
+        return create_short(instance.information)
 
 
 class ClasstestDetailSerializer(RandomIDSerializerMixin):

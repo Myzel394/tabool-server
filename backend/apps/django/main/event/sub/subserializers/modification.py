@@ -1,5 +1,7 @@
 from apps.django.main.school_data.public.serializer_fields import RoomField, SubjectField, TeacherField
 from apps.django.utils.serializers import RandomIDSerializerMixin
+from django_common_utils.libraries.utils.text import create_short
+
 from ...models import Modification
 
 __all__ = [
@@ -11,8 +13,13 @@ class ModificationListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Modification
         fields = [
-            "start_datetime", "end_datetime", "modification_type", "id"
+            "start_datetime", "end_datetime", "modification_type", "truncated_information", "id"
         ]
+    
+    truncated_information = serializers.SerializerMethodField()
+    
+    def get_truncated_information(self, instance: Modification) -> str:
+        return create_short(instance.information)
 
 
 class ModificationDetailSerializer(RandomIDSerializerMixin):

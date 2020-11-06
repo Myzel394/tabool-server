@@ -25,3 +25,4 @@ class MaterialFilterSet(filters.FilterSet):
         field_name="lesson__lesson_data__course__id",
         label=model_verbose(Course)
     )
+    

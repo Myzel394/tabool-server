@@ -14,11 +14,11 @@ __all__ = [
 
 class TeacherViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ["first_name", "last_name", "short_name"]
+    search_fields = ["last_name", "short_name"]
     model = Teacher
     pagination_class = LargeSetPagination
     permission_classes = [IsAuthenticated]  # Teachers must be collected for full registration
-    ordering_fields = ["first_name", "last_name", "short_name"]
+    ordering_fields = ["last_name", "short_name"]
     
     def get_serializer_class(self):
         if self.action == "list":

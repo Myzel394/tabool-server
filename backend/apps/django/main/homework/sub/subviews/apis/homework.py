@@ -15,7 +15,7 @@ class HomeworkViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = HomeworkFilterSet
     search_fields = ["information"]
-    ordering_fields = ["completed", "due_date"]
+    ordering_fields = ["due_date"]  # TODO: Add user relation ordering!
     
     def get_queryset(self):
         return Homework.objects.from_user(self.request.user).distinct()
