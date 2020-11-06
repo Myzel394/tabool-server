@@ -1,8 +1,9 @@
+from django_common_utils.libraries.utils.text import create_short
+from rest_framework import serializers
+
 from apps.django.main.lesson.public.serializer_fields import CourseField
 from apps.django.main.school_data.public.serializer_fields import RoomField
 from apps.django.utils.serializers import RandomIDSerializerMixin
-from django_common_utils.libraries.utils.text import create_short
-
 from ...models import Classtest
 
 __all__ = [
