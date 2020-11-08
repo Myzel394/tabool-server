@@ -30,7 +30,7 @@ class MaterialDetailSerializer(RandomIDSerializerMixin):
     
     def get_scooso_download_link(self, instance: Material):
         if scooso_data := getattr(instance, "materialscoosodata", None):
-            user = self.context["request"]
+            user = self.context["request"].user
             url = scooso_data.build_download_url(user)
             return url
         return

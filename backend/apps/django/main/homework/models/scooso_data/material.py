@@ -37,8 +37,11 @@ class MaterialScoosoData(ScoosoDataMixin):
     def __str__(self):
         return str(self.material)
     
-    def build_download_url(self, user: "User") -> str:
-        with MaterialRequest(user.scoosodata.username, user.scoosodata.password) as scraper:
-            url = scraper.build_download_material_url(self.scooso_id)
-        
-        return url
+    def build_download_url(self, user: "User") -> Optional[str]:
+        try:
+            with MaterialRequest(user.scoosodata.username, user.scoosodata.password) as scraper:
+                url = scraper.build_download_material_url(self.scooso_id)
+            
+            return url
+        except:
+            return None

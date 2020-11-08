@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta
 from typing import *
 
 from django.conf import settings
@@ -60,6 +60,8 @@ class TimetableRequest(Request):
     ) -> PureTimetableParserDataType:
         start_date = start_date or date.today()
         end_date = end_date or start_date + timedelta(days=5)
+        start_date = datetime.combine(start_date, time.min)
+        end_date = datetime.combine(end_date, time.max)
         
         return self.request_with_parser(
             parser_class=PureTimetableParser,

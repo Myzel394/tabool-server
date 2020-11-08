@@ -9,7 +9,7 @@ LOGIN_CONNECTION = {
 TIMETABLE_CONNECTION = {
     "url": DEFAULT_QUERY_URL,
     "method": "POST",
-    "dt_format": "%Y-%m-%d 00:00:00"
+    "dt_format": "%Y-%m-%d %H:%H:%S"
 }
 
 MATERIAL_CONNECTION = {
