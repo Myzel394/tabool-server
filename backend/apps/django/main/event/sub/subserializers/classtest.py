@@ -1,3 +1,5 @@
+from typing import *
+
 from django_common_utils.libraries.utils.text import create_short
 from rest_framework import serializers
 
@@ -22,8 +24,8 @@ class ClasstestListSerializer(RandomIDSerializerMixin):
     
     truncated_information = serializers.SerializerMethodField()
     
-    def get_truncated_information(self, instance: Classtest) -> str:
-        return create_short(instance.information)
+    def get_truncated_information(self, instance: Classtest) -> Optional[str]:
+        return create_short(instance.information) if instance.information else None
 
 
 class ClasstestDetailSerializer(RandomIDSerializerMixin):

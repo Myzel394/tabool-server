@@ -1,3 +1,5 @@
+from typing import *
+
 from django_common_utils.libraries.utils.text import create_short
 from rest_framework import serializers
 
@@ -19,8 +21,8 @@ class ModificationListSerializer(RandomIDSerializerMixin):
     
     truncated_information = serializers.SerializerMethodField()
     
-    def get_truncated_information(self, instance: Modification) -> str:
-        return create_short(instance.information)
+    def get_truncated_information(self, instance: Modification) -> Optional[str]:
+        return create_short(instance.information) if instance.information else None
 
 
 class ModificationDetailSerializer(RandomIDSerializerMixin):
