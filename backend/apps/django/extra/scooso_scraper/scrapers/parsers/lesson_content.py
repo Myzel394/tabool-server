@@ -1,3 +1,4 @@
+import base64
 from datetime import datetime
 from typing import *
 
@@ -24,6 +25,8 @@ class PureLessonContentParserDataType(TypedDict):
 
 
 class PureLessonContentParser(BaseParser):
+    ENCODING_TYPE = "utf-8"
+    
     @property
     def is_valid(self) -> bool:
         try:
@@ -34,14 +37,17 @@ class PureLessonContentParser(BaseParser):
     @property
     def data(self) -> PureLessonContentParserDataType:
         data = self.json["item"]
+        topic_online = data["topic_online_b64"]
+        topic_presence = data["topic_presence_b64"]
+        homework = data["homework_b64"]
         
         return {
             "content": {
-                "presence": data["topic_presence"],
-                "online": data["topic_online"]
+                "presence": base64.b64decode(topic_presence).decode(self.ENCODING_TYPE) if topic_presence else None,
+                "online": base64.b64decode(topic_online).decode(self.ENCODING_TYPE) if topic_online else None,
             },
             "homework": {
-                "information": data["homework"],
+                "information": base64.b64decode(homework).decode(self.ENCODING_TYPE) if homework else None,
                 "due_date": data["homework_until"]
             }
         }

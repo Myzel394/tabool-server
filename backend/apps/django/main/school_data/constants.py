@@ -32,31 +32,31 @@ SUBJECT_NAMES_MAPPING = dicti(
     bk=_("Kunst"),
 )
 SUBJECT_COLORS_MAPPING = dicti(
-    E="#14A5FF",
-    M="#FF4834",
-    D="#2072FF",
-    F="#FFDA28",
-    L="#73FFF2",
-    S="#EAFF00",
+    englisch="#14A5FF",
+    mathe="#FF4834",
+    deutsch="#2072FF",
+    französisch="#FFDA28",
+    latein="#73FFF2",
+    spanisch="#EAFF00",
     
-    iN="#1E67FF",
+    informatik="#1E67FF",
     
-    ch="#F2FF06",
-    ph="#2FD0FF",
-    bi="#86FF49",
+    chemie="#F2FF06",
+    physik="#2FD0FF",
+    biologie="#86FF49",
     
-    skek="#BE10FF",
-    sk="#FF0021",
-    ek="#CE8F24",
+    sozialkunde_erdkunde="#BE10FF",
+    sozialkunde="#FF0021",
+    eerdunde="#CE8F24",
     
-    kr="#D70AFF",
-    et="#D70AFF",
-    er="#D70AFF",
+    katholische_religion="#D70AFF",
+    ethik="#D70AFF",
+    evangelische_religion="#D70AFF",
     
-    mu="#FFFB00",
-    ds="#48FFF7",
+    musik="#FFFB00",
+    darstellendes_spiel="#48FFF7",
     
-    spk="#39D8FF",
-    g="#FF6E37",
-    bk="#5645FF"
+    sport="#39D8FF",
+    geschichte="#FF6E37",
+    kunst="#5645FF"
 )

@@ -17,6 +17,7 @@ from apps.django.main.school_data.serializers import (
     RoomScoosoScraperSerializer, SubjectScoosoScraperSerializer,
     TeacherScoosoScraperSerializer,
 )
+from .homework import HomeworkRequest
 from .material import MaterialRequest
 from .parsers import PureTimetableParser, PureTimetableParserDataType
 from .parsers.material import MaterialType
@@ -199,10 +200,13 @@ class TimetableRequest(Request):
             participants: list["User"] = None,
     ) -> List[Lesson]:
         lessons = []
+        lessons_time_id_map = {}
         # Lessons
         for lesson_data in timetable['lessons']:
             lesson = self.import_lesson_from_scraper(lesson_data, participants)
             lessons.append(lesson)
+            
+            lessons_time_id_map[lesson_data['lesson']['time_id']] = lesson
         
         # Events
         for event in timetable['events']:
@@ -217,5 +221,17 @@ class TimetableRequest(Request):
             course = lesson_scooso.lesson.lesson_data.course
             
             self.import_modification_from_scraper(modification, course=course)
+        
+        # Homework
+        for homework_information in timetable['homeworks']:
+            try:
+                lesson = lessons_time_id_map[homework_information['time_id']]
+            except KeyError:
+                continue
+            else:
+                HomeworkRequest.import_homework_from_scraper(
+                    homework_information['homework'],
+                    lesson=lesson
+                )
         
         return lessons

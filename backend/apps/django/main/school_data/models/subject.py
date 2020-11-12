@@ -47,7 +47,9 @@ class Subject(RandomIDMixin, ColorMixin, LifecycleModel, HandlerMixin):
     @hook(BEFORE_CREATE)
     @hook(BEFORE_SAVE)
     def _hook_set_color(self):
-        self.color = self.color or constants.SUBJECT_COLORS_MAPPING[self.short_name]
+        name = self.name.replace(" ", "_").replace("-", "_")
+        
+        self.color = self.color or constants.SUBJECT_COLORS_MAPPING[name]
     
     @property
     def lessons_data(self) -> QueryType["Lesson"]:

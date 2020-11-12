@@ -23,6 +23,8 @@ LESSON_TYPES_MODIFICATION_TYPE_MAP = {
     1060: ModificationTypeOptions.SELF_LEARN,
 }
 
+TEACHER_HOMEWORK_KEY = 310
+
 
 class DefaultScoosoDataTypeMixin(TypedDict):
     code: Optional[str]
@@ -81,9 +83,12 @@ class EventType(TypedDict):
 
 
 class MaterialListDataType(TypedDict):
-    calendar_id: int
     time_id: int
     target_date: date
+
+
+class HomeworkListDataType(TypedDict):
+    due_date: datetime
 
 
 class SingleEventType(TypedDict):
@@ -102,6 +107,11 @@ class SingleMaterialDataType(TypedDict):
     subject: SubjectType
 
 
+class SingleHomeworkDataType(TypedDict):
+    homework: HomeworkListDataType
+    time_id: int
+
+
 class SingleModificationType(TypedDict):
     new_subject: SubjectType
     new_teacher: TeacherType
@@ -118,6 +128,7 @@ class PureTimetableParserDataType(TypedDict):
     events: List[SingleEventType]
     modifications: List[SingleModificationType]
     materials_data: List[SingleMaterialDataType]
+    homeworks: List[SingleHomeworkDataType]
 
 
 class PureTimetableParser(BaseParser):
@@ -250,18 +261,29 @@ class PureTimetableParser(BaseParser):
     
     @classmethod
     def get_material_data(cls, data: dict) -> Optional[dict]:
-        if (key := "materials") in data:
-            prop = next(iter(data[key]))
-            
+        if "materials" in data and \
+                (str(TEACHER_HOMEWORK_KEY) in data["materials"]
+                 or TEACHER_HOMEWORK_KEY in data["materials"]):
             return {
                 "material": {
                     "time_id": data["time_id"],
                     "target_date": data["start_time"].date(),
-                    "calendar_id": int(prop),
                 },
                 "subject": cls.extract_subject(data),
             }
-        return None
+        return
+    
+    @classmethod
+    def get_homework_data(cls, data: dict) -> Optional[dict]:
+        if value := data.get("homework_until"):
+            print(value)
+            return {
+                "homework": {
+                    "due_date": value,
+                },
+                "time_id": data["time_id"]
+            }
+        return
     
     @property
     def is_valid(self) -> bool:
@@ -288,6 +310,7 @@ class PureTimetableParser(BaseParser):
         events = []
         modifications = []
         materials = []
+        homeworks = []
         
         for thing in self.json["tables"]["schedule"]:
             if self.is_lesson(thing):
@@ -299,10 +322,14 @@ class PureTimetableParser(BaseParser):
             
             if data := self.get_material_data(thing):
                 materials.append(data)
+            
+            if data := self.get_homework_data(thing):
+                homeworks.append(data)
         
         return {
             "lessons": lessons,
             "events": events,
             "modifications": modifications,
-            "materials_data": materials
+            "materials_data": materials,
+            "homeworks": homeworks
         }

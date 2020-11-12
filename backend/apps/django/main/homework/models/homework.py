@@ -54,7 +54,7 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
         null=True,
     )  # type: User
     
-    due_date = models.DateField(
+    due_date = models.DateTimeField(
         verbose_name=_("Fälligkeitsdatum"),
         blank=True,
         null=True,

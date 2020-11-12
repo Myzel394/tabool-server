@@ -1,9 +1,16 @@
 from datetime import datetime
+from typing import *
 
+from apps.django.main.homework.models import Homework
+from apps.django.main.homework.sub.subserializers import HomeworkScoosoScraperSerializer
 from .parsers import PureLessonContentParser, PureLessonContentParserDataType
+from .parsers.timetable import HomeworkListDataType
 from .request import Request
 from .. import constants
-from ..utils import build_url
+from ..utils import build_url, import_from_scraper
+
+if TYPE_CHECKING:
+    from apps.django.main.lesson.models import Lesson
 
 __all__ = [
     "HomeworkRequest"
@@ -39,3 +46,10 @@ class HomeworkRequest(Request):
                 "method": constants.LESSON_CONTENT_CONNECTION["method"]
             },
         )
+    
+    @staticmethod
+    def import_homework_from_scraper(
+            data: HomeworkListDataType,
+            lesson: "Lesson"
+    ) -> Homework:
+        return import_from_scraper(HomeworkScoosoScraperSerializer, data, lesson=lesson)
