@@ -7,13 +7,13 @@ from pathlib import Path
 
 import lorem
 
+from apps.django.main.homework.models import Homework
 from apps.django.main.lesson.mixins.tests import *
 from apps.django.main.lesson.models import LessonData
 from apps.django.main.school_data.models import Subject, TeacherScoosoData
 from apps.django.utils.tests import *
 from ...actions import import_teachers
 from ...mixins.tests import *
-from ...scrapers.homework import HomeworkRequest
 from ...scrapers.material import MaterialRequest, MaterialTypeOptions
 from ...scrapers.parsers import PureTimetableParser
 from ...scrapers.timetable import TimetableRequest
@@ -110,26 +110,14 @@ class SomeTests(LessonUploadTestMixin, UtilsTestMixin):
     
     def test_timetable(self):
         with TimetableRequest(self.username, self.password) as scraper:
-            data = scraper.get_timetable(datetime(2020, 11, 9))
+            data = scraper.get_timetable(datetime(2020, 11, 9), datetime(2020, 11, 13))
             
-            lesson_with_materials_scooso_ids = [
-                homework['time_id']
-                for homework in data['homeworks']
-            ]
-            lesson_with_materials = [
-                lesson
-                for lesson in data['lessons']
-                if lesson['lesson']['time_id'] in lesson_with_materials_scooso_ids
-            ]
+            lessons = scraper.import_timetable_from_scraper(data)
             
-            for lesson in lesson_with_materials:
-                lesson_instance = scraper.import_lesson_from_scraper(lesson)
-                time_id = lesson['lesson']['time_id']
-                targeted_datetime = datetime.combine(lesson['lesson']['date'], lesson['lesson']['start_time'])
-        
-        with HomeworkRequest(self.username, self.password) as scraper:
-            data = scraper.get_homework(time_id=time_id, targeted_datetime=targeted_datetime)
-            homework = scraper.import_homework_from_scraper(data['homework'], lesson=lesson_instance)
+            print(data['homeworks'])
+            print(Homework.objects.all().count())
+            
+            self.assertEqual(len(data['homeworks']), Homework.objects.all().count())
 
 
 class ForeignSerializerTest(CourseTestMixin):

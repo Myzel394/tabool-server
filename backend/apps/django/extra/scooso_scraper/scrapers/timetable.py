@@ -17,7 +17,7 @@ from apps.django.main.school_data.serializers import (
     RoomScoosoScraperSerializer, SubjectScoosoScraperSerializer,
     TeacherScoosoScraperSerializer,
 )
-from .homework import HomeworkRequest
+from .homework import LessonContentRequest
 from .material import MaterialRequest
 from .parsers import PureTimetableParser, PureTimetableParserDataType
 from .parsers.material import MaterialType
@@ -229,9 +229,12 @@ class TimetableRequest(Request):
             except KeyError:
                 continue
             else:
-                HomeworkRequest.import_homework_from_scraper(
-                    homework_information['homework'],
-                    lesson=lesson
-                )
+                with LessonContentRequest(self.username, self.password) as scraper:
+                    homework_data = scraper.get_homework(
+                        homework_information['time_id'],
+                        datetime.combine(lesson.date, lesson.lesson_data.start_time)
+                    )
+                
+                scraper.import_homework_from_scraper(homework_data['homework'], lesson)
         
         return lessons

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.django.extra.scooso_scraper.utils import rename_name_for_color_mapping
 from apps.django.main.school_data.constants import SUBJECT_COLORS_MAPPING, SUBJECT_NAMES_MAPPING
 from apps.django.utils.serializers import ScoosoScraperSerializerMixin
 from ....models import Subject, SubjectScoosoData
@@ -24,12 +25,13 @@ class SubjectScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     
     def rename_data(self, validated_data: dict) -> dict:
         code = validated_data.pop("code")
-        name = SUBJECT_NAMES_MAPPING[code]
+        name = str(SUBJECT_NAMES_MAPPING[code])
+        colors_mapping_name = rename_name_for_color_mapping(name)
         
         return {
             "short_name": code,
             "name": name,
-            "color": SUBJECT_COLORS_MAPPING[name],
+            "color": SUBJECT_COLORS_MAPPING[colors_mapping_name],
             **validated_data
         }
     

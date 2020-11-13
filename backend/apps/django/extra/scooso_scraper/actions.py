@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from typing import *
 
 from apps.django.main.school_data.models import Teacher
@@ -34,7 +34,7 @@ def import_teachers() -> list[Teacher]:
 
 
 def fetch_timetable(user: "User", start_date: date = None, end_date: date = None) -> None:
-    start_date = start_date or find_next_date_by_weekday(date.today(), weekday=0)
+    start_date = start_date or find_next_date_by_weekday(date.today() - timedelta(days=6), weekday=0)
     end_date = end_date or find_next_date_by_weekday(start_date, weekday=4)
     
     scooso_data: "ScoosoData" = user.scoosodata

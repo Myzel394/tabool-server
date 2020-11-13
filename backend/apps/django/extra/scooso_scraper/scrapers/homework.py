@@ -4,7 +4,7 @@ from typing import *
 from apps.django.main.homework.models import Homework
 from apps.django.main.homework.sub.subserializers import HomeworkScoosoScraperSerializer
 from .parsers import PureLessonContentParser, PureLessonContentParserDataType
-from .parsers.timetable import HomeworkListDataType
+from .parsers.lesson_content import HomeworkType
 from .request import Request
 from .. import constants
 from ..utils import build_url, import_from_scraper
@@ -13,11 +13,11 @@ if TYPE_CHECKING:
     from apps.django.main.lesson.models import Lesson
 
 __all__ = [
-    "HomeworkRequest"
+    "LessonContentRequest"
 ]
 
 
-class HomeworkRequest(Request):
+class LessonContentRequest(Request):
     def build_get_homework_url(
             self,
             time_id: int,
@@ -49,7 +49,7 @@ class HomeworkRequest(Request):
     
     @staticmethod
     def import_homework_from_scraper(
-            data: HomeworkListDataType,
+            data: HomeworkType,
             lesson: "Lesson"
     ) -> Homework:
         return import_from_scraper(HomeworkScoosoScraperSerializer, data, lesson=lesson)

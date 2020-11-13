@@ -8,6 +8,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_SAVE, hook, LifecycleModel
 
+from apps.django.extra.scooso_scraper.utils import rename_name_for_color_mapping
 from apps.django.utils.models import ColorMixin
 from constants import maxlength
 from .. import constants
@@ -47,9 +48,9 @@ class Subject(RandomIDMixin, ColorMixin, LifecycleModel, HandlerMixin):
     @hook(BEFORE_CREATE)
     @hook(BEFORE_SAVE)
     def _hook_set_color(self):
-        name = self.name.replace(" ", "_").replace("-", "_")
-        
-        self.color = self.color or constants.SUBJECT_COLORS_MAPPING[name]
+        if not self.color:
+            colors_mapping_name = rename_name_for_color_mapping(self.name)
+            self.color = constants.SUBJECT_COLORS_MAPPING[colors_mapping_name]
     
     @property
     def lessons_data(self) -> QueryType["Lesson"]:

@@ -1,4 +1,5 @@
 import os
+import re
 import string
 import unicodedata
 from typing import *
@@ -8,7 +9,8 @@ from requests.utils import default_headers
 from rest_framework import serializers
 
 __all__ = [
-    "build_url", "get_headers", "get_safe_filename", "get_mime_from_extension", "import_from_scraper"
+    "build_url", "get_headers", "get_safe_filename", "get_mime_from_extension", "import_from_scraper",
+    "rename_name_for_color_mapping"
 ]
 
 from rest_framework.exceptions import ValidationError
@@ -143,3 +145,10 @@ def import_from_scraper(
             return None
         raise exception
     return serializer.save(**kwargs)
+
+
+COlOR_MAPPING_RENAME_REGEX = re.compile(r"[ -]")
+
+
+def rename_name_for_color_mapping(name: str) -> str:
+    return COlOR_MAPPING_RENAME_REGEX.sub("_", name)

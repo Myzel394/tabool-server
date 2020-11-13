@@ -34,7 +34,7 @@ def yield_lessons_with_materials(
 
 
 def fetch_timetable(user: "User") -> None:
-    next_monday = find_next_date_by_weekday(date.today(), weekday=0)
+    next_monday = find_next_date_by_weekday(date.today() - timedelta(days=6), weekday=0)
     scooso_data: "ScoosoData" = user.scoosodata
     
     login_data = {

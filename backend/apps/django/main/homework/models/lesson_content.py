@@ -19,7 +19,6 @@ from apps.django.utils.validators import validate_weekday_in_lesson_data_availab
 from .user_relations.homework import UserHomeworkRelation
 from ..public import HOMEWORK_CHANNEL, model_names
 from ..querysets import HomeworkQuerySet
-from ..validators import validate_only_future_days
 
 if TYPE_CHECKING:
     from datetime import date, datetime
@@ -58,7 +57,7 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
         verbose_name=_("Fälligkeitsdatum"),
         blank=True,
         null=True,
-        validators=[validate_only_future_days, validate_weekday_in_lesson_data_available]
+        validators=[validate_weekday_in_lesson_data_available]
     )  # type: date
     
     information = models.TextField(
