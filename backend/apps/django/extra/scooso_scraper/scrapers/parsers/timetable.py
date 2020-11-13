@@ -276,7 +276,6 @@ class PureTimetableParser(BaseParser):
     @classmethod
     def get_homework_data(cls, data: dict) -> Optional[dict]:
         if value := data.get("homework_until"):
-            print(value)
             return {
                 "homework": {
                     "due_date": value,

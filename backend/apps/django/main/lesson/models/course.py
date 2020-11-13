@@ -70,11 +70,17 @@ class Course(RandomIDMixin, LifecycleModel):
     
     @property
     def folder_name(self) -> str:
+        prefix: str
+        
         if class_number := self.get_class_number():
-            return f"{class_number}/{self.name}"
-        return f"unknown/{self.name}"
+            prefix = str(class_number)
+        else:
+            prefix = "unknown_class_number"
+        
+        return f"{prefix}/{self.name}/{self.id}"
     
     def get_class_number(self) -> Optional[int]:
+        # Get a class number from a student
         for participant in self.participants.all():
             if student := getattr(participant, "student", None):  # type: Student
                 return student.class_number

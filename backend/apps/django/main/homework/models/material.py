@@ -101,4 +101,4 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     
     @property
     def folder_name(self) -> str:
-        return f"{self.lesson.lesson_data.course.folder_name}/{self.id}"
+        return f"{self.lesson.lesson_data.course.folder_name}"

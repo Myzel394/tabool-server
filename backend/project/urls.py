@@ -1,5 +1,4 @@
 import private_storage.urls
-from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path
 
@@ -52,8 +51,6 @@ urlpatterns = [
     
     path("", include("apps.django.core.urls")),
     path("admin/", admin.site.urls),
-    
-    url(r'', include('user_sessions.urls', 'user_sessions')),
 ]
 
 urlpatterns += data_patterns

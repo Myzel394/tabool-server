@@ -44,7 +44,7 @@ def build_path(
     
     path = build_str("", access_folder, "/") \
            + build_str("", prefix, "/") \
-           + "/".join(str(x) for x in [now.year, now.month, now.day, now.hour]) \
+           + "/".join(str(x) for x in [now.year, now.month, now.day]) \
            + build_str("", suffix, "/") + filename
     
     return path

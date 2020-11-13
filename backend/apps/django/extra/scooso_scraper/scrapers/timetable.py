@@ -187,7 +187,7 @@ class TimetableRequest(Request):
                 settings.MEDIA_ROOT / build_material_upload_to(material_instance, material['filename'])
             )
             
-            material_instance.file = str(path)
+            material_instance.file = str(path.relative_to(settings.MEDIA_ROOT))
             material_instance.save()
             
             materials_list.append(material_instance)

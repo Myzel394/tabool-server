@@ -15,6 +15,7 @@ __all__ = [
 class CourseAdmin(DefaultAdminMixin):
     fieldset_fields = {
         "default": ["participants", "subject", "teacher", "course_number", "!..."],
+        "created": ["id", "!..."]
     }
     list_display = ["__str__", "subject", "teacher", "class_number", "participants_count"]
     list_filter = ["subject", "teacher"]

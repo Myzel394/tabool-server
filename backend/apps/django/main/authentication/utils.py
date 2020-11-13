@@ -3,9 +3,6 @@ from typing import *
 
 from . import constants
 
-if TYPE_CHECKING:
-    pass
-
 __all__ = [
     "get_school_starts_date_for_year"
 ]
