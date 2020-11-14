@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import *
 
 from apps.django.main.homework.models import Homework
-from apps.django.main.homework.sub.subserializers import HomeworkScoosoScraperSerializer
+from apps.django.main.homework.sub.subserializers.scooso_scrapers.homework import HomeworkScoosoScraperSerializer
 from .parsers import PureLessonContentParser, PureLessonContentParserDataType
 from .parsers.lesson_content import HomeworkType
 from .request import Request

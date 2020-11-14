@@ -1,4 +1,4 @@
-from apps.django.main.event.sub.subserializers import EventDetailSerializer
+from apps.django.main.event.sub.subserializers.event import EventDetailSerializer
 from apps.django.utils.serializers import serializer_no_readonly_fields_factory
 
 __all__ = [

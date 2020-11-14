@@ -1,6 +1,6 @@
 from apps.django.main.event.mixins.tests import *
 from apps.django.main.event.models import *
-from apps.django.main.event.sub.subserializers import *
+from apps.django.main.event.sub.subserializers.event import EventListSerializer
 from apps.django.utils.tests import *
 
 

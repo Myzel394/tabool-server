@@ -13,13 +13,17 @@ __all__ = [
 ]
 
 
+def create_user_relations(user: "User"):
+    update_user_relations(user)
+    
+    user.is_being_setup = False
+    user.save()
+
+
 def update_user_relations(user: "User"):
     for manager_classes in related_managers.values():
         for manager_class in manager_classes:
             manager_class.create_relations_with_given_user(user)
-    
-    user.is_being_setup = False
-    user.save()
 
 
 def update_related_managers_relations(instance, **kwargs):
@@ -36,7 +40,7 @@ def post_save_manager(instance, **kwargs):
 
 def post_save_user_manager(instance, created: bool, *args, **kwargs):
     if created:
-        run_in_thread(update_user_relations, args=(instance,))
+        run_in_thread(create_user_relations, args=(instance,))
 
 
 def post_save_related_manager(instance, sender: Type[Model], created: bool, **kwargs):

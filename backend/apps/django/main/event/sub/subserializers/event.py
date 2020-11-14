@@ -1,4 +1,4 @@
-from apps.django.main.school_data.public.serializer_fields import RoomField
+from apps.django.main.school_data.public.serializer_fields.room import RoomField
 from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField
 from .user_relations import UserEventRelationSerializer
 from ...models import Event
@@ -28,4 +28,4 @@ class EventDetailSerializer(RandomIDSerializerMixin):
     
     user_relation = UserRelationField(UserEventRelationSerializer)
     
-    room = RoomField(required=False)
+    room = RoomField(required=False, detail=True)

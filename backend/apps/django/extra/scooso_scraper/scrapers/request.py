@@ -18,6 +18,7 @@ class Request:
     username: str
     password: str
     session: Optional[str] = None
+    second_session_data: Optional[str] = None
     
     def __post_init__(self):
         self.client = TorRequest()
@@ -60,6 +61,7 @@ class Request:
                 raise LoginFailed()
         
         self.session = parser.data["session"]
+        self.second_session_data = parser.data["second_session_data"]
         
         return parser.data
     
@@ -77,7 +79,7 @@ class Request:
                 data = get_data()
                 url = data.pop("url")
                 
-                """ Debugging
+                """
                 request = requests.Request(url=url, **data)
                 prepared = request.prepare()
                 print_request(prepared)"""
@@ -102,5 +104,6 @@ class Request:
         return {
             "logSessionId": self.session,
             "client": "rwg",
-            "sc_version": 6,
+            "logUserIe": self.second_session_data,
+            "username": self.username
         }

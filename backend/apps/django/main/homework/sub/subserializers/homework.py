@@ -1,7 +1,7 @@
 from django_common_utils.libraries.utils.text import create_short
 from rest_framework import serializers
 
-from apps.django.main.lesson.public.serializer_fields import LessonField
+from apps.django.main.lesson.public.serializer_fields.lesson import LessonField
 from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField, WritableSerializerMethodField
 from .user_relations import UserHomeworkRelationSerializer
 from ...models import Homework
@@ -23,7 +23,7 @@ class HomeworkListSerializer(RandomIDSerializerMixin):
     truncated_information = serializers.SerializerMethodField()
     
     def get_truncated_information(self, instance: Homework) -> str:
-        return create_short(instance.information)
+        return create_short(instance.information) if instance.information else None
 
 
 class HomeworkDetailSerializer(RandomIDSerializerMixin):
@@ -40,7 +40,7 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin):
         deserializer_field=serializers.BooleanField()
     )
     
-    lesson = LessonField()
+    lesson = LessonField(detail=True)
     
     user_relation = UserRelationField(UserHomeworkRelationSerializer)
     

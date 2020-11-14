@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from apps.django.extra.scooso_scraper.scrapers.request import LoginFailed, Request
-from apps.django.main.school_data.public.serializer_fields import TeacherField
+from apps.django.main.school_data.public.serializer_fields.teacher import TeacherField
 from ...models import ScoosoData, Student
 
 if TYPE_CHECKING:

@@ -3,7 +3,9 @@ from typing import *
 from django_common_utils.libraries.utils.text import create_short
 from rest_framework import serializers
 
-from apps.django.main.school_data.public.serializer_fields import RoomField, SubjectField, TeacherField
+from apps.django.main.school_data.public.serializer_fields.room import RoomField
+from apps.django.main.school_data.public.serializer_fields.subject import SubjectField
+from apps.django.main.school_data.public.serializer_fields.teacher import TeacherField
 from apps.django.utils.serializers import RandomIDSerializerMixin
 from ...models import Modification
 
@@ -33,6 +35,6 @@ class ModificationDetailSerializer(RandomIDSerializerMixin):
             "modification_type", "id"
         ]
     
-    new_subject = SubjectField(required=False)
-    new_teacher = TeacherField(required=False)
-    new_room = RoomField(required=False)
+    new_subject = SubjectField(required=False, detail=True)
+    new_teacher = TeacherField(required=False, detail=True)
+    new_room = RoomField(required=False, detail=True)

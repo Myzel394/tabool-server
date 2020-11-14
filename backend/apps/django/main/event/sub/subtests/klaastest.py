@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 
 from apps.django.main.event.mixins.tests import *
-from apps.django.main.event.sub.subserializers import *
+from apps.django.main.event.sub.subserializers.classtest import ClasstestListSerializer
 from apps.django.main.lesson.mixins.tests import *
 from apps.django.utils.tests import *
 from apps.utils.dates import find_next_date_by_weekday

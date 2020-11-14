@@ -2,7 +2,7 @@ from rest_framework import views
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.django.main.authentication.sub.subserializers import PasswordChangerSerializer
+from apps.django.main.authentication.serializers import PasswordChangerSerializer
 
 __all__ = [
     "PasswordChangeView"

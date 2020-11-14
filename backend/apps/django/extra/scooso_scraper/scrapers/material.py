@@ -3,6 +3,7 @@ from datetime import date
 from enum import Enum
 from pathlib import Path
 
+from future.backports.datetime import datetime
 from magic import Magic
 from secure_file_detection import detector
 from secure_file_detection.exceptions import *
@@ -168,7 +169,7 @@ class MaterialRequest(Request):
     def upload_material(
             self,
             time_id: int,
-            targeted_date: date,
+            targeted_datetime: datetime,
             filename: str,
             data: str,
             material_type: MaterialTypeOptions = MaterialTypeOptions.HOMEWORK,
@@ -177,7 +178,7 @@ class MaterialRequest(Request):
         mimetype_from_extension = get_mime_from_extension(filename)
         
         def get_data():
-            targeted_date_str = targeted_date.strftime(constants.MATERIAL_UPLOAD_CONNECTION["dt_format"])
+            targeted_date_str = targeted_datetime.strftime(constants.MATERIAL_UPLOAD_CONNECTION["dt_format"])
             form_data = {
                 "cmd": 3000,
                 "subcmd": 10,

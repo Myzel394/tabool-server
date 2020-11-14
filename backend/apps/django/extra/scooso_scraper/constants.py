@@ -25,7 +25,7 @@ MATERIAL_DOWNLOAD_CONNECTION = {
 MATERIAL_UPLOAD_CONNECTION = {
     "url": DEFAULT_QUERY_URL,
     "method": "POST",
-    "dt_format": "%Y-%m-%d 00:00:00"
+    "dt_format": "%Y-%m-%d %H:%M:%S"
 }
 
 MATERIAL_DELETE_CONNECTION = {

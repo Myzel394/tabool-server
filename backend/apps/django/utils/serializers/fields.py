@@ -71,6 +71,7 @@ class WritableIDField(serializers.Field):
     default_error_messages = {
         "object_not_found": _("Das Objekt wurde nicht gefunden")
     }
+    detail_serializer: Optional[Type[serializers.Serializer]] = None
     
     @staticmethod
     def default_get_qs(key, request: RequestType, instance):
@@ -81,6 +82,7 @@ class WritableIDField(serializers.Field):
             get_object: Optional[Callable] = None,
             lookup_field: str = "id",
             many: bool = False,
+            detail: bool = False,
             *args,
             **kwargs
     ):
@@ -88,9 +90,16 @@ class WritableIDField(serializers.Field):
         self.get_object = get_object or self.default_get_qs
         self.lookup_field = lookup_field
         self.many = many
+        self.detail = detail
     
     def to_representation(self, value):
-        return getattr(value, self.lookup_field)
+        if not self.detail:
+            return getattr(value, self.lookup_field)
+        
+        assert hasattr(self, "detail_serializer") and self.detail_serializer is not None, \
+            f"No `detail_serializer` found on {self.__class__.__name__}."
+        
+        return self.detail_serializer(value, context=self.context).data
     
     def to_internal_value(self, data):
         if data is not empty:

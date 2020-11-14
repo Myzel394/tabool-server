@@ -67,6 +67,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin, DummyUs
         }, content_type="application/json")
         
         # Check
+        user.refresh_from_db()
         user.scoosodata.fetch_user_data()
         user.refresh_from_db()
         self.assertStatusOk(response.status_code)

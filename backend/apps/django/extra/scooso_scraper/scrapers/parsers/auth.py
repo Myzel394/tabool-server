@@ -18,7 +18,8 @@ class LoginParser(BaseParser):
             "id": data["id"],
             "first_name": data["prename"],
             "last_name": data["name"],
-            "session": auth_data["logSessionId"][0]
+            "session": auth_data["logSessionId"][0],
+            "second_session_data": auth_data["logUserIe"]
         }
     
     @property

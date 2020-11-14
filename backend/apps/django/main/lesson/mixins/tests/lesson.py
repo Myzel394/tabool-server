@@ -94,7 +94,7 @@ class LessonUploadTestMixin(LessonTestMixin, DummyUser):
         self.load_dummy_user()
         
         self.time_id = int(os.getenv("LESSON_ID"))
-        self.target_date = datetime.strptime(os.getenv("DATE"), "%Y.%m.%d").date()
+        self.target_date = datetime.strptime(os.getenv("DATE"), "%Y.%m.%d.%H.%M.%S")
         
         self.lesson = self.Create_lesson(
             date=self.target_date

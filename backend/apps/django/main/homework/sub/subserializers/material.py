@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from apps.django.main.lesson.public.serializer_fields import LessonField
+from apps.django.main.lesson.public.serializer_fields.lesson import LessonField
 from apps.django.utils.serializers import RandomIDSerializerMixin
 from ...models import Material
 
