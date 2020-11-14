@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from apps.django.main.authentication.models import User, ScoosoData
 
 __all__ = [
-    "fetch_timetable"
+    "fetch_timetable", "yield_lessons_with_materials"
 ]
 
 

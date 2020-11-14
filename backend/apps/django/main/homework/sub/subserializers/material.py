@@ -14,7 +14,7 @@ class MaterialListSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Material
         fields = [
-            "name", "added_at", "id"
+            "lesson", "name", "added_at", "id"
         ]
 
 
@@ -22,7 +22,7 @@ class MaterialDetailSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Material
         fields = [
-            "file", "name", "added_at", "scooso_download_link", "id"
+            "file", "name", "added_at", "scooso_download_link", "lesson", "id"
         ]
     
     scooso_download_link = serializers.SerializerMethodField()

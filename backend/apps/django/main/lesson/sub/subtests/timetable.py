@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 from pprint import pp
 
-from apps.django.extra.scooso_scraper.actions import fetch_timetable_debugging
+from apps.django.extra.scooso_scraper.actions import fetch_timetable
 from apps.django.main.event.mixins.tests import ModificationTestMixin
 from apps.django.main.lesson.mixins.tests import LessonTestMixin
 from apps.django.main.lesson.models import Lesson
@@ -19,7 +19,7 @@ class TimetableAPITest(LessonTestMixin, ModificationTestMixin, ClientTestMixin, 
         end_datetime = datetime.strptime(os.getenv("DATA_END_DATE"), os.getenv("DATE_FORMAT"))
         
         print("Fetching & importing timetable")
-        fetch_timetable_debugging(self.__class__.associated_user, start_datetime, end_datetime)
+        fetch_timetable(self.__class__.associated_user, start_datetime, end_datetime)
         print("Done")
     
     def get_start_datetime(self) -> datetime:
