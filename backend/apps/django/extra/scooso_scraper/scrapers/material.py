@@ -1,4 +1,5 @@
 import mimetypes
+import random
 from datetime import date
 from enum import Enum
 from pathlib import Path
@@ -186,6 +187,7 @@ class MaterialRequest(Request):
                 "destType": 10030,
                 "destId": time_id,
                 "parDate": targeted_date_str,
+                "_": random.randint(0, 100_000_000),
                 **self.login_data
             }
             return {

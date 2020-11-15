@@ -105,5 +105,6 @@ class Request:
             "logSessionId": self.session,
             "client": "rwg",
             "logUserIe": self.second_session_data,
-            "username": self.username
+            "username": self.username,
+            "institution": "rwg"
         }
