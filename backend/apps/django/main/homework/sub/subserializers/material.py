@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from apps.django.main.lesson.public.serializer_fields.lesson import LessonField
-from apps.django.utils.serializers import RandomIDSerializerMixin
+from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin
 from ...models import Material
 
 __all__ = [
@@ -10,7 +10,9 @@ __all__ = [
 ]
 
 
-class MaterialListSerializer(RandomIDSerializerMixin):
+class MaterialListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "material"
+    
     class Meta:
         model = Material
         fields = [
@@ -18,7 +20,9 @@ class MaterialListSerializer(RandomIDSerializerMixin):
         ]
 
 
-class MaterialDetailSerializer(RandomIDSerializerMixin):
+class MaterialDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "material"
+    
     class Meta:
         model = Material
         fields = [

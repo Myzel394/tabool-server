@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from apps.django.main.school_data.public.serializer_fields.subject import SubjectField
 from apps.django.main.school_data.public.serializer_fields.teacher import TeacherField
-from apps.django.utils.serializers import RandomIDSerializerMixin
+from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin
 from ...models import Course
 
 __all__ = [
@@ -10,7 +10,9 @@ __all__ = [
 ]
 
 
-class CourseDetailSerializer(RandomIDSerializerMixin):
+class CourseDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "course"
+    
     class Meta:
         model = Course
         fields = [

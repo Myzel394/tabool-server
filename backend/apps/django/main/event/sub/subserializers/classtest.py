@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from apps.django.main.lesson.public.serializer_fields.course import CourseField
 from apps.django.main.school_data.public.serializer_fields.room import RoomField
-from apps.django.utils.serializers import RandomIDSerializerMixin
+from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin
 from ...models import Classtest
 
 __all__ = [
@@ -13,7 +13,9 @@ __all__ = [
 ]
 
 
-class ClasstestListSerializer(RandomIDSerializerMixin):
+class ClasstestListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "classtest"
+    
     class Meta:
         model = Classtest
         fields = [
@@ -28,7 +30,9 @@ class ClasstestListSerializer(RandomIDSerializerMixin):
         return create_short(instance.information) if instance.information else None
 
 
-class ClasstestDetailSerializer(RandomIDSerializerMixin):
+class ClasstestDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "classtest"
+    
     class Meta:
         model = Classtest
         fields = [

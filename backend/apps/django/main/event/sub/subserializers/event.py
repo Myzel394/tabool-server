@@ -1,5 +1,5 @@
 from apps.django.main.school_data.public.serializer_fields.room import RoomField
-from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField
+from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin, UserRelationField
 from .user_relations import UserEventRelationSerializer
 from ...models import Event
 
@@ -8,7 +8,9 @@ __all__ = [
 ]
 
 
-class EventListSerializer(RandomIDSerializerMixin):
+class EventListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "event"
+    
     class Meta:
         model = Event
         fields = [
@@ -16,7 +18,9 @@ class EventListSerializer(RandomIDSerializerMixin):
         ]
 
 
-class EventDetailSerializer(RandomIDSerializerMixin):
+class EventDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "event"
+    
     class Meta:
         model = Event
         fields = [

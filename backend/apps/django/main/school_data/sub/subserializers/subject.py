@@ -1,4 +1,4 @@
-from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField
+from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin, UserRelationField
 from .user_relations import UserSubjectRelationSerializer
 from ...models import Subject
 
@@ -7,7 +7,9 @@ __all__ = [
 ]
 
 
-class SubjectDetailSerializer(RandomIDSerializerMixin):
+class SubjectDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "subject"
+    
     class Meta:
         model = Subject
         fields = [

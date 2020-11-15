@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from apps.django.main.lesson.public.serializer_fields.lesson import LessonField
 from apps.django.utils.serializers import (
-    AssociatedUserSerializerMixin, PrivatizeSerializerMixin,
+    AssociatedUserSerializerMixin, PreferredIdsMixin, PrivatizeSerializerMixin,
     RandomIDSerializerMixin,
 )
 from ...models import Submission
@@ -22,7 +22,9 @@ class FilenameMixin(serializers.Serializer):
         return Path(instance.file.path).name
 
 
-class SubmissionListSerializer(RandomIDSerializerMixin, FilenameMixin):
+class SubmissionListSerializer(RandomIDSerializerMixin, FilenameMixin, PreferredIdsMixin):
+    preferred_id_key = "submission"
+    
     class Meta:
         model = Submission
         fields = [
@@ -37,7 +39,10 @@ class SubmissionDetailSerializer(
     AssociatedUserSerializerMixin,
     RandomIDSerializerMixin,
     FilenameMixin,
+    PreferredIdsMixin
 ):
+    preferred_id_key = "submission"
+    
     class Meta:
         model = Submission
         fields = [

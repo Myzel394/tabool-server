@@ -1,4 +1,4 @@
-from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField
+from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin, UserRelationField
 from .lesson_data import LessonDataDetailSerializer, LessonDataListSerializer
 from .user_relations import UserLessonRelationSerializer
 from ...models import Lesson
@@ -8,7 +8,9 @@ __all__ = [
 ]
 
 
-class LessonListSerializer(RandomIDSerializerMixin):
+class LessonListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "lesson"
+    
     class Meta:
         model = Lesson
         fields = [
@@ -18,7 +20,9 @@ class LessonListSerializer(RandomIDSerializerMixin):
     lesson_data = LessonDataListSerializer()
 
 
-class LessonDetailSerializer(RandomIDSerializerMixin):
+class LessonDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "lesson"
+    
     class Meta:
         model = Lesson
         fields = [

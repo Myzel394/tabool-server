@@ -2,7 +2,10 @@ from django_common_utils.libraries.utils.text import create_short
 from rest_framework import serializers
 
 from apps.django.main.lesson.public.serializer_fields.lesson import LessonField
-from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField, WritableSerializerMethodField
+from apps.django.utils.serializers import (
+    PreferredIdsMixin, RandomIDSerializerMixin, UserRelationField,
+    WritableSerializerMethodField,
+)
 from .user_relations import UserHomeworkRelationSerializer
 from ...models import Homework
 
@@ -11,7 +14,9 @@ __all__ = [
 ]
 
 
-class HomeworkListSerializer(RandomIDSerializerMixin):
+class HomeworkListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "homework"
+    
     class Meta:
         model = Homework
         fields = [
@@ -26,7 +31,9 @@ class HomeworkListSerializer(RandomIDSerializerMixin):
         return create_short(instance.information) if instance.information else None
 
 
-class HomeworkDetailSerializer(RandomIDSerializerMixin):
+class HomeworkDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "homework"
+    
     class Meta:
         model = Homework
         fields = [

@@ -93,11 +93,11 @@ class WritableIDField(serializers.Field):
         self.detail = detail
     
     def to_representation(self, value):
-        if not self.detail:
-            return getattr(value, self.lookup_field)
-        
         assert hasattr(self, "detail_serializer") and self.detail_serializer is not None, \
             f"No `detail_serializer` found on {self.__class__.__name__}."
+        
+        if not self.detail:
+            return getattr(value, self.lookup_field)
         
         return self.detail_serializer(value, context=self.context).data
     

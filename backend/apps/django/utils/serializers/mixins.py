@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from simple_history.models import ModelChange, ModelDelta
 
+from apps.django.utils import constants as utils_constants
 from apps.django.utils.serializers import HistoryUserField
 from apps.utils.files import privatize_file
 from apps.utils.texts import camel_to_snake
@@ -12,7 +13,7 @@ from apps.utils.texts import camel_to_snake
 __all__ = [
     "RandomIDSerializerMixin", "AssociatedUserSerializerMixin", "ScoosoScraperSerializerMixin",
     "PrivatizeSerializerMixin", "GetOrCreateSerializerMixin", "ModelHistoryListSerializerMixin",
-    "ModelHistoryDetailSerializerMixin"
+    "ModelHistoryDetailSerializerMixin", "PreferredIdsMixin"
 ]
 
 
@@ -162,3 +163,22 @@ class ModelHistoryDetailSerializerMixin(serializers.ModelSerializer):
             change.field: change.new
             for change in changes
         }
+
+
+class PreferredIdsMixin(serializers.ModelSerializer):
+    preferred_id_key: str
+    
+    def is_preferring_id(self):
+        assert "request" in self.context, "`request` missing in `context`."
+        
+        request = self.context["request"]
+        
+        if value := request.META.get(utils_constants.PREFERRED_IDS_HEADER_NAME):
+            return self.instance.id in value.get(self.preferred_id_key, [])
+        return False
+    
+    @property
+    def data(self) -> Union[OrderedDict, str]:
+        if self.is_preferring_id():
+            return self.instance.id
+        return super().data

@@ -1,4 +1,4 @@
-from apps.django.utils.serializers import RandomIDSerializerMixin
+from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin
 from ...models import Teacher
 
 __all__ = [
@@ -6,13 +6,17 @@ __all__ = [
 ]
 
 
-class TeacherListSerializer(RandomIDSerializerMixin):
+class TeacherListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "teacher"
+    
     class Meta:
         model = Teacher
         fields = ["short_name", "last_name", "id"]
 
 
-class TeacherDetailSerializer(RandomIDSerializerMixin):
+class TeacherDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "teacher"
+    
     class Meta:
         model = Teacher
         fields = [
