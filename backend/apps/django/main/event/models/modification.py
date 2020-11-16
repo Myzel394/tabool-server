@@ -15,7 +15,6 @@ from ..public import model_names, MODIFICATION_CHANNEL
 from ..querysets import ModificationQuerySet
 
 if TYPE_CHECKING:
-    from datetime import datetime
     from apps.django.main.school_data.models import Room, Subject, Teacher
     from apps.django.main.lesson.models import Lesson
 
@@ -76,19 +75,15 @@ class Modification(RandomIDMixin, LifecycleModel):
     )  # type: int
     
     def __str__(self):
-        return _("{course} vom {start_datetime} bis {end_datetime}").format(
-            course=self.course,
-            start_datetime=self.start_datetime,
-            end_datetime=self.end_datetime
-        )
+        return self.lesson
     
     @hook(AFTER_CREATE)
     @hook(AFTER_DELETE)
     @hook(
         AFTER_UPDATE,
-        when_any=["new_room", "new_teacher", "new_subject", "start_datetime", "end_datetime", "information"]
+        when_any=["new_room", "new_teacher", "new_subject", "information", "modification_type", ""]
     )
     def _hook_send_modification_changed_event(self):
         send_event(MODIFICATION_CHANNEL, "modification", {
-            "course_id": self.course_id
+            "lesson_id": self.lesson_id
         })

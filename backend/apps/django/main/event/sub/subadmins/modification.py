@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 from django_common_utils.libraries.utils import model_verbose
 
-from apps.django.utils.admins import build_date
 from ...models import Modification
 
 __all__ = [
@@ -14,11 +13,10 @@ __all__ = [
 @admin.register(Modification)
 class ModificationAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["course", "new_room", "new_subject", "new_teacher", "start_datetime", "end_datetime",
-                    "information", "modification_type"]
+        "default": ["lesson", "new_room", "new_subject", "new_teacher", "information", "modification_type"]
     }
-    list_display = ["__str__", "course", "modifications", "date"]
-    list_filter = ["course", "course__subject"]
+    list_display = ["__str__", "lesson", "modifications"]
+    list_filter = ["lesson__lesson_data__course__subject", "modification_type"]
     autocomplete_fields = ["new_room", "new_subject", "new_teacher"]
     search_fields = ["information", "modification_type", "course"]
     
@@ -38,6 +36,3 @@ class ModificationAdmin(DefaultAdminMixin):
         )
     
     modifications.short_description = _("Veränderungen")
-    
-    def date(self, instance: Modification):
-        return build_date(instance.start_datetime, instance.end_datetime)
