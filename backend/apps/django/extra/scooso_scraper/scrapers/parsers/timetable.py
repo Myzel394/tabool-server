@@ -1,7 +1,8 @@
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, time
 from typing import *
 
 from apps.django.main.event.options import ModificationTypeOptions
+from apps.utils.dates import is_all_day
 from .base import BaseParser
 
 __all__ = [
@@ -190,18 +191,14 @@ class PureTimetableParser(BaseParser):
     
     @classmethod
     def get_event_data(cls, event: dict) -> Dict[str, Any]:
-        diff: timedelta = event["end_time"] - event["start_time"]
-        one_day_diff = datetime.combine(event["end_time"].date(), time.min) \
-                       - datetime.combine(event["start_time"].date(), time.min)
+        start_datetime = event["start_time"]
+        end_datetime = event["end_time"]
         
-        is_all_day = event.get("allday", 1) == 1 or diff.microseconds == one_day_diff.microseconds
+        is_event_all_day = event.get("allday", 1) == 1 or is_all_day(start_datetime, end_datetime)
         
-        if is_all_day:
-            start_datetime = datetime.combine(event["start_time"].date(), time.min)
-            end_datetime = datetime.combine(event["start_time"].date(), time.max)
-        else:
-            start_datetime = event["start_time"]
-            end_datetime = event["end_time"]
+        if is_event_all_day:
+            start_datetime = datetime.combine(start_datetime.date(), time.min)
+            end_datetime = datetime.combine(start_datetime.date(), time.max)
         
         return {
             "event": {

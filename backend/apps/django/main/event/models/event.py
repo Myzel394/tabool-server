@@ -10,14 +10,14 @@ from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
 from apps.django.main.school_data.public import model_names as school_names
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
-from apps.utils import format_datetime
+from apps.utils import format_datetime, is_all_day
 from constants import maxlength
 from ..public import model_names
 from ..sub.subquerysets import EventQuerySet
 from ...school_data.public.model_references import *
 
 if TYPE_CHECKING:
-    from datetime import datetime, time
+    from datetime import datetime
     from apps.django.main.school_data.models import Room
     from . import UserEventRelation
 
@@ -81,5 +81,4 @@ class Event(RandomIDMixin, HandlerMixin):
     
     @property
     def is_all_day(self) -> bool:
-        return self.start_datetime == datetime.combine(self.start_datetime.date(), time.min) \
-               and self.end_datetime == datetime.combine(self.end_datetime.date(), time.max)
+        return is_all_day(self.start_datetime, self.end_datetime)
