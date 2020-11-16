@@ -17,7 +17,7 @@ from ..querysets import ModificationQuerySet
 if TYPE_CHECKING:
     from datetime import datetime
     from apps.django.main.school_data.models import Room, Subject, Teacher
-    from apps.django.main.lesson.models import Course
+    from apps.django.main.lesson.models import Lesson
 
 __all__ = [
     "Modification"
@@ -28,15 +28,15 @@ class Modification(RandomIDMixin, LifecycleModel):
     class Meta:
         verbose_name = model_names.MODIFICATION
         verbose_name_plural = model_names.MODIFICATION_PLURAL
-        ordering = ("start_datetime",)
+        ordering = ("lesson",)
     
     objects = ModificationQuerySet.as_manager()
     
-    course = models.ForeignKey(
-        COURSE,
+    lesson = models.ForeignKey(
+        LESSON,
         on_delete=models.CASCADE,
-        verbose_name=lesson_names.COURSE,
-    )  # type: Course
+        verbose_name=lesson_names.LESSON
+    )  # type: Lesson
     
     new_room = models.ForeignKey(
         ROOM,
@@ -61,14 +61,6 @@ class Modification(RandomIDMixin, LifecycleModel):
         blank=True,
         null=True,
     )  # type: Teacher
-    
-    start_datetime = models.DateTimeField(
-        verbose_name=_("Start"),
-    )  # type: datetime
-    
-    end_datetime = models.DateTimeField(
-        verbose_name=_("Ende")
-    )  # type: datetime
     
     information = models.TextField(
         verbose_name=_("Information"),

@@ -144,11 +144,8 @@ class TimetableRequest(Request):
             cls,
             modification: SingleModificationType,
             *,
-            user: Optional["User"] = None,
-            course: Course = None,
+            lesson: Lesson = None,
     ) -> Modification:
-        assert user or course, "Either an user or a course must be given."
-        
         room = cls.import_room(modification['new_room'], none_on_error=True)
         teacher = cls.import_teacher(modification['new_teacher'], none_on_error=True)
         subject = cls.import_subject(modification['new_subject'], none_on_error=True)
@@ -158,7 +155,7 @@ class TimetableRequest(Request):
             new_room=room,
             new_teacher=teacher,
             new_subject=subject,
-            course=course,
+            lesson=lesson,
         )
         
         return modification
@@ -218,9 +215,9 @@ class TimetableRequest(Request):
                 time_id=modification['time_id'],
                 lesson__date=modification['modification']['start_datetime'].date()
             )
-            course = lesson_scooso.lesson.lesson_data.course
+            course = lesson_scooso.lesson
             
-            self.import_modification_from_scraper(modification, course=course)
+            self.import_modification_from_scraper(modification, lesson=lesson)
         
         # Homework
         for homework_information in timetable['homeworks']:
