@@ -75,13 +75,13 @@ class Modification(RandomIDMixin, LifecycleModel):
     )  # type: int
     
     def __str__(self):
-        return self.lesson
+        return str(self.lesson)
     
     @hook(AFTER_CREATE)
     @hook(AFTER_DELETE)
     @hook(
         AFTER_UPDATE,
-        when_any=["new_room", "new_teacher", "new_subject", "information", "modification_type", ""]
+        when_any=["new_room", "new_teacher", "new_subject", "information", "modification_type"]
     )
     def _hook_send_modification_changed_event(self):
         send_event(MODIFICATION_CHANNEL, "modification", {

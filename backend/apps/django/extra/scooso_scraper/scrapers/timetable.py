@@ -215,7 +215,7 @@ class TimetableRequest(Request):
                 time_id=modification['time_id'],
                 lesson__date=modification['modification']['start_datetime'].date()
             )
-            course = lesson_scooso.lesson
+            lesson = lesson_scooso.lesson
             
             self.import_modification_from_scraper(modification, lesson=lesson)
         
