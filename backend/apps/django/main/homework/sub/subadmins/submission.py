@@ -24,7 +24,7 @@ class SubmissionAdmin(DefaultAdminMixin):
         "advanced": ["associated_user"]
     }
     autocomplete_fields = ["lesson"]
-    list_filter = ["is_uploaded", "lesson__lesson_data__course", "lesson__lesson_data__course__subject"]
+    list_filter = ["is_uploaded", "lesson__lesson_data__course__subject"]
     list_display = ["__str__", "lesson", "subject", "upload_at"]
     mixins = [CreationDateAdminFieldsetMixin]
     readonly_fields = ["is_uploaded"]

@@ -15,7 +15,7 @@ class ClasstestAdmin(DefaultAdminMixin, SimpleHistoryAdmin):
         "default": ["course", "room", "targeted_date", "information", "!..."]
     }
     list_display = ["__str__", "course", "room", "targeted_date"]
-    list_filter = ["course", "course", "course__subject"]
+    list_filter = ["course__subject"]
     search_fields = ["information", "course", "targeted_date"]
     autocomplete_fields = ["course", "room"]
     mixins = [CreationDateAdminFieldsetMixin]

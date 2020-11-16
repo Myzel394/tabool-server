@@ -18,7 +18,7 @@ class CourseAdmin(DefaultAdminMixin):
         "created": ["id", "!..."]
     }
     list_display = ["__str__", "subject", "teacher", "class_number", "participants_count"]
-    list_filter = ["subject", "teacher"]
+    list_filter = ["subject"]
     filter_horizontal = ["participants"]
     autocomplete_fields = ["subject", "teacher"]
     search_fields = ["name", "subject", "teacher"]

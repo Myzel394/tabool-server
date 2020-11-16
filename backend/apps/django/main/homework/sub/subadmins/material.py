@@ -23,7 +23,7 @@ class MaterialAdmin(DefaultAdminMixin):
         "default": ["lesson", "file", "name", "!..."]
     }
     list_display = ["__str__", "added_at", "subject"]
-    list_filter = ["lesson__lesson_data__course", "lesson__lesson_data__course__subject"]
+    list_filter = ["lesson__lesson_data__course__subject"]
     autocomplete_fields = ["lesson"]
     date_hierarchy = "added_at"
     inlines = [MaterialScoosoDataAdminInline]
