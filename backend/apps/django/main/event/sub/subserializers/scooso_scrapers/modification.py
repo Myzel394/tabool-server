@@ -16,7 +16,6 @@ class ModificationScoosoScraperSerializer(GetOrCreateSerializerMixin):
     def create(self, validated_data):
         unique_data = {
             "lesson": validated_data.pop("lesson"),
-            "modification_type": validated_data.pop("modification_type")
         }
         instance = super().create(unique_data)
         other_data = {
