@@ -230,14 +230,15 @@ class PureTimetableParser(BaseParser):
         new_teacher_code = modification.get("old_teacher_code")
         new_teacher_id = modification.get("old_teacher")
         
-        start_time = modification["start_time"]
-        end_time = modification["end_time"]
+        start_datetime = modification["start_time"]
+        end_datetime = modification["end_time"]
         
         return {
             "modification": {
                 "information": information,
-                "start_datetime": start_time,
-                "end_datetime": end_time,
+                "start_datetime": start_datetime,
+                "end_datetime": end_datetime,
+                "date": date,
                 "modification_type": LESSON_TYPES_MODIFICATION_TYPE_MAP[modification["type"]]
             },
             "new_subject": {

@@ -40,8 +40,8 @@ def timetable(request):
     lessons_ids = lessons.values_list("id", flat=True).distinct()
     modifications = Modification.objects \
         .from_user(user) \
-        .only("start_datetime", "end_datetime") \
-        .filter(start_datetime__gte=start_datetime, end_datetime__lte=end_datetime)
+        .only("lesson") \
+        .filter(lesson__id__in=lessons_ids)
     events = Event.objects \
         .from_user(user) \
         .only("start_datetime", "end_datetime") \

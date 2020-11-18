@@ -21,11 +21,11 @@ class ModificationListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     class Meta:
         model = Modification
         fields = [
-            "lesson", "modification_type", "truncated_information", "id"
+            "lesson", "modification_type", "start_datetime", "end_datetime", "truncated_information", "id"
         ]
     
     truncated_information = serializers.SerializerMethodField()
-    lesson = LessonField(detail=True)
+    lesson = LessonField()
     
     def get_truncated_information(self, instance: Modification) -> Optional[str]:
         return create_short(instance.information) if instance.information else None
@@ -37,10 +37,11 @@ class ModificationDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     class Meta:
         model = Modification
         fields = [
-            "new_room", "new_teacher", "new_subject", "lesson", "information", "modification_type", "id"
+            "new_room", "new_teacher", "new_subject", "lesson", "start_datetime", "end_datetime", "information",
+            "modification_type", "id"
         ]
     
-    lesson = LessonField()
+    lesson = LessonField(detail=True)
     
     new_subject = SubjectField(required=False, detail=True)
     new_teacher = TeacherField(required=False, detail=True)

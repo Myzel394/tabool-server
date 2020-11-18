@@ -213,7 +213,7 @@ class TimetableRequest(Request):
         for modification in timetable['modifications']:
             lesson_scooso = LessonScoosoData.objects.only("time_id").get(
                 time_id=modification['time_id'],
-                lesson__date=modification['modification']['start_datetime'].date()
+                lesson__date=modification['modification']['start_datetime']
             )
             lesson = lesson_scooso.lesson
             

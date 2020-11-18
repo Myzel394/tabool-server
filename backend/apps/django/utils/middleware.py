@@ -12,7 +12,7 @@ class RequestPreferredIdMiddleware:
     
     def __call__(self, request: RequestType):
         if constants.PREFERRED_IDS_HEADER_NAME in request.headers and not self.is_valid(request):
-            del request.headers["PREFERRED_IDS_HEADER_NAME"]
+            del request.headers[constants.PREFERRED_IDS_HEADER_NAME]
         
         response = self.get_response(request)
         

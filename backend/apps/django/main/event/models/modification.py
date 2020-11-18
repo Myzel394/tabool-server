@@ -1,3 +1,4 @@
+from datetime import time
 from typing import *
 
 from django.db import models
@@ -73,6 +74,14 @@ class Modification(RandomIDMixin, LifecycleModel):
         help_text=_("Art von Veränderung"),
         default=ModificationTypeOptions.REPLACEMENT.value
     )  # type: int
+    
+    start_datetime = models.DateTimeField(
+        verbose_name=_("Startzeit"),
+    )  # type: time
+    
+    end_datetime = models.DateTimeField(
+        verbose_name=_("Endzeit")
+    )  # type: time
     
     def __str__(self):
         return str(self.lesson)

@@ -10,12 +10,14 @@ class ModificationScoosoScraperSerializer(GetOrCreateSerializerMixin):
     class Meta:
         model = Modification
         fields = [
-            "information", "modification_type"
+            "information", "modification_type", "start_datetime", "end_datetime"
         ]
     
     def create(self, validated_data):
         unique_data = {
             "lesson": validated_data.pop("lesson"),
+            "start_datetime": validated_data.pop("start_datetime"),
+            "end_datetime": validated_data.pop("end_datetime"),
         }
         instance = super().create(unique_data)
         other_data = {
