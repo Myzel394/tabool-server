@@ -19,15 +19,15 @@ __all__ = [
 
 @api_view(["GET"])
 def timetable(request):
-    user = request.user
-    serializer_context = {
-        "request": request
-    }
-    
     # Validation
     serializer = TimetableSerializer(data=request.GET)
     serializer.is_valid(raise_exception=True)
     
+    # Variables
+    user = request.user
+    serializer_context = {
+        "request": request
+    }
     data = serializer.validated_data
     start_datetime: datetime = data["start_datetime"]
     end_datetime: datetime = data["end_datetime"]
@@ -48,6 +48,7 @@ def timetable(request):
         .filter(start_datetime__gte=start_datetime, end_datetime__lte=end_datetime)
     homeworks = Homework.objects \
         .from_user(user) \
+        .only("lesson") \
         .filter(lesson__id__in=lessons_ids)
     materials = Material.objects \
         .only("lesson") \
@@ -58,5 +59,7 @@ def timetable(request):
         "modifications": ModificationDetailSerializer(modifications, many=True, context=serializer_context).data,
         "events": EventDetailSerializer(events, many=True, context=serializer_context).data,
         "homeworks": HomeworkListSerializer(homeworks, many=True, context=serializer_context).data,
-        "materials": MaterialListSerializer(materials, many=True, context=serializer_context).data
+        "materials": MaterialListSerializer(materials, many=True, context=serializer_context).data,
+        "earliest_date_available": Lesson.objects.only("date").earliest("date").date,
+        "latest_date_available": Lesson.objects.only("date").latest("date").date
     })
