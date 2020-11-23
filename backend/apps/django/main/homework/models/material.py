@@ -2,6 +2,7 @@ import mimetypes
 from pathlib import Path
 from typing import *
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -102,3 +103,12 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     @property
     def folder_name(self) -> str:
         return f"{self.lesson.lesson_data.course.folder_name}"
+    
+    @property
+    def is_downloaded(self) -> bool:
+        if not self.file:
+            return False
+        
+        full_path = settings.MEDIA_ROOT / self.file.path
+        
+        return full_path.exists()

@@ -177,17 +177,19 @@ class TimetableRequest(Request):
             material_instance = self.import_material(
                 material,
                 lesson=lesson,
+                filename=material['filename']
             )
             
-            path = scraper.download_material(
-                material['scooso_id'],
-                settings.MEDIA_ROOT / build_material_upload_to(material_instance, material['filename'])
-            )
-            
-            material_instance.file = str(path.relative_to(settings.MEDIA_ROOT))
-            material_instance.save()
-            
-            materials_list.append(material_instance)
+            if not material_instance.is_downloaded:
+                path = scraper.download_material(
+                    material['scooso_id'],
+                    settings.MEDIA_ROOT / build_material_upload_to(material_instance, material['filename'])
+                )
+                
+                material_instance.file = str(path.relative_to(settings.MEDIA_ROOT))
+                material_instance.save()
+                
+                materials_list.append(material_instance)
         
         return materials_list
     

@@ -8,6 +8,5 @@ class JobTest(UserTestMixin):
         for _ in range(0):
             self.Create_user()
         
-        with self.Login_user_as_context() as user:
-            print("Fetching data")
-            fetch_timetable_from_users()
+        print("Fetching data")
+        fetch_timetable_from_users()

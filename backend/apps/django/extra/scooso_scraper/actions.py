@@ -42,7 +42,7 @@ def fetch_material(lesson: "Lesson", scraper: TimetableRequest) -> None:
         pass
 
 
-def fetch_timetable(user: "User", start_date: date = None, end_date: date = None) -> None:
+def fetch_timetable(user: "User", start_date: date = None, end_date: date = None, in_thread: bool = True) -> None:
     start_date = start_date or find_next_date_by_weekday(date.today() - timedelta(days=6), weekday=0)
     end_date = end_date or find_next_date_by_weekday(start_date, weekday=4)
     
@@ -59,4 +59,8 @@ def fetch_timetable(user: "User", start_date: date = None, end_date: date = None
         
         materials = yield_lessons_with_materials(data, lessons)
         
-        list_in_thread(materials, fetch_material, [scraper])
+        if in_thread:
+            list_in_thread(materials, fetch_material, [scraper])
+        else:
+            for material in materials:
+                scraper.import_materials_from_lesson(material)

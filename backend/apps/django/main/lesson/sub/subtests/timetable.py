@@ -1,4 +1,3 @@
-import json
 import os
 from datetime import datetime
 from pprint import pp
@@ -19,7 +18,7 @@ class TimetableAPITest(LessonTestMixin, ModificationTestMixin, ClientTestMixin, 
         end_datetime = datetime.strptime(os.getenv("DATA_END_DATE"), os.getenv("DATE_FORMAT"))
         
         print("Fetching & importing timetable")
-        fetch_timetable(self.__class__.associated_user, start_datetime, end_datetime)
+        fetch_timetable(self.__class__.associated_user, start_datetime, end_datetime, in_thread=False)
         print("Done")
     
     def get_start_datetime(self) -> datetime:
@@ -45,7 +44,7 @@ class TimetableAPITest(LessonTestMixin, ModificationTestMixin, ClientTestMixin, 
         
         self.assertStatusOk(response.status_code)
         
-        return json.loads(json.dumps(response.data))
+        return response.data
     
     def test_api(self):
         pp(self.get_data())
