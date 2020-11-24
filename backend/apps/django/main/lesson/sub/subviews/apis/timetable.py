@@ -7,7 +7,7 @@ from apps.django.main.event.models import Event, Modification
 from apps.django.main.event.sub.subserializers.event import EventDetailSerializer
 from apps.django.main.event.sub.subserializers.modification import ModificationDetailSerializer
 from apps.django.main.homework.models import Homework, Material
-from apps.django.main.homework.sub.subserializers.homework import HomeworkListSerializer
+from apps.django.main.homework.sub.subserializers.homework import HomeworkDetailSerializer
 from apps.django.main.homework.sub.subserializers.material import MaterialListSerializer
 from ....models import Lesson
 from ....serializers import LessonDetailSerializer, TimetableSerializer
@@ -58,7 +58,7 @@ def timetable(request):
         "lessons": LessonDetailSerializer(lessons, many=True, context=serializer_context).data,
         "modifications": ModificationDetailSerializer(modifications, many=True, context=serializer_context).data,
         "events": EventDetailSerializer(events, many=True, context=serializer_context).data,
-        "homeworks": HomeworkListSerializer(homeworks, many=True, context=serializer_context).data,
+        "homeworks": HomeworkDetailSerializer(homeworks, many=True, context=serializer_context).data,
         "materials": MaterialListSerializer(materials, many=True, context=serializer_context).data,
         "earliest_date_available": Lesson.objects.only("date").earliest("date").date,
         "latest_date_available": Lesson.objects.only("date").latest("date").date
