@@ -3,6 +3,7 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers.mixins import TextOptimizerHandler
+from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import CreationDateMixin
 from django_eventstream import send_event
@@ -16,6 +17,7 @@ from apps.django.main.lesson.public import *
 from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.utils.history_extras.extras import UserInformationHistoricalModel
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
+from constants import maxlength
 from .user_relations.homework import UserHomeworkRelation
 from ..public import HOMEWORK_CHANNEL, model_names
 from ..querysets import HomeworkQuerySet
@@ -31,7 +33,7 @@ __all__ = [
 ]
 
 
-class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
+class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     class Meta:
         verbose_name = model_names.HOMEWORK
         verbose_name_plural = model_names.HOMEWORK_PLURAL
@@ -64,6 +66,7 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel):
         verbose_name=_("Informationen"),
         blank=True,
         null=True,
+        max_length=maxlength.INFORMATION,
     )  # type: str
     
     type = models.CharField(

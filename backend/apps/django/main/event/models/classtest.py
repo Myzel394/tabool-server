@@ -13,6 +13,7 @@ from apps.django.main.school_data.public import model_names as school_names
 from apps.django.utils.history_extras.extras import UserInformationHistoricalModel
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
 from apps.utils import format_datetime
+from constants import maxlength
 from ..public import model_names
 from ..querysets import ClasstestQuerySet
 from ...lesson.public.model_references import *
@@ -59,7 +60,8 @@ class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     information = models.TextField(
         verbose_name=_("Informationen"),
         blank=True,
-        null=True
+        null=True,
+        max_length=maxlength.INFORMATION,
     )  # type: str
     
     history = HistoricalRecords(

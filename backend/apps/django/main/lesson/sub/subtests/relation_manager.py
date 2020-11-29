@@ -11,7 +11,5 @@ class RelationTest(ClientTestMixin, LessonTestMixin, UserTestMixin):
         self.Create_user()
         self.Create_subject()
         self.assertEqual(self.count(), 1)
-        self.Create_user()
-        self.assertEqual(self.count(), 2)
         self.Create_subject()
-        self.assertEqual(self.count(), 4)
+        self.assertEqual(self.count(), 2)

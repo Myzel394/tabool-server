@@ -11,6 +11,7 @@ from apps.django.main.lesson.public import *
 from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.main.school_data.public import *
 from apps.django.main.school_data.public import model_names as school_names
+from constants import maxlength
 from ..options import ModificationTypeOptions
 from ..public import model_names, MODIFICATION_CHANNEL
 from ..querysets import ModificationQuerySet
@@ -65,7 +66,8 @@ class Modification(RandomIDMixin, LifecycleModel):
     information = models.TextField(
         verbose_name=_("Information"),
         blank=True,
-        null=True
+        null=True,
+        max_length=maxlength.INFORMATION,
     )  # type: str
     
     modification_type = models.PositiveSmallIntegerField(

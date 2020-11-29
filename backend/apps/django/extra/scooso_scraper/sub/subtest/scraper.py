@@ -120,7 +120,7 @@ class SomeTests(LessonUploadTestMixin, UtilsTestMixin):
             self.assertEqual(len(data['homeworks']), Homework.objects.all().count())
 
 
-class ForeignSerializerTest(CourseTestMixin):
+class ForeignSerializerTest(LessonTestMixin):
     def setUp(self) -> None:
         self.load_dummy_user()
         
@@ -164,7 +164,7 @@ class ForeignSerializerTest(CourseTestMixin):
         random_modification = random.choice(self.timetable['modifications'])
         modification = TimetableRequest.import_modification_from_scraper(
             random_modification,
-            course=self.Create_course()
+            lesson=self.Create_lesson()
         )
     
     def test_materials(self):
