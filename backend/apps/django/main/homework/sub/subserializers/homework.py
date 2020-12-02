@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.django.main.lesson.public.serializer_fields.lesson import LessonField
+from apps.django.main.school_data.sub.subserializers.subject import SubjectDetailSerializer
 from apps.django.utils.serializers import (
     PreferredIdsMixin, RandomIDSerializerMixin, UserRelationField,
     WritableSerializerMethodField,
@@ -22,15 +23,19 @@ class HomeworkListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     class Meta:
         model = Homework
         fields = [
-            "lesson", "due_date", "created_at", "id", "truncated_information"
+            "lesson", "due_date", "created_at", "id", "truncated_information", "subject"
         ]
     
     lesson = LessonField()
+    subject = serializers.SerializerMethodField()
     
     truncated_information = serializers.SerializerMethodField()
     
     def get_truncated_information(self, instance: Homework) -> str:
         return create_short(instance.information) if instance.information else None
+    
+    def get_subject(self, instance: Homework):
+        return SubjectDetailSerializer(instance=instance.lesson.lesson_data.course.subject, context=self.context).data
 
 
 class HomeworkDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):

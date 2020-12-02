@@ -98,7 +98,7 @@ REST_FRAMEWORK = {
         "anon": os.getenv("THROTTLE_ANON"),
         "user": os.getenv("THROTTLE_USER")
     },
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_PAGINATION_CLASS": "apps.django.utils.paginations.PageNumberPagination",
     "PAGE_SIZE": int(os.getenv("DEFAULT_PAGE_SIZE")),
     "DEFAULT_PERMISSION_CLASSES": [
         "apps.django.utils.permissions.AuthenticationAndActivePermission",
