@@ -1,9 +1,12 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from django_hint import RequestType
 from rest_framework import viewsets
+from rest_framework.decorators import action
 
 from apps.django.utils.viewsets import RetrieveFromUserMixin
+from ...subserializers.lesson_data import LessonDataListSerializer
 from ....filters import LessonFilterSet
-from ....models import Lesson
+from ....models import Lesson, LessonData
 from ....paginations import LessonPagination
 from ....serializers import LessonDetailSerializer, LessonListSerializer
 
@@ -22,3 +25,9 @@ class LessonViewSet(viewsets.mixins.ListModelMixin, RetrieveFromUserMixin):
         if self.action == "list":
             return LessonListSerializer
         return LessonDetailSerializer
+    
+    @action(detail=False, methods=["GET"], url_path="lesson-data")
+    def lesson_data_list(self, request: RequestType):
+        lesson_data = LessonData.objects.from_user(request.user)
+        
+        return LessonDataListSerializer(lesson_data, many=True).data
