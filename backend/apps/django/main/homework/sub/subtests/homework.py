@@ -203,6 +203,15 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         response = self.client.get(f"/api/data/homework/{homework.id}/")
         data = response.data
         pp(data)
+    
+    def test_information(self):
+        for _ in range(5):
+            self.Create_homework()
+        
+        response = self.client.get(f"/api/data/homework/homework-information/")
+        
+        self.assertStatusOk(response.status_code)
+        pp(response.data)
 
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):

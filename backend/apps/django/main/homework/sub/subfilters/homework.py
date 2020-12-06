@@ -28,7 +28,7 @@ class HomeworkFilterSet(filters.FilterSet):
     )
     
     subject = filters.CharFilter(
-        field_name="lesson__lesson_data__subject__id",
+        field_name="lesson__lesson_data__course__subject__id",
         label=model_verbose(Subject)
     )
     
