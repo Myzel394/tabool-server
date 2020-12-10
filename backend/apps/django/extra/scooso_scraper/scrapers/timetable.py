@@ -235,5 +235,6 @@ class TimetableRequest(Request):
                     )
                 
                 scraper.import_homework_from_scraper(homework_data['homework'], lesson)
+                scraper.import_classbook_from_scraper(homework_data['classbook'], lesson)
         
         return lessons

@@ -1,5 +1,5 @@
 from .auth import *
 from .base import *
-from .lesson_content import *
+from .classbook import *
 from .material import *
 from .timetable import *

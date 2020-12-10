@@ -10,7 +10,7 @@ from apps.django.main.homework.models import Homework, Material
 from apps.django.main.homework.sub.subserializers.homework import HomeworkDetailSerializer
 from apps.django.main.homework.sub.subserializers.material import MaterialListSerializer
 from ....models import Lesson
-from ....serializers import LessonDetailSerializer, TimetableSerializer
+from ....serializers import LessonTimetableSerializer, TimetableSerializer
 
 __all__ = [
     "timetable"
@@ -55,7 +55,7 @@ def timetable(request):
         .filter(lesson__id__in=lessons_ids)
     
     return Response({
-        "lessons": LessonDetailSerializer(lessons, many=True, context=serializer_context).data,
+        "lessons": LessonTimetableSerializer(lessons, many=True, context=serializer_context).data,
         "modifications": ModificationDetailSerializer(modifications, many=True, context=serializer_context).data,
         "events": EventDetailSerializer(events, many=True, context=serializer_context).data,
         "homeworks": HomeworkDetailSerializer(homeworks, many=True, context=serializer_context).data,

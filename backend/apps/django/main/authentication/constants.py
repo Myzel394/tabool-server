@@ -1,8 +1,15 @@
 from datetime import date
 
 __all__ = [
-    "APP_LABEL", "PAY_USER_SAMPLE_AMOUNT", "SCHOOL_YEAR_START_DATE", "TOKEN_LENGTH", "AVAILABLE_CLASS_NUMBERS"
+    "APP_LABEL", "PAY_USER_SAMPLE_AMOUNT", "SCHOOL_YEAR_START_DATE", "TOKEN_LENGTH", "AVAILABLE_CLASS_NUMBERS",
+    "ClassLevel"
 ]
+
+
+class ClassLevel:
+    PRIMARY = "primary"
+    SECONDARY = "secondary"
+
 
 APP_LABEL = "authentication"
 PAY_USER_SAMPLE_AMOUNT = 10

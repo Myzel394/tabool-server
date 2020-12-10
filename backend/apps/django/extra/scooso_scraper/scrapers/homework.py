@@ -2,9 +2,10 @@ from datetime import datetime
 from typing import *
 
 from apps.django.main.homework.models import Homework
-from apps.django.main.homework.sub.subserializers.scooso_scrapers.homework import HomeworkScoosoScraperSerializer
+from apps.django.main.homework.sub.subserializers.scooso_scrapers import HomeworkScoosoScraperSerializer
+from apps.django.main.lesson.sub.subserializers.scooso_scrapers import ClassbookScoosoScraperSerializer
 from .parsers import PureLessonContentParser, PureLessonContentParserDataType
-from .parsers.lesson_content import HomeworkType
+from .parsers.classbook import ClassbookType, HomeworkType
 from .request import Request
 from .. import constants
 from ..utils import build_url, import_from_scraper
@@ -53,3 +54,10 @@ class LessonContentRequest(Request):
             lesson: "Lesson"
     ) -> Homework:
         return import_from_scraper(HomeworkScoosoScraperSerializer, data, lesson=lesson)
+    
+    @staticmethod
+    def import_classbook_from_scraper(
+            data: ClassbookType,
+            lesson: "Lesson"
+    ):
+        return import_from_scraper(ClassbookScoosoScraperSerializer, data, lesson=lesson)

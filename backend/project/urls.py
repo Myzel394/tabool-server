@@ -2,6 +2,7 @@ import private_storage.urls
 from django.contrib import admin
 from django.urls import include, path
 
+from apps.django.core.views import contacts
 from apps.django.main.authentication.sub.subviews.apis.register import FullRegisterView, RegisterView
 from apps.django.main.authentication.views import (
     EmailConfirmation, LoginView, LogoutView, PasswordChangeView,
@@ -42,6 +43,7 @@ urlpatterns = [
     
     # API
     path(f"api/data/", include("rest_framework.urls")),
+    path(f"api/data/contacts/", contacts),
     path(f"api/data/timetable/", timetable),
     
     path(f"api/auth/change-password/", PasswordChangeView.as_view()),

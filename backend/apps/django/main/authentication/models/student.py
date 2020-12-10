@@ -69,3 +69,7 @@ class Student(RandomIDMixin, LifecycleModel):
     @hook(BEFORE_UPDATE, when="user", has_changed=True)
     def _hook_call_full_clean(self):
         self.full_clean()
+    
+    @property
+    def class_level(self) -> constants.ClassLevel:
+        return constants.ClassLevel.PRIMARY if self.class_number <= 10 else constants.ClassLevel.SECONDARY

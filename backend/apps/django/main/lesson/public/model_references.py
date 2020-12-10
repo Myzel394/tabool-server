@@ -7,3 +7,4 @@ __all__ = [
 COURSE = f"{constants.APP_LABEL}.Course"
 LESSON = f"{constants.APP_LABEL}.Lesson"
 LESSON_DATA = f"{constants.APP_LABEL}.LessonData"
+LESSON_CONTENT = f"{constants.APP_LABEL}.LessonContent"

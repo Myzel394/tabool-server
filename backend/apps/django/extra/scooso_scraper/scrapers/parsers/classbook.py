@@ -9,7 +9,7 @@ __all__ = [
 ]
 
 
-class ContentType(TypedDict):
+class ClassbookType(TypedDict):
     presence: str
     online: str
 
@@ -20,7 +20,7 @@ class HomeworkType(TypedDict):
 
 
 class PureLessonContentParserDataType(TypedDict):
-    content: ContentType
+    classbook: ClassbookType
     homework: HomeworkType
 
 
@@ -42,9 +42,13 @@ class PureLessonContentParser(BaseParser):
         homework = data["homework_b64"]
         
         return {
-            "content": {
-                "presence": base64.b64decode(topic_presence).decode(self.ENCODING_TYPE) if topic_presence else None,
-                "online": base64.b64decode(topic_online).decode(self.ENCODING_TYPE) if topic_online else None,
+            "classbook": {
+                "presence_content": base64.b64decode(topic_presence).decode(self.ENCODING_TYPE)
+                if topic_presence else
+                None,
+                "distance_content": base64.b64decode(topic_online).decode(self.ENCODING_TYPE)
+                if topic_online else
+                None,
             },
             "homework": {
                 "information": base64.b64decode(homework).decode(self.ENCODING_TYPE) if homework else None,
