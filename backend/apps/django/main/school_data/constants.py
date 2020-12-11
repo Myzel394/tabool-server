@@ -1,6 +1,10 @@
 from django.utils.translation import gettext_lazy as _
 from pydicti import dicti
 
+__all__ = [
+    "APP_LABEL", "SUBJECT_NAMES_MAPPING", "SUBJECT_COLORS_MAPPING",
+]
+
 APP_LABEL = "school_data"
 SUBJECT_NAMES_MAPPING = dicti(
     E=_("Englisch"),

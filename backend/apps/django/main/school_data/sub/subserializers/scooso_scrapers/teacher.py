@@ -31,3 +31,8 @@ class TeacherScoosoScraperSerializer(ScoosoScraperSerializerMixin):
         return {
             "short_name": validated_data["short_name"]
         }
+    
+    def get_extra_data(self, validated_data: dict) -> dict:
+        return {
+            "gender": validated_data[""]
+        }

@@ -1,3 +1,4 @@
+import re
 from datetime import date, timedelta
 from typing import *
 
@@ -16,6 +17,18 @@ __all__ = [
     "import_teachers", "fetch_timetable"
 ]
 
+REMOVE_TITLES = [r"Prof\.", r"Dr\.", r"PD"]
+REMOVE_TITLES_JOINED = '|'.join(REMOVE_TITLES)
+
+teacher_first_name_regex = re.compile(
+    rf"(?:{REMOVE_TITLES_JOINED})? ?(?:{REMOVE_TITLES_JOINED})? ?(?:{REMOVE_TITLES_JOINED})? ?(\w+)")
+
+
+def get_teacher_first_name(name: str) -> str:
+    if match := teacher_first_name_regex.match(name):
+        return match.group(1)
+    return name
+
 
 def import_teachers() -> list[Teacher]:
     teachers = scrape_teachers()
@@ -25,9 +38,10 @@ def import_teachers() -> list[Teacher]:
         teacher, _ = Teacher.objects.get_or_create(
             short_name=teacher_data['short_name']
         )
-        teacher.first_name = teacher_data['first_name']
+        teacher.first_name = get_teacher_first_name(teacher_data['first_name'])
         teacher.last_name = teacher_data['last_name']
         teacher.email = teacher_data['email'].removeprefix("mailto:")
+        teacher.gender = teacher_data['gender']
         teacher.save()
         
         teachers_added.append(teacher)

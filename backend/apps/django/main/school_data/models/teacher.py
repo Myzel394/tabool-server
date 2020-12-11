@@ -8,6 +8,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import QueryType
 
 from constants import maxlength
+from ..options import GenderChoices
 from ..public import model_names
 
 if TYPE_CHECKING:
@@ -48,6 +49,12 @@ class Teacher(RandomIDMixin, HandlerMixin):
         blank=True,
         null=True
     )  # type: str
+    
+    gender = models.PositiveSmallIntegerField(
+        choices=GenderChoices.choices,
+        verbose_name=_("Geschlecht"),
+        default=GenderChoices.UNKNOWN
+    )  # type: int
     
     def __str__(self):
         return _("{first_name} {last_name}, {short_name}").format(

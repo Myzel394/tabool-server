@@ -20,5 +20,5 @@ class TeacherDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     class Meta:
         model = Teacher
         fields = [
-            "first_name", "last_name", "short_name", "email", "id"
+            "first_name", "last_name", "short_name", "email", "gender", "id"
         ]

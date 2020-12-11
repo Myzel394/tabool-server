@@ -19,8 +19,8 @@ class TeacherScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
 @admin.register(Teacher)
 class TeacherAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["first_name", "last_name", "short_name", "email", "!..."],
+        "default": ["first_name", "last_name", "short_name", "email", "gender", "!..."],
     }
     inlines = [TeacherScoosoDataAdminInline]
-    list_display = ["short_name", "first_name", "last_name"]
+    list_display = ["short_name", "first_name", "last_name", "gender"]
     search_fields = ["short_name", "first_name", "last_name"]
