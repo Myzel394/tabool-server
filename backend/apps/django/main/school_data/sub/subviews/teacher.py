@@ -25,7 +25,8 @@ class TeacherViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
     search_fields = ["last_name", "short_name"]
     model = Teacher
     pagination_class = LargeSetPagination
-    permission_classes = [IsAuthenticated]  # Teachers must be collected for full registration
+    # Teachers must be collected for full registration
+    permission_classes = [IsAuthenticated]
     ordering_fields = ["last_name", "short_name"]
     
     def get_serializer_class(self):
