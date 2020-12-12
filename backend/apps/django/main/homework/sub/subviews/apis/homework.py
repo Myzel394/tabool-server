@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from ....filters import HomeworkFilterSet
 from ....models import Homework
-from ....serializers import HomeworkDetailSerializer, HomeworkListSerializer
+from ....serializers import HomeworkDetailEndpointSerializer, HomeworkListSerializer
 
 __all__ = [
     "HomeworkViewSet"
@@ -26,7 +26,7 @@ class HomeworkViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return HomeworkListSerializer
-        return HomeworkDetailSerializer
+        return HomeworkDetailEndpointSerializer
     
     @action(methods=["GET"], detail=False, url_path="homework-information")
     def information(self, request: RequestType):

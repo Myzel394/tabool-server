@@ -112,3 +112,9 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         full_path = settings.MEDIA_ROOT / self.file.path
         
         return full_path.exists()
+    
+    def get_scooso_download_link(self, user: "User") -> Optional[str]:
+        if scooso_data := getattr(self, "materialscoosodata", None):
+            url = scooso_data.build_download_url(user)
+            return url
+        return

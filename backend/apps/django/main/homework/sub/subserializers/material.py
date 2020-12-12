@@ -1,23 +1,11 @@
-from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from apps.django.main.lesson.public.serializer_fields.lesson import LessonField
 from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin
 from ...models import Material
 
 __all__ = [
-    "MaterialListSerializer", "MaterialDetailSerializer", "UploadSerializer",
+    "MaterialDetailSerializer",
 ]
-
-
-class MaterialListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
-    preferred_id_key = "material"
-    
-    class Meta:
-        model = Material
-        fields = [
-            "lesson", "name", "added_at", "id"
-        ]
 
 
 class MaterialDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
@@ -26,23 +14,10 @@ class MaterialDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     class Meta:
         model = Material
         fields = [
-            "file", "name", "added_at", "scooso_download_link", "lesson", "id"
+            "name", "added_at", "id", "size"
         ]
     
-    scooso_download_link = serializers.SerializerMethodField()
-    file = serializers.SerializerMethodField()
+    size = serializers.SerializerMethodField()
     
-    def get_scooso_download_link(self, instance: Material):
-        if scooso_data := getattr(instance, "materialscoosodata", None):
-            user = self.context["request"].user
-            url = scooso_data.build_download_url(user)
-            return url
-        return
-    
-    def get_file(self, instance: Material):
-        return instance.file.url
-
-
-class UploadSerializer(serializers.Serializer):
-    lesson = LessonField()
-    file = serializers.FileField(label=_("Datei"))
+    def get_size(self, instance: Material) -> int:
+        return instance.file.size

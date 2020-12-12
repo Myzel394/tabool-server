@@ -52,10 +52,13 @@ class TeacherViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
                         .count()
                 ) /
                 (
-                    user_lessons
-                        .filter(lesson_data__course__teacher=teacher)
-                        .distinct()
-                        .count()
+                    max(
+                        1,
+                        user_lessons
+                            .filter(lesson_data__course__teacher=teacher)
+                            .distinct()
+                            .count()
+                    )
                 )
         )
         teacher_missing_ratio = (
@@ -66,11 +69,14 @@ class TeacherViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
                         .count()
                 ) /
                 (
-                    Lesson
-                        .objects
-                        .filter(lesson_data__course__teacher=teacher)
-                        .distinct()
-                        .count()
+                    max(
+                        1,
+                        Lesson
+                            .objects
+                            .filter(lesson_data__course__teacher=teacher)
+                            .distinct()
+                            .count()
+                    )
                 )
         )
         

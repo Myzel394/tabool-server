@@ -104,8 +104,13 @@ class TimetableRequest(Request):
         return import_from_scraper(EventScoosoScraperSerializer, data, **kwargs)
     
     @staticmethod
-    def import_modification(data: ModificationType, **kwargs) -> Modification:
-        return import_from_scraper(ModificationScoosoScraperSerializer, data, **kwargs)
+    def import_modification(data: ModificationType, lesson: Lesson, **kwargs) -> Modification:
+        # Delete old modifications
+        Modification.objects.filter(
+            lesson=lesson,
+        ).delete()
+        
+        return import_from_scraper(ModificationScoosoScraperSerializer, data, lesson=lesson, **kwargs)
     
     @staticmethod
     def import_material(data: MaterialType, **kwargs) -> Material:

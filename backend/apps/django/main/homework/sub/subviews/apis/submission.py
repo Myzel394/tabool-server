@@ -10,7 +10,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 
 from apps.django.extra.scooso_scraper.scrapers.material import *
-from ...subserializers.material import UploadSerializer
+from ...subserializers.material__endpoint import UploadSerializer
 from .... import constants
 from ....filters import SubmissionFilterSet
 from ....models import Submission
