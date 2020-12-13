@@ -1,11 +1,11 @@
-from datetime import time
+from datetime import datetime, time
 from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_eventstream import send_event
-from django_lifecycle import AFTER_CREATE, AFTER_DELETE, AFTER_UPDATE, hook, LifecycleModel
+from django_lifecycle import AFTER_CREATE, AFTER_DELETE, AFTER_UPDATE, BEFORE_SAVE, hook, LifecycleModel
 
 from apps.django.main.lesson.public import *
 from apps.django.main.lesson.public import model_names as lesson_names
@@ -79,14 +79,23 @@ class Modification(RandomIDMixin, LifecycleModel):
     
     start_datetime = models.DateTimeField(
         verbose_name=_("Startzeit"),
+        blank=True,
     )  # type: time
     
     end_datetime = models.DateTimeField(
-        verbose_name=_("Endzeit")
+        verbose_name=_("Endzeit"),
+        blank=True,
     )  # type: time
     
     def __str__(self):
         return str(self.lesson)
+    
+    @hook(BEFORE_SAVE)
+    def _hook_autofill_times(self):
+        self.start_datetime = self.start_datetime \
+                              or datetime.combine(self.lesson.date, self.lesson.lesson_data.start_time)
+        self.end_datetime = self.end_datetime \
+                            or datetime.combine(self.lesson.date, self.lesson.lesson_data.end_time)
     
     @hook(AFTER_CREATE)
     @hook(AFTER_DELETE)

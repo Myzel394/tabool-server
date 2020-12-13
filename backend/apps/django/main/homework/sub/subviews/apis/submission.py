@@ -11,10 +11,11 @@ from rest_framework.response import Response
 
 from apps.django.extra.scooso_scraper.scrapers.material import *
 from ...subserializers.material__endpoint import UploadSerializer
+from ...subserializers.submission__endpoint import SubmissionEndpointDetailSerializer
 from .... import constants
 from ....filters import SubmissionFilterSet
 from ....models import Submission
-from ....serializers import SubmissionDetailSerializer, SubmissionListSerializer
+from ....serializers import SubmissionListSerializer
 
 __all__ = [
     "SubmissionViewSet"
@@ -33,7 +34,23 @@ class SubmissionViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return SubmissionListSerializer
-        return SubmissionDetailSerializer
+        return SubmissionEndpointDetailSerializer
+    
+    def create(self, request, *args, **kwargs):
+        """
+        #checks if post request data is an array initializes serializer with many=True
+        else executes default CreateModelMixin.create function
+        """
+        print(request.data)
+        is_many = isinstance(request.data, list)
+        if not is_many:
+            return super().create(request, *args, **kwargs)
+        else:
+            serializer = self.get_serializer(data=request.data, many=True)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     @action(detail=False, methods=["post"])
     def scooso(self, request: RequestType):

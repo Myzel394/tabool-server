@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     "channels",
     "django_eventstream",
     "django_crontab",
-    "corsheaders",
     "django_object_actions",
     
     "apps.django.utils.relation_managers.apps.RelationManagersConfig",
@@ -279,6 +278,9 @@ if DEBUG:
     CORS_ALLOW_CREDENTIALS = True
     CORS_ALLOW_HEADERS = default_headers + (
         'Access-Control-Allow-Origin',
+        "Content-Type",
+        "Origin",
+        "Authorization",
     )
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",
@@ -286,8 +288,11 @@ if DEBUG:
         "http://localhost:8000",
         "http://127.0.0.1:8000",
     ]
-    CORS_ALLOW_CREDENTIALS = True
     SESSION_COOKIE_DOMAIN = "127.0.0.1"
+    
+    CORS_ORIGIN_ALLOW_ALL = True
+    
+    INSTALLED_APPS += ["corsheaders"]
 
 SESSION_COOKIE_HTTPONLY = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG

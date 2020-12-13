@@ -13,11 +13,14 @@ __all__ = [
 @admin.register(Modification)
 class ModificationAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["lesson", "new_room", "new_subject", "new_teacher", "information", "modification_type"]
+        "default": [
+            "lesson", "start_datetime", "end_datetime", "new_room", "new_subject", "new_teacher", "information",
+            "modification_type"
+        ]
     }
     list_display = ["__str__", "lesson", "modifications"]
     list_filter = ["lesson__lesson_data__course__subject", "modification_type"]
-    autocomplete_fields = ["new_room", "new_subject", "new_teacher"]
+    autocomplete_fields = ["new_room", "new_subject", "new_teacher", "lesson"]
     search_fields = ["information", "modification_type", "course"]
     
     def modifications(self, instance: Modification):

@@ -3,7 +3,6 @@ from typing import *
 
 from rest_framework import serializers
 
-from apps.django.main.lesson.public.serializer_fields.lesson import LessonField
 from apps.django.utils.serializers import (
     AssociatedUserSerializerMixin, PreferredIdsMixin, PrivatizeSerializerMixin,
     RandomIDSerializerMixin,
@@ -11,7 +10,7 @@ from apps.django.utils.serializers import (
 from ...models import Submission
 
 __all__ = [
-    "SubmissionListSerializer", "SubmissionDetailSerializer"
+    "SubmissionDetailSerializer"
 ]
 
 
@@ -20,18 +19,6 @@ class FilenameMixin(serializers.Serializer):
     
     def get_filename(self, instance: Submission):
         return Path(instance.file.path).name
-
-
-class SubmissionListSerializer(RandomIDSerializerMixin, FilenameMixin, PreferredIdsMixin):
-    preferred_id_key = "submission"
-    
-    class Meta:
-        model = Submission
-        fields = [
-            "lesson", "filename", "upload_at", "id"
-        ]
-    
-    lesson = LessonField()
 
 
 class SubmissionDetailSerializer(
@@ -46,13 +33,11 @@ class SubmissionDetailSerializer(
     class Meta:
         model = Submission
         fields = [
-            "lesson", "file", "privatize", "filename", "upload_at", "is_uploaded", "id"
+            "file", "privatize", "filename", "upload_at", "is_uploaded", "id"
         ]
         read_only_fields = [
-            "is_uploaded", "id"
+            "is_uploaded", "id", "filename"
         ]
-    
-    lesson = LessonField(detail=True)
     
     def get_file_to_privatize(self, instance: Submission, _) -> List[str]:
         return [instance.file.path]
