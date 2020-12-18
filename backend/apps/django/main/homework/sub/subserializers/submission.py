@@ -10,7 +10,7 @@ from apps.django.utils.serializers import (
 from ...models import Submission
 
 __all__ = [
-    "SubmissionDetailSerializer"
+    "SubmissionDetailSerializer", "SizeMixin", "FilenameMixin"
 ]
 
 
@@ -21,19 +21,27 @@ class FilenameMixin(serializers.Serializer):
         return Path(instance.file.path).name
 
 
+class SizeMixin(serializers.Serializer):
+    size = serializers.SerializerMethodField()
+    
+    def get_size(self, instance: Submission):
+        return instance.file.size
+
+
 class SubmissionDetailSerializer(
     PrivatizeSerializerMixin,
     AssociatedUserSerializerMixin,
     RandomIDSerializerMixin,
     FilenameMixin,
-    PreferredIdsMixin
+    PreferredIdsMixin,
+    SizeMixin
 ):
     preferred_id_key = "submission"
     
     class Meta:
         model = Submission
         fields = [
-            "file", "privatize", "filename", "upload_at", "is_uploaded", "id"
+            "file", "privatize", "filename", "upload_at", "is_uploaded", "size", "id"
         ]
         read_only_fields = [
             "is_uploaded", "id", "filename"

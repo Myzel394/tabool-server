@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
-from corsheaders.defaults import default_headers
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
@@ -34,7 +33,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "secret_key")
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG", 1))
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(" ")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(" ")
 
 # Application definition
 
@@ -57,6 +56,7 @@ INSTALLED_APPS = [
     "django_eventstream",
     "django_crontab",
     "django_object_actions",
+    "corsheaders",
     
     "apps.django.utils.relation_managers.apps.RelationManagersConfig",
     
@@ -73,9 +73,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -274,25 +274,12 @@ PRIVATE_STORAGE_AUTH_FUNCTION = "apps.django.utils.private_storages.private_stor
 EVENTSTREAM_STORAGE_CLASS = "django_eventstream.storage.DjangoModelStorage"
 EVENTSTREAM_CHANNELMANAGER_CLASS = "apps.django.utils.permissions.UserActiveChannelManager"
 
+MAX_UPLOAD_SIZE = 5242880  # 50MB
+
 if DEBUG:
-    CORS_ALLOW_CREDENTIALS = True
-    CORS_ALLOW_HEADERS = default_headers + (
-        'Access-Control-Allow-Origin',
-        "Content-Type",
-        "Origin",
-        "Authorization",
-    )
-    CORS_ALLOWED_ORIGINS = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:8000",
-        "http://127.0.0.1:8000",
-    ]
-    SESSION_COOKIE_DOMAIN = "127.0.0.1"
-    
     CORS_ORIGIN_ALLOW_ALL = True
-    
-    INSTALLED_APPS += ["corsheaders"]
+    CORS_ALLOW_CREDENTIALS = True
+    ALLOWED_HOSTS = ["*"]
 
 SESSION_COOKIE_HTTPONLY = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
