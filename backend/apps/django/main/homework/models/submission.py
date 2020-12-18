@@ -75,8 +75,12 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         if self.is_uploaded and self.has_changed("upload_at"):
             raise ValidationError(_(
                 "Die Datei wurde bereits am {upload_date} hochgeladen. Das Hochladedatum kann daher nicht mehr "
-                "geändert werden."
-            ), self.upload_at)
+                "geändert werden.",
+            ).format(self.upload_at))
+        if self.has_changed("file"):
+            raise ValidationError(_(
+                "Die Datei kann nicht verändert werden."
+            ))
         return super().clean()
     
     def can_user_access_file(self, user: "User") -> bool:
