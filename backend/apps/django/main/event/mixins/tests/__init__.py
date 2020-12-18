@@ -1,3 +1,3 @@
 from .event import *
-from .classtest import *
+from .exam import *
 from .modification import *

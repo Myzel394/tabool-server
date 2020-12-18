@@ -2,15 +2,15 @@ from django.contrib import admin
 from django_common_utils.libraries.fieldsets.mixins import CreationDateAdminFieldsetMixin, DefaultAdminMixin
 from simple_history.admin import SimpleHistoryAdmin
 
-from ...models import Classtest
+from ...models import Exam
 
 __all__ = [
-    "ClasstestAdmin"
+    "ExamAdmin"
 ]
 
 
-@admin.register(Classtest)
-class ClasstestAdmin(DefaultAdminMixin, SimpleHistoryAdmin):
+@admin.register(Exam)
+class ExamAdmin(DefaultAdminMixin, SimpleHistoryAdmin):
     fieldset_fields = {
         "default": ["course", "room", "targeted_date", "information", "!..."]
     }

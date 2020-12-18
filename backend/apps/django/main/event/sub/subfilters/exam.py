@@ -3,16 +3,16 @@ from django_filters import rest_framework as filters
 
 from apps.django.main.lesson.models import Course
 from apps.django.main.school_data.models import Subject
-from ...models import Classtest
+from ...models import Exam
 
 __all__ = [
-    "ClasstestFilterSet"
+    "ExamFilterSet"
 ]
 
 
-class ClasstestFilterSet(filters.FilterSet):
+class ExamFilterSet(filters.FilterSet):
     class Meta:
-        model = Classtest
+        model = Exam
         fields = {
             "targeted_date": ["lte", "gte", "exact"],
         }

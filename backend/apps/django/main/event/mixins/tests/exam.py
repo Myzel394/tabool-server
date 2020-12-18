@@ -7,13 +7,13 @@ from apps.django.main.lesson.mixins.tests import *
 from apps.django.main.school_data.mixins.tests import *
 from apps.django.utils.tests import *
 from apps.utils.dates import find_next_date_by_weekday
-from ...models import Classtest
+from ...models import Exam
 
 
-class ClasstestTestMixin(RoomTestMixin, CourseTestMixin, SubjectTestMixin, ABC):
+class ExamTestMixin(RoomTestMixin, CourseTestMixin, SubjectTestMixin, ABC):
     @classmethod
-    def Create_classtest(cls, **kwargs) -> Classtest:
-        return Classtest.objects.create(
+    def create_exam(cls, **kwargs) -> Exam:
+        return Exam.objects.create(
             **joinkwargs(
                 {
                     "course": cls.Create_course,

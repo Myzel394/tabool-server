@@ -1,5 +1,5 @@
-from .classtest import *
+from .exam import *
 from .event import *
 from .event_user_relation import *
 from .modification import *
-from .classtest_history import *
+from .exam_history import *

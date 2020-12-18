@@ -1,8 +1,8 @@
 from apps.django.main.event import constants
 
 __all__ = [
-    "CLASSTEST", "EVENT"
+    "EXAM", "EVENT"
 ]
 
-CLASSTEST = f"{constants.APP_LABEL}.Classtest"
+EXAM = f"{constants.APP_LABEL}.Exam"
 EVENT = f"{constants.APP_LABEL}.Event"

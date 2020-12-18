@@ -6,18 +6,18 @@ from rest_framework import serializers
 from apps.django.main.lesson.public.serializer_fields.course import CourseField
 from apps.django.main.school_data.public.serializer_fields.room import RoomField
 from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin
-from ...models import Classtest
+from ...models import Exam
 
 __all__ = [
-    "ClasstestListSerializer", "ClasstestDetailSerializer"
+    "ExamListSerializer", "ExamDetailSerializer"
 ]
 
 
-class ClasstestListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
-    preferred_id_key = "classtest"
+class ExamListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "exam"
     
     class Meta:
-        model = Classtest
+        model = Exam
         fields = [
             "course", "targeted_date", "truncated_information", "id"
         ]
@@ -26,15 +26,15 @@ class ClasstestListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     
     truncated_information = serializers.SerializerMethodField()
     
-    def get_truncated_information(self, instance: Classtest) -> Optional[str]:
+    def get_truncated_information(self, instance: Exam) -> Optional[str]:
         return create_short(instance.information) if instance.information else None
 
 
-class ClasstestDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
-    preferred_id_key = "classtest"
+class ExamDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "exam"
     
     class Meta:
-        model = Classtest
+        model = Exam
         fields = [
             "course", "room", "targeted_date", "information", "created_at", "id"
         ]

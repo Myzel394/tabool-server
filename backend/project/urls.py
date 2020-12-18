@@ -21,8 +21,8 @@ def build_url(prefix: str) -> str:
 
 data_patterns = build_patterns("data", [
     event_routers.data_router.urls,
-    event_routers.classtest_router.urls,
-    event_routers.classtest_history_router.urls,
+    event_routers.exam_router.urls,
+    event_routers.exam_history_router.urls,
     homework_routers.data_router.urls,
     homework_routers.homework_router.urls,
     homework_routers.homework_history_router.urls,

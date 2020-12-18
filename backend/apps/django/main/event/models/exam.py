@@ -15,7 +15,7 @@ from apps.django.utils.validators import validate_weekday_in_lesson_data_availab
 from apps.utils import format_datetime
 from constants import maxlength
 from ..public import model_names
-from ..querysets import ClasstestQuerySet
+from ..querysets import ExamQuerySet
 from ...lesson.public.model_references import *
 from ...school_data.public.model_references import *
 
@@ -25,17 +25,17 @@ if TYPE_CHECKING:
     from apps.django.main.lesson.models import Course
 
 __all__ = [
-    "Classtest"
+    "Exam"
 ]
 
 
-class Classtest(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
+class Exam(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     class Meta:
-        verbose_name = model_names.CLASSTEST
-        verbose_name_plural = model_names.CLASSTEST_PLURAL
+        verbose_name = model_names.EXAM
+        verbose_name_plural = model_names.EXAM_PLURAL
         ordering = ("targeted_date", "course", "room")
     
-    objects = ClasstestQuerySet.as_manager()
+    objects = ExamQuerySet.as_manager()
     
     course = models.ForeignKey(
         COURSE,

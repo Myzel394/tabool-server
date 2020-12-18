@@ -4,14 +4,14 @@ from rest_framework_nested.routers import NestedSimpleRouter
 from .views import *
 
 __all__ = [
-    "classtest_router", "classtest_history_router", "data_router", "relation_router"
+    "exam_router", "exam_history_router", "data_router", "relation_router"
 ]
 
-classtest_router = SimpleRouter()
-classtest_router.register("classtest", ClasstestViewSet, basename="classtest")
+exam_router = SimpleRouter()
+exam_router.register("exam", ExamViewSet, basename="exam")
 
-classtest_history_router = NestedSimpleRouter(classtest_router, "classtest", lookup="classtest")
-classtest_history_router.register("history", ClasstestHistoryViewSet, basename="classtest-history")
+exam_history_router = NestedSimpleRouter(exam_router, "exam", lookup="exam")
+exam_history_router.register("history", ExamHistoryViewSet, basename="exam-history")
 
 data_router = SimpleRouter()
 data_router.register("modification", ModificationViewSet, basename="modification")

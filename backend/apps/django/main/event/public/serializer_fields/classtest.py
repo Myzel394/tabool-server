@@ -1,12 +1,12 @@
-from apps.django.main.event.models import Classtest
-from apps.django.main.event.sub.subserializers.classtest import ClasstestDetailSerializer
+from apps.django.main.event.models import Exam
+from apps.django.main.event.sub.subserializers.exam import ExamDetailSerializer
 from apps.django.utils.serializers import WritableFromUserFieldMixin
 
 __all__ = [
-    "ClasstestField"
+    "ExamField"
 ]
 
 
-class ClasstestField(WritableFromUserFieldMixin):
-    model = Classtest
-    detail_serializer = ClasstestDetailSerializer
+class ExamField(WritableFromUserFieldMixin):
+    model = Exam
+    detail_serializer = ExamDetailSerializer

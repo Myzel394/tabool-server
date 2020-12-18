@@ -1,4 +1,4 @@
-from .lesson_content import *
+from .homework import *
 from .material import *
 from .scooso_data import *
 from .submission import *
