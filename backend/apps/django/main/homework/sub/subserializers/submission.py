@@ -41,7 +41,7 @@ class SubmissionDetailSerializer(
     class Meta:
         model = Submission
         fields = [
-            "file", "privatize", "filename", "upload_at", "is_uploaded", "size", "id"
+            "file", "privatize", "filename", "upload_date", "created_at", "is_uploaded", "size", "id"
         ]
         read_only_fields = [
             "is_uploaded", "id", "filename"

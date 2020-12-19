@@ -36,7 +36,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     class Meta:
         verbose_name = model_names.SUBMISSION
         verbose_name_plural = model_names.SUBMISSION_PLURAL
-        ordering = ("lesson", "upload_at")
+        ordering = ("lesson", "upload_date")
     
     objects = SubmissionQuerySet.as_manager()
     
@@ -53,7 +53,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         validators=[safe_file_validator]
     )  # type: FieldFile
     
-    upload_at = models.DateTimeField(
+    upload_date = models.DateTimeField(
         verbose_name=_("Hochladedatum"),
         help_text=_("Wann soll die Datei hochgeladen werden?"),
         blank=True,
@@ -72,11 +72,11 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     )  # type: bool
     
     def clean(self):
-        if self.is_uploaded and self.has_changed("upload_at"):
+        if self.is_uploaded and self.has_changed("upload_date"):
             raise ValidationError(_(
                 "Die Datei wurde bereits am {upload_date} hochgeladen. Das Hochladedatum kann daher nicht mehr "
                 "geändert werden.",
-            ).format(self.upload_at))
+            ).format(self.upload_date))
         if self.has_changed("file"):
             raise ValidationError(_(
                 "Die Datei kann nicht verändert werden."
@@ -86,7 +86,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     def can_user_access_file(self, user: "User") -> bool:
         return user.id == self.associated_user_id
     
-    @hook(BEFORE_UPDATE, when="upload_at", has_changed=True)
+    @hook(BEFORE_UPDATE, when="upload_date", has_changed=True)
     def _hook_full_clean(self):
         self.full_clean()
     
@@ -102,7 +102,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         return _("{filename} für {lesson} (Hochladedatum: {upload_date})").format(
             filename=Path(self.file.path).name,
             lesson=self.lesson,
-            upload_date=self.upload_at or "-"
+            upload_date=self.upload_date or "-"
         )
     
     def _get_material_from_scooso(self) -> MaterialType:

@@ -36,7 +36,7 @@ class LessonDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
         model = Lesson
         fields = [
             "lesson_data", "date", "id", "user_relation", "classbook", "materials", "homeworks", "modifications",
-            "submissions"
+            "submissions",
         ]
     
     user_relation = UserRelationField(UserLessonRelationSerializer)

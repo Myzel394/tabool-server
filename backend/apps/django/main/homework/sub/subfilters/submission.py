@@ -13,7 +13,7 @@ class SubmissionFilterSet(filters.FilterSet):
     class Meta:
         model = Submission
         fields = {
-            "upload_at": ["lte", "gte"],
+            "upload_date": ["lte", "gte"],
             "is_uploaded": ["exact"]
         }
     

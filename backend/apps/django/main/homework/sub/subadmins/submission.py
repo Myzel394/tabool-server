@@ -20,12 +20,12 @@ class SubmissionScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
 @admin.register(Submission)
 class SubmissionAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["lesson", "file", "upload_at", "is_uploaded", "!..."],
+        "default": ["lesson", "file", "upload_date", "is_uploaded", "!..."],
         "advanced": ["associated_user"]
     }
     autocomplete_fields = ["lesson"]
     list_filter = ["is_uploaded", "lesson__lesson_data__course__subject"]
-    list_display = ["__str__", "lesson", "subject", "upload_at"]
+    list_display = ["__str__", "lesson", "subject", "upload_date"]
     mixins = [CreationDateAdminFieldsetMixin]
     readonly_fields = ["is_uploaded"]
     inlines = [SubmissionScoosoDataAdminInline]

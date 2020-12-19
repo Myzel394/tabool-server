@@ -6,7 +6,7 @@ from django_hint import RequestType
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
-from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 
 from apps.django.extra.scooso_scraper.scrapers.material import *
@@ -25,8 +25,8 @@ __all__ = [
 class SubmissionViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = SubmissionFilterSet
-    ordering_fields = ["upload_at", "is_uploaded"]
-    parser_classes = [MultiPartParser, FormParser]
+    ordering_fields = ["upload_date", "is_uploaded"]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
     
     def get_queryset(self):
         return Submission.objects.user_accessible(self.request.user)
@@ -41,7 +41,6 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         #checks if post request data is an array initializes serializer with many=True
         else executes default CreateModelMixin.create function
         """
-        print(request.data)
         is_many = isinstance(request.data, list)
         if not is_many:
             return super().create(request, *args, **kwargs)

@@ -21,7 +21,7 @@ class SubmissionListSerializer(
     class Meta:
         model = Submission
         fields = [
-            "lesson", "filename", "upload_at", "size", "id"
+            "lesson", "filename", "size", "id"
         ]
     
     lesson = LessonField()
