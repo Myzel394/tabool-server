@@ -1,10 +1,12 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
 from django_hint import RequestType
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 
+from apps.django.utils.viewsets import BulkDeleteMixin
 from ....filters import HomeworkFilterSet
 from ....models import Homework
 from ....serializers import HomeworkDetailEndpointSerializer, HomeworkListSerializer
@@ -14,14 +16,16 @@ __all__ = [
 ]
 
 
-class HomeworkViewSet(viewsets.ModelViewSet):
+class HomeworkViewSet(viewsets.ModelViewSet, BulkDeleteMixin):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = HomeworkFilterSet
     search_fields = ["information"]
     ordering_fields = ["due_date"]  # TODO: Add user relation ordering!
     
     def get_queryset(self):
-        return Homework.objects.from_user(self.request.user).distinct()
+        if self.action in ["list", "retrieve", "update", "partial_update"]:
+            return Homework.objects.from_user(self.request.user).distinct()
+        return Homework.objects.only("private_to_user").filter(private_to_user=self.request.user).distinct()
     
     def get_serializer_class(self):
         if self.action == "list":

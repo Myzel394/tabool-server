@@ -1,3 +1,4 @@
+import random
 from pprint import pp
 
 import lorem
@@ -212,6 +213,27 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         
         self.assertStatusOk(response.status_code)
         pp(response.data)
+    
+    def test_delete_list(self):
+        DELETE_AMOUNT = 3
+        
+        for _ in range(10):
+            self.Create_homework(private_to_user=self.__class__.associated_user)
+        
+        homework_ids = random.choices(Homework.objects.all().values_list("id", flat=True).distinct(), k=DELETE_AMOUNT)
+        
+        response = self.client.delete("/api/data/homework/", {
+            "ids": homework_ids
+        }, content_type="application/json")
+        self.assertStatusOk(response.status_code)
+        self.assertEqual(Homework.objects.all().count(), 10 - DELETE_AMOUNT)
+        print(response.data)
+        
+        random_id = random.choice(Homework.objects.all().values_list('id', flat=True).distinct())
+        response = self.client.delete(f"/api/data/homework/{random_id}/")
+        self.assertStatusOk(response.status_code)
+        self.assertEqual(Homework.objects.all().count(), 10 - DELETE_AMOUNT - 1)
+        print(response.data)
 
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):

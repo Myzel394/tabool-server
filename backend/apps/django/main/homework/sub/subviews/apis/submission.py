@@ -10,6 +10,7 @@ from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 
 from apps.django.extra.scooso_scraper.scrapers.material import *
+from apps.django.utils.viewsets import BulkDeleteMixin
 from ...subserializers.material__endpoint import UploadSerializer
 from ...subserializers.submission__endpoint import SubmissionEndpointDetailSerializer
 from .... import constants
@@ -22,7 +23,7 @@ __all__ = [
 ]
 
 
-class SubmissionViewSet(viewsets.ModelViewSet):
+class SubmissionViewSet(viewsets.ModelViewSet, BulkDeleteMixin):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = SubmissionFilterSet
     ordering_fields = ["upload_date", "is_uploaded"]
