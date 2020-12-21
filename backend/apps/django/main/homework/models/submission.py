@@ -140,6 +140,9 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         if not self.is_in_action and not self.is_uploaded:
             self.is_in_action = True
             
+            if commit:
+                self.save()
+            
             try:
                 user = self.associated_user
                 

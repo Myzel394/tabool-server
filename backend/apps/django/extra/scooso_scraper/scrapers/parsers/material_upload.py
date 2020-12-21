@@ -1,3 +1,4 @@
+import json
 from dataclasses import dataclass
 
 
@@ -7,9 +8,12 @@ class MaterialUploadParser:
     
     @property
     def is_valid(self) -> bool:
-        # Content is always empty, so no method to check
-        return True
+        try:
+            json.loads(self.content.decode("ascii"))["item"]["file_id"]
+            return True
+        except:
+            return False
     
     @property
     def data(self):
-        return None
+        return json.loads(self.content.decode("ascii"))
