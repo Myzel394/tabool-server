@@ -72,7 +72,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     )  # type: bool
     
     def clean(self):
-        if self.pk is not "":
+        if self.pk != "":
             if self.is_uploaded and self.has_changed("upload_date"):
                 raise ValidationError(_(
                     "Die Datei wurde bereits am {upload_date} hochgeladen. Das Hochladedatum kann daher nicht mehr "
@@ -96,7 +96,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
         Path(self.file.path).unlink(missing_ok=True)
         
         if self.is_uploaded:
-            self.delete_file(False)
+            self.delete_file(commit=False)
     
     def __str__(self):
         # Translators: Diese Nachricht ist für den Admin-Bereich. Sie wird verwendet, um Einreichungen darzustellen.
@@ -192,4 +192,4 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     
     @property
     def folder_name(self) -> str:
-        return f"{self.lesson.lesson_data.course.folder_name}/{self.id}"
+        return f"{self.lesson.lesson_data.course.folder_name}"

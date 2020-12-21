@@ -97,7 +97,9 @@ class BulkDeleteMixin:
             queryset = self.get_queryset().only("id").filter(id__in=ids)
             
             if len(queryset) == len(ids):
-                queryset.delete()
+                # Delete each object, otherwise some signals would be missing
+                for obj in queryset:
+                    obj.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
             return Response({
                 "message": _("Nicht alle Objekte gefunden.")

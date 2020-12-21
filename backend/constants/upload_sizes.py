@@ -1,2 +1,2 @@
 MAX_UPLOAD_SIZE = 1024 * 1024 * 50  # 50 MiB
-MIN_UPLOAD_SIZE = 50  # 10 bytes
+MIN_UPLOAD_SIZE = 10  # 10 bytes
