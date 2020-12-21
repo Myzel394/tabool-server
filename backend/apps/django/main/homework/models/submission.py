@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 from typing import *
 
@@ -143,23 +144,22 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
                 user = self.associated_user
                 
                 time_id = self.lesson.lessonscoosodata.time_id
-                targeted_date = self.lesson.date
+                targeted_date = datetime.combine(self.lesson.date, self.lesson.lesson_data.start_time)
                 filename = self.file.name
                 content = Path(self.file.path).read_text()
                 
-                scraper = MaterialRequest(user.scoosodata.username, user.scoosodata.password)
-                scraper.login()
+                with MaterialRequest(user.scoosodata.username, user.scoosodata.password) as scraper:
+                    try:
+                        scraper.upload_material(
+                            time_id=time_id,
+                            targeted_datetime=targeted_date,
+                            filename=filename,
+                            data=content,
+                            material_type=MaterialTypeOptions.HOMEWORK
+                        )
+                    except BaseException as exception:
+                        raise exception
                 
-                try:
-                    scraper.upload_material(
-                        time_id=time_id,
-                        targeted_datetime=targeted_date,
-                        filename=filename,
-                        data=content,
-                        material_type=MaterialTypeOptions.HOMEWORK
-                    )
-                except Exception as exception:
-                    raise exception
                 self.is_uploaded = True
                 
                 material = self._get_material_from_scooso()

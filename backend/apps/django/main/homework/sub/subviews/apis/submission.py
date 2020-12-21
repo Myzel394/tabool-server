@@ -9,6 +9,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 
+from apps.django.extra.scooso_scraper.exceptions import ConnectionFailed
 from apps.django.extra.scooso_scraper.scrapers.material import *
 from apps.django.utils.viewsets import BulkDeleteMixin
 from ...subserializers.material__endpoint import UploadSerializer
@@ -86,22 +87,22 @@ class SubmissionViewSet(viewsets.ModelViewSet, BulkDeleteMixin):
     
     @action(detail=True, methods=["post", "get"])
     def upload(self, request: RequestType, pk: Optional[str] = None):
-        submission = self.get_object()
+        submission: Submission = self.get_object()
         
         if submission.is_uploaded:
             return Response({
                 "upload_status": constants.UPLOAD_STATUSES.UPLOADED
-            }, status=status.HTTP_202_ACCEPTED)
+            }, status=status.HTTP_200_OK)
         
         if submission.is_in_action:
             return Response({
                 "upload_status": constants.UPLOAD_STATUSES.PENDING
-            }, status=status.HTTP_202_ACCEPTED)
+            }, status=status.HTTP_200_OK)
         
         if request.method == "POST":
             try:
                 submission.upload_file()
-            except:
+            except ConnectionFailed:
                 return Response({
                     "upload_status": constants.UPLOAD_STATUSES.FAILED
                 }, status=status.HTTP_502_BAD_GATEWAY)

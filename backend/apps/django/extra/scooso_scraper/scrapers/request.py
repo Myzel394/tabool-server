@@ -22,7 +22,6 @@ class Request:
     
     def __post_init__(self):
         self.client = TorRequest()
-        self.client.session.headers = get_headers()
     
     def __enter__(self):
         self.login()
@@ -50,7 +49,7 @@ class Request:
         )
         with self.client as tr:
             for _ in range(login_attempts):
-                response = tr.session.request(constants.LOGIN_CONNECTION["method"], url)
+                response = tr.session.request(constants.LOGIN_CONNECTION["method"], url, headers=get_headers())
                 content = response.content.decode("utf-8")
                 
                 parser = LoginParser(content)
@@ -78,13 +77,12 @@ class Request:
             for _ in range(attempts):
                 data = get_data()
                 url = data.pop("url")
-                
                 """
-                request = requests.Request(url=url, **data)
+                request = requests.Request(url=url, headers=get_headers(), **data)
                 prepared = request.prepare()
                 print_request(prepared)"""
                 
-                response = tr.session.request(url=url, **data)
+                response = tr.session.request(url=url, headers=get_headers(), **data)
                 
                 if response.status_code == 200:
                     parser_instance = parser_class(response.content)
@@ -105,6 +103,4 @@ class Request:
             "logSessionId": self.session,
             "client": "rwg",
             "logUserIe": self.second_session_data,
-            "username": self.username,
-            "institution": "rwg"
         }
