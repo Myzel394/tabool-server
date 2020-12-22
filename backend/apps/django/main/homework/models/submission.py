@@ -7,7 +7,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
 from django_lifecycle import (
-    AFTER_DELETE, BEFORE_UPDATE, hook,
+    BEFORE_DELETE, BEFORE_UPDATE, hook,
     LifecycleModel,
 )
 from private_storage.fields import PrivateFileField
@@ -92,7 +92,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     def _hook_full_clean(self):
         self.full_clean()
     
-    @hook(AFTER_DELETE)
+    @hook(BEFORE_DELETE)
     def _hook_delete_file(self):
         Path(self.file.path).unlink(missing_ok=True)
         

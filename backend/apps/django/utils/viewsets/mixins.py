@@ -92,14 +92,14 @@ class BulkDeleteMixin:
     def delete(self, request: RequestType):
         ids = request.GET.getlist("ids[]", [])
         
-        print(ids)
         if type(ids) is list and len(ids) > 0:
             queryset = self.get_queryset().only("id").filter(id__in=ids)
             
             if len(queryset) == len(ids):
                 # Delete each object, otherwise some signals would be missing
                 for obj in queryset:
-                    obj.delete()
+                    pass
+                    # obj.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
             return Response({
                 "message": _("Nicht alle Objekte gefunden.")
