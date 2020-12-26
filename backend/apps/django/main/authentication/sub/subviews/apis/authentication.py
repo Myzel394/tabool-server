@@ -74,7 +74,7 @@ class LoginView(views.APIView):
     
     def is_ip_known(self, user: "User", ip_address: str) -> bool:
         return KnownIp.objects.filter(
-            assoicated_user=user,
+            associated_user=user,
             ip_address=ip_address,
             expire_date=datetime.now()
         ).exists()
@@ -86,7 +86,7 @@ class LoginView(views.APIView):
         
         # OTP
         ip_address = get_client_ip(request)
-        if self.is_ip_known(user=user, ip_address=ip_address) or is_ip_geolocation_suspicious(ip_address):
+        if not self.is_ip_known(user=user, ip_address=ip_address) or is_ip_geolocation_suspicious(ip_address):
             valid, otp_created, payload = self.handle_otp(user)
             
             if not valid:
