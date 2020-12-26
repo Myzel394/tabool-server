@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import *
 
 from django.contrib.auth import login, logout
@@ -8,16 +8,16 @@ from rest_framework import status, views
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.django.main.otp.constants import OTP_EXPIRE_DURATION
 from apps.django.main.otp.models.otp import OTP
 from apps.django.main.otp.utils import is_ip_geolocation_suspicious, send_otp_message
 from apps.django.utils.request import get_client_ip
+from ....models import KnownIp
 from ....serializers import (
     LoginSerializer, UserAuthenticationSerializer,
 )
 
 if TYPE_CHECKING:
-    from ....models import KnownIp, User
+    from ....models import User
 
 __all__ = [
     "LoginView", "LogoutView"
@@ -33,37 +33,44 @@ class LoginView(views.APIView):
         )
         send_otp_message(request=self.request, user=user, otp=otp)
     
-    def has_confirmed_otp(self, request: RequestType, user: "User") -> tuple[bool, bool, dict]:
+    def delete_old_otps(self):
+        OTP.objects.only("expire_date").filter(expire_date=datetime.now()).delete()
+    
+    def handle_otp(self, user: "User") -> tuple[bool, bool, dict]:
         """
         Checks whether the user has confirmed the OTP. If no OTP available, a new one will be created.
+        Deletes old OTPs
         
         :return: Valid, New OTP created?, payload
         """
-        
         available_otps = OTP.objects.only("associated_user").filter(associated_user=user)
         valid_otps = available_otps \
             .only("expire_date") \
-            .filter(expire_date__gte=datetime.now() - timedelta(minutes=OTP_EXPIRE_DURATION))
+            .filter(expire_date__gte=datetime.now())
         
-        if valid_otps.count() > 0:
-            if (token := request.data.get("otp_key", "")) != "":
-                for otp in valid_otps:  # type: OTP
-                    if otp.is_valid(token):
-                        return True, False, {}
-                
-                # Check if OTP is expired
-                if available_otps.only("token").filter(token=token).exists():
-                    self.create_new_otp(user)
-                    return False, False, {
-                        "otp_key": _("Dieses OTP ist abgelaufen. Es wurde dir ein neues zugeschickt.")
-                    }
-            
-            return False, False, {
-                "otp_key": _("Ungültiges OTP.")
-            }
-        else:
+        user_token = self.request.data.get("otp_key", "")
+        
+        # No OTP exists, create one
+        if available_otps.count() == 0:
             self.create_new_otp(user)
             return False, True, {}
+        
+        # Everything valid, log user in
+        if valid_otps.only("token").filter(token=user_token).exists():
+            self.delete_old_otps()
+            return True, False, {}
+        
+        # OTP expired
+        if available_otps.only("token").filter(token=user_token).exists():
+            self.delete_old_otps()
+            self.create_new_otp(user)
+            return False, True, {
+                "otp_key": _("Dieses OTP ist abgelaufen. Es wurde dir ein neues zugeschickt.")
+            }
+        
+        return False, False, {
+            "otp_key": _("Ungültiges OTP.")
+        }
     
     def post(self, request: RequestType):
         serializer = LoginSerializer(data=request.data)
@@ -73,13 +80,12 @@ class LoginView(views.APIView):
         # OTP
         ip_address = get_client_ip(request)
         if is_ip_geolocation_suspicious(ip_address):
-            valid, otp_created, payload = self.has_confirmed_otp(request, user)
+            valid, otp_created, payload = self.handle_otp(user)
             
             if not valid:
                 if otp_created:
                     return Response(payload, status=status.HTTP_401_UNAUTHORIZED)
                 return Response(payload, status=status.HTTP_400_BAD_REQUEST)
-            # TODO: Remove otps after login!
         
         # Known ips
         KnownIp.objects.create(

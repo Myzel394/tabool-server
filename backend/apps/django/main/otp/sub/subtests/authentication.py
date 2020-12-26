@@ -19,7 +19,9 @@ class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):
         
         self.assertEqual(401, response.status_code)
         
-        return OTP.objects.all().first()
+        otp = OTP.objects.all().first()
+        
+        return otp
     
     def test_otp_valid(self):
         otp = self.request()
@@ -49,7 +51,7 @@ class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):
         otp = self.request()
         
         # Make otp expired
-        otp.expire_date = datetime.now() - timedelta(minutes=10)
+        otp.expire_date = datetime.now() - timedelta(minutes=20)
         otp.save()
         
         response = self.client.post("/api/auth/login/", {
@@ -60,3 +62,12 @@ class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):
         
         self.assertStatusNotOk(response.status_code)
         self.assertEqual("Dieses OTP ist abgelaufen. Es wurde dir ein neues zugeschickt.", response.data["otp_key"])
+    
+    def test_otp_not_existing(self):
+        response = self.client.post("/api/auth/login/", {
+            "email": self.user.email,
+            "password": self.user_password,
+            "otp_key": "123456"
+        }, content_type="application/json")
+        
+        self.assertEqual(401, response.status_code)

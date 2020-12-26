@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_lifecycle import BEFORE_SAVE, hook, LifecycleModel
+from django_lifecycle import BEFORE_CREATE, hook, LifecycleModel
 
 from apps.django.utils.models import AssociatedUserMixin
 from .. import constants
@@ -35,10 +35,10 @@ class OTP(RandomIDMixin, AssociatedUserMixin, LifecycleModel):
     def is_valid(self, token: str) -> bool:
         return self.token == token
     
-    @hook(BEFORE_SAVE)
+    @hook(BEFORE_CREATE)
     def _hook_create(self):
         min_value = int("1" + "0" * (self.TOKEN_LENGTH - 1))
         max_value = int("9" * self.TOKEN_LENGTH)
         
         self.token = random.randint(min_value, max_value)
-        self.expire_date = datetime.now() + timedelta(constants.OTP_EXPIRE_DURATION)
+        self.expire_date = datetime.now() + timedelta(minutes=constants.OTP_EXPIRE_DURATION)
