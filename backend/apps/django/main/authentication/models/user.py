@@ -24,7 +24,7 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
         verbose_name=_("ID"),
         blank=True,
         editable=False,
-        max_length=6 + 4,
+        max_length=6 + 1 + 4,
         primary_key=True,
     )  # type: str
     

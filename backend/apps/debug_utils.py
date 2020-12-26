@@ -18,10 +18,8 @@ if settings.DEBUG:
     from apps.django.extra.news.models import *
     
     
-    def flush():
-        for model in [Room, Subject, Teacher, Course, Event, News, User]:
-            print(f"Deleting {model.__class__.__name__.lower()}s")
-            model.objects.all().delete()
+    def get_set_values(model, field):
+        return set(model.objects.all().values_list(field, flat=True))
     
     
     def create_user(confirm: bool = True, scooso_data: bool = True, staff: bool = False):

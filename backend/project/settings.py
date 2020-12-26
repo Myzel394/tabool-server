@@ -13,10 +13,14 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.db.models import CharField
+from django.db.models.functions import Lower
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
 load_dotenv()
+
+CharField.register_lookup(Lower)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", __file__)
 
@@ -44,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.postgres",
     
     "rest_framework",
     "simple_history",
@@ -91,11 +96,13 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.AnonRateThrottle",
-        "rest_framework.throttling.UserRateThrottle"
+        "rest_framework.throttling.UserRateThrottle",
+        "rest_framework.throttling.ScopedRateThrottle"
     ],
     "DEFAULT_THROTTLE_RATES": {
         "anon": os.getenv("THROTTLE_ANON"),
-        "user": os.getenv("THROTTLE_USER")
+        "user": os.getenv("THROTTLE_USER"),
+        "autocomplete": os.getenv("THROTTLE_AUTOCOMPLETE"),
     },
     "DEFAULT_PAGINATION_CLASS": "apps.django.utils.paginations.PageNumberPagination",
     "PAGE_SIZE": int(os.getenv("DEFAULT_PAGE_SIZE")),
@@ -145,11 +152,12 @@ ASGI_APPLICATION = "project.routing.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.getenv("POSTGRES_DB", BASE_DIR.joinpath("db.sqlite3")),
-        "USER": os.getenv("POSTGRES_USER", "user"),
+        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.postgresql_psycopg2"),
+        "NAME": os.getenv("POSTGRES_DB", "tabool_django_database"),
+        "USER": os.getenv("POSTGRES_USER", "tabool_django_role"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "password"),
         "HOST": os.getenv("POSTGRES_HOST", "localhost"),
         "PORT": os.getenv("POSTGRES_PORT", "5432")
@@ -284,3 +292,5 @@ if DEBUG:
 SESSION_COOKIE_HTTPONLY = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SAMESITE = ""
+
+CREATE_USERS_IN_THREAD = False

@@ -1,5 +1,6 @@
 from typing import *
 
+from django.conf import settings
 from django.db.models import Model
 
 from apps.utils.threads import run_in_thread
@@ -40,7 +41,10 @@ def post_save_manager(instance, **kwargs):
 
 def post_save_user_manager(instance, created: bool, *args, **kwargs):
     if created:
-        run_in_thread(create_user_relations, args=(instance,))
+        if settings.CREATE_USERS_IN_THREAD:
+            run_in_thread(create_user_relations, args=(instance,))
+        else:
+            create_user_relations(instance)
 
 
 def post_save_related_manager(instance, sender: Type[Model], created: bool, **kwargs):

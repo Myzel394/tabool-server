@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from django.utils.translation import gettext_lazy as _
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -27,6 +29,12 @@ def timetable(request):
     data = serializer.validated_data
     start_datetime: datetime = data["start_datetime"]
     end_datetime: datetime = data["end_datetime"]
+    
+    # Empty guard
+    if Lesson.objects.count() == 0:
+        return Response({
+            "detail": _("Der Stundenplan wurde noch nicht geladen.")
+        }, status=status.HTTP_501_NOT_IMPLEMENTED)
     
     # Get data
     lessons = Lesson.objects \
