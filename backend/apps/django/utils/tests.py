@@ -37,13 +37,14 @@ class UserTestMixin(DummyUser):
         Model = get_user_model()
         first_name = names.get_first_name()
         last_name = names.get_last_name()
+        password = kwargs.pop("password", first_name)
         
         user: "User" = Model.objects.create_user(
             **{
                 "first_name": first_name,
                 "last_name": last_name,
                 "email": f"{first_name}.{last_name}@gmail.com",
-                "password": first_name,
+                "password": password,
                 **kwargs
             }
         )
