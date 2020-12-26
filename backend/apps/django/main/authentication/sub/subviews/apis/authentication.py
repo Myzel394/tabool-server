@@ -72,6 +72,13 @@ class LoginView(views.APIView):
             "otp_key": _("Ungültiges OTP.")
         }
     
+    def is_ip_known(self, user: "User", ip_address: str) -> bool:
+        return KnownIp.objects.filter(
+            assoicated_user=user,
+            ip_address=ip_address,
+            expire_date=datetime.now()
+        ).exists()
+    
     def post(self, request: RequestType):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -79,7 +86,7 @@ class LoginView(views.APIView):
         
         # OTP
         ip_address = get_client_ip(request)
-        if is_ip_geolocation_suspicious(ip_address):
+        if self.is_ip_known(user=user, ip_address=ip_address) or is_ip_geolocation_suspicious(ip_address):
             valid, otp_created, payload = self.handle_otp(user)
             
             if not valid:
