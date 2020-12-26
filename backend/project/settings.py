@@ -122,7 +122,8 @@ CRONJOBS = [
     (os.getenv("CRON_FETCH_TIMETABLE_DAY_WEEKEND"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
     (os.getenv("CRON_FETCH_TIMETABLE_NIGHT_WEEKEND"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
     (os.getenv("CRON_FETCH_USER_NAMES"), "apps.django.main.authentication.cron_jobs.fetch_user_names"),
-    (os.getenv("CRON_CLEANUP_LIB_FOLDER"), "apps.django.core.cron_jobs.cleanup_lib_dir")
+    (os.getenv("CRON_CLEANUP_LIB_FOLDER"), "apps.django.core.cron_jobs.cleanup_lib_dir"),
+    (os.getenv("CRON_DELETE_KNOWN_IPS"), "apps.django.core.authentication.delete_known_ips")
 ]
 
 AUTH_USER_MODEL = "authentication.User"

@@ -17,7 +17,7 @@ from ....serializers import (
 )
 
 if TYPE_CHECKING:
-    from ....models import User
+    from ....models import KnownIp, User
 
 __all__ = [
     "LoginView", "LogoutView"
@@ -70,18 +70,26 @@ class LoginView(views.APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         
-        ip = get_client_ip(request)
-        if is_ip_geolocation_suspicious(ip):
+        # OTP
+        ip_address = get_client_ip(request)
+        if is_ip_geolocation_suspicious(ip_address):
             valid, otp_created, payload = self.has_confirmed_otp(request, user)
             
             if not valid:
                 if otp_created:
                     return Response(payload, status=status.HTTP_401_UNAUTHORIZED)
                 return Response(payload, status=status.HTTP_400_BAD_REQUEST)
+            # TODO: Remove otps after login!
+        
+        # Known ips
+        KnownIp.objects.create(
+            associated_user=user,
+            ip_address=ip_address
+        )
         
         login(request, user)
-        user_data = UserAuthenticationSerializer(user).data
         
+        user_data = UserAuthenticationSerializer(user).data
         return Response(user_data)
 
 
