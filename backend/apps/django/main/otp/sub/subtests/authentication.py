@@ -1,3 +1,5 @@
+import random
+import string
 from datetime import datetime, timedelta
 
 from apps.django.main.authentication.sub.subserializers.user import UserAuthenticationSerializer
@@ -41,7 +43,7 @@ class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):
         response = self.client.post("/api/auth/login/", {
             "email": self.user.email,
             "password": self.user_password,
-            "otp_key": str(int(otp.token) - 1)
+            "otp_key": "".join(random.choices(string.ascii_letters + string.digits, k=OTP.TOKEN_LENGTH))
         }, content_type="application/json")
         
         self.assertStatusNotOk(response.status_code)

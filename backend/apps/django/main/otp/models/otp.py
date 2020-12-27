@@ -1,4 +1,5 @@
 import random
+import string
 from datetime import datetime, timedelta
 
 from django.db import models
@@ -37,8 +38,5 @@ class OTP(RandomIDMixin, AssociatedUserMixin, LifecycleModel):
     
     @hook(BEFORE_CREATE)
     def _hook_create(self):
-        min_value = int("1" + "0" * (self.TOKEN_LENGTH - 1))
-        max_value = int("9" * self.TOKEN_LENGTH)
-        
-        self.token = random.randint(min_value, max_value)
+        self.token = "".join(random.choices(string.ascii_letters + string.digits, k=self.TOKEN_LENGTH))
         self.expire_date = datetime.now() + timedelta(minutes=constants.OTP_EXPIRE_DURATION)

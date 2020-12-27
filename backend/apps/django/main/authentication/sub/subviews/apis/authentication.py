@@ -36,12 +36,12 @@ class LoginView(views.APIView):
     def delete_old_otps(self):
         OTP.objects.only("expire_date").filter(expire_date=datetime.now()).delete()
     
-    def handle_otp(self, user: "User") -> tuple[bool, bool, dict]:
+    def handle_otp(self, user: "User") -> tuple[bool, dict]:
         """
         Checks whether the user has confirmed the OTP. If no OTP available, a new one will be created.
         Deletes old OTPs
         
-        :return: Valid, New OTP created?, payload
+        :return: Valid, payload
         """
         available_otps = OTP.objects.only("associated_user").filter(associated_user=user)
         valid_otps = available_otps \
@@ -50,25 +50,25 @@ class LoginView(views.APIView):
         
         user_token = self.request.data.get("otp_key", "")
         
-        # No OTP exists, create one
-        if available_otps.count() == 0:
-            self.create_new_otp(user)
-            return False, True, {}
-        
         # Everything valid, log user in
         if valid_otps.only("token").filter(token=user_token).exists():
             self.delete_old_otps()
-            return True, False, {}
+            return True, {}
         
         # OTP expired
         if available_otps.only("token").filter(token=user_token).exists():
             self.delete_old_otps()
             self.create_new_otp(user)
-            return False, True, {
+            return False, {
                 "otp_key": _("Dieses OTP ist abgelaufen. Es wurde dir ein neues zugeschickt.")
             }
         
-        return False, False, {
+        # No OTP exists, create one
+        if valid_otps.count() == 0:
+            self.create_new_otp(user)
+            return False, {}
+        
+        return False, {
             "otp_key": _("Ungültiges OTP.")
         }
     
@@ -87,12 +87,10 @@ class LoginView(views.APIView):
         # OTP
         ip_address = get_client_ip(request)
         if not self.is_ip_known(user=user, ip_address=ip_address) or is_ip_geolocation_suspicious(ip_address):
-            valid, otp_created, payload = self.handle_otp(user)
+            valid, payload = self.handle_otp(user)
             
             if not valid:
-                if otp_created:
-                    return Response(payload, status=status.HTTP_401_UNAUTHORIZED)
-                return Response(payload, status=status.HTTP_400_BAD_REQUEST)
+                return Response(payload, status=status.HTTP_401_UNAUTHORIZED)
         
         # Known ips
         KnownIp.objects.create(
