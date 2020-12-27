@@ -1,6 +1,6 @@
 from typing import *
 
-from django.contrib.auth import logout
+from django.contrib.auth import login
 from rest_framework import generics, status
 from rest_framework.metadata import SimpleMetadata
 from rest_framework.permissions import IsAuthenticated
@@ -36,7 +36,7 @@ class RegisterView(generics.CreateAPIView):
         user = self.perform_create(serializer)
         serializer = UserInformationSerializer(user)
         
-        logout(request)
+        login(request, user)
         
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -67,7 +67,7 @@ class FullRegisterView(generics.CreateAPIView):
         user: "User" = serializer.instance
         
         user.scoosodata.fetch_user_data()
-        logout(request)
+        login(request, user)
         
         return Response(
             UserInformationSerializer(serializer.instance).data,
