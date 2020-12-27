@@ -1,5 +1,4 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from django_filters.rest_framework import DjangoFilterBackend
 from django_hint import RequestType
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -23,7 +22,7 @@ class HomeworkViewSet(viewsets.ModelViewSet, BulkDeleteMixin):
     ordering_fields = ["due_date"]  # TODO: Add user relation ordering!
     
     def get_queryset(self):
-        if self.action in ["list", "retrieve", "update", "partial_update"]:
+        if self.action in ["list", "retrieve"]:
             return Homework.objects.from_user(self.request.user).distinct()
         return Homework.objects.only("private_to_user").filter(private_to_user=self.request.user).distinct()
     

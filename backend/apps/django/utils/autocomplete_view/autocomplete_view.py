@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import *
 
-from django.utils.translation import gettext_lazy as _
 from django_hint import *
 from rest_framework import status
 from rest_framework.response import Response
@@ -40,8 +39,7 @@ class AutocompleteView(APIView, ABC, Generic[T]):
         raise NotImplementedError()
     
     def validate_query(self, query: str) -> None:
-        if query == "":
-            raise InvalidQueryError(_("Der Such-Wer ist leer."))
+        pass
     
     def is_query_valid(self, query: str) -> bool:
         return query != ""
