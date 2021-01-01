@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from django_hint import RequestType
 from rest_framework import viewsets
@@ -21,10 +22,19 @@ class HomeworkViewSet(viewsets.ModelViewSet, BulkDeleteMixin):
     search_fields = ["information"]
     ordering_fields = ["due_date"]  # TODO: Add user relation ordering!
     
-    def get_queryset(self):
+    def check_object_permissions(self, request: RequestType, obj: Homework):
+        super().check_object_permissions(request, obj)
+        
         if self.action in ["list", "retrieve"]:
-            return Homework.objects.from_user(self.request.user).distinct()
-        return Homework.objects.only("private_to_user").filter(private_to_user=self.request.user).distinct()
+            return True
+        
+        if obj.private_to_user != request.user:
+            self.permission_denied(
+                request, _("Du hast keine Berechtigung, diese Aktion durchzuführen!")
+            )
+    
+    def get_queryset(self):
+        return Homework.objects.from_user(self.request.user).distinct()
     
     def get_serializer_class(self):
         if self.action == "list":

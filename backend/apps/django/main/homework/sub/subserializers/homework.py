@@ -1,3 +1,5 @@
+from typing import *
+
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -8,6 +10,9 @@ from apps.django.utils.serializers import (
 )
 from .user_relations import UserHomeworkRelationSerializer
 from ...models import Homework
+
+if TYPE_CHECKING:
+    from apps.django.main.authentication.models import User
 
 
 class HomeworkDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
@@ -33,6 +38,9 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
         super().__init__(*args, **kwargs)
         self._is_private = False
     
+    def get_private_to_user(self) -> Optional["User"]:
+        return self.context["request"].user if self._is_private else None
+    
     @staticmethod
     def get_is_private(obj: Homework):
         return obj.is_private
@@ -40,8 +48,13 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     def set_is_private(self, value: bool):
         self._is_private = value
     
+    def update(self, instance, validated_data):
+        validated_data["private_to_user"] = self.get_private_to_user()
+        
+        return super().update(instance, validated_data)
+    
     def create(self, validated_data):
-        validated_data["private_to_user"] = self.context["request"].user if self._is_private else None
+        validated_data["private_to_user"] = self.get_private_to_user()
         
         return super().create(validated_data)
     
