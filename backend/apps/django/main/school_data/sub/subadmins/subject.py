@@ -14,13 +14,13 @@ class SubjectScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
     fieldset_fields = {
         "default": ["code", "!..."]
     }
+    readonly_fields = ["code", "scooso_id"]
 
 
 @admin.register(Subject)
 class SubjectAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["name", "short_name", "!..."],
-        "extra": ["color", "!..."]
+        "default": ["name", "short_name", "color"],
     }
     inlines = [SubjectScoosoDataAdminInline]
     list_display = ["name", "short_name"]

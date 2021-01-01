@@ -14,12 +14,13 @@ class TeacherScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
     fieldset_fields = {
         "default": ["code", "!..."]
     }
+    readonly_fields = ["code"]
 
 
 @admin.register(Teacher)
 class TeacherAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["first_name", "last_name", "short_name", "email", "gender", "!..."],
+        "default": ["first_name", "last_name", "short_name", "email", "gender", ],
     }
     inlines = [TeacherScoosoDataAdminInline]
     list_display = ["short_name", "first_name", "last_name", "gender"]

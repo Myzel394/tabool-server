@@ -1,6 +1,9 @@
+from typing import *
+
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.fieldsets.mixins import CreationDateAdminFieldsetMixin, DefaultAdminMixin
+from django_hint import RequestType
 from simple_history.admin import SimpleHistoryAdmin
 
 from apps.django.main.school_data.public import model_names as school_names
@@ -34,3 +37,17 @@ class HomeworkAdmin(DefaultAdminMixin, SimpleHistoryAdmin):
         return instance.lesson.lesson_data.course.subject
     
     subject.short_description = school_names.SUBJECT
+    
+    def get_queryset(self, request: RequestType):
+        if request.user.has_perm("homework.view_private_homework"):
+            return Homework.objects.all()
+        return Homework.objects.all().only("private_to_user").filter(private_to_user=None)
+    
+    def has_view_permission(self, request: RequestType, obj: Optional[Homework] = None) -> bool:
+        if not request.user.has_perm("homework.view_homework"):
+            return False
+        
+        if obj and request:
+            return not obj.is_private or \
+                   (obj.is_private and request.user.has_perm("homework.can_view_private_homework"))
+        return True

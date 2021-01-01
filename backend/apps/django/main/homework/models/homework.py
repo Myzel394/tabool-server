@@ -38,6 +38,9 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
         verbose_name = model_names.HOMEWORK
         verbose_name_plural = model_names.HOMEWORK_PLURAL
         ordering = ("due_date", "type")
+        permissions = (
+            ("can_view_private_homework", _("Kann private Hausaufgaben sehen und bearbeiten")),
+        )
     
     objects = HomeworkQuerySet.as_manager()
     

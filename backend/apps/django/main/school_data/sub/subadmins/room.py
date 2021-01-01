@@ -14,12 +14,13 @@ class RoomScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
     fieldset_fields = {
         "default": ["code", "!..."]
     }
+    readonly_fields = ["code", "scooso_id"]
 
 
 @admin.register(Room)
 class RoomAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["place", "!..."]
+        "default": ["place"]
     }
     inlines = [RoomScoosoDataAdminInline]
     search_fields = ["place"]

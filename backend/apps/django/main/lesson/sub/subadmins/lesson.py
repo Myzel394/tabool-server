@@ -17,6 +17,7 @@ class LessonScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
     fieldset_fields = {
         "default": ["time_id"]
     }
+    readonly_fields = ["time_id"]
 
 
 @admin.register(Lesson)

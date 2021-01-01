@@ -20,6 +20,11 @@ __all__ = [
 
 
 class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
+    class Meta:
+        permissions = (
+            ("change_user_permissions", _("Kann Benutzer-Berechtigungen verändern")),
+        )
+    
     id = models.CharField(
         verbose_name=_("ID"),
         blank=True,

@@ -1,7 +1,10 @@
+from typing import *
+
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 from django_common_utils.libraries.utils import model_verbose
+from django_hint import RequestType
 
 from ...models import Modification
 
@@ -39,3 +42,14 @@ class ModificationAdmin(DefaultAdminMixin):
         )
     
     modifications.short_description = _("Veränderungen")
+    
+    def get_readonly_fields(self, request: Optional[RequestType] = None, obj: Optional[Modification] = None):
+        if request.user.is_authenticated and request.user.is_superuser:
+            return []
+        
+        if obj.from_scooso:
+            return [
+                "lesson", "start_datetime", "end_datetime", "room", "subject", "teacher", "information", "type"
+            ]
+        
+        return []

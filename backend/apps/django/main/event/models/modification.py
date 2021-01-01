@@ -87,6 +87,11 @@ class Modification(RandomIDMixin, LifecycleModel):
         blank=True,
     )  # type: time
     
+    from_scooso = models.BooleanField(
+        default=False,
+        verbose_name=_("Von Scooso"),
+    )
+    
     def __str__(self):
         return str(self.lesson)
     

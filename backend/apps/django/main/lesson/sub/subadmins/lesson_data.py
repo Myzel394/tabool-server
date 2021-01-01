@@ -20,6 +20,7 @@ class LessonDataScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
     fieldset_fields = {
         "default": ["lesson_type"]
     }
+    readonly_fields = ["lesson_type"]
 
 
 @admin.register(LessonData)

@@ -161,6 +161,7 @@ class TimetableRequest(Request):
             new_teacher=teacher,
             new_subject=subject,
             lesson=lesson,
+            from_scooso=True
         )
         
         return modification
