@@ -14,7 +14,7 @@ class MaterialDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     class Meta:
         model = Material
         fields = [
-            "name", "added_at", "id", "size"
+            "name", "added_at", "id", "size", "is_deleted"
         ]
     
     size = serializers.SerializerMethodField()

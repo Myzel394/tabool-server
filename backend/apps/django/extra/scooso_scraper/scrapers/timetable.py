@@ -185,6 +185,7 @@ class TimetableRequest(Request):
                 lesson=lesson,
                 filename=material['filename']
             )
+            materials_list.append(material_instance)
             
             if not material_instance.is_downloaded:
                 path = scraper.download_material(
@@ -194,8 +195,14 @@ class TimetableRequest(Request):
                 
                 material_instance.file = str(path.relative_to(settings.MEDIA_ROOT))
                 material_instance.save()
-                
-                materials_list.append(material_instance)
+        
+        # Mark deleted materials as deleted
+        imported_materials_ids = [
+            material.id
+            for material in materials_list
+        ]
+        for material in Material.objects.only("lesson").filter(lesson=lesson).exclude(id__in=imported_materials_ids):
+            material.mark_as_deleted()
         
         return materials_list
     

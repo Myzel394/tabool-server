@@ -32,7 +32,7 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     class Meta:
         verbose_name = model_names.MATERIAL
         verbose_name_plural = model_names.MATERIAL_PLURAL
-        ordering = ("-added_at", "name")
+        ordering = ("is_deleted", "-added_at", "name")
     
     objects = MaterialQuerySet.as_manager()
     
@@ -57,6 +57,11 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         blank=True,
         null=True
     )  # type: str
+    
+    is_deleted = models.BooleanField(
+        verbose_name=_("Gelöscht"),
+        default=False,
+    )
     
     def __str__(self):
         return _("{material_model_verbose} {name} für {lesson}").format(
@@ -118,3 +123,7 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
             url = scooso_data.build_download_url(user)
             return url
         return
+    
+    def mark_as_deleted(self):
+        self.is_deleted = True
+        self.save()

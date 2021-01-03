@@ -27,7 +27,7 @@ class MaterialDetailEndpointSerializer(BaseMaterialSerializer):
     class Meta:
         model = Material
         fields = [
-            "name", "added_at", "lesson", "id", "file", "scooso_download_link"
+            "name", "added_at", "lesson", "id", "file", "scooso_download_link", "is_deleted"
         ]
     
     file = serializers.SerializerMethodField()
