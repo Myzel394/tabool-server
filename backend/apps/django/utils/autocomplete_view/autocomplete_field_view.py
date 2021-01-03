@@ -35,4 +35,5 @@ class AutocompleteFieldView(AutocompleteView, ABC):
         return count \
                    .annotate(text=F(self.field)) \
                    .values("text", "count") \
+                   .filter(count__gt=0) \
                    .distinct()[:self.max_results]
