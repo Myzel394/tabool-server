@@ -39,7 +39,7 @@ class ExamDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
             "course", "room", "targeted_date", "information", "created_at", "id"
         ]
         read_only_fields = [
-            "created_at"
+            "created_at", "id"
         ]
     
     course = CourseField(detail=True)

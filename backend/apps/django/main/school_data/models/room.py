@@ -27,7 +27,8 @@ class Room(RandomIDMixin, LifecycleModel):
     place = models.CharField(
         verbose_name=_("Ort"),
         max_length=maxlength.ROOM,
-        validators=[validate_place]
+        validators=[validate_place],
+        unique=True
     )  # type: str
     
     def __str__(self):
