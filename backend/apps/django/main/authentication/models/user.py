@@ -19,6 +19,7 @@ __all__ = [
 ]
 
 
+# TODO: Add student data!
 class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     class Meta:
         permissions = (

@@ -9,7 +9,7 @@ from constants import weekdays
 
 
 def validate_place(value: str) -> None:
-    if not re.match("^(([A-Z]{1,2}[0-9]?)|([0-9]){3})|([A-Z][a-z ]{62})$", value):
+    if not re.match("^(([A-Z]{1,2}[0-9]?)|([0-9]){3})|([A-Z][A-z ]{62})$", value):
         raise ValidationError(
             _("Dieser Raum ist nicht gültig.")
         )

@@ -31,7 +31,7 @@ class EmailConfirmation(views.APIView):
                     "confirmation_key": [_("Der Email-Bestätigungscode ist falsch.")]
                 }, status=status.HTTP_400_BAD_REQUEST)
             
-            return Response()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({
             "confirmation_key": [_("Der Email-Bestätigungscode fehlt.")]
         }, status=status.HTTP_400_BAD_REQUEST)
