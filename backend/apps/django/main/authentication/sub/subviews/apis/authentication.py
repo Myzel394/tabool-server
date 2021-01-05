@@ -34,6 +34,7 @@ class LoginView(views.APIView):
         send_otp_message(request=self.request, user=user, otp=otp)
     
     def delete_old_otps(self):
+        # Delete expired
         OTP.objects.only("expire_date").filter(expire_date=datetime.now()).delete()
     
     def handle_otp(self, user: "User") -> tuple[bool, dict]:
@@ -51,13 +52,12 @@ class LoginView(views.APIView):
         user_token = self.request.data.get("otp_key", "")
         
         # Everything valid, log user in
-        if valid_otps.only("token").filter(token=user_token).exists():
-            self.delete_old_otps()
+        if (tokens := valid_otps.only("token").filter(token=user_token)).exists():
+            tokens.delete()
             return True, {}
         
         # OTP expired
         if available_otps.only("token").filter(token=user_token).exists():
-            self.delete_old_otps()
             self.create_new_otp(user)
             return False, {
                 "otp_key": _("Dieses OTP ist abgelaufen. Es wurde dir ein neues zugeschickt.")
@@ -91,6 +91,8 @@ class LoginView(views.APIView):
             
             if not valid:
                 return Response(payload, status=status.HTTP_401_UNAUTHORIZED)
+        
+        self.delete_old_otps()
         
         # Known ips
         KnownIp.objects.create(

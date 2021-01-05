@@ -11,7 +11,7 @@ class TeacherListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     
     class Meta:
         model = Teacher
-        fields = ["short_name", "last_name", "id"]
+        fields = ["short_name", "last_name", "id", "gender"]
 
 
 class TeacherDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):

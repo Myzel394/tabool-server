@@ -73,3 +73,17 @@ class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):
         }, content_type="application/json")
         
         self.assertEqual(401, response.status_code)
+    
+    def test_otp_deletes_after_success(self):
+        otp = self.request()
+        
+        response = self.client.post("/api/auth/login/", {
+            "email": self.user.email,
+            "password": self.user_password,
+            "otp_key": otp.token
+        }, content_type="application/json")
+        
+        self.assertStatusOk(response.status_code)
+        
+        new_otp = self.request()
+        self.assertNotEqual(otp, new_otp)

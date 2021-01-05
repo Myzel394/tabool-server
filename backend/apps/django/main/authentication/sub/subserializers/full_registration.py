@@ -34,7 +34,7 @@ class ScoosoDataRegistrationSerializer(serializers.ModelSerializer):
             scraper.login()
         except LoginFailed:
             raise ValidationError(
-                _("Mit diesen Anmeldedaten konnte ich mich bei Scooso nicht anmelden.")
+                _("Mit diesen Scooso-Anmeldedaten konnte der Server sich nicht anmelden.")
             )
         
         return data

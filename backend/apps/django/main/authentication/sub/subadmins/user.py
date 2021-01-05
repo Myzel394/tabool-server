@@ -27,7 +27,7 @@ class StudentAdminInline(admin.StackedInline):
 class UserAdmin(DjangoObjectActions, DefaultAdminMixin):
     fieldset_fields = {
         "default": ["first_name", "last_name", "email", "id", "is_active", "!..."],
-        "advanced": ["confirmation_key", "last_login", "user_permissions", "is_staff"]
+        "advanced": ["last_login", "user_permissions", "is_staff"]
     }
     list_display = ["email", "id", "is_active", "is_confirmed"]
     list_filter = ["is_active"]
