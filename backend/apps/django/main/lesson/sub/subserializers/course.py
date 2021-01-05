@@ -6,8 +6,21 @@ from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerM
 from ...models import Course, LessonData
 
 __all__ = [
-    "CourseDetailSerializer"
+    "CourseListSerializer", "CourseDetailSerializer"
 ]
+
+
+class CourseListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+    preferred_id_key = "course"
+    
+    class Meta:
+        model = Course
+        fields = [
+            "subject", "teacher", "course_number", "id"
+        ]
+    
+    subject = SubjectField(detail=True)
+    teacher = TeacherField(detail=True)
 
 
 class CourseDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
