@@ -44,6 +44,13 @@ class Lesson(RandomIDMixin):
         verbose_name=_("Datum")
     )  # type: typing_date
     
+    video_conference_link = models.CharField(
+        max_length=1023,
+        verbose_name=_("Videokonferenz-Link"),
+        blank=True,
+        null=True
+    )
+    
     def __str__(self):
         return _("{date}, {course}").format(
             date=format_datetime(self.date),

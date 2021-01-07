@@ -121,7 +121,7 @@ def get_mime_from_extension(filename):
 
 
 def print_request(prepared):
-    body = prepared.body.decode("ascii") if prepared.body else ""
+    body = prepared.body if prepared.body else ""
     
     print('{}\n{}\r\n{}\r\n\r\n{}'.format(
         '-----------START-----------',

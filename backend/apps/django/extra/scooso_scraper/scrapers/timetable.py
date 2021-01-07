@@ -1,5 +1,7 @@
+import random
 from datetime import date, datetime, time, timedelta
 from typing import *
+from urllib import parse
 
 from django.conf import settings
 
@@ -19,7 +21,7 @@ from apps.django.main.school_data.serializers import (
 )
 from .homework import LessonContentRequest
 from .material import MaterialRequest
-from .parsers import PureTimetableParser, PureTimetableParserDataType
+from .parsers import PureTimetableParser, PureTimetableParserDataType, VideoConferenceParser
 from .parsers.material import MaterialType
 from .parsers.timetable import (
     CourseType, EventType, LessonType, ModificationType, RoomType, SingleEventType, SingleLessonType,
@@ -75,6 +77,31 @@ class TimetableRequest(Request):
             }
         )
     
+    def get_video_conference_link(self, time_id: int, lesson_date: date) -> str:
+        def get_data():
+            targeted_date_str = lesson_date.strftime(constants.VIDEO_CONFERENCE_CONNECTION["dt_format"])
+            form_data = {
+                "cmd": 600,
+                "subcmd": 820,
+                "time_id": time_id,
+                "pardate": targeted_date_str,
+                "_": random.randint(0, 100_000_000),
+                **self.login_data
+            }
+            return {
+                "url": constants.VIDEO_CONFERENCE_CONNECTION["url"],
+                "method": constants.VIDEO_CONFERENCE_CONNECTION["method"],
+                "data": parse.unquote(parse.urlencode(form_data)),
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+                }
+            }
+        
+        return self.request_with_parser(
+            parser_class=VideoConferenceParser,
+            get_data=get_data
+        )
+    
     @staticmethod
     def import_teacher(data: TeacherType, **kwargs) -> Teacher:
         return import_from_scraper(TeacherScoosoScraperSerializer, data, **kwargs)
@@ -116,24 +143,38 @@ class TimetableRequest(Request):
     def import_material(data: MaterialType, **kwargs) -> Material:
         return import_from_scraper(MaterialScoosoScraperSerializer, data, **kwargs)
     
-    @classmethod
-    def import_lesson_from_scraper(cls, lesson: SingleLessonType, participants: list["User"] = None) -> Lesson:
-        room = cls.import_room(lesson['room'], none_on_error=True)
-        subject = cls.import_subject(lesson['subject'], none_on_error=True)
-        teacher = cls.import_teacher(lesson['teacher'], none_on_error=True)
-        course = cls.import_course(
+    def import_lesson_from_scraper(self, lesson: SingleLessonType, participants: list["User"] = None) -> Lesson:
+        room = self.import_room(lesson['room'], none_on_error=True)
+        subject = self.import_subject(lesson['subject'], none_on_error=True)
+        teacher = self.import_teacher(lesson['teacher'], none_on_error=True)
+        course = self.import_course(
             lesson['course'],
             none_on_error=True,
             subject=subject,
             teacher=teacher,
             participants=participants
         )
-        lesson_data = cls.import_lesson_data(
+        lesson_data = self.import_lesson_data(
             lesson['lesson'],
             room=room,
             course=course,
         )
-        lesson = cls.import_lesson(lesson['lesson'], lesson_data=lesson_data)
+        
+        video_conference_link = None
+        if lesson['lesson']['has_video_conference']:
+            video_conference_link = self.get_video_conference_link(
+                lesson['lesson']['time_id'],
+                lesson['lesson']['date']
+            )
+            
+            if video_conference_link == "":
+                video_conference_link = None
+        
+        lesson = self.import_lesson(
+            lesson['lesson'],
+            lesson_data=lesson_data,
+            video_conference_link=video_conference_link
+        )
         
         return lesson
     

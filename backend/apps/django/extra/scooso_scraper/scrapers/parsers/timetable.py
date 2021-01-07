@@ -57,6 +57,8 @@ class LessonType(TypedDict):
     end_time: time
     weekday: int
     date: date
+    
+    has_video_conference: bool
 
 
 class ModificationType(TypedDict):
@@ -171,7 +173,7 @@ class PureTimetableParser(BaseParser):
         }
     
     @classmethod
-    def get_lesson_data(cls, lesson: dict) -> Dict[str, Dict[str, Any]]:
+    def get_lesson_data(cls, lesson: dict) -> SingleLessonType:
         start_datetime: datetime = lesson["start_time"]
         end_datetime: datetime = lesson["end_time"]
         
@@ -181,7 +183,8 @@ class PureTimetableParser(BaseParser):
                 "end_time": end_datetime.time(),
                 "date": start_datetime.date(),
                 "time_id": lesson["time_id"],
-                "lesson_type": lesson["lessontype"]
+                "lesson_type": lesson["lessontype"],
+                "has_video_conference": lesson.get("videoconference") is not None
             },
             "room": cls.extract_room(lesson),
             "subject": cls.extract_subject(lesson),

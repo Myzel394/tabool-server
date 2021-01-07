@@ -13,7 +13,7 @@ class LessonScoosoScraperSerializer(ScoosoScraperSerializerMixin):
         model = Lesson
         scooso_model = LessonScoosoData
         fields = [
-            "time_id", "date"
+            "time_id", "date", "video_conference_link"
         ]
     
     scooso_id = None

@@ -9,7 +9,7 @@ import lorem
 
 from apps.django.main.homework.models import Homework
 from apps.django.main.lesson.mixins.tests import *
-from apps.django.main.lesson.models import LessonData
+from apps.django.main.lesson.models import Lesson, LessonData
 from apps.django.main.school_data.models import Subject, TeacherScoosoData
 from apps.django.utils.tests import *
 from ...actions import import_teachers
@@ -280,6 +280,11 @@ class ForeignSerializerTest(LessonTestMixin):
         print("Amount:", new_today_count)
         
         self.assertEqual(today_count, new_today_count)
+    
+    def test_random(self):
+        timetable = self.scraper.get_timetable()
+        self.scraper.import_timetable_from_scraper(timetable)
+        with_conference = Lesson.objects.all().filter(video_conference_link__isnull=False)
 
 
 class DummyTest(DummyUser):

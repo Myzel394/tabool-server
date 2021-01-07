@@ -23,10 +23,15 @@ class LessonListSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     class Meta:
         model = Lesson
         fields = [
-            "lesson_data", "date", "id"
+            "lesson_data", "date", "has_video_conference", "id"
         ]
     
     lesson_data = LessonDataListSerializer()
+    
+    has_video_conference = serializers.SerializerMethodField()
+    
+    def get_has_video_conference(self, instance: Lesson) -> str:
+        return instance.video_conference_link is not None
 
 
 class LessonDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
@@ -36,7 +41,7 @@ class LessonDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
         model = Lesson
         fields = [
             "lesson_data", "date", "id", "user_relation", "classbook", "materials", "homeworks", "modifications",
-            "submissions",
+            "submissions", "video_conference_link"
         ]
     
     user_relation = UserRelationField(UserLessonRelationSerializer)
