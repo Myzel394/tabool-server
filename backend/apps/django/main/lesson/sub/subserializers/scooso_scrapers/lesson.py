@@ -21,6 +21,12 @@ class LessonScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     
     date = serializers.DateField()
     
+    def get_unique_data(self, validated_data: dict) -> dict:
+        return {
+            "lesson_data": validated_data["lesson_data"],
+            "date": validated_data["date"]
+        }
+    
     def pop_scooso_data(self, validated_data: dict) -> dict:
         return {
             "time_id": validated_data.pop("time_id")
