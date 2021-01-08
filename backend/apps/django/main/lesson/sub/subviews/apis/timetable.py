@@ -5,8 +5,9 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from apps.django.main.event.models import Event
+from apps.django.main.event.models import Event, Exam
 from apps.django.main.event.sub.subserializers.event import EventDetailSerializer
+from apps.django.main.event.sub.subserializers.exam import ExamDetailSerializer
 from ....models import Lesson
 from ....serializers import LessonDetailSerializer, TimetableSerializer
 
@@ -41,14 +42,21 @@ def timetable(request):
         .from_user(user) \
         .only("date") \
         .filter(date__gte=start_datetime.date(), date__lte=end_datetime.date())
+    course_ids = lessons.values_list("lesson_data__course__id", flat=True).distinct()
     events = Event.objects \
         .from_user(user) \
         .only("start_datetime", "end_datetime") \
         .filter(start_datetime__gte=start_datetime, end_datetime__lte=end_datetime)
+    exams = Exam.objects \
+        .only("course", "targeted_date") \
+        .filter(course__id__in=course_ids, targeted_date__gte=start_datetime.date(),
+                targeted_date__lte=end_datetime.date()) \
+        .distinct()
     
     return Response({
         "lessons": LessonDetailSerializer(lessons, many=True, context=serializer_context).data,
         "events": EventDetailSerializer(events, many=True, context=serializer_context).data,
+        "exams": ExamDetailSerializer(exams, many=True, context=serializer_context).data,
         "earliest_date_available": Lesson.objects.only("date").earliest("date").date,
         "latest_date_available": Lesson.objects.only("date").latest("date").date
     })
