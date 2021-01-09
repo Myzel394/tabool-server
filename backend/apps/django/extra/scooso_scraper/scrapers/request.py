@@ -82,7 +82,6 @@ class Request:
                 url = data.pop("url")
                 headers = get_headers()
                 headers.update(data.pop("headers", {}))
-                
                 """
                 request = requests.Request(url=url, headers=headers, **data)
                 prepared = request.prepare()

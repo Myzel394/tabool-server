@@ -184,7 +184,7 @@ class MaterialRequest(Request):
                 "cmd": 3000,
                 "subcmd": 10,
                 "dir": material_type.value,
-                "destType": 10030,
+                "destType": 10_030,
                 "destId": time_id,
                 "parDate": targeted_date_str,
                 "_": random.randint(0, 100_000_000),
@@ -196,7 +196,7 @@ class MaterialRequest(Request):
                 "files": {
                     "file": (filename, data, mimetype_from_extension)
                 },
-                "data": form_data
+                "data": form_data,
             }
         
         self.request_with_parser(

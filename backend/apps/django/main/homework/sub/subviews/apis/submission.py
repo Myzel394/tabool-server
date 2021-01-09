@@ -9,7 +9,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 
-from apps.django.extra.scooso_scraper.exceptions import ConnectionFailed
+from apps.django.extra.scooso_scraper.exceptions import ConnectionFailed, RequestFailed
 from apps.django.extra.scooso_scraper.scrapers.material import *
 from apps.django.utils.viewsets import BulkDeleteMixin
 from ...subserializers.material__endpoint import UploadSerializer
@@ -72,12 +72,12 @@ class SubmissionViewSet(viewsets.ModelViewSet, BulkDeleteMixin):
         try:
             scraper.upload_material(
                 time_id=time_id,
-                targeted_date=targeted_date,
+                targeted_datetime=targeted_date,
                 filename=filename,
                 data=data,
                 material_type=material_type
             )
-        except:
+        except RequestFailed:
             return Response({
                 "upload_status": constants.UPLOAD_STATUSES.FAILED
             }, status=status.HTTP_502_BAD_GATEWAY)
