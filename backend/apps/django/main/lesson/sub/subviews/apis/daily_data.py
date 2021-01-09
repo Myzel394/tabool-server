@@ -1,5 +1,6 @@
 from datetime import date, datetime, time, timedelta
 
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django_hint import RequestType
 from rest_framework import status
@@ -11,7 +12,7 @@ from apps.django.main.event.sub.subserializers.event import EventDetailSerialize
 from apps.django.main.event.sub.subserializers.exam import ExamDetailSerializer
 from apps.django.main.event.sub.subserializers.modification import ModificationDetailSerializer
 from apps.django.main.homework.models import Homework
-from apps.django.main.homework.sub.subserializers.homework import HomeworkDetailSerializer
+from apps.django.main.homework.sub.subserializers.homework__endpoint import HomeworkDetailEndpointSerializer
 from ....models import Lesson
 from ....serializers import DailyDataSerializer, LessonDetailSerializer
 
@@ -29,6 +30,10 @@ def daily_data(request: RequestType):
     }
     data = serializer.validated_data
     targeted_date: date = data["date"]
+    targeted_date_range = (
+        datetime.combine(targeted_date, time.min),
+        datetime.combine(targeted_date, time.max)
+    )
     max_future_days: int = data["max_future_days"]
     
     # Empty guard
@@ -48,8 +53,8 @@ def daily_data(request: RequestType):
         .filter(lesson__in=lessons) \
         .distinct()
     homeworks = Homework.objects \
-        .only("lesson") \
-        .filter(lesson__in=lessons)
+        .only("lesson", "due_date") \
+        .filter(Q(lesson__in=lessons) | Q(due_date__range=targeted_date_range))
     exams = Exam.objects \
         .only("course", "targeted_date") \
         .filter(course__id__in=course_ids,
@@ -72,7 +77,7 @@ def daily_data(request: RequestType):
     return Response({
         "lessons": LessonDetailSerializer(lessons, many=True, context=serializer_context).data,
         "modifications": ModificationDetailSerializer(modifications, many=True, context=serializer_context).data,
-        "homeworks": HomeworkDetailSerializer(homeworks, many=True, context=serializer_context).data,
+        "homeworks": HomeworkDetailEndpointSerializer(homeworks, many=True, context=serializer_context).data,
         "exams": ExamDetailSerializer(exams, many=True, context=serializer_context).data,
         "events": EventDetailSerializer(events, many=True, context=serializer).data,
         "video_conference_lessons": LessonDetailSerializer(
