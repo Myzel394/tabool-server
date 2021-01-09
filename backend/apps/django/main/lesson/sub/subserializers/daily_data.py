@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-__all__ = {
+__all__ = [
     "DailyDataSerializer"
-}
+]
 
 
 class DailyDataSerializer(serializers.Serializer):
