@@ -1,4 +1,4 @@
-import random
+import secrets
 import string
 from datetime import datetime, timedelta
 
@@ -23,6 +23,7 @@ class OTP(RandomIDMixin, AssociatedUserMixin, LifecycleModel):
         ordering = ("expire_date",)
     
     TOKEN_LENGTH = 6
+    CHOICES = string.ascii_letters + string.digits
     
     token = models.CharField(
         max_length=TOKEN_LENGTH,
@@ -38,5 +39,8 @@ class OTP(RandomIDMixin, AssociatedUserMixin, LifecycleModel):
     
     @hook(BEFORE_CREATE)
     def _hook_create(self):
-        self.token = "".join(random.choices(string.ascii_letters + string.digits, k=self.TOKEN_LENGTH))
+        self.token = "".join(
+            secrets.choice(self.CHOICES)
+            for _ in range(self.TOKEN_LENGTH)
+        )
         self.expire_date = datetime.now() + timedelta(minutes=constants.OTP_EXPIRE_DURATION)

@@ -1,4 +1,4 @@
-import random
+import secrets
 import string
 from typing import *
 
@@ -67,22 +67,20 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     @hook(BEFORE_CREATE)
     def _hook_create_id(self):
         while True:
-            random_id = "".join(
-                random.choices(
-                    string.ascii_letters + string.digits,
-                    k=6
-                )
-            ) + "@" + "".join(
-                random.choices(
-                    string.digits,
-                    k=4
-                )
+            first_id_part = "".join(
+                secrets.choice(string.ascii_letters + string.digits)
+                for _ in range(6)
             )
+            second_id_part = "".join(
+                secrets.choice(string.digits)
+                for _ in range(4)
+            )
+            user_id = f"{first_id_part}@{second_id_part}"
             
-            if not self.__class__.objects.only("id").filter(id=random_id).exists():
+            if not self.__class__.objects.only("id").filter(id=user_id).exists():
                 break
         
-        self.id = random_id
+        self.id = user_id
     
     @hook(AFTER_CREATE)
     def _hook_send_mail(self):

@@ -1,4 +1,4 @@
-import random
+import secrets
 import string
 from typing import *
 
@@ -60,10 +60,8 @@ class Token(RandomIDMixin, CreationDateMixin, LifecycleModel):
         
         while True:
             token = "".join(
-                random.choices(
-                    string.ascii_letters + string.digits,
-                    k=constants.TOKEN_LENGTH
-                )
+                secrets.choice(string.ascii_letters + string.digits)
+                for _ in range(constants.TOKEN_LENGTH)
             )
             
             if token not in tokens:
