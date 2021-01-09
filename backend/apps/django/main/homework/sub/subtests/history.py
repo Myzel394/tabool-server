@@ -12,7 +12,7 @@ class HistoryTest(HomeworkTestMixin, ClientTestMixin):
         self.first_content = "First Edit!"
         self.second_content = "Second Edit!"
         
-        self.homework = self.Create_homework()
+        self.homework = self.Create_homework(private_to_user=self.logged_user)
         response = self.client.patch(
             f"/api/data/homework/{self.homework.id}/",
             {"information": self.first_content},

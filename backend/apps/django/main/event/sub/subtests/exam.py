@@ -12,11 +12,11 @@ from apps.utils.dates import find_next_date_by_weekday
 class ModelTest(ExamTestMixin, ClientTestMixin):
     def test_invalid_date(self):
         def func():
-            self.create_exam(
+            self.Create_exam(
                 targeted_date=find_next_date_by_weekday(date.today(), 5)
             )
         
-        self.create_exam()
+        self.Create_exam()
         self.assertRaises(ValidationError, func)
     
     def test_create(self):
@@ -36,7 +36,7 @@ class ModelTest(ExamTestMixin, ClientTestMixin):
             self.__class__.associated_user = user
             
             for _ in range(50):
-                self.create_exam()
+                self.Create_exam()
             
             targeted_date = date.today() + timedelta(days=2)
             filter_statement = "targeted_date"

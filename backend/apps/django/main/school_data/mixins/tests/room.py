@@ -14,10 +14,18 @@ __all__ = [
 class RoomTestMixin(TestCase, ABC):
     @staticmethod
     def Create_room(**kwargs) -> Room:
+        place = ""
+        
+        while True:
+            place = str(random.randint(100, 999))
+            
+            if not Room.objects.filter(place=place).exists():
+                break
+        
         return Room.objects.create(
             **joinkwargs(
                 {
-                    "place": lambda: f"{random.choice(range(3 + 1))}{random.choice(list(range(10, 99)))}",
+                    "place": lambda: place,
                 },
                 kwargs
             )

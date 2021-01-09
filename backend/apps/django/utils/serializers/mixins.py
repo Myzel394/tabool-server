@@ -114,16 +114,21 @@ class PrivatizeSerializerMixin(serializers.ModelSerializer):
         raise NotImplementedError()
     
     def create(self, validated_data):
+        should_privatize = validated_data.pop("privatize", True)
+        
         instance = super().create(validated_data)
-        validated_data.pop("privatize")
-        if validated_data.get("privatize", True):
+        
+        if should_privatize:
             for file in self.get_file_to_privatize(instance, validated_data):
                 privatize_file(file)
         return instance
     
     def update(self, instance, validated_data):
+        should_privatize = validated_data.pop("privatize", True)
+        
         instance = super().update(instance, validated_data)
-        if validated_data.get("privatize", True):
+        
+        if should_privatize:
             for file in self.get_file_to_privatize(instance, validated_data):
                 privatize_file(file)
         return instance

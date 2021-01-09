@@ -134,7 +134,7 @@ class ForeignSerializerTest(LessonTestMixin):
     def test_timetable(self):
         # Creation
         random_lesson = random.choice(self.timetable['lessons'])
-        lesson = TimetableRequest.import_lesson_from_scraper(random_lesson)
+        lesson = TimetableRequest(self.username, self.password).import_lesson_from_scraper(random_lesson)
         
         # Validation
         lesson_data = lesson.lesson_data

@@ -12,7 +12,7 @@ from ...models import Exam
 
 class ExamTestMixin(RoomTestMixin, CourseTestMixin, SubjectTestMixin, ABC):
     @classmethod
-    def create_exam(cls, **kwargs) -> Exam:
+    def Create_exam(cls, **kwargs) -> Exam:
         return Exam.objects.create(
             **joinkwargs(
                 {
