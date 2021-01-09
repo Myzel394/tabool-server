@@ -19,7 +19,7 @@ from ....serializers import DailyDataSerializer, LessonDetailSerializer
 @api_view(["GET"])
 def daily_data(request: RequestType):
     # Validation
-    serializer = DailyDataSerializer()
+    serializer = DailyDataSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     
     # Variables
@@ -29,10 +29,6 @@ def daily_data(request: RequestType):
     }
     data = serializer.validated_data
     targeted_date: date = data["date"]
-    targeted_date_range = (
-        datetime.combine(targeted_date, time.min),
-        datetime.combine(targeted_date, time.max),
-    )
     max_future_days: int = data["max_future_days"]
     
     # Empty guard

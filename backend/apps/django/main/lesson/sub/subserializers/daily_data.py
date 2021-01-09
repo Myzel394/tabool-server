@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework import serializers
 
 __all__ = [
@@ -6,5 +8,5 @@ __all__ = [
 
 
 class DailyDataSerializer(serializers.Serializer):
-    date = serializers.DateField()
-    max_future_days = serializers.IntegerField(min_value=0, max_value=30)
+    date = serializers.DateField(default=lambda: date.today())
+    max_future_days = serializers.IntegerField(min_value=0, max_value=30, default=5)

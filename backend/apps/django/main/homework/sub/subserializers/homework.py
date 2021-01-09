@@ -29,17 +29,27 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
         ]
     
     is_private = WritableSerializerMethodField(
-        deserializer_field=serializers.BooleanField()
+        deserializer_field=serializers.BooleanField(allow_null=True)
     )
     
     user_relation = UserRelationField(UserHomeworkRelationSerializer)
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._is_private = False
+        self._is_private = None
     
     def get_private_to_user(self) -> Optional["User"]:
-        return self.context["request"].user if self._is_private else None
+        user = None
+        
+        if self._is_private == True:
+            user = self.context["request"].user
+        elif self._is_private == False:
+            user = None
+        else:
+            if self.instance:
+                user = self.instance.private_to_user
+        
+        return user
     
     @staticmethod
     def get_is_private(obj: Homework):
