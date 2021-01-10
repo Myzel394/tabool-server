@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from apps.django.main.event.models import Event, Exam, Modification
 from apps.django.main.event.sub.subserializers.event import EventDetailSerializer
 from apps.django.main.event.sub.subserializers.exam import ExamDetailSerializer
-from apps.django.main.event.sub.subserializers.modification import ModificationDetailSerializer
+from apps.django.main.event.sub.subserializers.modification__endpoint import ModificationDetailEndpointSerializer
 from apps.django.main.homework.models import Homework
 from apps.django.main.homework.sub.subserializers.homework__endpoint import HomeworkDetailEndpointSerializer
 from ....models import Lesson
@@ -43,10 +43,12 @@ def daily_data(request: RequestType):
         }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
     
     # Get data
-    lessons = Lesson.objects \
-        .from_user(user) \
+    user_lessons = Lesson.objects \
+        .from_user(user)
+    lessons = user_lessons \
         .only("date") \
-        .filter(date=targeted_date)
+        .filter(date=targeted_date) \
+        .order_by("lesson_data__start_time")
     course_ids = lessons.values_list("lesson_data__course", flat=True).distinct()
     modifications = Modification.objects \
         .only("lesson") \
@@ -76,11 +78,15 @@ def daily_data(request: RequestType):
     
     return Response({
         "lessons": LessonDetailSerializer(lessons, many=True, context=serializer_context).data,
-        "modifications": ModificationDetailSerializer(modifications, many=True, context=serializer_context).data,
+        "modifications": ModificationDetailEndpointSerializer(
+            modifications, many=True, context=serializer_context
+        ).data,
         "homeworks": HomeworkDetailEndpointSerializer(homeworks, many=True, context=serializer_context).data,
         "exams": ExamDetailSerializer(exams, many=True, context=serializer_context).data,
         "events": EventDetailSerializer(events, many=True, context=serializer_context).data,
         "video_conference_lessons": LessonDetailSerializer(
             video_conference_lessons, many=True, context=serializer_context
-        ).data
+        ).data,
+        "earliest_date_available": user_lessons.only("date").earliest("date").date,
+        "latest_date_available": user_lessons.only("date").latest("date").date
     })
