@@ -38,8 +38,9 @@ def timetable(request):
         }, status=status.HTTP_501_NOT_IMPLEMENTED)
     
     # Get data
-    lessons = Lesson.objects \
-        .from_user(user) \
+    user_lessons = Lesson.objects \
+        .from_user(user)
+    lessons = user_lessons \
         .only("date") \
         .filter(date__gte=start_datetime.date(), date__lte=end_datetime.date())
     course_ids = lessons.values_list("lesson_data__course__id", flat=True).distinct()
@@ -57,6 +58,6 @@ def timetable(request):
         "lessons": LessonDetailSerializer(lessons, many=True, context=serializer_context).data,
         "events": EventDetailSerializer(events, many=True, context=serializer_context).data,
         "exams": ExamDetailSerializer(exams, many=True, context=serializer_context).data,
-        "earliest_date_available": Lesson.objects.only("date").earliest("date").date,
-        "latest_date_available": Lesson.objects.only("date").latest("date").date
+        "earliest_date_available": user_lessons.only("date").earliest("date").date,
+        "latest_date_available": user_lessons.only("date").latest("date").date
     })
