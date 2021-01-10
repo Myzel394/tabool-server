@@ -20,7 +20,7 @@ from ....serializers import DailyDataSerializer, LessonDetailSerializer
 @api_view(["GET"])
 def daily_data(request: RequestType):
     # Validation
-    serializer = DailyDataSerializer(data=request.data)
+    serializer = DailyDataSerializer(data=request.query_params)
     serializer.is_valid(raise_exception=True)
     
     # Variables
@@ -79,7 +79,7 @@ def daily_data(request: RequestType):
         "modifications": ModificationDetailSerializer(modifications, many=True, context=serializer_context).data,
         "homeworks": HomeworkDetailEndpointSerializer(homeworks, many=True, context=serializer_context).data,
         "exams": ExamDetailSerializer(exams, many=True, context=serializer_context).data,
-        "events": EventDetailSerializer(events, many=True, context=serializer).data,
+        "events": EventDetailSerializer(events, many=True, context=serializer_context).data,
         "video_conference_lessons": LessonDetailSerializer(
             video_conference_lessons, many=True, context=serializer_context
         ).data
