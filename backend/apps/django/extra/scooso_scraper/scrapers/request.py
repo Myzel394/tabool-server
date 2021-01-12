@@ -1,12 +1,15 @@
+import random
 from dataclasses import dataclass
 from typing import *
 
+import requests
 from torrequest import TorRequest
 
 from .parsers import BaseParser, LoginParser
 from .. import constants
 from ..exceptions import *
 from ..utils import *
+from ..utils import print_request
 
 __all__ = [
     "Request"
@@ -31,7 +34,15 @@ class Request:
     def __exit__(self, *args, **kwargs):
         self.logout()
     
+    @staticmethod
+    def create_underscore() -> int:
+        number = random.randint(0, 100_000_000)
+        number -= number % 43
+        
+        return number
+    
     # Utils
+    
     def build_url(self, url: str, data: dict) -> str:
         use_data = data.copy()
         use_data.update(self.login_data)
@@ -82,15 +93,23 @@ class Request:
                 url = data.pop("url")
                 headers = get_headers()
                 headers.update(data.pop("headers", {}))
-                """
+                
                 request = requests.Request(url=url, headers=headers, **data)
                 prepared = request.prepare()
-                print_request(prepared)"""
+                
+                if type(prepared.body) is bytes:
+                    prepared.body = prepared.body.decode("ascii")
+                
+                print_request(prepared)
                 
                 response = tr.session.request(url=url, headers=headers, **data)
                 
                 if response.status_code == 200:
-                    parser_instance = parser_class(response.content)
+                    content = response.content
+                    if type(content) is bytes:
+                        content = bytes.decode("ascii")
+                    
+                    parser_instance = parser_class(content)
                     
                     if parser_instance.is_valid:
                         break
@@ -108,6 +127,4 @@ class Request:
             "logSessionId": self.session,
             "client": "rwg",
             "logUserIe": self.second_session_data,
-            "sc_version": 6,
-            "institution": "rwg"
         }
