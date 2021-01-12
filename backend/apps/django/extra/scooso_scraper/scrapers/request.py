@@ -2,14 +2,12 @@ import random
 from dataclasses import dataclass
 from typing import *
 
-import requests
 from torrequest import TorRequest
 
 from .parsers import BaseParser, LoginParser
 from .. import constants
 from ..exceptions import *
 from ..utils import *
-from ..utils import print_request
 
 __all__ = [
     "Request"
@@ -94,13 +92,14 @@ class Request:
                 headers = get_headers()
                 headers.update(data.pop("headers", {}))
                 
+                """
                 request = requests.Request(url=url, headers=headers, **data)
                 prepared = request.prepare()
                 
                 if type(prepared.body) is bytes:
                     prepared.body = prepared.body.decode("ascii")
                 
-                print_request(prepared)
+                print_request(prepared)"""
                 
                 response = tr.session.request(url=url, headers=headers, **data)
                 
