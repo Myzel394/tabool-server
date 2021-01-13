@@ -105,8 +105,6 @@ class Request:
                 
                 if response.status_code == 200:
                     content = response.content
-                    if type(content) is bytes:
-                        content = bytes.decode("ascii")
                     
                     parser_instance = parser_class(content)
                     
