@@ -44,7 +44,12 @@ class LessonDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
             "submissions", "video_conference_link"
         ]
     
-    user_relation = UserRelationField(UserLessonRelationSerializer)
+    user_relation = UserRelationField(
+        UserLessonRelationSerializer,
+        default={
+            "attendance": True
+        }
+    )
     
     lesson_data = LessonDataDetailSerializer()
     classbook = ClassbookDetailSerializer()

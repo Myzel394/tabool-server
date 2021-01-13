@@ -1,5 +1,5 @@
 from apps.django.utils.viewsets import UserRelationViewSetMixin
-from ....models import Homework
+from ....models import Homework, UserHomeworkRelation
 from ....serializers import UserHomeworkRelationSerializer
 
 __all__ = [
@@ -10,3 +10,4 @@ __all__ = [
 class UserHomeworkRelationViewSet(UserRelationViewSetMixin):
     serializer_class = UserHomeworkRelationSerializer
     model = Homework
+    relation_model = UserHomeworkRelation

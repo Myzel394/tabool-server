@@ -6,31 +6,24 @@ from django_common_utils.libraries.handlers.mixins import WhiteSpaceStripHandler
 from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import QueryType
-from django_lifecycle import BEFORE_CREATE, BEFORE_SAVE, hook, LifecycleModel
+from django_lifecycle import LifecycleModel
 
-from apps.django.extra.scooso_scraper.utils import rename_name_for_color_mapping
-from apps.django.utils.models import ColorMixin
 from constants import maxlength
-from .. import constants
 from ..public import model_names
-from ..querysets import SubjectQuerySet
 
 if TYPE_CHECKING:
     from apps.django.main.lesson.models import Lesson
-    from . import UserSubjectRelation
 
 __all__ = [
     "Subject"
 ]
 
 
-class Subject(RandomIDMixin, ColorMixin, LifecycleModel, HandlerMixin):
+class Subject(RandomIDMixin, LifecycleModel, HandlerMixin):
     class Meta:
         verbose_name = model_names.SUBJECT
         verbose_name_plural = model_names.SUBJECT_PLURAL
         ordering = ("name",)
-    
-    objects = SubjectQuerySet.as_manager()
     
     name = models.CharField(
         verbose_name=_("Name"),
@@ -45,13 +38,6 @@ class Subject(RandomIDMixin, ColorMixin, LifecycleModel, HandlerMixin):
     def __str__(self):
         return self.name
     
-    @hook(BEFORE_CREATE)
-    @hook(BEFORE_SAVE)
-    def _hook_set_color(self):
-        if not self.color:
-            colors_mapping_name = rename_name_for_color_mapping(self.name)
-            self.color = constants.SUBJECT_COLORS_MAPPING[colors_mapping_name]
-    
     @property
     def lessons_data(self) -> QueryType["Lesson"]:
         # noinspection PyUnresolvedReferences
@@ -62,7 +48,3 @@ class Subject(RandomIDMixin, ColorMixin, LifecycleModel, HandlerMixin):
         return {
             "name": WhiteSpaceStripHandler()
         }
-    
-    @property
-    def user_relations(self) -> QueryType["UserSubjectRelation"]:
-        return self.usersubjectrelation_set.all()

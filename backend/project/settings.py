@@ -63,8 +63,6 @@ INSTALLED_APPS = [
     "django_object_actions",
     "corsheaders",
     
-    "apps.django.utils.relation_managers.apps.RelationManagersConfig",
-    
     "apps.django.main.authentication",
     "apps.django.main.school_data",
     "apps.django.main.lesson",

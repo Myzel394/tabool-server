@@ -32,7 +32,13 @@ class HomeworkDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
         deserializer_field=serializers.BooleanField(allow_null=True)
     )
     
-    user_relation = UserRelationField(UserHomeworkRelationSerializer)
+    user_relation = UserRelationField(
+        UserHomeworkRelationSerializer,
+        default={
+            "completed": False,
+            "ignore": False
+        }
+    )
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

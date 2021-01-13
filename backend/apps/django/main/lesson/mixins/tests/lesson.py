@@ -1,6 +1,6 @@
 import os
 import random
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
 from typing import *
 
 from dateutil.rrule import MINUTELY, rrule
@@ -8,6 +8,7 @@ from dateutil.rrule import MINUTELY, rrule
 from apps.django.extra.scooso_scraper.mixins.tests import *
 from apps.django.main.school_data.mixins.tests import *
 from apps.django.utils.tests import *
+from apps.utils import find_next_date_by_weekday
 from apps.utils.time import dummy_datetime_from_target
 from constants.weekdays import ALLOWED_WEEKDAYS
 from .course import CourseTestMixin
@@ -25,10 +26,13 @@ class LessonTestMixin(
 ):
     @classmethod
     def Create_lesson(cls, **kwargs):
-        return Lesson.objects.create_automatically(
+        lesson_data = kwargs.pop("lesson_data", cls.Create_lesson_data())
+        
+        return Lesson.objects.create(
             **joinkwargs(
                 {
-                    "lesson_data": cls.Create_lesson_data,
+                    "date": lambda: find_next_date_by_weekday(date.today(), lesson_data.weekday),
+                    "lesson_data": lambda: lesson_data,
                 },
                 kwargs
             )

@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-from pprint import pp
 
 from apps.django.extra.scooso_scraper.actions import fetch_timetable
 from apps.django.main.event.mixins.tests import ModificationTestMixin
@@ -45,21 +44,3 @@ class TimetableAPITest(LessonTestMixin, ModificationTestMixin, ClientTestMixin, 
         self.assertStatusOk(response.status_code)
         
         return response.data
-    
-    def test_api(self):
-        pp(self.get_data())
-    
-    def test_request_prefers_ids(self):
-        data_with_details = self.get_data()
-        
-        ids = self.get_course_ids()
-        header = {
-            "course": ids
-        }
-        data_with_ids = self.get_data({
-            "X-PREFERRED-IDS": header
-        })
-        
-        self.assertNotEqual(data_with_ids, data_with_details)
-        
-        pp(data_with_ids)

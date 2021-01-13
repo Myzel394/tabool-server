@@ -7,7 +7,6 @@ from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
 from apps.utils import format_datetime
-from .user_relations.lesson import UserLessonRelation
 from ..public import *
 from ..public import model_names
 from ..querysets import LessonQuerySet
@@ -15,7 +14,7 @@ from ..validators import validate_lesson_weekday
 
 if TYPE_CHECKING:
     from datetime import date as typing_date
-    from . import LessonData, UserLessonRelation
+    from . import LessonData
     from apps.django.main.homework.models import Homework
 
 __all__ = [
@@ -69,7 +68,3 @@ class Lesson(RandomIDMixin):
     @property
     def homeworks(self) -> QueryType["Homework"]:
         return self.homework_set.all()
-    
-    @property
-    def user_relations(self) -> QueryType["UserLessonRelation"]:
-        return self.userlessonrelation_set.all()

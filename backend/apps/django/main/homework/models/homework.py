@@ -7,7 +7,6 @@ from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import CreationDateMixin
 from django_eventstream import send_event
-from django_hint import QueryType
 from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 from simple_history.models import HistoricalRecords
 
@@ -18,13 +17,11 @@ from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.utils.history_extras.extras import UserInformationHistoricalModel
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
 from constants import maxlength
-from .user_relations.homework import UserHomeworkRelation
 from ..public import HOMEWORK_CHANNEL, model_names
 from ..querysets import HomeworkQuerySet
 
 if TYPE_CHECKING:
     from datetime import date, datetime
-    from . import UserHomeworkRelation
     from apps.django.main.lesson.models import Lesson
     from apps.django.main.authentication.models import User
 
@@ -125,7 +122,3 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     @property
     def edited_at(self) -> "datetime":
         return self.history.latest().history_date
-    
-    @property
-    def user_relations(self) -> QueryType["UserHomeworkRelation"]:
-        return self.userhomeworkrelation_set.all()

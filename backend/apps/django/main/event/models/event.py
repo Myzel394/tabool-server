@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers.mixins import WhiteSpaceStripHandler
 from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_hint import QueryType
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
 from apps.django.main.school_data.public import model_names as school_names
@@ -19,7 +18,6 @@ from ...school_data.public.model_references import *
 if TYPE_CHECKING:
     from datetime import datetime
     from apps.django.main.school_data.models import Room
-    from . import UserEventRelation
 
 __all__ = [
     "Event"
@@ -74,10 +72,6 @@ class Event(RandomIDMixin, HandlerMixin):
     @hook(BEFORE_UPDATE, when_any=["start_datetime", "end_datetime"], has_changed=True)
     def _hook_full_clean(self):
         self.full_clean()
-    
-    @property
-    def user_relations(self) -> QueryType["UserEventRelation"]:
-        return self.usereventrelation_set.all()
     
     @property
     def is_all_day(self) -> bool:

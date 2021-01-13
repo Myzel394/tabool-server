@@ -5,11 +5,7 @@ from django.conf import settings
 from django.db.models import Q
 from django_common_utils.libraries.models.mixins import CustomQuerySetMixin
 
-from apps.django.utils.querysets import RelationQuerySetMixin
-from ...models.user_relations.homework import UserHomeworkRelation
-
 if TYPE_CHECKING:
-    from ...models import Homework
     from apps.django.main.school_data.models import Subject
 
 __all__ = [
@@ -18,14 +14,7 @@ __all__ = [
 
 
 # noinspection PyTypeChecker
-class HomeworkQuerySet(CustomQuerySetMixin.QuerySet, RelationQuerySetMixin):
-    ref_filter_statement = "lesson__lesson_data__course"
-    related_model = UserHomeworkRelation
-    
-    @staticmethod
-    def get_ref_from_element(element: "Homework"):
-        return element.lesson.lesson_data.course
-    
+class HomeworkQuerySet(CustomQuerySetMixin.QuerySet):
     def expired(self) -> "HomeworkQuerySet":
         return self.only("due_date").filter(
             Q(due_date=None) | Q(due_date__lte=datetime.now())

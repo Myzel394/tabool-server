@@ -30,6 +30,11 @@ class EventDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
             "user_relation", "id"
         ]
     
-    user_relation = UserRelationField(UserEventRelationSerializer)
+    user_relation = UserRelationField(
+        UserEventRelationSerializer,
+        default={
+            "ignore": False
+        }
+    )
     
     room = RoomField(required=False, detail=True)

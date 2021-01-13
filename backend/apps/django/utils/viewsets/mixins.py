@@ -1,14 +1,14 @@
 from abc import abstractmethod
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 from django_hint import *
-from rest_framework import serializers, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-
-from .helpers.mixins import DefaultAccessSerializer
 
 __all__ = [
     "UserRelationViewSetMixin", "RetrieveFromUserMixin", "RetrieveAllMixin", "ModelHistoryMixin", "BulkDeleteMixin"
@@ -19,31 +19,60 @@ class UserRelationViewSetMixin(
     viewsets.mixins.UpdateModelMixin,
     viewsets.GenericViewSet
 ):
-    access_serializer: Type[serializers.ModelSerializer] = DefaultAccessSerializer
     model: StandardModelType
-    related_name: str = "user_relations"
-    model_lookup_name: str = "id"
-    serializer_lookup_key_name: str = "id"
+    relation_model: StandardModelType
+    
+    # Lookup
+    kwargs_field_name: str = "pk"
+    model_lookup_field_name: str = "id"
+    
+    relation_model_lookup: Optional[str] = None
+    relation_model_user_lookup: str = "user"
     
     def get_queryset(self):
         return self.model.objects.from_user(self.request.user).distinct()
     
-    def get_object(self):
-        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+    def get_model_object(self) -> StandardModelType:
+        """Gets the model (not relation model) via the key argument in kwargs"""
         
-        # Validation
-        serializer = self.access_serializer(data={
-            self.serializer_lookup_key_name: self.kwargs[lookup_url_kwarg]
-        })
-        serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
+        key = self.kwargs.get(self.kwargs_field_name)
+        
+        if key == "":
+            raise ValidationError(_("ID fehlt."))
         
         available_objects = self.get_queryset()
         obj = get_object_or_404(available_objects, **{
-            self.model_lookup_name: validated_data[self.serializer_lookup_key_name]
+            self.model_lookup_field_name: key
         })
         
-        return getattr(obj, self.related_name).only("user").get(user=self.request.user)
+        return obj
+    
+    def get_relation_object(self, obj: StandardModelType) -> StandardModelType:
+        """Gets the relation model from `obj`"""
+        
+        # Check if instance already exists
+        field = self.relation_model_lookup or self.model.__name__.lower()
+        user_field = self.relation_model_user_lookup
+        model_data = {
+            field: obj,
+            user_field: self.request.user
+        }
+        
+        try:
+            relation_obj = self.relation_model.objects \
+                .only(field, user_field) \
+                .get(**model_data)
+        except ObjectDoesNotExist:
+            relation_obj = self.relation_model.objects \
+                .create(**model_data)
+        
+        return relation_obj
+    
+    def get_object(self):
+        obj = self.get_model_object()
+        relation_object = self.get_relation_object(obj)
+        
+        return relation_object
 
 
 class RetrieveFromUserMixin(

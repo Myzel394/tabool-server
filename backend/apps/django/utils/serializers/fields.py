@@ -1,4 +1,5 @@
-from abc import ABC
+import inspect
+from abc import ABC, abstractmethod
 from typing import *
 
 from django.contrib.auth import get_user_model
@@ -132,16 +133,51 @@ class WritableAllFieldMixin(WritableIDField, ABC):
 
 
 class UserRelationField(serializers.SerializerMethodField):
-    def __init__(self, serializer: Type[serializers.Serializer], *args, **kwargs):
+    @abstractmethod
+    def default(self, obj: StandardModelType):
+        raise NotImplementedError()
+    
+    def __init__(
+            self,
+            serializer: Type[serializers.Serializer],
+            default: Union[dict, Callable],
+            *args,
+            **kwargs
+    ):
         super().__init__(*args, **kwargs)
         
+        self.default_value = default
         self.serializer = serializer
     
-    def to_representation(self, value):
+    def get_relation_object(self, model_obj) -> Optional[StandardModelType]:
+        model = self.parent.Meta.model
+        relation_model = self.serializer.Meta.model
+        field_name = model.__name__.lower()
         user = self.context["request"].user
-        relation = value.user_relations.get(user=user)
         
-        return self.serializer(relation).data
+        try:
+            relation_obj = relation_model.objects.only("user", field_name).get(**{
+                "user": user,
+                field_name: model_obj
+            })
+        except ObjectDoesNotExist:
+            return
+        else:
+            return relation_obj
+    
+    def get_default_value(self, model: StandardModelType):
+        if type(self.default_value) is dict:
+            return self.default_value
+        elif inspect.isfunction(self.default_value):
+            return self.default_value(model, self)
+        
+        raise TypeError(f"`default_value` can either be a dict or function!")
+    
+    def to_representation(self, value):
+        if obj := self.get_relation_object(value):
+            return self.serializer(obj).data
+        
+        return self.get_default_value(value)
 
 
 class HistoryUserField(serializers.ModelSerializer):
