@@ -12,3 +12,8 @@ class ClassbookScoosoScraperSerializer(GetOrCreateSerializerMixin):
         fields = [
             "presence_content", "distance_content"
         ]
+    
+    def get_unique_fields(self, validated_data):
+        return {
+            "lesson": validated_data.pop("lesson")
+        }

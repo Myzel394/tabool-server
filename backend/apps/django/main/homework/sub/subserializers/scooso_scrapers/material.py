@@ -21,15 +21,15 @@ class MaterialScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     created_at = serializers.DateTimeField()
     filename = serializers.CharField()
     
+    def get_unique_data(self, validated_data: dict) -> dict:
+        return {
+            "added_at": validated_data.pop("created_at"),
+            "lesson": validated_data.pop("lesson"),
+            "name": validated_data.pop("filename")
+        }
+    
     def pop_scooso_data(self, validated_data: dict) -> dict:
         return {
             "scooso_id": validated_data.pop("scooso_id"),
             "owner_id": validated_data.pop("owner_id")
-        }
-    
-    def rename_data(self, validated_data: dict) -> dict:
-        return {
-            "added_at": validated_data["created_at"],
-            "lesson": validated_data["lesson"],
-            "name": validated_data["filename"]
         }

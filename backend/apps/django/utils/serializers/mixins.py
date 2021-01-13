@@ -135,8 +135,16 @@ class PrivatizeSerializerMixin(serializers.ModelSerializer):
 
 
 class GetOrCreateSerializerMixin(serializers.ModelSerializer):
+    def get_unique_fields(self, validated_data):
+        return validated_data
+    
     def create(self, validated_data):
-        return self.Meta.model.objects.get_or_create(**validated_data)[0]
+        unique_data = self.get_unique_fields(validated_data)
+        
+        instance = self.Meta.model.objects.get_or_create(**unique_data)[0]
+        self.update(instance, validated_data)
+        
+        return instance
 
 
 class ModelHistoryListSerializerMixin(serializers.ModelSerializer):

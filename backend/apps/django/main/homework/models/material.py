@@ -48,7 +48,6 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         null=True,
         upload_to=build_material_upload_to,
         max_length=1023,
-        validators=[safe_file_validator]
     )  # type: FieldFile
     
     name = models.CharField(
@@ -90,6 +89,8 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
                     extension=extension,
                     available_extensions=listify(extensions)
                 ))
+            
+            safe_file_validator(self.file)
         
         return super().clean()
     

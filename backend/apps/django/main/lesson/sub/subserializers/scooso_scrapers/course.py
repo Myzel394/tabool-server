@@ -14,14 +14,14 @@ class CourseScoosoScraperSerializer(GetOrCreateSerializerMixin):
         ]
     
     def create(self, validated_data):
-        participants = validated_data.pop("participants") or []
+        participants = validated_data.pop("participants", [])
         instance: Course = super().create(validated_data)
         instance.participants.add(*participants)
         
         return instance
     
     def update(self, instance, validated_data):
-        participants = validated_data.pop("participants") or []
+        participants = validated_data.pop("participants", [])
         instance: Course = super().update(instance, validated_data)
         instance.participants.add(*participants)
         
