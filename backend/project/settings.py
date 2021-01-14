@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "apps.django.main.event",
     "apps.django.main.homework",
     "apps.django.main.otp",
+    "apps.django.main.sessions.apps.SessionsConfig",
     
     "apps.django.extra.scooso_scraper",
     "apps.django.extra.news",

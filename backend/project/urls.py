@@ -13,6 +13,7 @@ from apps.django.main.homework.views import HomeworkAutocompleteView
 from apps.django.main.lesson import routers as lesson_routers
 from apps.django.main.lesson.views import daily_data, timetable
 from apps.django.main.school_data import routers as school_routers
+from apps.django.main.sessions import routers as sessions_routers
 from apps.django.utils.urls import build_patterns
 
 
@@ -28,7 +29,8 @@ data_patterns = build_patterns("data", [
     homework_routers.homework_router.urls,
     homework_routers.homework_history_router.urls,
     lesson_routers.data_router.urls,
-    school_routers.data_router.urls
+    school_routers.data_router.urls,
+    sessions_routers.data_router.urls
 ])
 
 relation_patterns = build_patterns("user-relation", [
