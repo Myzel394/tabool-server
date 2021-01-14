@@ -45,10 +45,10 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.postgres",
+    "user_sessions",
     
     "rest_framework",
     "simple_history",
@@ -76,10 +76,12 @@ INSTALLED_APPS = [
     "apps.django.core",
 ]
 
+SESSION_ENGINE = "user_sessions.backends.db"
+
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
+    "user_sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -255,6 +257,8 @@ BLEACH_STRIP_COMMENTS = True
 # SESSION & LOGIN
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 days
+LOGOUT_REDIRECT_URL = "/"
+SILENCED_SYSTEM_CHECKS = ['admin.E410']
 
 # EMAIL
 DEFAULT_FROM_EMAIL = "testfrom@gmail.com"

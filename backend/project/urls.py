@@ -60,6 +60,7 @@ urlpatterns = [
     
     path("", include("apps.django.core.urls")),
     path("admin/", admin.site.urls),
+    path("", include("user_sessions.urls", "user_sessions"))
 ]
 
 urlpatterns += data_patterns
