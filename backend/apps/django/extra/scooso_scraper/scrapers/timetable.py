@@ -228,19 +228,15 @@ class TimetableRequest(Request):
             )
             materials_list.append(material_instance)
             
-            print(material_instance.name, material_instance.is_downloaded)
             if not material_instance.is_downloaded:
-                try:
-                    path = scraper.download_material(
-                        material['scooso_id'],
-                        settings.MEDIA_ROOT / build_material_upload_to(material_instance, material['filename'])
-                    )
-                    
-                    material_instance.file = str(path.relative_to(settings.MEDIA_ROOT))
-                    
-                    material_instance.save()
-                except:
-                    material_instance.delete()
+                path = scraper.download_material(
+                    material['scooso_id'],
+                    settings.MEDIA_ROOT / build_material_upload_to(material_instance, material['filename'])
+                )
+                
+                material_instance.file = str(path.relative_to(settings.MEDIA_ROOT))
+                
+                material_instance.save()
         
         # Mark deleted materials as deleted
         imported_materials_ids = [

@@ -1,3 +1,5 @@
+from typing import *
+
 from rest_framework import serializers
 
 from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin
@@ -14,10 +16,18 @@ class MaterialDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     class Meta:
         model = Material
         fields = [
-            "name", "added_at", "id", "size", "is_deleted"
+            "name", "added_at", "size", "id", "file", "is_deleted"
         ]
     
     size = serializers.SerializerMethodField()
+    file = serializers.SerializerMethodField()
     
-    def get_size(self, instance: Material) -> int:
-        return instance.file.size
+    def get_file(self, instance: Material) -> Optional[str]:
+        if instance.file.name:
+            return instance.file.url
+        return None
+    
+    def get_size(self, instance: Material) -> Optional[int]:
+        if instance.file.name:
+            return instance.file.size
+        return None

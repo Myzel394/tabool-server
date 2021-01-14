@@ -33,7 +33,7 @@ class MaterialViewSet(viewsets.ReadOnlyModelViewSet):
     def download_link(self, request: RequestType, pk: str):
         material = get_object_or_404(Material, id=pk)
         
-        file = material.file.url or material.get_scooso_download_link(request.user)
+        file = material.file.url if material.file.name else material.get_scooso_download_link(request.user)
         
         if file:
             return Response({
