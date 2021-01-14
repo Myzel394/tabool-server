@@ -55,7 +55,8 @@ def daily_data(request: RequestType):
         .filter(lesson__in=lessons) \
         .distinct()
     homeworks = Homework.objects \
-        .only("lesson", "due_date") \
+        .only("lesson", "due_date", "userhomeworkrelation__completed") \
+        .filter(userhomeworkrelation__completed=False) \
         .filter(Q(lesson__in=lessons) | Q(due_date__range=targeted_date_range))
     exams = Exam.objects \
         .only("course", "targeted_date") \

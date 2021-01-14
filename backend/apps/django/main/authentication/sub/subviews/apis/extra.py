@@ -1,4 +1,5 @@
-from rest_framework import views
+from django.contrib.auth import update_session_auth_hash
+from rest_framework import status, views
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -22,5 +23,7 @@ class PasswordChangeView(views.APIView):
         new_password = validated_data["new_password"]
         
         user.set_password(new_password)
+        user.save()
+        update_session_auth_hash(request, user)
         
-        return Response()
+        return Response(status=status.HTTP_204_NO_CONTENT)
