@@ -1,4 +1,5 @@
 import mimetypes
+import re
 from pathlib import Path
 from typing import *
 
@@ -8,7 +9,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_common_utils.libraries.utils import listify, model_verbose
-from django_lifecycle import AFTER_DELETE, BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
+from django_lifecycle import AFTER_DELETE, BEFORE_CREATE, BEFORE_SAVE, BEFORE_UPDATE, hook, LifecycleModel
 from magic import Magic
 from private_storage.fields import PrivateFileField
 
@@ -106,6 +107,10 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     def _hook_full_clean(self):
         self.full_clean()
     
+    @hook(BEFORE_SAVE)
+    def _hook_improve_name(self):
+        self.name = self.improve_name(self.name)
+    
     @property
     def folder_name(self) -> str:
         return f"{self.lesson.lesson_data.course.folder_name}"
@@ -128,3 +133,29 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     def mark_as_deleted(self):
         self.is_deleted = True
         self.save()
+    
+    def improve_name(self, name: str) -> str:
+        improved_name = name
+        
+        # Remove unnecessary date
+        date_string = self.added_at.strftime("%Y%M%D")
+        improved_name = improved_name.lstrip(date_string)
+        
+        # Remove unnecessary course name
+        course_name = self.lesson.lesson_data.course.name
+        escaped_course_name = re.escape(course_name)
+        improved_name = re.sub(
+            f"(^{escaped_course_name})|({escaped_course_name}$)",
+            "",
+            improved_name,
+            flags=re.IGNORECASE
+        )
+        
+        # Remove dashes and underscores
+        improved_name = re.sub(r"[\-_]", " ", improved_name)
+        
+        # Strip space
+        improved_name = improved_name.strip()
+        improved_name = re.sub(r"\s\s+", " ", improved_name)
+        
+        return improved_name
