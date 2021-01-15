@@ -36,19 +36,17 @@ class ScoosoCredentialsView(views.APIView):
         try:
             logged_in_data = scraper.login()
         except LoginFailed:
-            raise ValidationError(
-                _("Mit diesen Scooso-Anmeldedaten konnte der Server sich nicht anmelden."),
-                status.HTTP_400_BAD_REQUEST
-            )
+            raise ValidationError({
+                "detail": _("Mit diesen Scooso-Anmeldedaten konnte der Server sich nicht anmelden."),
+            }, status.HTTP_400_BAD_REQUEST)
         
         # Validate Scooso's user id belongs to request's saved user id
         scooso_data: "ScoosoData" = request.user.scoosodata
         
         if scooso_data.scooso_id != logged_in_data["id"]:
-            raise ValidationError(
-                _("Dieser Benutzer gehört dir nicht."),
-                status.HTTP_400_BAD_REQUEST
-            )
+            raise ValidationError({
+                "detail": _("Dieser Benutzer gehört dir nicht."),
+            }, status.HTTP_400_BAD_REQUEST)
     
     @staticmethod
     def is_new_data_equal(request: RequestType, username: str, password: str) -> bool:
