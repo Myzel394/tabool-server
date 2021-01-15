@@ -15,7 +15,10 @@ class SessionViewSet(
 ):
     serializer_class = SessionSerializer
     
-    def get_object(self, pk: str):
+    def get_object(self):
+        kwargs_name = self.lookup_url_kwarg or self.lookup_field
+        pk = self.kwargs[kwargs_name]
+        
         return get_object_or_404(
             self.get_queryset(),
             sessionrelation__id=pk
