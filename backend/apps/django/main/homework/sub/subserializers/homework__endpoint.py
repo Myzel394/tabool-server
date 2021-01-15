@@ -39,10 +39,16 @@ class HomeworkDetailEndpointSerializer(BaseHomeworkDetailSerializer):
     class Meta:
         model = Homework
         fields = [
-            "lesson", "is_private", "due_date", "information", "type", "created_at", "id", "user_relation"
+            "lesson", "is_private", "due_date", "information", "type", "created_at", "id", "user_relation",
+            "truncated_information"
         ]
         read_only_fields = [
             "created_at", "id", "user_relation"
         ]
     
+    truncated_information = serializers.SerializerMethodField()
+    
     lesson = LessonField(detail=True)
+    
+    def get_truncated_information(self, instance: Homework) -> str:
+        return create_short(instance.information) if instance.information else None
