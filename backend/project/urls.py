@@ -46,21 +46,22 @@ urlpatterns = [
     path("private-media/", include(private_storage.urls)),
     
     # API
-    path(f"api/data/", include("rest_framework.urls")),
-    path(f"api/data/contacts/", contacts),
-    path(f"api/data/timetable/", timetable),
-    path(f"api/data/daily-data/", daily_data),
+    path("api/data/", include("rest_framework.urls")),
+    path("api/data/contacts/", contacts),
+    path("api/data/timetable/", timetable),
+    path("api/data/daily-data/", daily_data),
     
     # Autocomplete
-    path(f"api/autocomplete/homework/type/", HomeworkAutocompleteView.as_view()),
+    path("api/autocomplete/homework/type/", HomeworkAutocompleteView.as_view()),
     
-    path(f"api/auth/change-password/", PasswordChangeView.as_view()),
-    path(f"api/auth/scooso-credentials/", ScoosoCredentialsView.as_view()),
-    path(f"api/auth/registration/", RegisterView.as_view()),
-    path(f"api/auth/full-registration/", FullRegisterView.as_view()),
-    path(f"api/auth/login/", LoginView.as_view()),
-    path(f"api/auth/logout/", LogoutView.as_view()),
-    path(f"api/auth/confirmation/", EmailConfirmation.as_view()),
+    path("api/auth/change-password/", PasswordChangeView.as_view()),
+    path("api/auth/scooso-credentials/", ScoosoCredentialsView.as_view()),
+    path("api/auth/registration/", RegisterView.as_view()),
+    path("api/auth/full-registration/", FullRegisterView.as_view()),
+    path("api/auth/login/", LoginView.as_view()),
+    path("api/auth/logout/", LogoutView.as_view()),
+    path("api/auth/confirmation/", EmailConfirmation.as_view()),
+    path("api/auth/reset-password/", include("django_rest_passwordreset.urls", namespace="password_reset")),
     
     path("", include("apps.django.core.urls")),
     path("admin/", admin.site.urls),

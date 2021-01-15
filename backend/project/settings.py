@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "user_sessions",
     
     "rest_framework",
+    "django_rest_passwordreset",
     "simple_history",
     "django_filters",
     "django_common_utils.apps.Config",
@@ -63,7 +64,7 @@ INSTALLED_APPS = [
     "django_object_actions",
     "corsheaders",
     
-    "apps.django.main.authentication",
+    "apps.django.main.authentication.apps.AuthenticationConfig",
     "apps.django.main.school_data",
     "apps.django.main.lesson",
     "apps.django.main.event",
@@ -299,3 +300,12 @@ SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SAMESITE = ""
 
 CREATE_USERS_IN_THREAD = False
+DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME = 1
+DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
+    "CLASS": "django_rest_passwordreset.tokens.RandomStringTokenGenerator",
+    "OPTIONS": {
+        "min_length": 20,
+        "max_length": 30,
+    }
+}
+DJANGO_REST_PASSWORDRESET_NO_INFORMATION_LEAKAGE = False
