@@ -5,7 +5,6 @@ from django.contrib.auth import login, logout
 from django.utils.translation import gettext_lazy as _
 from django_hint import RequestType
 from rest_framework import status, views
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.django.main.otp.models.otp import OTP
@@ -107,11 +106,9 @@ class LoginView(views.APIView):
 
 
 class LogoutView(views.APIView):
-    permission_classes = [
-        IsAuthenticated
-    ]
-    
     def post(self, request):
-        logout(request)
-        
-        return Response()
+        if request.is_authenticated():
+            logout(request)
+            
+            return Response()
+        return Response(status=status.HTTP_202_ACCEPTED)
