@@ -23,4 +23,4 @@ class SessionSerializer(serializers.ModelSerializer):
         return instance.session_key == request_session.session_key
     
     def get_id(self, instance: Session) -> str:
-        return instance.sessionrelation_id
+        return instance.sessionrelation.id
