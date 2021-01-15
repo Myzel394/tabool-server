@@ -29,6 +29,11 @@ class ScoosoData(RandomIDMixin, LifecycleModel):
         verbose_name=model_names.USER,
     )
     
+    scooso_id = models.CharField(
+        max_length=127,
+        verbose_name=_("Scooso-Id"),
+    )
+    
     username = EncryptedCharField(
         max_length=127,
         verbose_name=_("Scooso-Benutzername"),
@@ -48,6 +53,7 @@ class ScoosoData(RandomIDMixin, LifecycleModel):
             data = scraper.login(login_attempts=2)
             first_name = data["first_name"]
             last_name = data["last_name"]
+            scooso_id = data["id"]
         except:
             send_event(USER_NAMES_FETCHED_CHANNEL, "fail", {
                 "id": user.id
@@ -56,7 +62,7 @@ class ScoosoData(RandomIDMixin, LifecycleModel):
         else:
             user.first_name = first_name
             user.last_name = last_name
-        finally:
+            user.scooso_id = scooso_id
             user.save()
     
     def __str__(self):

@@ -15,3 +15,4 @@ class DummyUser(TestCase):
         load_dotenv(settings.BASE_DIR / ".." / "scooso_data.env")
         self.username = os.getenv("SCOOSO_USERNAME")
         self.password = os.getenv("SCOOSO_PASSWORD")
+        self.scooso_id = os.getenv("SCOOSO_ID")

@@ -56,7 +56,8 @@ class UserTestMixin(DummyUser):
             ScoosoData.objects.create(
                 user=user,
                 username=self.username,
-                password=self.password
+                password=self.password,
+                scooso_id=self.scooso_id
             )
         user.has_filled_out_data = has_filled_out_data
         user.is_active = is_active

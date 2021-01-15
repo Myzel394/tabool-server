@@ -4,6 +4,7 @@ from django.urls import include, path
 
 from apps.django.core.views import contacts
 from apps.django.main.authentication.sub.subviews.apis.register import FullRegisterView, RegisterView
+from apps.django.main.authentication.sub.subviews.apis.scooso_credentials import ScoosoCredentialsView
 from apps.django.main.authentication.views import (
     EmailConfirmation, LoginView, LogoutView, PasswordChangeView,
 )
@@ -54,6 +55,7 @@ urlpatterns = [
     path(f"api/autocomplete/homework/type/", HomeworkAutocompleteView.as_view()),
     
     path(f"api/auth/change-password/", PasswordChangeView.as_view()),
+    path(f"api/auth/scooso-credentials/", ScoosoCredentialsView.as_view()),
     path(f"api/auth/registration/", RegisterView.as_view()),
     path(f"api/auth/full-registration/", FullRegisterView.as_view()),
     path(f"api/auth/login/", LoginView.as_view()),

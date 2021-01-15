@@ -15,7 +15,7 @@ class LoginParser(BaseParser):
         auth_data = parse_qs(auth_string)
         
         return {
-            "id": data["id"],
+            "id": str(data["id"]),
             "first_name": data["prename"],
             "last_name": data["name"],
             "session": auth_data["logSessionId"][0],
