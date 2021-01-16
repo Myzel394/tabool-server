@@ -33,7 +33,7 @@ def push_modification_change(modification: "Modification") -> None:
         users=users,
         title=f"Veränderungen am {modification.start_datetime.strftime('%d.%m.%Y')} in {subject_name}!",
         body=f"Es gibt Veränderungen in {subject_name}!" + "\n\n" + "\n".join(message_parts),
-        collapse_group_name="modification",
+        collapse_group_name=f"modification_{modification.id}",
         max_retry_time=int(diff_datetime.total_seconds()),
         is_important=True,
         data={
