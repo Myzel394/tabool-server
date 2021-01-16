@@ -1,20 +1,31 @@
 from typing import *
 
+from django.db.models import QuerySet
+from django_hint import QueryType
 from fcm_django.models import FCMDevice, FCMDeviceQuerySet
 
 if TYPE_CHECKING:
     from apps.django.main.authentication.models import User
 
 
+def get_as_list(value) -> list:
+    if type(value) is list:
+        return value
+    elif isinstance(value, QuerySet):
+        return value
+    return value
+
+
 def send_notification(
-        users: Union[list["User"], "User"],
+        users: Union[list["User"], "User", QueryType["User"]],
         title: str,
         body: Optional[str] = None,
         data: Optional[Any] = None,
         collapse_group_name: Optional[str] = None,
         is_important: bool = False,
+        max_retry_time: Optional[int] = None
 ) -> None:
-    users = users if type(users) is list else [users]
+    users = get_as_list(users)
     
     devices: FCMDeviceQuerySet = FCMDevice.objects.only("user").filter(user__in=users)
     
@@ -26,4 +37,5 @@ def send_notification(
             data=data,
             collapse_key=collapse_group_name,
             low_priority=not is_important,
+            time_to_live=max_retry_time,
         )
