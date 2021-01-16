@@ -1,13 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_eventstream import send_event
 from django_lifecycle import LifecycleModel
 from fernet_fields import EncryptedCharField
 
 from apps.django.extra.scooso_scraper.scrapers.request import Request
+from ..notifications import push_scooso_data_invalid
 from ..public import model_names
-from ..public.event_channels import USER_NAMES_FETCHED_CHANNEL
 from ..querysets import ScoosoDataQuerySet
 
 __all__ = [
@@ -55,10 +54,7 @@ class ScoosoData(RandomIDMixin, LifecycleModel):
             last_name = data["last_name"]
             scooso_id = data["id"]
         except:
-            send_event(USER_NAMES_FETCHED_CHANNEL, "fail", {
-                "id": user.id
-            })
-            pass
+            push_scooso_data_invalid(self.user)
         else:
             user.first_name = first_name
             user.last_name = last_name
