@@ -59,10 +59,10 @@ INSTALLED_APPS = [
     "private_storage",
     "simple_email_confirmation",
     "channels",
-    "django_eventstream",
     "django_crontab",
     "django_object_actions",
     "corsheaders",
+    "fcm_django",
     
     "apps.django.main.authentication.apps.AuthenticationConfig",
     "apps.django.main.school_data",
@@ -309,3 +309,10 @@ DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
     }
 }
 DJANGO_REST_PASSWORDRESET_NO_INFORMATION_LEAKAGE = False
+
+FCM_DJANGO_SETTINGS = {
+    # Your firebase API KEY
+    "FCM_SERVER_KEY": os.getenv("FCM_SERVER_KEY"),
+    "ONE_DEVICE_PER_USER": False,
+    "DELETE_INACTIVE_DEVICES": False,
+}

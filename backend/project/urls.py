@@ -1,6 +1,7 @@
 import private_storage.urls
 from django.contrib import admin
 from django.urls import include, path
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 
 from apps.django.core.views import contacts
 from apps.django.main.authentication.sub.subviews.apis.register import FullRegisterView, RegisterView
@@ -65,7 +66,8 @@ urlpatterns = [
     
     path("", include("apps.django.core.urls")),
     path("admin/", admin.site.urls),
-    path("", include("user_sessions.urls", "user_sessions"))
+    path("", include("user_sessions.urls", "user_sessions")),
+    path("api/fcm/devices/", FCMDeviceAuthorizedViewSet.as_view({"post": "create"}), name="create_fcm_device"),
 ]
 
 urlpatterns += data_patterns
