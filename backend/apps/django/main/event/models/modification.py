@@ -4,7 +4,6 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_eventstream import send_event
 from django_lifecycle import AFTER_CREATE, AFTER_DELETE, AFTER_UPDATE, BEFORE_SAVE, hook, LifecycleModel
 
 from apps.django.main.lesson.public import *
@@ -12,8 +11,9 @@ from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.main.school_data.public import *
 from apps.django.main.school_data.public import model_names as school_names
 from constants import maxlength
+from ..notifications import push_modification_change
 from ..options import ModificationTypeOptions
-from ..public import model_names, MODIFICATION_CHANNEL
+from ..public import model_names
 from ..querysets import ModificationQuerySet
 
 if TYPE_CHECKING:
@@ -80,7 +80,7 @@ class Modification(RandomIDMixin, LifecycleModel):
     start_datetime = models.DateTimeField(
         verbose_name=_("Startzeit"),
         blank=True,
-    )  # type: time
+    )
     
     end_datetime = models.DateTimeField(
         verbose_name=_("Endzeit"),
@@ -109,6 +109,4 @@ class Modification(RandomIDMixin, LifecycleModel):
         when_any=["new_room", "new_teacher", "new_subject", "information", "modification_type"]
     )
     def _hook_send_modification_changed_event(self):
-        send_event(MODIFICATION_CHANNEL, "modification", {
-            "lesson_id": self.lesson_id
-        })
+        push_modification_change(self)
