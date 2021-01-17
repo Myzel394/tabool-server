@@ -1,4 +1,4 @@
-from datetime import datetime, time
+from datetime import datetime
 from typing import *
 
 from django.db import models
@@ -85,7 +85,7 @@ class Modification(RandomIDMixin, LifecycleModel):
     end_datetime = models.DateTimeField(
         verbose_name=_("Endzeit"),
         blank=True,
-    )  # type: time
+    )
     
     from_scooso = models.BooleanField(
         default=False,

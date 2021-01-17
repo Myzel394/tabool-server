@@ -12,6 +12,9 @@ __all__ = [
 
 
 def push_modification_change(modification: "Modification") -> None:
+    if modification.end_datetime < datetime.now():
+        return
+    
     users = modification.lesson.lesson_data.course.participants.all()
     subject_name = modification.lesson.lesson_data.course.subject.name
     diff_datetime = modification.start_datetime - datetime.now()

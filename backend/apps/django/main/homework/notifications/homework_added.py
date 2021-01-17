@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import *
 
 from apps.django.utils.send_notification import send_notification
@@ -7,6 +8,9 @@ if TYPE_CHECKING:
 
 
 def push_homework_added(homework: "Homework") -> None:
+    if homework.due_date < datetime.now():
+        return
+    
     users = homework.lesson.lesson_data.course.participants.all()
     subject_name = homework.lesson.lesson_data.course.subject.name
     
