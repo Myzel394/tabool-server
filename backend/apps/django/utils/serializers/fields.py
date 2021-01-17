@@ -103,7 +103,25 @@ class WritableIDField(serializers.Field):
         return self.detail_serializer(value, context=self.context).data
     
     def to_internal_value(self, data):
-        if data is not empty:
+        if data is empty:
+            self.fail("is_empty", input=data)
+        
+        if self.many:
+            if not type(data) is list:
+                self.fail("invalid_type", input=data)
+            
+            objs = []
+            
+            for single_data in data:
+                try:
+                    obj = self.get_object(single_data, self.context["request"], self)
+                except ObjectDoesNotExist:
+                    self.fail("object_not_found", input=single_data)
+                else:
+                    objs.append(obj)
+            
+            return objs
+        else:
             try:
                 return self.get_object(data, self.context["request"], self)
             except ObjectDoesNotExist:
