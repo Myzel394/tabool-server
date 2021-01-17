@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     
     "apps.django.extra.scooso_scraper",
     "apps.django.extra.news",
+    "apps.django.extra.poll",
     
     "apps.django.core",
 ]

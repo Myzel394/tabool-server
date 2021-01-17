@@ -4,6 +4,7 @@ from django.urls import include, path
 from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 
 from apps.django.core.views import contacts
+from apps.django.extra.poll import routers as poll_routers
 from apps.django.main.authentication.sub.subviews.apis.register import FullRegisterView, RegisterView
 from apps.django.main.authentication.sub.subviews.apis.scooso_credentials import ScoosoCredentialsView
 from apps.django.main.authentication.views import (
@@ -32,7 +33,8 @@ data_patterns = build_patterns("data", [
     homework_routers.homework_history_router.urls,
     lesson_routers.data_router.urls,
     school_routers.data_router.urls,
-    sessions_routers.data_router.urls
+    sessions_routers.data_router.urls,
+    poll_routers.data_router.urls
 ])
 
 relation_patterns = build_patterns("user-relation", [
