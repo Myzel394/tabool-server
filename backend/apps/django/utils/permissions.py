@@ -1,13 +1,12 @@
 from typing import *
 
-from django_eventstream.channelmanager import DefaultChannelManager
 from rest_framework import exceptions, permissions, status, views
 
 if TYPE_CHECKING:
     from apps.django.main.authentication.models import User
 
 __all__ = [
-    "AuthenticationAndActivePermission", "unauthorized_handler", "UserActiveChannelManager"
+    "AuthenticationAndActivePermission", "unauthorized_handler",
 ]
 
 
@@ -35,8 +34,3 @@ def unauthorized_handler(exc, context):
         response.status_code = status.HTTP_401_UNAUTHORIZED
     
     return response
-
-
-class UserActiveChannelManager(DefaultChannelManager):
-    def can_read_channel(self, user, _) -> bool:
-        return is_user_authorized(user)

@@ -284,10 +284,6 @@ PUBLIC_STORAGE_FOLDER = "public"
 PRIVATE_STORAGE_PATH = LIB_DIR / PRIVATE_STORAGE_FOLDER
 PRIVATE_STORAGE_AUTH_FUNCTION = "apps.django.utils.private_storages.private_storage_access_check"
 
-# Event stream
-EVENTSTREAM_STORAGE_CLASS = "django_eventstream.storage.DjangoModelStorage"
-EVENTSTREAM_CHANNELMANAGER_CLASS = "apps.django.utils.permissions.UserActiveChannelManager"
-
 MAX_UPLOAD_SIZE = 5242880  # 50MB
 
 if DEBUG:
