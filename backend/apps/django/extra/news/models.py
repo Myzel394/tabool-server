@@ -5,8 +5,7 @@ from django_common_utils.libraries.handlers.mixins import HTMLOptimizerHandler, 
 from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import EditCreationDateMixin
-from django_eventstream import send_event
-from django_lifecycle import AFTER_CREATE, hook, LifecycleModel
+from django_lifecycle import LifecycleModel
 
 from apps.django.extra.news.public import *
 from apps.django.main.authentication.public import *
@@ -48,7 +47,3 @@ class News(RandomIDMixin, HandlerMixin, EditCreationDateMixin, LifecycleModel):
             "html": HTMLOptimizerHandler(),
             "title": TextOptimizerHandler()
         }
-    
-    @hook(AFTER_CREATE)
-    def _hook_send_event(self):
-        send_event(NEWS_CHANNEL, "news", {})

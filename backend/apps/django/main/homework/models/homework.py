@@ -6,7 +6,6 @@ from django_common_utils.libraries.handlers.mixins import TextOptimizerHandler
 from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import CreationDateMixin
-from django_eventstream import send_event
 from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 from simple_history.models import HistoricalRecords
 
@@ -17,7 +16,8 @@ from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.utils.history_extras.extras import UserInformationHistoricalModel
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
 from constants import maxlength
-from ..public import HOMEWORK_CHANNEL, model_names
+from ..notifications import push_homework_added
+from ..public import model_names
 from ..querysets import HomeworkQuerySet
 
 if TYPE_CHECKING:
@@ -91,9 +91,7 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     @hook(AFTER_CREATE)
     def _hook_send_event(self):
         if not self.is_private:
-            send_event(HOMEWORK_CHANNEL, "homework", {
-                "lesson_id": self.lesson_id
-            })
+            push_homework_added(self)
     
     @staticmethod
     def handlers():
