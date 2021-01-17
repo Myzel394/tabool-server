@@ -37,5 +37,5 @@ def send_notification(
             data=data,
             collapse_key=collapse_group_name,
             low_priority=not is_important,
-            time_to_live=max_retry_time,
+            time_to_live=max(max_retry_time, 60),
         )

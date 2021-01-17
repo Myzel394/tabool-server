@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 
 def push_homework_added(homework: "Homework") -> None:
-    users = homework.lesson.lesson_data.course.participants
+    users = homework.lesson.lesson_data.course.participants.all()
     subject_name = homework.lesson.lesson_data.course.subject.name
     
     message_parts = []
@@ -21,5 +21,11 @@ def push_homework_added(homework: "Homework") -> None:
         users=users,
         collapse_group_name=f"homework_{homework.id}",
         title=f"Es wurde eine neue Hausaufgabe in {subject_name} eingestellt!",
-        body="\n".join(message_parts)
+        body="\n".join(message_parts),
+        data={
+            "type": "homework",
+            "payload": {
+                "id": homework.id
+            }
+        }
     )

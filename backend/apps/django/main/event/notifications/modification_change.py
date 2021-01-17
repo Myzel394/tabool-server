@@ -37,8 +37,9 @@ def push_modification_change(modification: "Modification") -> None:
         max_retry_time=int(diff_datetime.total_seconds()),
         is_important=True,
         data={
-            "type": "detail:modification",
+            "type": "modification",
             "payload": {
+                "lesson_id": modification.lesson.id,
                 "id": modification.id
             }
         }
