@@ -1,6 +1,5 @@
 import secrets
 import string
-from typing import *
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -10,9 +9,6 @@ from simple_email_confirmation.models import SimpleEmailConfirmationUserMixin
 
 from ..helpers import send_email_verification
 from ..querysets import UserManager, UserQuerySet
-
-if TYPE_CHECKING:
-    from ..querysets import UserPaymentQuerySet
 
 __all__ = [
     "User"
@@ -85,10 +81,6 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     @hook(AFTER_CREATE)
     def _hook_send_mail(self):
         send_email_verification(self)
-    
-    @property
-    def payments(self) -> "UserPaymentQuerySet":
-        return self.userpayment_set.all()
     
     @property
     def is_scooso_data_valid(self) -> bool:
