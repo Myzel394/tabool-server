@@ -18,10 +18,11 @@ def has_voted(poll: Poll, user: "User") -> bool:
         .exists()
 
 
-def add_user_vote(poll: Poll, user: "User", choices: list["Choice"]) -> None:
+def add_user_vote(poll: Poll, user: "User", choices: list["Choice"], feedback: str = None) -> None:
     if not has_voted(poll, user):
         vote = Vote.objects.create(
             poll=poll,
             associated_user=user,
+            feedback=feedback,
         )
         vote.choices.add(*choices)

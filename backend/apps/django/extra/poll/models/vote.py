@@ -1,6 +1,7 @@
 from typing import *
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
 
 from apps.django.utils.models import AssociatedUserMixin
@@ -29,4 +30,11 @@ class Vote(RandomIDMixin, CreationDateMixin, AssociatedUserMixin):
     choices = models.ManyToManyField(
         model_references.CHOICE,
         verbose_name=CHOICE_NAME_PLURAL
+    )
+    
+    feedback = models.TextField(
+        max_length=1023,
+        verbose_name=_("Feedback"),
+        blank=True,
+        null=True,
     )

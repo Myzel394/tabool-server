@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import *
 
 from django.conf import settings
@@ -13,7 +14,7 @@ from ..public.model_names import POLL_NAME, POLL_NAME_PLURAL
 from ..querysets import PollQuerySet
 
 if TYPE_CHECKING:
-    from .choice import Choice
+    from .choice import Choice, Vote
 
 __all__ = [
     "Poll"
@@ -69,3 +70,14 @@ class Poll(RandomIDMixin, CreationDateMixin, LifecycleModel):
     @property
     def choices(self) -> QueryType["Choice"]:
         return self.choice_set.all()
+    
+    @property
+    def votes(self) -> QueryType["Vote"]:
+        return self.vote_set.all()
+    
+    @property
+    def show_results(self) -> bool:
+        if not self.show_results_date:
+            return True
+        
+        return self.show_results_date < datetime.now()

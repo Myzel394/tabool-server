@@ -19,17 +19,26 @@ class PollViewSet(ReadOnlyModelViewSet):
     serializer_class = PollSerializer
     
     def get_queryset(self):
-        return Poll.objects.from_user(self.request.user)
+        from_user = Poll.objects.from_user(self.request.user)
+        if self.action in ["retrieve", "list"]:
+            return from_user
+        return from_user.not_voted(self.request.user)
     
     @action(["POST"], detail=True)
     def vote(self, request: RequestType, pk):
         # Validation
-        serializer = PollUserVoteSerializer(data=request.data, context=self.get_serializer_context())
+        data = request.data
+        data.update({
+            "poll": pk
+        })
+        
+        serializer = PollUserVoteSerializer(data=data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         
         poll = validated_data["poll"]
         choices = validated_data["choices"]
+        feedback = validated_data.get("feedback")
         user = request.user
         
         if has_voted(poll, user):
@@ -37,6 +46,11 @@ class PollViewSet(ReadOnlyModelViewSet):
                 "detail": _("Du hast bereits abgestimmt.")
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        add_user_vote(poll, user, choices)
+        add_user_vote(
+            poll=poll,
+            user=user,
+            choices=choices,
+            feedback=feedback
+        )
         
         return Response(PollSerializer(instance=poll, context=self.get_serializer_context()).data)
