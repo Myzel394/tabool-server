@@ -44,7 +44,7 @@ class PollViewSet(ReadOnlyModelViewSet):
         if has_voted(poll, user):
             return Response({
                 "detail": _("Du hast bereits abgestimmt.")
-            }, status=status.HTTP_400_BAD_REQUEST)
+            }, status=status.HTTP_423_LOCKED)
         
         add_user_vote(
             poll=poll,

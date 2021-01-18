@@ -70,7 +70,8 @@ class WritableSerializerMethodField(serializers.SerializerMethodField):
 
 class WritableIDField(serializers.Field):
     default_error_messages = {
-        "object_not_found": _("Das Objekt wurde nicht gefunden")
+        "object_not_found": _("Das Objekt wurde nicht gefunden"),
+        "invalid_type": _("Ungültiger Typ")
     }
     detail_serializer: Optional[Type[serializers.Serializer]] = None
     

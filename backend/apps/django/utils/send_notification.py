@@ -23,7 +23,7 @@ def send_notification(
         data: Optional[Any] = None,
         collapse_group_name: Optional[str] = None,
         is_important: bool = False,
-        max_retry_time: Optional[int] = None
+        max_retry_time: int = 60
 ) -> None:
     users = get_as_list(users)
     

@@ -1,10 +1,11 @@
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from .choice import ChoiceSerializer
 from .user_vote import VoteSerializer
 from ...models import Poll, Vote
-from ...utils import has_voted
+from ...utils import get_results, has_voted
 
 __all__ = [
     "PollSerializer"
@@ -39,15 +40,10 @@ class PollSerializer(serializers.ModelSerializer):
         return VoteSerializer(instance=vote).data
     
     def get_results(self, instance: Poll):
+        if not settings.SHOW_VOTES_RESULTS:
+            return None
+        
         if not instance.show_results or not has_voted(poll=instance, user=self.context["request"].user):
             return None
         
-        votes_amount = instance.votes.count()
-        
-        return [
-            {
-                "choice_id": choice.id,
-                "percentage_value": round(instance.votes.filter(choices__in=[choice]).count() / max(1, votes_amount))
-            }
-            for choice in instance.choices
-        ]
+        return get_results(instance=instance)

@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 
 def push_homework_added(homework: "Homework") -> None:
-    if homework.due_date < datetime.now():
+    if homework.due_date and homework.due_date < datetime.now():
         return
     
     users = homework.lesson.lesson_data.course.participants.all()

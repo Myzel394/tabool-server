@@ -28,7 +28,7 @@ class Choice(RandomIDMixin, LifecycleModel):
         on_delete=models.CASCADE,
     )
     
-    text = models.TextField(
+    text = models.CharField(
         max_length=24,
         verbose_name=_("Text")
     )

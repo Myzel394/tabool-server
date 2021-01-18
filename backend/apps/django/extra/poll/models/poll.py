@@ -29,7 +29,7 @@ class Poll(RandomIDMixin, CreationDateMixin, LifecycleModel):
     
     objects = PollQuerySet.as_manager()
     
-    title = models.TextField(
+    title = models.CharField(
         max_length=63,
         verbose_name=_("Titel")
     )

@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from apps.django.main.authentication.models import User
 
 __all__ = [
-    "has_voted", "add_user_vote"
+    "has_voted", "add_user_vote", "get_results"
 ]
 
 
@@ -26,3 +26,15 @@ def add_user_vote(poll: Poll, user: "User", choices: list["Choice"], feedback: s
             feedback=feedback,
         )
         vote.choices.add(*choices)
+
+
+def get_results(instance: Poll, precision: int = 2):
+    votes_amount = instance.votes.count()
+    
+    return [
+        {
+            "choice_id": choice.id,
+            "percentage_value": round(instance.votes.filter(choices__in=[choice]).count() / max(1, votes_amount))
+        }
+        for choice in instance.choices
+    ]

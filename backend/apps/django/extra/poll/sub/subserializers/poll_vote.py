@@ -16,6 +16,7 @@ class PollUserVoteSerializer(serializers.Serializer):
     feedback = serializers.CharField(
         max_length=Vote._meta.get_field("feedback").max_length,
         allow_blank=True,
+        allow_null=True,
         label=Vote._meta.get_field("feedback").max_length,
         required=False,
     )
