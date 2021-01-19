@@ -311,7 +311,7 @@ FCM_DJANGO_SETTINGS = {
     # Your firebase API KEY
     "FCM_SERVER_KEY": os.getenv("FCM_SERVER_KEY"),
     "ONE_DEVICE_PER_USER": False,
-    "DELETE_INACTIVE_DEVICES": False,
+    "DELETE_INACTIVE_DEVICES": True,
 }
 
 SHOW_VOTES_RESULTS = False
