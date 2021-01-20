@@ -1,10 +1,4 @@
-from django.core.files.uploadedfile import SimpleUploadedFile
-
-from apps.django.extra.scooso_scraper.scrapers.material import *
-from apps.django.main.lesson.mixins.tests import *
-from apps.django.utils.tests import *
-
-
+"""
 class UploadTest(ClientTestMixin, LessonUploadTestMixin, UtilsTestMixin):
     def setUp(self) -> None:
         self.load_lesson_upload()
@@ -37,3 +31,4 @@ class UploadTest(ClientTestMixin, LessonUploadTestMixin, UtilsTestMixin):
             for material in materials['materials']
         ]
         self.assertIn(filename, available_filenames)
+"""
