@@ -35,8 +35,6 @@ jobs:
         run: python --version
       - name: Install requirements
         run: pip install -r requirements.txt
-      - name: PostgreSQL enable extensions
-        run: psql
       - name: Run Makemigrations
         run: python backend/manage.py makemigrations
       - name: Run Migrations
