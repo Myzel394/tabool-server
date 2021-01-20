@@ -104,12 +104,12 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.ScopedRateThrottle"
     ],
     "DEFAULT_THROTTLE_RATES": {
-        "anon": os.getenv("THROTTLE_ANON"),
-        "user": os.getenv("THROTTLE_USER"),
-        "autocomplete": os.getenv("THROTTLE_AUTOCOMPLETE"),
+        "anon": os.getenv("THROTTLE_ANON", "100/second"),
+        "user": os.getenv("THROTTLE_USER", "200/second"),
+        "autocomplete": os.getenv("THROTTLE_AUTOCOMPLETE" "10/second"),
     },
     "DEFAULT_PAGINATION_CLASS": "apps.django.utils.paginations.PageNumberPagination",
-    "PAGE_SIZE": int(os.getenv("DEFAULT_PAGE_SIZE")),
+    "PAGE_SIZE": int(os.getenv("DEFAULT_PAGE_SIZE", "20")),
     "DEFAULT_PERMISSION_CLASSES": [
         "apps.django.utils.permissions.AuthenticationAndActivePermission",
     ],
@@ -120,13 +120,18 @@ REST_FRAMEWORK = {
 }
 
 CRONJOBS = [
-    (os.getenv("CRON_FETCH_TIMETABLE_DAY"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_TIMETABLE_DAY_WEEKEND"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT_WEEKEND"), "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_USER_NAMES"), "apps.django.main.authentication.cron_jobs.fetch_user_names"),
-    (os.getenv("CRON_CLEANUP_LIB_FOLDER"), "apps.django.core.cron_jobs.cleanup_lib_dir"),
-    (os.getenv("CRON_DELETE_KNOWN_IPS"), "apps.django.core.authentication.delete_known_ips")
+    (
+        os.getenv("CRON_FETCH_TIMETABLE_DAY", "* * * * *"),
+        "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT", "* * * * *"),
+     "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_TIMETABLE_DAY_WEEKEND", "* * * * *"),
+     "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT_WEEKEND", "* * * * *"),
+     "apps.django.main.lesson.cron_jobs.fetch_timetable_from_users"),
+    (os.getenv("CRON_FETCH_USER_NAMES", "* * * * *"), "apps.django.main.authentication.cron_jobs.fetch_user_names"),
+    (os.getenv("CRON_CLEANUP_LIB_FOLDER", "* * * * *"), "apps.django.core.cron_jobs.cleanup_lib_dir"),
+    (os.getenv("CRON_DELETE_KNOWN_IPS", "* * * * *"), "apps.django.core.authentication.delete_known_ips")
 ]
 
 AUTH_USER_MODEL = "authentication.User"

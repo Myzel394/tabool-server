@@ -1,4 +1,3 @@
-import os
 import random
 
 import names
@@ -65,14 +64,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin, DummyUs
             "scoosodata": scooso_data,
             "student": student_data,
         }, content_type="application/json")
-        
-        # Check
-        user.refresh_from_db()
-        user.scoosodata.fetch_user_data()
-        user.refresh_from_db()
         self.assertStatusOk(response.status_code)
-        self.assertEqual(os.getenv("SCOOSO_FIRST_NAME"), user.first_name)
-        self.assertEqual(os.getenv("SCOOSO_LAST_NAME"), user.last_name)
     
     def test_user_cant_register_two_times(self):
         email = f"{names.get_first_name()}@gmail.com"

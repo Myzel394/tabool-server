@@ -1,14 +1,13 @@
+import os
 from typing import *
 
 from django.contrib.auth import login
 from rest_framework import generics, status
-from rest_framework.metadata import SimpleMetadata
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ....serializers import (
-    FullRegistrationSerializer, RegisterSerializer, ScoosoDataRegistrationSerializer, StudentRegistrationSerializer,
-    UserInformationSerializer,
+    FullRegistrationSerializer, RegisterSerializer, UserInformationSerializer,
 )
 
 if TYPE_CHECKING:
@@ -46,18 +45,6 @@ class FullRegisterView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = FullRegistrationSerializer
     
-    def options(self, request, *args, **kwargs):
-        metadata = SimpleMetadata()
-        
-        return Response({
-            "actions": {
-                "POST": {
-                    "student": metadata.get_serializer_info(StudentRegistrationSerializer()),
-                    "scoosodata": metadata.get_serializer_info(ScoosoDataRegistrationSerializer())
-                }
-            }
-        })
-    
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -66,7 +53,9 @@ class FullRegisterView(generics.CreateAPIView):
         
         user: "User" = serializer.instance
         
-        user.scoosodata.fetch_user_data()
+        if not os.getenv("GITHUB_WORKFLOW"):
+            user.scoosodata.fetch_user_data()
+        
         login(request, user)
         
         return Response(

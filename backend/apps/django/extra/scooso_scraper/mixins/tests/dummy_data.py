@@ -12,7 +12,12 @@ __all__ = [
 class DummyUser(TestCase):
     def load_dummy_user(self) -> None:
         # Load authentication
-        load_dotenv(settings.BASE_DIR / ".." / "scooso_data.env")
-        self.username = os.getenv("SCOOSO_USERNAME")
-        self.password = os.getenv("SCOOSO_PASSWORD")
-        self.scooso_id = os.getenv("SCOOSO_ID")
+        if os.getenv("GITHUB_WORKFLOW"):
+            self.username = "username"
+            self.password = "password"
+            self.scooso_id = "scooso_id"
+        else:
+            load_dotenv(settings.BASE_DIR / ".." / "scooso_data.env")
+            self.username = os.getenv("SCOOSO_USERNAME")
+            self.password = os.getenv("SCOOSO_PASSWORD")
+            self.scooso_id = os.getenv("SCOOSO_ID")
