@@ -1,18 +1,16 @@
-import os
 import random
 from datetime import date, datetime, time, timedelta
 from typing import *
 
 from dateutil.rrule import MINUTELY, rrule
 
-from apps.django.extra.scooso_scraper.mixins.tests import *
 from apps.django.main.school_data.mixins.tests import *
 from apps.django.utils.tests import *
 from apps.utils import find_next_date_by_weekday
 from apps.utils.time import dummy_datetime_from_target
 from constants.weekdays import ALLOWED_WEEKDAYS
 from .course import CourseTestMixin
-from ...models import Lesson, LessonData, LessonScoosoData
+from ...models import Lesson, LessonData
 
 __all__ = [
     "LessonTestMixin", "LessonUploadTestMixin"
@@ -91,6 +89,7 @@ class LessonTestMixin(
         return lessons
 
 
+"""
 class LessonUploadTestMixin(LessonTestMixin, DummyUser):
     def load_lesson_upload(self):
         self.logged_user = self.Login_user()
@@ -107,3 +106,4 @@ class LessonUploadTestMixin(LessonTestMixin, DummyUser):
             lesson=self.lesson,
             time_id=self.time_id
         )
+"""

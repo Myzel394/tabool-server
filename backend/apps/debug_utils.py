@@ -38,8 +38,8 @@ if settings.DEBUG:
         if scooso_data:
             user_scooso_data = ScoosoData.objects.create(
                 user=user,
-                username=os.getenv("SCOOSO_USERNAME"),
-                password=os.getenv("SCOOSO_PASSWORD")
+                username=os.getenv("SCOOSO_USERNAME", "username"),
+                password=os.getenv("SCOOSO_PASSWORD", "password")
             )
         if staff:
             user.is_superuser = True

@@ -1,13 +1,4 @@
-import os
-from datetime import datetime
-
-from apps.django.extra.scooso_scraper.actions import fetch_timetable
-from apps.django.main.event.mixins.tests import ModificationTestMixin
-from apps.django.main.lesson.mixins.tests import LessonTestMixin
-from apps.django.main.lesson.models import Course, Lesson
-from apps.django.utils.tests import ClientTestMixin, DummyUser, UserTestMixin
-
-
+"""
 class TimetableAPITest(LessonTestMixin, ModificationTestMixin, ClientTestMixin, UserTestMixin, DummyUser):
     def setUp(self) -> None:
         self.load_dummy_user()
@@ -44,3 +35,4 @@ class TimetableAPITest(LessonTestMixin, ModificationTestMixin, ClientTestMixin, 
         self.assertStatusOk(response.status_code)
         
         return response.data
+"""
