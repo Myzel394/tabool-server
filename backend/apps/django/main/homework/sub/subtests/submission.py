@@ -1,14 +1,10 @@
-from pathlib import Path
-
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from apps.django.extra.scooso_scraper.scrapers.material import *
 from apps.django.main.homework.mixins.tests import *
-from apps.django.main.lesson.mixins.tests import *
 from apps.django.utils.tests import *
 
 
-class SubmissionTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin, UtilsTestMixin):
+class SubmissionTest(SubmissionTestMixin, ClientTestMixin, UtilsTestMixin):
     def setUp(self) -> None:
         self.logged_user = self.Login_user()
         self.__class__.associated_user = self.logged_user
@@ -68,6 +64,7 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin
                 self.assertStatusNotOk(response.status_code)
 
 
+"""
 class ScoosoTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin):
     def setUp(self) -> None:
         self.load_lesson_upload()
@@ -132,3 +129,4 @@ class ScoosoTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin):
         )
         self.assertStatusOk(response.status_code)
         self.assertEqual(response.data["upload_status"], "UPLOADED")
+"""
