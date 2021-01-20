@@ -13,7 +13,7 @@ from .course import CourseTestMixin
 from ...models import Lesson, LessonData
 
 __all__ = [
-    "LessonTestMixin", "LessonUploadTestMixin"
+    "LessonTestMixin"
 ]
 
 
