@@ -1,3 +1,4 @@
+import os
 from typing import *
 
 from django.contrib.auth import get_user_model
@@ -28,14 +29,15 @@ class ScoosoDataRegistrationSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         
-        # Check if login is successful
-        scraper = Request(username=attrs["username"], password=attrs["password"])
-        try:
-            scraper.login()
-        except LoginFailed:
-            raise ValidationError(
-                _("Mit diesen Scooso-Anmeldedaten konnte der Server sich nicht anmelden.")
-            )
+        if not os.getenv("GITHUB_WORKFLOW"):
+            # Check if login is successful
+            scraper = Request(username=attrs["username"], password=attrs["password"])
+            try:
+                scraper.login()
+            except LoginFailed:
+                raise ValidationError(
+                    _("Mit diesen Scooso-Anmeldedaten konnte der Server sich nicht anmelden.")
+                )
         
         return data
 

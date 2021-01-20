@@ -9,7 +9,7 @@ class UploadTest(ClientTestMixin, LessonUploadTestMixin, UtilsTestMixin):
     def setUp(self) -> None:
         self.load_lesson_upload()
     
-    def test_direct_scooso_upload(self):
+    def _test_direct_scooso_upload(self):
         filename = self.Random_filename()
         
         response = self.client.post(
