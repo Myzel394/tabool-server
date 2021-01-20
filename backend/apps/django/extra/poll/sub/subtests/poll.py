@@ -82,12 +82,43 @@ class APITest(ClientTestMixin, UserTestMixin, PollTestMixin):
         response = self.vote()
         self.assertIsNone(response.data["results"])
     
-    def test_show_results(self):
-        response = self.vote()
-        self.assertIsNotNone(response.data["results"])
-    
     def test_dont_show_results_before_vote(self):
         response = self.client.get(f"/api/data/poll/{self.poll.id}/")
         self.assertStatusOk(response.status_code)
         # Ensure no results visible
         self.assertIsNone(response.data["results"])
+
+
+class PollAmountTest(ClientTestMixin, UserTestMixin, PollTestMixin):
+    def setUp(self):
+        self.user = self.Login_user()
+        self.__class__.associated_user = self.user
+        
+        choices = ["Ja", "Nein", "Vielleicht", "A", "B"]
+        min_vote_choices = 2
+        max_vote_choices = 4
+        self.poll = self.Create_poll(
+            choices=choices,
+            min_vote_choices=min_vote_choices,
+            max_vote_choices=max_vote_choices,
+        )
+    
+    def test_too_much(self):
+        response = self.client.post(f"/api/data/poll/{self.poll.id}/vote/", {
+            "choices": [
+                self.poll.choices[0].id,
+                self.poll.choices[1].id,
+                self.poll.choices[2].id,
+                self.poll.choices[3].id,
+                self.poll.choices[4].id,
+            ],
+        }, content_type="application/json")
+        self.assertStatusNotOk(response.status_code)
+    
+    def test_too_little(self):
+        response = self.client.post(f"/api/data/poll/{self.poll.id}/vote/", {
+            "choices": [
+                self.poll.choices[0].id,
+            ],
+        }, content_type="application/json")
+        self.assertStatusNotOk(response.status_code)

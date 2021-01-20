@@ -24,12 +24,19 @@ class PollUserVoteSerializer(serializers.Serializer):
     def validate(self, attrs):
         super().validate(attrs)
         
+        # Choices
         poll = attrs["poll"]
         choices = attrs["choices"]
         choices_ids = [
             choice.id
             for choice in choices
         ]
+        
+        # Amount
+        if not (poll.min_vote_choices <= len(choices_ids) <= poll.max_vote_choices):
+            raise ValidationError({
+                "choices": _(f"Wähle zwischen {poll.min_vote_choices} bis {poll.max_vote_choices} Elemente aus.")
+            })
         
         found_choices = Choice.objects.from_user(self.context["request"].user).filter(
             poll=poll,

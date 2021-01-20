@@ -1,6 +1,5 @@
 import random
 
-import lorem
 from django.test import TestCase
 from django_hint import QueryType
 
@@ -30,7 +29,7 @@ class PollTestMixin(TestCase):
         poll = Poll.objects.create(
             **joinkwargs(
                 {
-                    "title": lorem.text,
+                    "title": lambda: "Random title",
                 },
                 kwargs
             )

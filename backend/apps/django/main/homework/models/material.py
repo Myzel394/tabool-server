@@ -51,6 +51,13 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         max_length=1023,
     )  # type: FieldFile
     
+    _original_filename = models.CharField(
+        verbose_name=_("Originaler Dateiname"),
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    
     name = models.CharField(
         verbose_name=_("Dateiname"),
         max_length=255,
@@ -109,7 +116,7 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     
     @hook(BEFORE_SAVE)
     def _hook_improve_name(self):
-        self.name = self.improve_name(self.name)
+        self.name = self.improve_name(self._original_filename)
     
     @property
     def folder_name(self) -> str:

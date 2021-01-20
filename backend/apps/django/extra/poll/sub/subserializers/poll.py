@@ -16,8 +16,8 @@ class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
         fields = [
-            "title", "created_at", "max_vote_date", "show_results_date", "max_vote_choices", "id", "choices",
-            "user_vote", "results"
+            "title", "created_at", "max_vote_date", "show_results_date", "max_vote_choices", "min_vote_choices",
+            "id", "choices", "user_vote", "results"
         ]
     
     choices = serializers.SerializerMethodField()

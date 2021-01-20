@@ -47,6 +47,12 @@ class Poll(RandomIDMixin, CreationDateMixin, LifecycleModel):
         null=True,
     )
     
+    min_vote_choices = models.PositiveSmallIntegerField(
+        verbose_name=_("Mindestanzahl von Auswahlen"),
+        help_text=_("Wie viele Elemente mindestens ausgewählt werden"),
+        default=1
+    )
+    
     max_vote_choices = models.PositiveSmallIntegerField(
         verbose_name=_("Maximale Abstimmmöglichkeiten"),
         help_text=_("Wie viele Elemente maximal ausgewählt werden können"),
@@ -57,6 +63,18 @@ class Poll(RandomIDMixin, CreationDateMixin, LifecycleModel):
         settings.AUTH_USER_MODEL,
         verbose_name=auth_names.USER_PLURAL,
     )
+    
+    def clean(self):
+        super().clean()
+        
+        if self.min_vote_choices > self.max_vote_choices:
+            raise ValidationError(_(f"Das Feld \"{self._meta.get_field('min_voter_choices').verbose_name}\" kann "
+                                    f"nicht kleiner sein als das Feld \""
+                                    f"{self._meta.get_field('min_voter_choices').verbose_name}\""))
+    
+    @hook(BEFORE_SAVE)
+    def _hook_full_clean(self):
+        self.full_clean()
     
     @hook(BEFORE_SAVE)
     def _hook_validate_max_vote_choices(self):

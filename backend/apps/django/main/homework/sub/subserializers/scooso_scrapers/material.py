@@ -25,7 +25,7 @@ class MaterialScoosoScraperSerializer(ScoosoScraperSerializerMixin):
         return {
             "added_at": validated_data.pop("created_at"),
             "lesson": validated_data.pop("lesson"),
-            "name": validated_data.pop("filename")
+            "_original_filename": validated_data.pop("filename")
         }
     
     def pop_scooso_data(self, validated_data: dict) -> dict:
