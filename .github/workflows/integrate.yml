@@ -42,4 +42,4 @@ jobs:
       - name: Run Migrations
         run: python backend/manage.py migrate
       - name: Run Test
-        run: python backend/manage.py test
+        run: python backend/manage.py test ./backend/ --noinput
