@@ -106,8 +106,10 @@ class LoginView(views.APIView):
 
 
 class LogoutView(views.APIView):
+    permission_classes = []
+    
     def post(self, request):
-        if request.is_authenticated():
+        if request.user.is_authenticated:
             logout(request)
             
             return Response()
