@@ -1,3 +1,5 @@
+import random
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -13,6 +15,10 @@ from ..querysets import ChoiceQuerySet
 __all__ = [
     "Choice"
 ]
+
+
+def random_color():
+    return "#" + "".join(random.choice("0123456789ABCDEF") for _ in range(6))
 
 
 class Choice(RandomIDMixin, LifecycleModel):
@@ -36,12 +42,11 @@ class Choice(RandomIDMixin, LifecycleModel):
     color = ColorField(
         verbose_name=_("Farbe"),
         blank=True,
-        null=True,
     )
     
     @hook(BEFORE_CREATE)
     def _hook_create_color_if_none(self):
-        self.color = self.color or DEFAULT_COLOR_TEXT_MAPPING[self.text.lower()]
+        self.color = self.color or DEFAULT_COLOR_TEXT_MAPPING.get(self.text.lower()) or random_color()
         
         if not self.color:
             raise ValidationError(_(

@@ -19,9 +19,9 @@ class ChoiceInline(admin.TabularInline):
 class PollAdmin(DefaultAdminMixin):
     fieldset_fields = {
         "default": ["title", "max_vote_date", "show_results_date", "targeted_user"],
-        "extra": ["max_vote_choices"]
+        "extra": [["min_vote_choices", "max_vote_choices"]]
     }
-    list_display = ["title", "max_vote_date", "show_results_date", "max_vote_choices", "results"]
+    list_display = ["title", "max_vote_date", "show_results_date", "min_vote_choices", "max_vote_choices", "results"]
     search_fields = ["title"]
     date_hierarchy = "max_vote_date"
     filter_horizontal = ["targeted_user"]
