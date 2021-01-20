@@ -8,7 +8,7 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, UtilsTestMixin):
     def setUp(self) -> None:
         self.logged_user = self.Login_user()
         self.__class__.associated_user = self.logged_user
-        self.load_lesson_upload()
+        self.lesson = self.Create_lesson()
     
     def test_api_get(self):
         submission = self.Create_submission(lesson=self.lesson)
