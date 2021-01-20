@@ -25,6 +25,7 @@ class MaterialTestMixin(LessonTestMixin):
                 {
                     "lesson": cls.Create_lesson,
                     "name": lambda: filename,
+                    "_original_filename": lambda: filename,
                     "file": lambda: SimpleUploadedFile(
                         filename,
                         (lorem.paragraph() * 3).encode(),

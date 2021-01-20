@@ -91,7 +91,7 @@ class SomeTests(LessonUploadTestMixin, UtilsTestMixin):
         
         self.assertEqual(previous_count - 1, len(materials['materials']))
     
-    def test_download_material(self):
+    def _test_download_material(self):
         material_time_ids = [
             material['material']['time_id']
             for material in self.data['materials_data']
@@ -119,7 +119,7 @@ class ForeignSerializerTest(LessonTestMixin):
         self.end_date = datetime.strptime(os.getenv("DATA_END_DATE"), os.getenv("DATE_FORMAT"))
         self.timetable = self.scraper.get_timetable(start_date=self.start_date, end_date=self.end_date)
     
-    def test_timetable(self):
+    def _test_timetable(self):
         # Creation
         random_lesson = random.choice(self.timetable['lessons'])
         lesson = TimetableRequest(self.username, self.password).import_lesson_from_scraper(random_lesson)
@@ -143,7 +143,7 @@ class ForeignSerializerTest(LessonTestMixin):
         self.assertEqual(lesson.date, lesson_data_data['date'])
         self.assertEqual(lesson.date, lesson_data_data['date'])
     
-    def test_simple(self):
+    def _test_simple(self):
         """Just checks that there are no errors thrown while importing objects"""
         if len(self.timetable['events']) == 0:
             return
@@ -158,7 +158,7 @@ class ForeignSerializerTest(LessonTestMixin):
             lesson=self.Create_lesson()
         )
     
-    def test_materials(self):
+    def _test_materials(self):
         random_material_data = random.choice(self.timetable['materials_data'])
         scraper = MaterialRequest(self.username, self.password)
         materials = scraper.get_teacher_homework(
@@ -181,7 +181,7 @@ class ForeignSerializerTest(LessonTestMixin):
         
         print(teacher_scooso_data)
     
-    def test_create_material(self):
+    def _test_create_material(self):
         materials_subject_ids = [
             material['subject']['scooso_id']
             for material in self.timetable['materials_data']
@@ -212,7 +212,7 @@ class ForeignSerializerTest(LessonTestMixin):
         random_material.delete()
         self.assertFalse(path.exists())
     
-    def test_multiple_import(self):
+    def _test_multiple_import(self):
         import_teachers()
         
         start_count = TeacherScoosoData.objects.count()
@@ -228,7 +228,7 @@ class ForeignSerializerTest(LessonTestMixin):
         self.assertTrue(hasattr(teacher, "teacherscoosodata"))
         self.assertEqual(start_count + 1, TeacherScoosoData.objects.count())
     
-    def test_no_duplicates_for_subjects(self):
+    def _test_no_duplicates_for_subjects(self):
         subject = self.scraper.get_timetable(
             start_date=self.start_date,
             end_date=self.end_date)['lessons'][0]['subject']
@@ -243,7 +243,7 @@ class ForeignSerializerTest(LessonTestMixin):
         
         self.assertEqual(count, new_count)
     
-    def test_no_duplicates(self):
+    def _test_no_duplicates(self):
         print("First fetch. Fixed date")
         timetable = self.scraper.get_timetable(start_date=self.start_date, end_date=self.end_date)
         self.scraper.import_timetable_from_scraper(timetable)

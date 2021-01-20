@@ -3,7 +3,8 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from ...models import Choice, Vote
-from ...public.serializer_fields import ChoiceField, PollField
+from ...public.serializer_fields.choice import ChoiceField
+from ...public.serializer_fields.poll import PollField
 
 __all__ = [
     "PollUserVoteSerializer"

@@ -6,7 +6,7 @@ from apps.django.extra.scooso_scraper.other_scrapers.scrape_teachers import scra
 
 
 class TeacherScrapeTest(TestCase):
-    def test_scraper(self):
+    def _test_scraper(self):
         data = scrape_teachers()
         
         self.assertGreater(len(data), 0)

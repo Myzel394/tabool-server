@@ -30,7 +30,7 @@ class RegistrationTest(ClientTestMixin, TeacherTestMixin, UserTestMixin, DummyUs
         }
     
     def test_create_user_full(self):
-        print("Creating users")
+        print("Creating user")
         
         # Step 1 Token
         print("Step 1, Token")

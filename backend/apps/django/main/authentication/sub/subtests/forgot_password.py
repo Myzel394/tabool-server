@@ -9,7 +9,7 @@ class ForgotPasswordTest(UserTestMixin, DummyUser, ClientTestMixin):
         self.__class__.associated_user = self.user
     
     def request(self) -> None:
-        response = self.client.post("/api/auth/reset_password/", {
+        response = self.client.post("/api/auth/reset-password/", {
             "email": self.user.email
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
@@ -19,7 +19,7 @@ class ForgotPasswordTest(UserTestMixin, DummyUser, ClientTestMixin):
         
         token = ResetPasswordToken.objects.all()[0]
         
-        response = self.client.post("/api/auth/reset_password/confirm/", {
+        response = self.client.post("/api/auth/reset-password/confirm/", {
             "password": self.Get_random_password(),
             "token": token.key,
             "email": self.user.email

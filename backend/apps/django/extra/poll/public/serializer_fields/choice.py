@@ -1,6 +1,6 @@
 from apps.django.utils.serializers import WritableFromUserFieldMixin
 from ...models import Choice
-from ...serializers import ChoiceSerializer
+from ...sub.subserializers.choice import ChoiceSerializer
 
 __all__ = [
     "ChoiceField"

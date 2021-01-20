@@ -1,6 +1,6 @@
 from apps.django.utils.serializers import WritableFromUserFieldMixin
 from ...models import Poll
-from ...serializers import PollSerializer
+from ...sub.subserializers.poll import PollSerializer
 
 __all__ = [
     "PollField"
