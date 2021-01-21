@@ -75,10 +75,10 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     
     def clean(self):
         if self.pk != "":
-            if self.is_uploaded and self.has_changed("upload_date"):
+            if (self.is_uploaded or self.is_in_action) and self.has_changed("upload_date"):
                 raise ValidationError(_(
-                    "Die Datei wurde bereits am {upload_date} hochgeladen. Das Hochladedatum kann daher nicht mehr "
-                    "geändert werden.",
+                    "Die Datei wurde bereits am {upload_date} hochgeladen (oder wird gerade hochgeladen). Das "
+                    "Hochladedatum kann daher nicht mehr geändert werden.",
                 ).format(self.upload_date))
             if self.has_changed("file") and self.file.name:
                 raise ValidationError(_(
