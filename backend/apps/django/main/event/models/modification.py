@@ -4,7 +4,7 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_lifecycle import AFTER_CREATE, AFTER_DELETE, AFTER_UPDATE, BEFORE_SAVE, hook, LifecycleModel
+from django_lifecycle import AFTER_CREATE, BEFORE_SAVE, hook, LifecycleModel
 
 from apps.django.main.lesson.public import *
 from apps.django.main.lesson.public import model_names as lesson_names
@@ -103,10 +103,5 @@ class Modification(RandomIDMixin, LifecycleModel):
                             or datetime.combine(self.lesson.date, self.lesson.lesson_data.end_time)
     
     @hook(AFTER_CREATE)
-    @hook(AFTER_DELETE)
-    @hook(
-        AFTER_UPDATE,
-        when_any=["new_room", "new_teacher", "new_subject", "information", "modification_type"]
-    )
     def _hook_send_modification_changed_event(self):
         push_modification_change(self)

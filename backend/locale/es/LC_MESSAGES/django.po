@@ -1,0 +1,1200 @@
+#  _        _                 _
+# | |      | |               | |
+# | |_ __ _| |__   ___   ___ | |
+# | __/ _` | '_ \ / _ \ / _ \| |
+# | || (_| | |_) | (_) | (_) | |
+#  \__\__,_|_.__/ \___/ \___/|_|
+#
+# Übersetzung für: RUSSISCH
+#
+# Wie ist diese Datei aufgebaut?
+#   -> Jeder zu übersetzende Text enthält einen Eintrag in dieser Datei.
+#   -> Jeder Eintrag besteht hat dieses Format:
+#       msgid <Deutscher Text>
+#       msgstr <Dein Text>
+#
+# Wie übersetze ich einen Eintrag?
+#   -> Du übersetzt den Text von "msgid" in "msgstr".
+#   -> Du darfst nur " (Anführungszeichen) benutzen.
+#   -> "msgid" ist der deutsche Text
+#   -> "msgstr" ist deine Übersetzung
+#   -> "msgid" DARF NICHT VERÄNDERT WERDEN!!!
+#   -> NUR "msgstr" DARF VERÄNDERT WERDEN!!!
+#
+# Wie gehe ich mit langen Übersetzungen und Texten um?
+#   -> Lange Texte können aufgeteilt werden.
+#   -> Dabei gehst du wie folgt vor:
+#       1. Nach "msgstr" kommen zwei Anführungszeichen ("").
+#       2. Deinen Text schreibst du dann dadrunter in so viele Zeilen, wie du brauchst.
+#       3. Jede Zeile startet und endet mit einem Anführungszeichen
+#   -> Wichtig dabei zu wissen:
+#       -> Die einzelnen Zeilen werden intern wieder zusammengefasst.
+#           D.h. du könntest theoretisch 50 Zeilen Abstand zwischen zwei Übersetzungsteilen machen,
+#           am Ende wäre keine Zeile dazwischen.
+#
+# Wie füge ich Zeilenumbrüche, Anführungszeichen und spezielle Zeichen hinzu?
+#   -> Anführungszeichen kannst du hinzufügen, indem du einen Schrägstrich nach rechts direkt davor schreibst.
+#   -> Zeilenumbrüche fügst du mit dieser Ausnahme hinzu: "\n"
+#   -> Spezielle Zeichen kannst du ganz normal einfügen.
+#
+# Was beduetet dieses "{model}", "%(project_name)s" und so weiter?
+#   -> Diese Zeichen sind Platzhalter. Häufig kommt dieses Format vor: "{<name>}".
+#       Wenn es dir hilft kannst du dir irgendeinen Text vorstellen.
+#       Wichtig dabei ist:
+#           Beim Format: "%(<name>)<format>" steht nach der Klammer ein Buchstabe (meist "s" oder "d").
+#           Dieser Buchstabe ist nicht ausversehen da, der muss auch kopiert werden!
+#
+#
+# Beispiel:
+#    msgid "Superschnelle App"
+#    msgstr "Super efficient app"
+#
+#    msgid "Das ist ein super langer Text der niemals enden wird bla bla bla."
+#    msgstr ""
+#    "This is a super long text"
+#    "that is never going to end"
+#    "bla bla bla."
+#
+#    msgid "Hallo {username}. Hast du schon %(project_name)s getestet?"
+#    msgstr ""
+#    "Hello {username}. Have you already testes %(project_name)s?"
+#
+#
+# Fragen?
+#    -> Kontaktiere mich über:
+#    -> Signal/Threema/Telegram/Whatsapp: +49 1575 6035018
+#    -> E-Mail: miguel.kra@gmail.com
+
+
+# Diese Übersetzung kann ignoriert werden
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-20 21:11+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps/django/core/templates/main/index.html:28
+msgid "Benachrichtigung bei Änderungen"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:34
+msgid "Offline verfügbar"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:40
+msgid "Superschnelle App"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:46
+msgid "Sauwenig mobile Daten"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:52
+msgid "Kein Ausspionieren mehr möglich"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:58
+msgid "Sicheres Speichern der Daten"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:64
+msgid "Hausaufgaben einfach verwalten"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:70
+msgid "Materialien verzögert hochladen"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:76
+msgid "Effizient dank neuester Technologie"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:82
+msgid "Einfach zu benutzen"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:88
+msgid "Multikulturell"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:94
+msgid "Dark-Mode"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:101
+#, python-format
+msgid "%(project_name)s runterladen"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:105
+#, python-format
+msgid ""
+"%(project_name)s kann ganz einfach über den Browser installiert werden. "
+"Folge dazu diesen wenigen Schritten:"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:117
+msgid "Lade dir Chrome herunter"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:122
+msgid "Du kannst auf deinem Computer direkt auf die App zugreifen."
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:128
+msgid "Öffne die App,"
+msgstr ""
+
+#: apps/django/core/templates/main/index.html:130
+msgid ""
+"Tippe rechts neben der Suchleiste auf die drei Punkte und installiere die "
+"App indem du auf \"Zum Startbildschirm hinzufügen\" tippst."
+msgstr ""
+
+#: apps/django/extra/news/models.py:21 apps/django/extra/news/models.py:22
+msgid "News"
+msgstr ""
+
+#: apps/django/extra/news/models.py:27 apps/django/extra/poll/models/poll.py:34
+#: apps/django/main/event/models/event.py:44
+msgid "Titel"
+msgstr ""
+
+#: apps/django/extra/news/models.py:31
+msgid "HTML"
+msgstr ""
+
+#: apps/django/extra/poll/admin.py:39
+msgid "Fehler"
+msgstr ""
+
+#: apps/django/extra/poll/admin.py:49
+msgid "Ergebnis"
+msgstr ""
+
+#: apps/django/extra/poll/models/choice.py:39
+msgid "Text"
+msgstr ""
+
+#: apps/django/extra/poll/models/choice.py:43
+#: apps/django/main/school_data/models/user_relations/subject.py:38
+#: apps/django/utils/models.py:19
+msgid "Farbe"
+msgstr ""
+
+#: apps/django/extra/poll/models/choice.py:53
+msgid "Wähle eine Farbe aus."
+msgstr ""
+
+#: apps/django/extra/poll/models/poll.py:38
+msgid "Maximal Datum zum Abstimmen"
+msgstr ""
+
+#: apps/django/extra/poll/models/poll.py:44
+msgid "Veröffentlichkeitsdatum der Ergebnisse"
+msgstr ""
+
+#: apps/django/extra/poll/models/poll.py:45
+msgid "Ab wann man die Ergebnisse schauen kann"
+msgstr ""
+
+#: apps/django/extra/poll/models/poll.py:51
+msgid "Mindestanzahl von Auswahlen"
+msgstr ""
+
+#: apps/django/extra/poll/models/poll.py:52
+msgid "Wie viele Elemente mindestens ausgewählt werden"
+msgstr ""
+
+#: apps/django/extra/poll/models/poll.py:57
+msgid "Maximale Abstimmmöglichkeiten"
+msgstr ""
+
+#: apps/django/extra/poll/models/poll.py:58
+msgid "Wie viele Elemente maximal ausgewählt werden können"
+msgstr ""
+
+#: apps/django/extra/poll/models/poll.py:71
+msgid ""
+"Das Feld \"{self._meta.get_field('min_voter_choices').verbose_name}\" kann "
+msgstr ""
+
+#: apps/django/extra/poll/models/poll.py:85
+msgid ""
+"Ungültige Eingabe für das Feld \"{self._meta.get_field('max_vote_choices')."
+"verbose_name}\", "
+msgstr ""
+
+#: apps/django/extra/poll/models/vote.py:37
+msgid "Feedback"
+msgstr ""
+
+#: apps/django/extra/poll/public/model_names.py:7
+msgid "Auswahl"
+msgstr ""
+
+#: apps/django/extra/poll/public/model_names.py:8
+msgid "Auswahlen"
+msgstr ""
+
+#: apps/django/extra/poll/public/model_names.py:10
+msgid "Umfrage"
+msgstr ""
+
+#: apps/django/extra/poll/public/model_names.py:11
+msgid "Umfragen"
+msgstr ""
+
+#: apps/django/extra/poll/public/model_names.py:13
+msgid "Abstimmung"
+msgstr ""
+
+#: apps/django/extra/poll/public/model_names.py:14
+msgid "Abstimmungen"
+msgstr ""
+
+#: apps/django/extra/poll/sub/subserializers/poll_vote.py:39
+#, python-brace-format
+msgid ""
+"Wähle zwischen {poll.min_vote_choices} bis {poll.max_vote_choices} Elemente "
+"aus."
+msgstr ""
+
+#: apps/django/extra/poll/sub/subserializers/poll_vote.py:49
+msgid "Diese Auswahlen sind nicht gültig."
+msgstr ""
+
+#: apps/django/extra/poll/sub/subviews/apis/poll.py:46
+msgid "Du hast bereits abgestimmt."
+msgstr ""
+
+#: apps/django/main/authentication/middlewares.py:22
+msgid "Zugangstoken fehlt oder nicht gültig!"
+msgstr ""
+
+#: apps/django/main/authentication/models/known_ip.py:24
+#: apps/django/main/otp/models/otp.py:34
+msgid "Ablaufdatum"
+msgstr ""
+
+#: apps/django/main/authentication/models/known_ip.py:28
+#: apps/django/main/otp/models/ip_geolocation.py:19
+msgid "Ip-Adresse"
+msgstr ""
+
+#: apps/django/main/authentication/models/scooso_data.py:33
+msgid "Scooso-Id"
+msgstr ""
+
+#: apps/django/main/authentication/models/scooso_data.py:38
+msgid "Scooso-Benutzername"
+msgstr ""
+
+#: apps/django/main/authentication/models/scooso_data.py:39
+msgid "Der Scooso-Benutername wird verschlüsselt gespeichert"
+msgstr ""
+
+#: apps/django/main/authentication/models/scooso_data.py:44
+msgid "Scooso-Passwort"
+msgstr ""
+
+#: apps/django/main/authentication/models/scooso_data.py:45
+msgid "Das Scooso-Password wird verschlüsselt gespeichert"
+msgstr ""
+
+#: apps/django/main/authentication/models/student.py:49
+msgid "Klassenstufe"
+msgstr ""
+
+#: apps/django/main/authentication/models/student.py:53
+#, python-brace-format
+msgid "{user} in Klasse {class_number} mit Lehrer {teacher}"
+msgstr ""
+
+#: apps/django/main/authentication/models/student.py:61
+msgid "Der Benutzer ist noch nicht aktiviert!"
+msgstr ""
+
+#: apps/django/main/authentication/models/student.py:64
+msgid "Der Benutzer kann nicht verändert werden."
+msgstr ""
+
+#: apps/django/main/authentication/models/token.py:40
+#: apps/django/main/authentication/public/model_names.py:8
+#: apps/django/main/otp/models/otp.py:30
+msgid "Token"
+msgstr ""
+
+#: apps/django/main/authentication/models/token.py:48
+#, python-brace-format
+msgid "{user} vom {creation_date}"
+msgstr ""
+
+#: apps/django/main/authentication/models/token.py:53
+msgid "Der Zugangscode kann nicht geändert werden."
+msgstr ""
+
+#: apps/django/main/authentication/models/user.py:22
+msgid "Kann Benutzer-Berechtigungen verändern"
+msgstr ""
+
+#: apps/django/main/authentication/models/user.py:26
+msgid "ID"
+msgstr ""
+
+#: apps/django/main/authentication/models/user.py:34
+msgid "Email-Adresse"
+msgstr ""
+
+#: apps/django/main/authentication/models/user.py:40
+msgid "Daten ausgefüllt"
+msgstr ""
+
+#: apps/django/main/authentication/models/user.py:45
+msgid "Wird gerade konfiguriert"
+msgstr ""
+
+#: apps/django/main/authentication/models/user.py:56
+#, python-brace-format
+msgid "{first_name} {last_name}, {email_part} (ID: {id})"
+msgstr ""
+
+#: apps/django/main/authentication/public/model_names.py:10
+msgid "Scooso-Daten"
+msgstr ""
+
+#: apps/django/main/authentication/public/model_names.py:12
+msgid "Schüler"
+msgstr ""
+
+#: apps/django/main/authentication/public/model_names.py:14
+msgid "Benutzer"
+msgstr ""
+
+#: apps/django/main/authentication/public/model_names.py:16
+msgid "Bekannte IP"
+msgstr ""
+
+#: apps/django/main/authentication/public/model_names.py:17
+msgid "Bekannte Ips"
+msgstr ""
+
+#: apps/django/main/authentication/sub/subadmins/token.py:25
+msgid "[Kein Benutzer]"
+msgstr ""
+
+#: apps/django/main/authentication/sub/subadmins/user.py:42
+#, python-brace-format
+msgid "Scooso-Stundenplan von {user} wurde geladen."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subadmins/user.py:46
+#, python-brace-format
+msgid "{user} hat noch keine Scooso-Daten angegeben."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subadmins/user.py:50
+msgid "Scooso-Stundenplan laden"
+msgstr ""
+
+#: apps/django/main/authentication/sub/subquerysets/user.py:22
+msgid "Email nicht angegeben."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subquerysets/user.py:37
+msgid "Superuser must have is_staff=True and is_superuser=True"
+msgstr ""
+
+#: apps/django/main/authentication/sub/subserializers/authentication.py:33
+msgid "Diese E-Mail ist ungültig."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subserializers/authentication.py:39
+msgid "Das Passwort ist falsch."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subserializers/authentication.py:43
+msgid "Dein Account wurde deaktiviert."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subserializers/authentication.py:46
+msgid "Dein Account wird noch erstellt, dies dauert ein bisschen."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subserializers/authentication.py:65
+msgid "Dein Zugangscode, damit wir wissen, dass nur Schüler die App verwenden."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subserializers/full_registration.py:39
+#: apps/django/main/authentication/sub/subviews/apis/scooso_credentials.py:40
+msgid "Mit diesen Scooso-Anmeldedaten konnte der Server sich nicht anmelden."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subserializers/full_registration.py:52
+msgid "Klassenlehrer/Stammkursleiter"
+msgstr ""
+
+#: apps/django/main/authentication/sub/subserializers/password_change.py:24
+msgid "Das Passwort ist das gleiche wie das alte!"
+msgstr ""
+
+#: apps/django/main/authentication/sub/subserializers/password_change.py:30
+msgid "Das Passwort ist falsch!"
+msgstr ""
+
+#: apps/django/main/authentication/sub/subviews/apis/authentication.py:62
+msgid "Dieses OTP ist abgelaufen. Es wurde dir ein neues zugeschickt."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subviews/apis/authentication.py:71
+msgid "Ungültiges OTP."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subviews/apis/email_confirmation.py:31
+msgid "Der Email-Bestätigungscode ist falsch."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subviews/apis/email_confirmation.py:36
+msgid "Der Email-Bestätigungscode fehlt."
+msgstr ""
+
+#: apps/django/main/authentication/sub/subviews/apis/scooso_credentials.py:48
+msgid "Dieser Benutzer gehört dir nicht."
+msgstr ""
+
+#: apps/django/main/authentication/validators.py:16
+msgid "Der Zugangscode ist nicht gültig"
+msgstr ""
+
+#: apps/django/main/authentication/validators.py:22
+msgid ""
+"Dieser Zugangscode wurde bereits verwendet. Du kannst Zugangscodes nur für "
+"einen Account verwenden. Wenn dein Zugangscode von jemand anderem verwendet "
+"wurde, kontaktiere uns bitte."
+msgstr ""
+
+#: apps/django/main/authentication/validators.py:30
+msgid "Diese E-Mail wurde bereits registriert."
+msgstr ""
+
+#: apps/django/main/event/models/event.py:49
+msgid "Start"
+msgstr ""
+
+#: apps/django/main/event/models/event.py:54
+msgid "Ende"
+msgstr ""
+
+#: apps/django/main/event/models/event.py:59
+#, python-brace-format
+msgid "{title} vom {start_datetime} bis {end_datetime}"
+msgstr ""
+
+#: apps/django/main/event/models/exam.py:55
+#: apps/django/main/event/sub/subadmins/event.py:26
+#: apps/django/main/lesson/models/lesson.py:43
+#: apps/django/main/lesson/sub/subadmins/lesson_data.py:52
+msgid "Datum"
+msgstr ""
+
+#: apps/django/main/event/models/exam.py:56
+msgid "Datum, wann die Klassenarbeit geschrieben wird."
+msgstr ""
+
+#: apps/django/main/event/models/exam.py:61
+#: apps/django/main/homework/models/homework.py:66
+msgid "Informationen"
+msgstr ""
+
+#: apps/django/main/event/models/exam.py:73
+#, python-brace-format
+msgid "{course} am {targeted_date}"
+msgstr ""
+
+#: apps/django/main/event/models/modification.py:67
+msgid "Information"
+msgstr ""
+
+#: apps/django/main/event/models/modification.py:75
+msgid "Typ"
+msgstr ""
+
+#: apps/django/main/event/models/modification.py:76
+msgid "Art von Veränderung"
+msgstr ""
+
+#: apps/django/main/event/models/modification.py:81
+#: apps/django/main/lesson/models/lesson_data.py:50
+msgid "Startzeit"
+msgstr ""
+
+#: apps/django/main/event/models/modification.py:86
+#: apps/django/main/lesson/models/lesson_data.py:54
+msgid "Endzeit"
+msgstr ""
+
+#: apps/django/main/event/models/modification.py:92
+msgid "Von Scooso"
+msgstr ""
+
+#: apps/django/main/event/models/user_relations/event.py:36
+#: apps/django/main/homework/models/user_relations/homework.py:41
+msgid "Ignorieren"
+msgstr ""
+
+#: apps/django/main/event/options.py:10
+msgid "Vertretung"
+msgstr ""
+
+#: apps/django/main/event/options.py:11
+msgid "Freistunde"
+msgstr ""
+
+#: apps/django/main/event/options.py:12
+msgid "Selbstorganisiertes Lernen"
+msgstr ""
+
+#: apps/django/main/event/options.py:13
+msgid "Raumänderung"
+msgstr ""
+
+#: apps/django/main/event/public/model_names.py:10
+msgid "Klassenarbeit"
+msgstr ""
+
+#: apps/django/main/event/public/model_names.py:11
+msgid "Klassenarbeiten"
+msgstr ""
+
+#: apps/django/main/event/public/model_names.py:13
+msgid "Event"
+msgstr ""
+
+#: apps/django/main/event/public/model_names.py:14
+msgid "Events"
+msgstr ""
+
+#: apps/django/main/event/public/model_names.py:16
+msgid "Veränderung"
+msgstr ""
+
+#: apps/django/main/event/public/model_names.py:17
+#: apps/django/main/event/sub/subadmins/modification.py:44
+msgid "Veränderungen"
+msgstr ""
+
+#: apps/django/main/homework/models/homework.py:39
+msgid "Kann private Hausaufgaben sehen und bearbeiten"
+msgstr ""
+
+#: apps/django/main/homework/models/homework.py:59
+msgid "Fälligkeitsdatum"
+msgstr ""
+
+#: apps/django/main/homework/models/homework.py:74
+msgid "Hausaufgaben-Typ"
+msgstr ""
+
+#: apps/django/main/homework/models/homework.py:75
+msgid "Beispiel: Vortag, Hausaufgabe, Protokoll, Hausarbeit"
+msgstr ""
+
+#: apps/django/main/homework/models/homework.py:104
+#, python-brace-format
+msgid "{lesson} (Typ: {type}) bis {due_date} (Privat: {is_private}"
+msgstr ""
+
+#: apps/django/main/homework/models/homework.py:110
+#, python-brace-format
+msgid "{lesson} (Typ: {type}, Privat: {is_private})"
+msgstr ""
+
+#: apps/django/main/homework/models/material.py:47
+#: apps/django/main/homework/models/submission.py:51
+#: apps/django/main/homework/sub/subserializers/material__endpoint.py:34
+msgid "Datei"
+msgstr ""
+
+#: apps/django/main/homework/models/material.py:55
+msgid "Originaler Dateiname"
+msgstr ""
+
+#: apps/django/main/homework/models/material.py:62
+msgid "Dateiname"
+msgstr ""
+
+#: apps/django/main/homework/models/material.py:69
+msgid "Gelöscht"
+msgstr ""
+
+#: apps/django/main/homework/models/material.py:74
+#, python-brace-format
+msgid "{material_model_verbose} {name} für {lesson}"
+msgstr ""
+
+#: apps/django/main/homework/models/material.py:83
+msgid "Dateiname fehlt!"
+msgstr ""
+
+#: apps/django/main/homework/models/material.py:94
+#, python-brace-format
+msgid ""
+"Die Endung \"{extension}\" im angegebenen Dateinamen ist für die "
+"hochgeladene Datei nicht gültig. Wähle aus zwischen: {available_extensions}."
+msgstr ""
+
+#: apps/django/main/homework/models/scooso_data/material.py:32
+msgid "Besitzer-Scooso-ID"
+msgstr ""
+
+#: apps/django/main/homework/models/submission.py:58
+msgid "Hochladedatum"
+msgstr ""
+
+#: apps/django/main/homework/models/submission.py:59
+msgid "Wann soll die Datei hochgeladen werden?"
+msgstr ""
+
+#: apps/django/main/homework/models/submission.py:65
+msgid "Hochgeladen?"
+msgstr ""
+
+#: apps/django/main/homework/models/submission.py:70
+msgid "Wird hochgeladen"
+msgstr ""
+
+#: apps/django/main/homework/models/submission.py:71
+msgid "Wenn ja, dann versucht der Server gerade die Datei hochzuladen."
+msgstr ""
+
+#: apps/django/main/homework/models/submission.py:79
+#, python-brace-format
+msgid ""
+"Die Datei wurde bereits am {upload_date} hochgeladen. Das Hochladedatum kann "
+"daher nicht mehr geändert werden."
+msgstr ""
+
+#: apps/django/main/homework/models/submission.py:84
+msgid "Die Datei kann nicht verändert werden."
+msgstr ""
+
+#. Translators: Diese Nachricht ist für den Admin-Bereich. Sie wird verwendet, um Einreichungen darzustellen.
+#: apps/django/main/homework/models/submission.py:104
+#, python-brace-format
+msgid "{filename} für {lesson} (Hochladedatum: {upload_date})"
+msgstr ""
+
+#: apps/django/main/homework/models/user_relations/homework.py:36
+msgid "Erledigt"
+msgstr ""
+
+#: apps/django/main/homework/public/model_names.py:11
+msgid "Hausaufgabe"
+msgstr ""
+
+#: apps/django/main/homework/public/model_names.py:12
+msgid "Hausaufgaben"
+msgstr ""
+
+#: apps/django/main/homework/public/model_names.py:14
+msgid "Material"
+msgstr ""
+
+#: apps/django/main/homework/public/model_names.py:15
+msgid "Materialien"
+msgstr ""
+
+#: apps/django/main/homework/public/model_names.py:17
+msgid "Einreichung"
+msgstr ""
+
+#: apps/django/main/homework/public/model_names.py:18
+msgid "Einreichungen"
+msgstr ""
+
+#: apps/django/main/homework/sub/subadmins/homework.py:34
+msgid "Privat"
+msgstr ""
+
+#: apps/django/main/homework/sub/subserializers/homework.py:80
+msgid "Öffentliche Hausaufgaben können nicht privat gestellt werden."
+msgstr ""
+
+#: apps/django/main/homework/sub/subviews/apis/homework.py:33
+msgid "Du hast keine Berechtigung, diese Aktion durchzuführen!"
+msgstr ""
+
+#: apps/django/main/homework/validators.py:11
+#: apps/django/main/homework/validators.py:14
+msgid "Es sind nur zukünftige Daten erlaubt!"
+msgstr ""
+
+#: apps/django/main/lesson/models/classbook.py:26
+msgid "Inhalt Präsenzunterricht"
+msgstr ""
+
+#: apps/django/main/lesson/models/classbook.py:30
+msgid "Inhalt Fernunterricht"
+msgstr ""
+
+#: apps/django/main/lesson/models/course.py:39
+msgid "Teilnehmer"
+msgstr ""
+
+#: apps/django/main/lesson/models/course.py:57
+msgid "Kursnummer"
+msgstr ""
+
+#: apps/django/main/lesson/models/course.py:62
+#, python-brace-format
+msgid "{course_name}: {teacher}"
+msgstr ""
+
+#: apps/django/main/lesson/models/lesson.py:48
+msgid "Videokonferenz-Link"
+msgstr ""
+
+#: apps/django/main/lesson/models/lesson.py:54
+#, python-brace-format
+msgid "{date}, {course}"
+msgstr ""
+
+#: apps/django/main/lesson/models/lesson_data.py:58
+msgid "Wochentag"
+msgstr ""
+
+#: apps/django/main/lesson/models/lesson_data.py:63
+#, python-brace-format
+msgid "{course}: {weekday} {start_time} - {end_time}"
+msgstr ""
+
+#: apps/django/main/lesson/models/scooso_data/lesson.py:32
+msgid "Time-ID"
+msgstr ""
+
+#: apps/django/main/lesson/models/scooso_data/lesson_data.py:32
+msgid "Stundentyp"
+msgstr ""
+
+#: apps/django/main/lesson/models/user_relations/lesson.py:36
+msgid "Anwesend?"
+msgstr ""
+
+#: apps/django/main/lesson/models/user_relations/lesson.py:37
+msgid "Bist du in dieser Stunde anwesend?"
+msgstr ""
+
+#: apps/django/main/lesson/public/model_names.py:11
+msgid "Kurs"
+msgstr ""
+
+#: apps/django/main/lesson/public/model_names.py:12
+msgid "Kurse"
+msgstr ""
+
+#: apps/django/main/lesson/public/model_names.py:14
+msgid "Stunde"
+msgstr ""
+
+#: apps/django/main/lesson/public/model_names.py:15
+msgid "Stunden"
+msgstr ""
+
+#: apps/django/main/lesson/public/model_names.py:17
+msgid "Stunden-Daten"
+msgstr ""
+
+#: apps/django/main/lesson/public/model_names.py:25
+msgid "Klassenbuch"
+msgstr ""
+
+#: apps/django/main/lesson/public/model_names.py:26
+msgid "Klassenbücher"
+msgstr ""
+
+#: apps/django/main/lesson/sub/subadmins/course.py:34
+msgid "Teilnehmeranzahl"
+msgstr ""
+
+#: apps/django/main/lesson/sub/subserializers/timetable.py:26
+msgid "Das Enddatum muss größer als das Startdatum sein"
+msgstr ""
+
+#: apps/django/main/lesson/sub/subserializers/timetable.py:34
+#, python-brace-format
+msgid ""
+"Das Enddatum kann höchstens {max_days_diff} Tage über dem Startdatum liegen."
+msgstr ""
+
+#: apps/django/main/lesson/sub/subviews/apis/daily_data.py:42
+#: apps/django/main/lesson/sub/subviews/apis/timetable.py:37
+msgid "Der Stundenplan wurde noch nicht geladen."
+msgstr ""
+
+#: apps/django/main/lesson/validators.py:23
+#, python-brace-format
+msgid ""
+"Der Wochentag für das Datum {date} ist ein {weekday}, der festgelegte "
+"Wochentag für die Stunde ist jedoch {lesson_weekday}. Die Wochentage müssen "
+"gleich sein."
+msgstr ""
+
+#: apps/django/main/otp/models/ip_geolocation.py:26
+msgid "Stadt"
+msgstr ""
+
+#: apps/django/main/otp/public/model_names.py:7
+msgid "Einmalpasswort"
+msgstr ""
+
+#: apps/django/main/otp/public/model_names.py:8
+msgid "Einmalpasswörter"
+msgstr ""
+
+#: apps/django/main/otp/public/model_names.py:10
+msgid "IP-Standort"
+msgstr ""
+
+#: apps/django/main/otp/public/model_names.py:11
+msgid "IP-Standorte"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:10
+msgid "Englisch"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:11
+msgid "Mathe"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:12
+msgid "Deutsch"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:13
+msgid "Französisch"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:14
+msgid "Latein"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:15
+msgid "Spanisch"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:17
+msgid "Informatik"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:19
+msgid "Chemie"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:20
+msgid "Physik"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:21
+msgid "Biologie"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:23
+msgid "Sozialkunde-Erdkunde"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:24
+msgid "Sozialkunde"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:25
+msgid "Erdkunde"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:27
+msgid "Katholische Religion"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:28
+msgid "Ethik"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:29
+msgid "Evangelische Religion"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:31
+msgid "Musik"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:32
+msgid "Darstellendes Spiel"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:34
+msgid "Sport"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:35
+msgid "Geschichte"
+msgstr ""
+
+#: apps/django/main/school_data/constants.py:36
+msgid "Kunst"
+msgstr ""
+
+#: apps/django/main/school_data/models/room.py:28
+msgid "Ort"
+msgstr ""
+
+#: apps/django/main/school_data/models/scooso_data/room.py:31
+msgid "Raum-Code"
+msgstr ""
+
+#: apps/django/main/school_data/models/scooso_data/subject.py:31
+msgid "Fach-Code"
+msgstr ""
+
+#: apps/django/main/school_data/models/scooso_data/teacher.py:32
+msgid "Lehrer-Code"
+msgstr ""
+
+#: apps/django/main/school_data/models/subject.py:29
+msgid "Name"
+msgstr ""
+
+#: apps/django/main/school_data/models/subject.py:34
+msgid "Kurzer Name"
+msgstr ""
+
+#: apps/django/main/school_data/models/teacher.py:29
+msgid "Vorname"
+msgstr ""
+
+#: apps/django/main/school_data/models/teacher.py:36
+msgid "Letzter Name"
+msgstr ""
+
+#: apps/django/main/school_data/models/teacher.py:41
+msgid "Kürzel"
+msgstr ""
+
+#: apps/django/main/school_data/models/teacher.py:48
+msgid "E-Mail"
+msgstr ""
+
+#: apps/django/main/school_data/models/teacher.py:55
+msgid "Geschlecht"
+msgstr ""
+
+#: apps/django/main/school_data/models/teacher.py:60
+#, python-brace-format
+msgid "{first_name} {last_name}, {short_name}"
+msgstr ""
+
+#: apps/django/main/school_data/options.py:10
+msgid "Männlich"
+msgstr ""
+
+#: apps/django/main/school_data/options.py:11
+msgid "Weiblich"
+msgstr ""
+
+#: apps/django/main/school_data/options.py:12
+msgid "Divers"
+msgstr ""
+
+#: apps/django/main/school_data/options.py:13
+msgid "Unbekannt"
+msgstr ""
+
+#: apps/django/main/school_data/public/model_names.py:11
+msgid "Raum"
+msgstr ""
+
+#: apps/django/main/school_data/public/model_names.py:12
+msgid "Räume"
+msgstr ""
+
+#: apps/django/main/school_data/public/model_names.py:14
+msgid "Fach"
+msgstr ""
+
+#: apps/django/main/school_data/public/model_names.py:15
+msgid "Fächer"
+msgstr ""
+
+#: apps/django/main/school_data/public/model_names.py:17
+msgid "Lehrer"
+msgstr ""
+
+#: apps/django/utils/admins.py:31
+msgid "Extra-Einstellungen"
+msgstr ""
+
+#: apps/django/utils/admins.py:40
+msgid "Einstellung sichtbar nach Erstellung des Objekts."
+msgstr ""
+
+#: apps/django/utils/autocomplete_view/exceptions.py:8
+msgid "Ungültige Eingabe"
+msgstr ""
+
+#: apps/django/utils/fields/color.py:36
+msgid "Feld für Farbe"
+msgstr ""
+
+#: apps/django/utils/fields/safe_file.py:22
+#, python-brace-format
+msgid ""
+"Aus Sicherheitsgründen können keine Dateien hochgeladen werden, die kleiner "
+"als {min_size_bytes} bytes groß sind."
+msgstr ""
+
+#: apps/django/utils/fields/safe_file.py:26
+#, python-brace-format
+msgid ""
+"Es können keine Dateien hochgeladen werden, die größer als {max_siz_mib} MiB "
+"groß sind."
+msgstr ""
+
+#: apps/django/utils/fields/safe_file.py:29
+msgid ""
+"Die Datei scheint manipuliert zu sein. Sie kann daher zur Sicherheit nicht "
+"gespeichert werden."
+msgstr ""
+
+#: apps/django/utils/fields/safe_file.py:32
+msgid "Dieses Dateiformat wird aus Sicherheitsgründen nicht unterstützt."
+msgstr ""
+
+#: apps/django/utils/fields/weekday.py:6
+msgid "Montag"
+msgstr ""
+
+#: apps/django/utils/fields/weekday.py:7
+msgid "Dienstag"
+msgstr ""
+
+#: apps/django/utils/fields/weekday.py:8
+msgid "Mittwoch"
+msgstr ""
+
+#: apps/django/utils/fields/weekday.py:9
+msgid "Donnerstag"
+msgstr ""
+
+#: apps/django/utils/fields/weekday.py:10
+msgid "Freitag"
+msgstr ""
+
+#: apps/django/utils/fields/weekday.py:11
+msgid "Samstag"
+msgstr ""
+
+#: apps/django/utils/fields/weekday.py:12
+msgid "Sonntag"
+msgstr ""
+
+#: apps/django/utils/fields/weekday.py:16
+msgid "Feld für einen Wochentag"
+msgstr ""
+
+#: apps/django/utils/history_extras/extras/user_information/models.py:14
+msgid "IP-Adresse"
+msgstr ""
+
+#: apps/django/utils/models.py:40
+msgid "Hinzugefügt"
+msgstr ""
+
+#: apps/django/utils/models.py:62
+msgid "Scooso-ID"
+msgstr ""
+
+#: apps/django/utils/serializers/fields.py:73
+msgid "Das Objekt wurde nicht gefunden"
+msgstr ""
+
+#: apps/django/utils/serializers/fields.py:74
+msgid "Ungültiger Typ"
+msgstr ""
+
+#: apps/django/utils/serializers/mixins.py:106
+msgid "Private Daten entfernen"
+msgstr ""
+
+#: apps/django/utils/serializers/mixins.py:107
+msgid ""
+"Entfernt private Daten und verschleiert Daten, die nicht entfernt werden "
+"können."
+msgstr ""
+
+#: apps/django/utils/translations.py:9
+#, python-brace-format
+msgid "{model}-Scooso-Daten"
+msgstr ""
+
+#: apps/django/utils/translations.py:15
+#, python-brace-format
+msgid "{model}-Benutzer-Beziehung"
+msgstr ""
+
+#: apps/django/utils/translations.py:16
+#, python-brace-format
+msgid "{model}-Benutzer-Beziehungen"
+msgstr ""
+
+#: apps/django/utils/validators.py:14
+msgid "Dieser Raum ist nicht gültig."
+msgstr ""
+
+#: apps/django/utils/validators.py:25
+msgid "Dieser Wochentag ist nicht gültig."
+msgstr ""
+
+#: apps/django/utils/viewsets/mixins.py:41
+msgid "ID fehlt."
+msgstr ""
+
+#: apps/django/utils/viewsets/mixins.py:134
+msgid "Nicht alle Objekte gefunden."
+msgstr ""
+
+#: apps/django/utils/viewsets/mixins.py:137
+msgid "Feld \"ids\" fehlt oder ist ungültig."
+msgstr ""
+
+#. Translators: Formatierung für Daten (Datum). Befehle: https://strftime.org/
+#: constants/dates.py:13
+msgid "%d.%m.%Y"
+msgstr ""
+
+#. Translators: Formatierung für Daten + Uhrzeiten (Datum + Uhrzeit). Befehle: https://strftime.org/
+#: constants/dates.py:15
+msgid "%d.%m.%Y, %H:%M"
+msgstr ""
+
+#. Translators: Formatierung für Uhrzeiten (Uhrzeit). Befehle: https://strftime.org/
+#: constants/dates.py:17
+msgid "%H:%M"
+msgstr ""
+
+#: project/settings.py:204
+msgid ""
+"Dieses Passwort wurde bereits schon mal gehackt! Das Passwort muss "
+"einzigartig sein."
+msgstr ""
+
+#: project/settings.py:205
+msgid "Dein Passwort muss einzigartig sein."
+msgstr ""

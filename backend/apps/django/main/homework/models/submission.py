@@ -18,6 +18,7 @@ from apps.django.main.lesson.public import *
 from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.utils.models import AssociatedUserMixin
 from . import SubmissionScoosoData
+from ..notifications import push_submission_scooso_upload_failed, push_submission_scooso_upload_succeeded
 from ..public import build_submission_upload_to, model_names
 from ..public.validators import safe_file_validator
 from ..querysets import SubmissionQuerySet
@@ -152,21 +153,22 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
                 content = Path(self.file.path).read_text()
                 
                 with MaterialRequest(user.scoosodata.username, user.scoosodata.password) as scraper:
-                    try:
-                        scraper.upload_material(
-                            time_id=time_id,
-                            targeted_datetime=targeted_date,
-                            filename=filename,
-                            data=content,
-                            material_type=MaterialTypeOptions.HOMEWORK
-                        )
-                    except BaseException as exception:
-                        raise exception
+                    scraper.upload_material(
+                        time_id=time_id,
+                        targeted_datetime=targeted_date,
+                        filename=filename,
+                        data=content,
+                        material_type=MaterialTypeOptions.HOMEWORK
+                    )
                 
                 self.is_uploaded = True
                 
                 material = self._get_material_from_scooso()
                 self._create_material_from_scooso(material)
+            except:
+                push_submission_scooso_upload_failed(self)
+            else:
+                push_submission_scooso_upload_succeeded(self)
             finally:
                 self.is_in_action = False
                 if commit:

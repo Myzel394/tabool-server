@@ -45,7 +45,7 @@ class ModificationScoosoScraperSerializer(GetOrCreateSerializerMixin):
             other_data["new_teacher"] = new_teacher
         
         # Create instance
-        instance = super().create(unique_data)
+        instance, _ = Modification.objects.get_or_create(**unique_data)
         
         for key, value in other_data.items():
             setattr(instance, key, value)
