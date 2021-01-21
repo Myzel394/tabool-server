@@ -49,9 +49,7 @@ class LoginSerializer(serializers.Serializer):
 
 
 class RegisterSerializer(serializers.Serializer):
-    email = serializers.EmailField(
-        validators=[email_not_in_use]
-    )
+    email = serializers.EmailField()
     
     password = serializers.CharField(
         validators=[validate_password],
@@ -59,18 +57,25 @@ class RegisterSerializer(serializers.Serializer):
     )
     
     token = serializers.CharField(
-        validators=[token_exists, token_not_in_use],
         min_length=constants.TOKEN_LENGTH,
         max_length=constants.TOKEN_LENGTH,
         help_text=_("Dein Zugangscode, damit wir wissen, dass nur Schüler die App verwenden.")
     )
     
+    def validate(self, attrs):
+        token_exists(attrs["token"])
+        token_not_in_use(attrs["token"])
+        
+        email_not_in_use(attrs["email"])
+        
+        return super().validate(attrs)
+    
     def create(self, validated_data):
+        token = Token.objects.get(token=validated_data["token"])
         user = User.objects.create_user(
             validated_data["email"],
             validated_data["password"],
         )
-        token = Token.objects.get(token=validated_data["token"])
         token.user = user
         token.save()
         
