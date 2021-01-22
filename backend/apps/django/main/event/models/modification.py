@@ -29,7 +29,7 @@ class Modification(RandomIDMixin, LifecycleModel):
     class Meta:
         verbose_name = model_names.MODIFICATION
         verbose_name_plural = model_names.MODIFICATION_PLURAL
-        ordering = ("lesson",)
+        ordering = ("lesson__date", "start_datetime",)
     
     objects = ModificationQuerySet.as_manager()
     

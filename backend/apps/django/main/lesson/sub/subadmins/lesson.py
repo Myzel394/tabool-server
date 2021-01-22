@@ -26,7 +26,8 @@ class LessonAdmin(DefaultAdminMixin):
         "default": ["date", "lesson_data"]
     }
     list_display = ["course_name", "date", "start_time", "end_time", "teacher", "room", ]
-    search_fields = ["date", "lesson_data"]
+    search_fields = ["lesson_data__course__subject__name", "lesson_data__course__teacher__first_name",
+                     "lesson_data__course__teacher__last_name"]
     inlines = [LessonScoosoDataAdminInline]
     
     def course_name(self, instance: Lesson):

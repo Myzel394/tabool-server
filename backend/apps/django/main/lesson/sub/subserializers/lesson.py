@@ -13,7 +13,7 @@ from .user_relations import UserLessonRelationSerializer
 from ...models import Lesson
 
 __all__ = [
-    "LessonListSerializer", "LessonDetailSerializer", "LessonDetailSerializer", "LessonDetailEndpointSerializer"
+    "LessonListSerializer", "LessonDetailSerializer", "LessonDetailSerializer", "LessonDetailEndpointSerializer",
 ]
 
 
@@ -65,7 +65,7 @@ class LessonDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
         return MaterialDetailSerializer(materials, many=True, context=self.context).data
     
     def get_homeworks(self, instance: Lesson):
-        homeworks = Homework.objects.only("lesson").filter(lesson=instance)
+        homeworks = Homework.objects.only("lesson").filter(lesson=instance).not_old()
         
         return HomeworkDetailSerializer(homeworks, many=True, context=self.context).data
     

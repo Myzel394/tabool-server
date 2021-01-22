@@ -51,3 +51,8 @@ class HomeworkQuerySet(CustomQuerySetMixin.QuerySet):
             Q(lesson__lesson_data__course__participants__in=[user], private_to_user=None)
             | Q(private_to_user=user)
         )
+    
+    def not_old(self) -> "HomeworkQuerySet":
+        return self.filter(
+            due_date__lte=datetime.now() - timedelta(days=14)
+        )
