@@ -127,8 +127,7 @@ class BulkDeleteMixin:
             if len(queryset) == len(ids):
                 # Delete each object, otherwise some signals would be missing
                 for obj in queryset:
-                    pass
-                    # obj.delete()
+                    obj.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
             return Response({
                 "message": _("Nicht alle Objekte gefunden.")
