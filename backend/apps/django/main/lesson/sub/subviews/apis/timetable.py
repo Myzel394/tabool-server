@@ -5,9 +5,13 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from apps.django.main.event.models import Event, Exam
+from apps.django.main.event.models import Event, Exam, Modification
 from apps.django.main.event.sub.subserializers.event.detail import DetailEventSerializer
 from apps.django.main.event.sub.subserializers.exam.detail import DetailExamSerializer
+from apps.django.main.event.sub.subserializers.modification.detail import DetailModificationSerializer
+from apps.django.main.homework.models import Homework, Material
+from apps.django.main.homework.sub.subserializers.homework.detail import DetailHomeworkSerializer
+from apps.django.main.homework.sub.subserializers.material.detail import DetailMaterialSerializer
 from ....models import Lesson
 from ....serializers import RelatedDetailLessonSerializer, TimetableSerializer
 
@@ -53,11 +57,23 @@ def timetable(request):
         .filter(course__id__in=course_ids, targeted_date__gte=start_datetime.date(),
                 targeted_date__lte=end_datetime.date()) \
         .distinct()
+    materials = Material.objects \
+        .only("lesson") \
+        .filter(lesson__in=lessons)
+    homeworks = Homework.objects \
+        .only("lesson") \
+        .filter(lesson__in=lessons)
+    modifications = Modification.objects \
+        .only("lesson") \
+        .filter(lesson__in=lessons)
     
     return Response({
         "lessons": RelatedDetailLessonSerializer(lessons, many=True, context=serializer_context).data,
         "events": DetailEventSerializer(events, many=True, context=serializer).data,
         "exams": DetailExamSerializer(exams, many=True, context=serializer_context).data,
+        "materials": DetailMaterialSerializer(materials, many=True, context=serializer_context).data,
+        "homeworks": DetailHomeworkSerializer(homeworks, many=True, context=serializer_context).data,
+        "modifications": DetailModificationSerializer(modifications, many=True, context=serializer_context).data,
         "earliest_date_available": user_lessons.only("date").earliest("date").date,
         "latest_date_available": user_lessons.only("date").latest("date").date
     })

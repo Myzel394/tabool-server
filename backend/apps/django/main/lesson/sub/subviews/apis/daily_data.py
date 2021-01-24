@@ -11,8 +11,9 @@ from apps.django.main.event.models import Event, Exam, Modification
 from apps.django.main.event.sub.subserializers.event.detail import DetailEventSerializer
 from apps.django.main.event.sub.subserializers.exam.detail import DetailExamSerializer
 from apps.django.main.event.sub.subserializers.modification.detail import DetailModificationSerializer
-from apps.django.main.homework.models import Homework
+from apps.django.main.homework.models import Homework, Material
 from apps.django.main.homework.sub.subserializers.homework.detail import DetailHomeworkSerializer
+from apps.django.main.homework.sub.subserializers.material.detail import DetailMaterialSerializer
 from ....models import Lesson
 from ....serializers import DailyDataSerializer, RelatedDetailLessonSerializer
 
@@ -77,6 +78,9 @@ def daily_data(request: RequestType):
                 date__gte=targeted_date,
                 date__lte=targeted_date + timedelta(days=max_future_days)) \
         .distinct()
+    materials = Material.objects \
+        .only("lesson") \
+        .filter(lesson__in=lessons)
     
     return Response({
         "lessons": RelatedDetailLessonSerializer(lessons, many=True, context=serializer_context).data,
@@ -86,6 +90,7 @@ def daily_data(request: RequestType):
         "homeworks": DetailHomeworkSerializer(homeworks, many=True, context=serializer_context).data,
         "exams": DetailExamSerializer(exams, many=True, context=serializer_context).data,
         "events": DetailEventSerializer(events, many=True, context=serializer_context).data,
+        "materials": DetailMaterialSerializer(materials, many=True, context=serializer_context).data,
         "video_conference_lessons": RelatedDetailLessonSerializer(
             video_conference_lessons, many=True, context=serializer_context
         ).data,
