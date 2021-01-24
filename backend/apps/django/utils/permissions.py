@@ -22,8 +22,7 @@ def is_user_authorized(user: "User") -> bool:
                    user.is_active and
                    user.has_filled_out_data and
                    user.is_confirmed and
-                   user.is_scooso_data_valid and
-                   not user.is_being_setup
+                   user.is_scooso_data_valid
            ) or user.is_superuser
 
 

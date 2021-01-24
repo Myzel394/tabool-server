@@ -31,7 +31,6 @@ class UserTestMixin(DummyUser):
             create_scooso_data: bool = True,
             is_active: bool = True,
             has_filled_out_data: bool = True,
-            is_being_setup: bool = False,
             **kwargs
     ) -> settings.AUTH_USER_MODEL:
         Model = get_user_model()
@@ -61,7 +60,6 @@ class UserTestMixin(DummyUser):
             )
         user.has_filled_out_data = has_filled_out_data
         user.is_active = is_active
-        user.is_being_setup = is_being_setup
         user.save()
         
         return user

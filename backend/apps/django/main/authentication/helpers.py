@@ -12,13 +12,14 @@ __all__ = [
 
 
 def send_email_verification(user: "User") -> None:
+    url = "https://tabool.app/app/auth/registration/email/" + user.confirmation_key + "/"
+    
     message = f"""
     Hi {user.first_name}!
 
-    Du kannst deine E-Mail bestätigen, indem du diesen Code kopierst und ihn in der App eingibst.
-    Hier dein Bestätigungscode:
+    Du kannst deine E-Mail bestätigen, indem du einfach auf diesen Link drückst:
 
-    {user.confirmation_key}
+    {url}
     """
     
     send_mail(

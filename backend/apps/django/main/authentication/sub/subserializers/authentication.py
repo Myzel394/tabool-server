@@ -42,9 +42,6 @@ class LoginSerializer(serializers.Serializer):
         if not user.is_active:
             raise serializers.ValidationError(_("Dein Account wurde deaktiviert."))
         
-        if user.is_being_setup:
-            raise serializers.ValidationError(_("Dein Account wird noch erstellt, dies dauert ein bisschen."))
-        
         return {"user": user}
 
 
