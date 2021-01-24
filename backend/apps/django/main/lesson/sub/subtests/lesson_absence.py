@@ -51,7 +51,7 @@ class LessonAbsenceUpdateTest(LessonAbsenceTestMixin, ClientTestMixin):
         response = self.client.patch(f"/api/data/lesson-absence/{self.absence.id}/", {
             "lesson": lesson.id,
         }, content_type="application/json")
-        self.assertStatusOk(response)
+        self.assertStatusOk(response.status_code)
         self.absence.refresh_from_db()
         self.assertEqual(absence_lesson, self.absence.lesson)
     

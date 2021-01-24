@@ -1,6 +1,6 @@
-from apps.django.main.event.models import Event
-from apps.django.main.event.sub.subserializers.event import EventDetailSerializer
 from apps.django.utils.serializers import WritableFromUserFieldMixin
+from ...models import Event
+from ...sub.subserializers.event.detail import DetailEventSerializer
 
 __all__ = [
     "EventField"
@@ -9,4 +9,4 @@ __all__ = [
 
 class EventField(WritableFromUserFieldMixin):
     model = Event
-    detail_serializer = EventDetailSerializer
+    detail_serializer = DetailEventSerializer

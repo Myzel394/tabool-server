@@ -5,11 +5,11 @@ from ... import constants
 from ...models import Subject
 
 __all__ = [
-    "SubjectDetailSerializer"
+    "SubjectSerializer"
 ]
 
 
-class SubjectDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
+class SubjectSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     preferred_id_key = "subject"
     
     class Meta:
@@ -17,7 +17,7 @@ class SubjectDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
         fields = [
             "name", "short_name", "id", "user_relation"
         ]
-        read_only_fields = [
+        read_only = [
             "id", "user_relation"
         ]
     

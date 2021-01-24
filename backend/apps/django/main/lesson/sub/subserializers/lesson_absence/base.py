@@ -10,6 +10,3 @@ __all__ = [
 class BaseLessonAbsenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonAbsence
-        fields = [
-            "reason", "is_signed"
-        ]

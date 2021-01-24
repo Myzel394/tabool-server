@@ -1,21 +1,27 @@
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 
+from apps.django.utils.viewsets import DetailSerializerViewSetMixin
 from ...models import Room
 from ...paginations import LargeSetPagination
-from ...serializers import RoomDetailSerializer
+from ...serializers import CreateRoomSerializer, DetailRoomSerializer
 
 __all__ = [
     "RoomViewSet"
 ]
 
 
-class RoomViewSet(viewsets.ModelViewSet):
+class RoomViewSet(viewsets.ModelViewSet, DetailSerializerViewSetMixin):
     filter_backends = [SearchFilter]
     search_fields = ["place"]
-    serializer_class = RoomDetailSerializer
     model = Room
     pagination_class = LargeSetPagination
+    detail_serializer = DetailRoomSerializer
+    
+    def get_serializer_class(self):
+        if self.action == "create":
+            return CreateRoomSerializer
+        return DetailRoomSerializer
     
     def get_queryset(self):
         if self.action in ["list", "retrieve"]:

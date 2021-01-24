@@ -5,7 +5,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from apps.django.utils.viewsets import RetrieveFromUserMixin
 from ....filters import ModificationFilterSet
 from ....models import Modification
-from ....serializers import ModificationDetailSerializer, ModificationListSerializer
+from ....serializers import DetailModificationSerializer, ListModificationSerializer
 
 __all__ = [
     "ModificationViewSet"
@@ -21,5 +21,5 @@ class ModificationViewSet(viewsets.mixins.ListModelMixin, RetrieveFromUserMixin)
     
     def get_serializer_class(self):
         if self.action == "list":
-            return ModificationListSerializer
-        return ModificationDetailSerializer
+            return ListModificationSerializer
+        return DetailModificationSerializer

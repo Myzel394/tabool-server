@@ -7,4 +7,4 @@ __all__ = [
 
 class UpdateLessonAbsenceSerializer(BaseLessonAbsenceSerializer):
     class Meta(BaseLessonAbsenceSerializer.Meta):
-        fields = BaseLessonAbsenceSerializer.Meta.fields
+        fields = ["reason", "is_signed"]

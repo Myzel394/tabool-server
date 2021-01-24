@@ -5,7 +5,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from apps.django.utils.viewsets import RetrieveFromUserMixin
 from ....filters import EventFilterSet
 from ....models import Event
-from ....serializers import EventDetailSerializer, EventListSerializer
+from ....serializers import DetailEventSerializer, ListEventSerializer
 
 __all__ = [
     "EventViewSet"
@@ -21,5 +21,5 @@ class EventViewSet(viewsets.mixins.ListModelMixin, RetrieveFromUserMixin):
     
     def get_serializer_class(self):
         if self.action == "list":
-            return EventListSerializer
-        return EventDetailSerializer
+            return ListEventSerializer
+        return DetailEventSerializer

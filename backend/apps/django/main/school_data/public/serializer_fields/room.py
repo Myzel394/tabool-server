@@ -1,6 +1,6 @@
-from apps.django.main.school_data.models import Room
-from apps.django.main.school_data.sub.subserializers.room import RoomDetailSerializer
 from apps.django.utils.serializers import WritableAllFieldMixin
+from ...models import Room
+from ...sub.subserializers.room.detail import DetailRoomSerializer
 
 __all__ = [
     "RoomField"
@@ -9,4 +9,4 @@ __all__ = [
 
 class RoomField(WritableAllFieldMixin):
     model = Room
-    detail_serializer = RoomDetailSerializer
+    detail_serializer = DetailRoomSerializer

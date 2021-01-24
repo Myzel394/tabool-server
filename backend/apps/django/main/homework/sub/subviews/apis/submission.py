@@ -11,32 +11,36 @@ from rest_framework.response import Response
 
 from apps.django.extra.scooso_scraper.exceptions import ConnectionFailed, RequestFailed
 from apps.django.extra.scooso_scraper.scrapers.material import *
-from apps.django.utils.viewsets import BulkDeleteMixin
-from ...subserializers.material__endpoint import UploadSerializer
-from ...subserializers.submission__endpoint import SubmissionEndpointDetailSerializer
+from apps.django.utils.viewsets import BulkDeleteMixin, DetailSerializerViewSetMixin
 from .... import constants
 from ....filters import SubmissionFilterSet
 from ....models import Submission
-from ....serializers import SubmissionListSerializer
+from ....serializers import (
+    CreateSubmissionSerializer, DetailSubmissionSerializer, ListSubmissionSerializer,
+    UpdateSubmissionSerializer, UploadSerializer,
+)
 
 __all__ = [
     "SubmissionViewSet"
 ]
 
 
-class SubmissionViewSet(viewsets.ModelViewSet, BulkDeleteMixin):
+class SubmissionViewSet(viewsets.ModelViewSet, BulkDeleteMixin, DetailSerializerViewSetMixin):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = SubmissionFilterSet
     ordering_fields = ["upload_date", "is_uploaded"]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
+    detail_serializer = DetailSubmissionSerializer
+    serializer_action_map = {
+        "create": CreateSubmissionSerializer,
+        "update": UpdateSubmissionSerializer,
+        "partial_update": UpdateSubmissionSerializer,
+        "list": ListSubmissionSerializer,
+        "retrieve": DetailSubmissionSerializer
+    }
     
     def get_queryset(self):
         return Submission.objects.user_accessible(self.request.user)
-    
-    def get_serializer_class(self):
-        if self.action == "list":
-            return SubmissionListSerializer
-        return SubmissionEndpointDetailSerializer
     
     @action(detail=False, methods=["post"])
     def scooso(self, request: RequestType):
@@ -85,6 +89,7 @@ class SubmissionViewSet(viewsets.ModelViewSet, BulkDeleteMixin):
             "upload_status": constants.UPLOAD_STATUSES.UPLOADED
         }, status=status.HTTP_200_OK)
     
+    # TODO: Rewrite!
     @action(detail=True, methods=["post", "get"])
     def upload(self, request: RequestType, pk: Optional[str] = None):
         submission: Submission = self.get_object()

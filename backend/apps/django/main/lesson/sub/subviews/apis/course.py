@@ -3,7 +3,7 @@ from rest_framework.filters import SearchFilter
 
 from apps.django.utils.viewsets import RetrieveFromUserMixin
 from ....models import Course
-from ....serializers import CourseDetailSerializer, CourseListSerializer
+from ....serializers import DetailCourseSerializer, ListCourseSerializer
 
 __all__ = [
     "CourseViewSet"
@@ -17,5 +17,5 @@ class CourseViewSet(viewsets.mixins.ListModelMixin, RetrieveFromUserMixin):
     
     def get_serializer_class(self):
         if self.action in ["list"]:
-            return CourseListSerializer
-        return CourseDetailSerializer
+            return ListCourseSerializer
+        return DetailCourseSerializer

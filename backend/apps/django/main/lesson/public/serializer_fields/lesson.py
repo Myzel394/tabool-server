@@ -1,6 +1,6 @@
-from apps.django.main.lesson.models import Lesson
-from apps.django.main.lesson.sub.subserializers.lesson import LessonDetailEndpointSerializer
 from apps.django.utils.serializers import WritableFromUserFieldMixin
+from ...models import Lesson
+from ...sub.subserializers.lesson.related_detail import RelatedDetailLessonSerializer
 
 __all__ = [
     "LessonField"
@@ -9,4 +9,4 @@ __all__ = [
 
 class LessonField(WritableFromUserFieldMixin):
     model = Lesson
-    detail_serializer = LessonDetailEndpointSerializer
+    detail_serializer = RelatedDetailLessonSerializer

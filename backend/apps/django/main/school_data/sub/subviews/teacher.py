@@ -13,7 +13,7 @@ from apps.django.main.lesson.models import Lesson, LessonData
 from apps.django.utils.viewsets import RetrieveAllMixin
 from ...models import Teacher
 from ...paginations import LargeSetPagination
-from ...serializers import TeacherDetailSerializer, TeacherListSerializer
+from ...serializers import DetailTeacherSerializer, ListTeacherSerializer
 
 __all__ = [
     "TeacherViewSet"
@@ -31,8 +31,8 @@ class TeacherViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
     
     def get_serializer_class(self):
         if self.action == "list":
-            return TeacherListSerializer
-        return TeacherDetailSerializer
+            return ListTeacherSerializer
+        return DetailTeacherSerializer
     
     @action(url_path="information", detail=True, methods=["GET"])
     def information(self, request: RequestType, pk: str = None):

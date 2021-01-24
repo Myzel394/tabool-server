@@ -8,7 +8,7 @@ __all__ = [
 
 class CreateLessonAbsenceSerializer(BaseLessonAbsenceSerializer):
     class Meta(BaseLessonAbsenceSerializer.Meta):
-        fields = BaseLessonAbsenceSerializer.Meta.fields + ["lesson"]
+        fields = ["reason", "is_signed", "lesson"]
     
     lesson = LessonField()
     

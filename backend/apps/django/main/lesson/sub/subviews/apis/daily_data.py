@@ -8,13 +8,13 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from apps.django.main.event.models import Event, Exam, Modification
-from apps.django.main.event.sub.subserializers.event import EventDetailSerializer
-from apps.django.main.event.sub.subserializers.exam import ExamDetailSerializer
-from apps.django.main.event.sub.subserializers.modification__endpoint import ModificationDetailEndpointSerializer
+from apps.django.main.event.sub.subserializers.event.detail import DetailEventSerializer
+from apps.django.main.event.sub.subserializers.exam.detail import DetailExamSerializer
+from apps.django.main.event.sub.subserializers.modification.detail import DetailModificationSerializer
 from apps.django.main.homework.models import Homework
-from apps.django.main.homework.sub.subserializers.homework__endpoint import HomeworkDetailEndpointSerializer
+from apps.django.main.homework.sub.subserializers.homework.detail import DetailHomeworkSerializer
 from ....models import Lesson
-from ....serializers import DailyDataSerializer, LessonDetailSerializer
+from ....serializers import DailyDataSerializer, RelatedDetailLessonSerializer
 
 
 @api_view(["GET"])
@@ -79,14 +79,14 @@ def daily_data(request: RequestType):
         .distinct()
     
     return Response({
-        "lessons": LessonDetailSerializer(lessons, many=True, context=serializer_context).data,
-        "modifications": ModificationDetailEndpointSerializer(
+        "lessons": RelatedDetailLessonSerializer(lessons, many=True, context=serializer_context).data,
+        "modifications": DetailModificationSerializer(
             modifications, many=True, context=serializer_context
         ).data,
-        "homeworks": HomeworkDetailEndpointSerializer(homeworks, many=True, context=serializer_context).data,
-        "exams": ExamDetailSerializer(exams, many=True, context=serializer_context).data,
-        "events": EventDetailSerializer(events, many=True, context=serializer_context).data,
-        "video_conference_lessons": LessonDetailSerializer(
+        "homeworks": DetailHomeworkSerializer(homeworks, many=True, context=serializer_context).data,
+        "exams": DetailExamSerializer(exams, many=True, context=serializer_context).data,
+        "events": DetailEventSerializer(events, many=True, context=serializer_context).data,
+        "video_conference_lessons": RelatedDetailLessonSerializer(
             video_conference_lessons, many=True, context=serializer_context
         ).data,
         "earliest_date_available": user_lessons.only("date").earliest("date").date,

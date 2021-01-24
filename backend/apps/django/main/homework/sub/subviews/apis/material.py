@@ -6,9 +6,9 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from apps.django.main.homework.filters import MaterialFilterSet
-from apps.django.main.homework.models import Material
-from apps.django.main.homework.serializers import MaterialDetailEndpointSerializer, MaterialListSerializer
+from ....filters import MaterialFilterSet
+from ....models import Material
+from ....serializers import DetailMaterialSerializer, ListMaterialSerializer
 
 __all__ = [
     "MaterialViewSet"
@@ -26,8 +26,8 @@ class MaterialViewSet(viewsets.ReadOnlyModelViewSet):
     
     def get_serializer_class(self):
         if self.action == "list":
-            return MaterialListSerializer
-        return MaterialDetailEndpointSerializer
+            return ListMaterialSerializer
+        return DetailMaterialSerializer
     
     @action(detail=True, methods=["GET"], url_path="download-link")
     def download_link(self, request: RequestType, pk: str):

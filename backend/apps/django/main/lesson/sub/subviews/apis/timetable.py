@@ -6,10 +6,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from apps.django.main.event.models import Event, Exam
-from apps.django.main.event.sub.subserializers.event import EventDetailSerializer
-from apps.django.main.event.sub.subserializers.exam import ExamDetailSerializer
+from apps.django.main.event.sub.subserializers.event.detail import DetailEventSerializer
+from apps.django.main.event.sub.subserializers.exam.detail import DetailExamSerializer
 from ....models import Lesson
-from ....serializers import LessonDetailSerializer, TimetableSerializer
+from ....serializers import RelatedDetailLessonSerializer, TimetableSerializer
 
 __all__ = [
     "timetable"
@@ -55,9 +55,9 @@ def timetable(request):
         .distinct()
     
     return Response({
-        "lessons": LessonDetailSerializer(lessons, many=True, context=serializer_context).data,
-        "events": EventDetailSerializer(events, many=True, context=serializer_context).data,
-        "exams": ExamDetailSerializer(exams, many=True, context=serializer_context).data,
+        "lessons": RelatedDetailLessonSerializer(lessons, many=True, context=serializer_context).data,
+        "events": DetailEventSerializer(events, many=True, context=serializer).data,
+        "exams": DetailExamSerializer(exams, many=True, context=serializer_context).data,
         "earliest_date_available": user_lessons.only("date").earliest("date").date,
         "latest_date_available": user_lessons.only("date").latest("date").date
     })

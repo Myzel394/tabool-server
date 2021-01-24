@@ -1,6 +1,6 @@
-from apps.django.main.homework.models import Submission
-from apps.django.main.homework.sub.subserializers.submission import SubmissionDetailSerializer
 from apps.django.utils.serializers import WritableFromUserFieldMixin
+from ...models import Submission
+from ...serializers import DetailSubmissionSerializer
 
 __all__ = [
     "SubmissionField"
@@ -9,4 +9,4 @@ __all__ = [
 
 class SubmissionField(WritableFromUserFieldMixin):
     model = Submission
-    detail_serializer = SubmissionDetailSerializer
+    detail_serializer = DetailSubmissionSerializer

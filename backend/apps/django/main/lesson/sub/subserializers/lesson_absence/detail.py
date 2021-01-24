@@ -1,5 +1,5 @@
+from apps.django.main.lesson.public.serializer_fields.lesson import LessonField
 from .base import BaseLessonAbsenceSerializer
-from ..lesson import LessonDetailEndpointSerializer
 
 __all__ = [
     "DetailLessonAbsenceSerializer"
@@ -8,7 +8,6 @@ __all__ = [
 
 class DetailLessonAbsenceSerializer(BaseLessonAbsenceSerializer):
     class Meta(BaseLessonAbsenceSerializer.Meta):
-        fields = BaseLessonAbsenceSerializer.Meta.fields + ["lesson"]
-        read_only = ["lesson"]
+        fields = ["lesson", "reason", "is_signed", "id"]
     
-    lesson = LessonDetailEndpointSerializer()
+    lesson = LessonField()

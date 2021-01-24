@@ -1,6 +1,6 @@
-from apps.django.main.school_data.models import Teacher
-from apps.django.main.school_data.sub.subserializers.teacher import TeacherDetailSerializer
 from apps.django.utils.serializers import WritableAllFieldMixin
+from ...models import Teacher
+from ...sub.subserializers.teacher.detail import DetailTeacherSerializer
 
 __all__ = [
     "TeacherField"
@@ -9,4 +9,4 @@ __all__ = [
 
 class TeacherField(WritableAllFieldMixin):
     model = Teacher
-    detail_serializer = TeacherDetailSerializer
+    detail_serializer = DetailTeacherSerializer

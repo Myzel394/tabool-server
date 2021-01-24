@@ -6,21 +6,32 @@ from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 
-from apps.django.utils.viewsets import BulkDeleteMixin
+from apps.django.utils.viewsets import DetailSerializerViewSetMixin
 from ....filters import HomeworkFilterSet
 from ....models import Homework
-from ....serializers import HomeworkDetailEndpointSerializer, HomeworkListSerializer
+from ....serializers import (
+    CreateHomeworkSerializer, DetailHomeworkSerializer, ListHomeworkSerializer,
+    UpdateHomeworkSerializer,
+)
 
 __all__ = [
     "HomeworkViewSet"
 ]
 
 
-class HomeworkViewSet(viewsets.ModelViewSet, BulkDeleteMixin):
+class HomeworkViewSet(viewsets.ModelViewSet, DetailSerializerViewSetMixin):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = HomeworkFilterSet
     search_fields = ["information"]
     ordering_fields = ["due_date"]  # TODO: Add user relation ordering!
+    detail_serializer = DetailHomeworkSerializer
+    serializer_action_map = {
+        "create": CreateHomeworkSerializer,
+        "update": UpdateHomeworkSerializer,
+        "partial_update": UpdateHomeworkSerializer,
+        "list": ListHomeworkSerializer,
+        "retrieve": DetailHomeworkSerializer,
+    }
     
     def check_object_permissions(self, request: RequestType, obj: Homework):
         super().check_object_permissions(request, obj)
@@ -35,11 +46,6 @@ class HomeworkViewSet(viewsets.ModelViewSet, BulkDeleteMixin):
     
     def get_queryset(self):
         return Homework.objects.from_user(self.request.user).distinct()
-    
-    def get_serializer_class(self):
-        if self.action == "list":
-            return HomeworkListSerializer
-        return HomeworkDetailEndpointSerializer
     
     @action(methods=["GET"], detail=False, url_path="homework-information")
     def information(self, request: RequestType):
