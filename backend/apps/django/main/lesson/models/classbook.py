@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_common_utils.libraries.handlers.mixins import TextOptimizerHandler
+from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 
 from ..public import *
@@ -10,7 +12,7 @@ __all__ = [
 ]
 
 
-class Classbook(RandomIDMixin):
+class Classbook(RandomIDMixin, HandlerMixin):
     class Meta:
         verbose_name = model_names.CLASSBOOK
         verbose_name_plural = model_names.CLASSBOOK_PLURAL
@@ -30,3 +32,10 @@ class Classbook(RandomIDMixin):
         verbose_name=_("Inhalt Fernunterricht"),
         null=True,
     )
+    
+    @staticmethod
+    def handlers():
+        return {
+            "presence_content": TextOptimizerHandler(),
+            "distance_content": TextOptimizerHandler()
+        }

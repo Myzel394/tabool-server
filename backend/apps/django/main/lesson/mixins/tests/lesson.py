@@ -23,7 +23,7 @@ class LessonTestMixin(
     CourseTestMixin
 ):
     @classmethod
-    def Create_lesson(cls, **kwargs):
+    def Create_lesson(cls, **kwargs) -> Lesson:
         lesson_data = kwargs.pop("lesson_data", cls.Create_lesson_data())
         
         return Lesson.objects.create(

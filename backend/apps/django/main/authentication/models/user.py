@@ -15,6 +15,7 @@ __all__ = [
 ]
 
 
+# TODO: Add "load_scooso_data" field!
 # TODO: Add student data!
 class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     class Meta:

@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from apps.django.main.event.models import Modification
@@ -6,11 +7,10 @@ from apps.django.main.homework.models import Homework, Material, Submission
 from apps.django.main.homework.sub.subserializers.homework import HomeworkDetailSerializer
 from apps.django.main.homework.sub.subserializers.material import MaterialDetailSerializer
 from apps.django.main.homework.sub.subserializers.submission import SubmissionDetailSerializer
-from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin, UserRelationField
+from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin
 from .classbook import ClassbookDetailSerializer
 from .lesson_data import LessonDataDetailSerializer, LessonDataListSerializer
-from .user_relations import UserLessonRelationSerializer
-from ...models import Lesson
+from ...models import Lesson, LessonAbsence
 
 __all__ = [
     "LessonListSerializer", "LessonDetailSerializer", "LessonDetailSerializer", "LessonDetailEndpointSerializer",
@@ -40,24 +40,31 @@ class LessonDetailSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     class Meta:
         model = Lesson
         fields = [
-            "lesson_data", "date", "id", "user_relation", "classbook", "materials", "homeworks", "modifications",
+            "lesson_data", "date", "id", "absence", "classbook", "materials", "homeworks", "modifications",
             "submissions", "video_conference_link"
         ]
-    
-    user_relation = UserRelationField(
-        UserLessonRelationSerializer,
-        default={
-            "attendance": True
-        }
-    )
     
     lesson_data = LessonDataDetailSerializer()
     classbook = ClassbookDetailSerializer()
     
+    absence = serializers.SerializerMethodField()
     materials = serializers.SerializerMethodField()
     homeworks = serializers.SerializerMethodField()
     modifications = serializers.SerializerMethodField()
     submissions = serializers.SerializerMethodField()
+    
+    def get_absence(self, instance: Lesson):
+        from .lesson_absence import DetailLessonAbsenceSerializer
+        user = self.context["request"].user
+        
+        try:
+            absence = LessonAbsence.objects \
+                .only("associated_user", "lesson") \
+                .get(associated_user=user, lesson=instance)
+        except ObjectDoesNotExist:
+            return None
+        
+        return DetailLessonAbsenceSerializer(instance=absence).data
     
     def get_materials(self, instance: Lesson):
         materials = Material.objects.only("lesson").filter(lesson=instance)

@@ -40,7 +40,6 @@ data_patterns = build_patterns("data", [
 relation_patterns = build_patterns("user-relation", [
     event_routers.relation_router.urls,
     homework_routers.relation_router.urls,
-    lesson_routers.relation_router.urls,
     school_routers.relation_router.urls
 ])
 
