@@ -14,7 +14,7 @@ from apps.django.main.event import routers as event_routers
 from apps.django.main.homework import routers as homework_routers
 from apps.django.main.homework.views import HomeworkAutocompleteView
 from apps.django.main.lesson import routers as lesson_routers
-from apps.django.main.lesson.views import daily_data, timetable
+from apps.django.main.lesson.views import AbsenceReasonAutocompleteView, daily_data, timetable
 from apps.django.main.school_data import routers as school_routers
 from apps.django.main.sessions import routers as sessions_routers
 from apps.django.utils.urls import build_patterns
@@ -55,6 +55,7 @@ urlpatterns = [
     
     # Autocomplete
     path("api/autocomplete/homework/type/", HomeworkAutocompleteView.as_view()),
+    path("api/autocomplete/absence/reason/", AbsenceReasonAutocompleteView.as_view()),
     
     path("api/auth/change-password/", PasswordChangeView.as_view()),
     path("api/auth/scooso-credentials/", ScoosoCredentialsView.as_view()),

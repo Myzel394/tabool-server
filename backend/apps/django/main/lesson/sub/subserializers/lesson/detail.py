@@ -3,13 +3,13 @@ from rest_framework import serializers
 
 from apps.django.main.event.models import Modification
 from apps.django.main.homework.models import Homework, Material, Submission
+from .absence import LessonAbsenceSerializer
 from .base import BaseLessonSerializer
 from .homework import LessonHomeworkSerializer
 from .material import LessonMaterialSerializer
 from .modification import LessonModificationSerializer
 from .submission import LessonSubmissionSerializer
 from ..classbook import ClassbookSerializer
-from ..lesson_absence.detail import DetailLessonAbsenceSerializer
 from ..lesson_data.detail import DetailLessonDataSerializer
 from ....models import Lesson, LessonAbsence
 
@@ -45,7 +45,7 @@ class DetailLessonSerializer(BaseLessonSerializer):
         except ObjectDoesNotExist:
             return None
         
-        return DetailLessonAbsenceSerializer(instance=absence).data
+        return LessonAbsenceSerializer(instance=absence).data
     
     def get_materials(self, instance: Lesson):
         materials = Material.objects.only("lesson").filter(lesson=instance)

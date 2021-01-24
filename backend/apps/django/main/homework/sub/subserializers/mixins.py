@@ -8,4 +8,6 @@ class SizeMixin(serializers.Serializer):
     
     @staticmethod
     def get_size(instance: Submission):
-        return instance.file.size
+        if instance.file:
+            return instance.file.size
+        return

@@ -23,5 +23,9 @@ class SubjectSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
     
     user_relation = UserRelationField(
         UserSubjectRelationSerializer,
-        default=lambda subject, _: constants.SUBJECT_COLORS_MAPPING[rename_name_for_color_mapping(subject.name)]
+        default=lambda subject, _: {
+            "color": constants.SUBJECT_COLORS_MAPPING.get(
+                rename_name_for_color_mapping(subject.name), "#232323"
+            )
+        }
     )
