@@ -6,7 +6,7 @@ __all__ = [
 ]
 
 
-class DetailSerializerViewSetMixin(viewsets.mixins.CreateModelMixin, viewsets.mixins.UpdateModelMixin):
+class DetailSerializerViewSetMixin(viewsets.GenericViewSet):
     detail_serializer: serializers.Serializer
     serializer_action_map: dict[str, serializers.Serializer]
     

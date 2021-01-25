@@ -47,3 +47,6 @@ class UserQuerySet(models.QuerySet):
     
     def with_scooso_data(self) -> "UserQuerySet":
         return self.only("scoosodata").filter(scoosodata__isnull=False)
+    
+    def fetch_enabled(self):
+        return self.only("load_scooso_data").filter(load_scooso_data=True)

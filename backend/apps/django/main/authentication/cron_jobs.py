@@ -4,9 +4,11 @@ from django.contrib.auth import get_user_model
 
 from apps.django.main.authentication.models import KnownIp
 
+User = get_user_model()
+
 
 def fetch_user_names():
-    for user in get_user_model().objects.only("first_name").filter(first_name__isnull=True):
+    for user in User.objects.fetch_enabled().with_scooso_data():
         user.scoosodata.fetch_user_data()
 
 

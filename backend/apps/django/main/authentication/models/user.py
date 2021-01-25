@@ -41,6 +41,11 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
         verbose_name=_("Daten ausgefüllt")
     )  # type: bool
     
+    load_scooso_data = models.BooleanField(
+        default=True,
+        verbose_name=_("Scooso-Daten laden")
+    )
+    
     username = None
     
     USERNAME_FIELD = "email"
