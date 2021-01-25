@@ -24,8 +24,8 @@ class MaterialFilterSet(filters.FilterSet):
         label=model_verbose(Course)
     )
     
-    lesson_date__lte = filters.DateTimeFilter(method="lesson_date_filter_lte")
-    lesson_date__gte = filters.DateTimeFilter(method="lesson_date_filter_gte")
+    lesson_date__lte = filters.DateTimeFilter(method="lesson__date__filter_lte")
+    lesson_date__gte = filters.DateTimeFilter(method="lesson__date__filter_gte")
     
     def lesson_date_filter_lte(self, qs: QueryType[Material], value: datetime, *args, **kwargs):
         return qs.filter(

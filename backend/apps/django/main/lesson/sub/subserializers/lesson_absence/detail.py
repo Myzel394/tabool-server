@@ -10,4 +10,4 @@ class DetailLessonAbsenceSerializer(BaseLessonAbsenceSerializer):
     class Meta(BaseLessonAbsenceSerializer.Meta):
         fields = ["lesson", "reason", "is_signed", "id"]
     
-    lesson = LessonField()
+    lesson = LessonField(detail=True)

@@ -18,7 +18,7 @@ class LessonAbsence(RandomIDMixin, AssociatedUserMixin, HandlerMixin):
     class Meta:
         verbose_name = LESSON_ABSENCE
         verbose_name_plural = LESSON_ABSENCE_PLURAL
-        ordering = ("-lesson__date", "-lesson__lesson_data__start_time")
+        ordering = ("lesson__date", "lesson__lesson_data__start_time")
         unique_together = (
             ("lesson", "associated_user"),
         )

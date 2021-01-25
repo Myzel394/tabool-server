@@ -57,6 +57,7 @@ urlpatterns = [
     path("api/autocomplete/homework/type/", HomeworkAutocompleteView.as_view()),
     path("api/autocomplete/absence/reason/", AbsenceReasonAutocompleteView.as_view()),
     
+    # Auth
     path("api/auth/change-password/", PasswordChangeView.as_view()),
     path("api/auth/scooso-credentials/", ScoosoCredentialsView.as_view()),
     path("api/auth/registration/", RegisterView.as_view()),
