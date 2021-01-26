@@ -2,6 +2,7 @@ import random
 from pprint import pp
 
 import lorem
+from django.test import RequestFactory
 
 from apps.django.main.homework.mixins.tests import HomeworkTestMixin
 from apps.django.main.homework.models import Homework
@@ -10,30 +11,11 @@ from apps.django.main.homework.sub.subserializers.tests import *
 from apps.django.main.lesson.mixins.tests import *
 from apps.django.utils.tests import ClientTestMixin
 
-__all__ = [
-    "APITest", "QuerySetTest"
-]
-
 
 class APITest(HomeworkTestMixin, ClientTestMixin):
     def setUp(self) -> None:
         self.logged_user = self.Login_user()
         self.__class__.associated_user = self.logged_user
-    
-    def test_receive(self):
-        homework = self.Create_homework()
-        
-        response = self.client.get(f"/api/data/homework/")
-        
-        self.assertStatusOk(response.status_code)
-        
-        self.assertCountEqual(
-            response.data["results"],
-            HomeworkListSerializer(
-                Homework.objects.from_user(self.logged_user),
-                many=True
-            ).data
-        )
     
     def test_create_user_homework(self):
         homework = self.Create_homework()
@@ -66,28 +48,6 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         homework.refresh_from_db(fields=["information"])
         self.assertEqual(homework.information, new_information)
     
-    def test_filtering(self):
-        lesson = self.Create_lesson()
-        self.Create_homework(
-            lesson=lesson
-        )
-        
-        response = self.client.get(f"/api/data/homework/", {
-            "lesson": lesson.scooso_id
-        }, content_type="application/json")
-        
-        self.assertStatusOk(response.status_code)
-        
-        expected_homeworks = Homework \
-            .objects \
-            .all() \
-            .from_user(self.logged_user) \
-            .filter(lesson__id=lesson.scooso_id)
-        expected_data = HomeworkListSerializer(expected_homeworks, many=True).data
-        actual_data = response.data["results"]
-        
-        self.assertCountEqual(actual_data, expected_data)
-    
     def test_filtering_relation(self):
         homework = self.Create_homework()
         completed_homework = self.Create_homework()
@@ -102,10 +62,6 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=False).distinct()
         
         self.assertStatusOk(response.status_code)
-        self.assertCountEqual(
-            response.data["results"],
-            HomeworkListSerializer(expected, many=True).data
-        )
         
         response = self.client.get(f"/api/data/homework/", {
             "completed": True
@@ -113,10 +69,6 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=True).distinct()
         
         self.assertStatusOk(response.status_code)
-        self.assertCountEqual(
-            response.data["results"],
-            HomeworkListSerializer(expected, many=True).data
-        )
     
     def test_private_homework(self):
         first_user = self.logged_user
@@ -180,10 +132,6 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             homeworks = Homework.objects.from_user(first_user).distinct()
             
             self.assertStatusOk(response.status_code)
-            self.assertCountEqual(
-                HomeworkListSerializer(homeworks, many=True).data,
-                response.data["results"]
-            )
             self.assertIn(private_homework, homeworks)
         
         # Should return only public
@@ -192,18 +140,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
             homeworks = Homework.objects.from_user(second_user).distinct()
             
             self.assertStatusOk(response.status_code)
-            self.assertCountEqual(
-                HomeworkListSerializer(homeworks, many=True).data,
-                response.data["results"]
-            )
             self.assertNotIn(private_homework, homeworks)
-    
-    def test_homework_relation(self):
-        homework = self.Create_homework()
-        
-        response = self.client.get(f"/api/data/homework/{homework.id}/")
-        data = response.data
-        pp(data)
     
     def test_information(self):
         for _ in range(5):
@@ -234,6 +171,34 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         self.assertStatusOk(response.status_code)
         self.assertEqual(Homework.objects.all().count(), 10 - DELETE_AMOUNT - 1)
         print(response.data)
+
+
+class SerializerTest(HomeworkTestMixin, ClientTestMixin):
+    def setUp(self) -> None:
+        self.logged_user = self.Login_user()
+        self.__class__.associated_user = self.logged_user
+        self.homework = self.Create_homework(private_to_user=self.logged_user)
+    
+    def get_request(self):
+        request = RequestFactory()
+        request = request.put(f"/api/data/homework/{self.homework.id}/", {
+            "information": "Test"
+        }, content_type="application/json")
+        request.user = self.logged_user
+        return request
+    
+    def test_return_uses_detail_serializer(self):
+        # Just edit something
+        response = self.client.put(f"/api/data/homework/{self.homework.id}/", {
+            "information": "Test"
+        }, content_type="application/json")
+        self.assertStatusOk(response.status_code)
+        
+        expected = DetailHomeworkSerializer(instance=self.homework, context={
+            "request": self.get_request()
+        }).data
+        
+        self.assertCountEqual(expected, response.data)
 
 
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):

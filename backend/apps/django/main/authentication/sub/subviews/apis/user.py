@@ -10,9 +10,9 @@ __all__ = [
 
 
 class UserViewSet(
+    DetailSerializerViewSetMixin,
     viewsets.mixins.UpdateModelMixin,
     viewsets.mixins.RetrieveModelMixin,
-    DetailSerializerViewSetMixin
 ):
     detail_serializer = UserInformationSerializer
     serializer_action_map = {

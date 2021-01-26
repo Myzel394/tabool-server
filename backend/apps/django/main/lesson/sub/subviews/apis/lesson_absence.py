@@ -13,7 +13,14 @@ __all__ = [
 ]
 
 
-class LessonAbsenceView(viewsets.ModelViewSet, DetailSerializerViewSetMixin):
+class LessonAbsenceView(
+    DetailSerializerViewSetMixin,
+    viewsets.mixins.CreateModelMixin,
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.UpdateModelMixin,
+    viewsets.mixins.DestroyModelMixin,
+    viewsets.mixins.ListModelMixin,
+):
     model = LessonAbsence
     pagination_class = AbsencePagination
     

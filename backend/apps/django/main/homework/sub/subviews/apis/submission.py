@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from apps.django.extra.scooso_scraper.exceptions import ConnectionFailed, RequestFailed
 from apps.django.extra.scooso_scraper.scrapers.material import *
-from apps.django.utils.viewsets import BulkDeleteMixin, DetailSerializerViewSetMixin
+from apps.django.utils.viewsets import DetailSerializerViewSetMixin
 from .... import constants
 from ....filters import SubmissionFilterSet
 from ....models import Submission
@@ -25,7 +25,14 @@ __all__ = [
 ]
 
 
-class SubmissionViewSet(viewsets.ModelViewSet, BulkDeleteMixin, DetailSerializerViewSetMixin):
+class SubmissionViewSet(
+    DetailSerializerViewSetMixin,
+    viewsets.mixins.CreateModelMixin,
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.UpdateModelMixin,
+    viewsets.mixins.DestroyModelMixin,
+    viewsets.mixins.ListModelMixin,
+):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = SubmissionFilterSet
     ordering_fields = ["upload_date", "is_uploaded"]

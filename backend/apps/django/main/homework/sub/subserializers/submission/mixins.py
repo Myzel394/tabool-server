@@ -1,4 +1,4 @@
-from pathlib import Path
+import os
 
 from rest_framework import serializers
 
@@ -10,4 +10,4 @@ class FilenameMixin(serializers.Serializer):
     
     @staticmethod
     def get_filename(instance: Submission):
-        return Path(instance.file.path).name
+        return os.path.basename(instance.file.path)

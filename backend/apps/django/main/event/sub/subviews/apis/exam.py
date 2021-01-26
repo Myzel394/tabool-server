@@ -12,7 +12,14 @@ __all__ = [
 ]
 
 
-class ExamViewSet(viewsets.ModelViewSet, DetailSerializerViewSetMixin):
+class ExamViewSet(
+    DetailSerializerViewSetMixin,
+    viewsets.mixins.CreateModelMixin,
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.UpdateModelMixin,
+    viewsets.mixins.DestroyModelMixin,
+    viewsets.mixins.ListModelMixin,
+):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ExamFilterSet
     search_fields = ["information"]

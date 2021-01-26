@@ -1,3 +1,4 @@
+# TODO: Add for non GitHub-Workflow environments!
 """
 class UploadTest(ClientTestMixin, LessonUploadTestMixin, UtilsTestMixin):
     def setUp(self) -> None:

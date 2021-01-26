@@ -19,7 +19,14 @@ __all__ = [
 ]
 
 
-class HomeworkViewSet(viewsets.ModelViewSet, DetailSerializerViewSetMixin):
+class HomeworkViewSet(
+    DetailSerializerViewSetMixin,
+    viewsets.mixins.CreateModelMixin,
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.UpdateModelMixin,
+    viewsets.mixins.DestroyModelMixin,
+    viewsets.mixins.ListModelMixin,
+):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = HomeworkFilterSet
     search_fields = ["information"]

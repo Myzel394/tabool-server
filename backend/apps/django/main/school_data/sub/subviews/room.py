@@ -11,7 +11,14 @@ __all__ = [
 ]
 
 
-class RoomViewSet(viewsets.ModelViewSet, DetailSerializerViewSetMixin):
+class RoomViewSet(
+    DetailSerializerViewSetMixin,
+    viewsets.mixins.CreateModelMixin,
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.UpdateModelMixin,
+    viewsets.mixins.DestroyModelMixin,
+    viewsets.mixins.ListModelMixin,
+):
     filter_backends = [SearchFilter]
     search_fields = ["place"]
     model = Room
