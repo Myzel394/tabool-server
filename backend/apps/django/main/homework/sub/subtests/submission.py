@@ -1,6 +1,11 @@
+import os
+from pathlib import Path
+
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+from apps.django.extra.scooso_scraper.scrapers.material import MaterialRequest, MaterialTypeOptions
 from apps.django.main.homework.mixins.tests import *
+from apps.django.main.lesson.mixins.tests.lesson import LessonUploadTestMixin
 from apps.django.utils.tests import *
 
 
@@ -64,12 +69,14 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, UtilsTestMixin):
                 self.assertStatusNotOk(response.status_code)
 
 
-"""
 class ScoosoTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin):
     def setUp(self) -> None:
         self.load_lesson_upload()
     
-    def _test_upload(self):
+    def test_upload(self):
+        if os.getenv("GITHUB_WORKFLOW"):
+            return
+        
         submission = self.Create_submission(
             lesson=self.lesson,
             associated_user=self.logged_user
@@ -129,4 +136,3 @@ class ScoosoTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin):
         )
         self.assertStatusOk(response.status_code)
         self.assertEqual(response.data["upload_status"], "UPLOADED")
-"""
