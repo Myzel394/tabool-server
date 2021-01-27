@@ -1,4 +1,5 @@
 import mimetypes
+import os
 import re
 from pathlib import Path
 from typing import *
@@ -78,7 +79,7 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         )
     
     def clean(self):
-        if self.file.name is not None:
+        if self.file.name != "" and self.file.name is not None:
             if self.name is None:
                 raise ValidationError(_("Dateiname fehlt!"))
             
@@ -144,25 +145,47 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     def improve_name(self, name: str) -> str:
         improved_name = name
         
-        # Remove unnecessary date
-        date_string = self.added_at.strftime("%Y%M%D")
-        improved_name = improved_name.lstrip(date_string)
+        # Remove prefixes
+        # Remove "AB" and "AA"
+        search = r"^(?i:(aa|ab))(?=[A-Z_])"
+        improved_name = re.sub(search, "", improved_name)
+        
+        # Remove "lk" and "gk"
+        search = "^(gk|lk)"
+        improved_name = re.sub(search, "", improved_name, flags=re.IGNORECASE)
         
         # Remove unnecessary course name
-        course_name = self.lesson.lesson_data.course.name
-        escaped_course_name = re.escape(course_name)
-        improved_name = re.sub(
-            f"(^{escaped_course_name})|({escaped_course_name}$)",
-            "",
-            improved_name,
-            flags=re.IGNORECASE
+        course = self.lesson.lesson_data.course
+        course_name = re.escape(course.name)
+        number_reversed_course_name = re.escape(
+            f"{course.get_class_number()}{course.name}"
         )
+        subject_name_short = re.escape(course.subject.short_name)
+        searches = "|".join([course_name, subject_name_short, number_reversed_course_name])
+        search = rf"^(?i:({searches}))(?![a-z])"
+        improved_name = re.sub(search, "", improved_name)
         
-        # Remove dashes and underscores
-        improved_name = re.sub(r"[\-_]", " ", improved_name)
+        # Improve overall
+        # Replace dashes with underscores
+        improved_name = improved_name.replace("-", "_")
+        
+        # Remove start and end underscores
+        improved_name = improved_name.lstrip("_").rstrip("_")
+        
+        # Strip underscore
+        improved_name = re.sub(r"_+", "_", improved_name)
+        
+        # Replace underscores with spaces
+        improved_name = improved_name.replace("_", " ")
         
         # Strip space
         improved_name = improved_name.strip()
         improved_name = re.sub(r"\s\s+", " ", improved_name)
         
-        return improved_name
+        # Capitalize
+        improved_name = improved_name.title()
+        
+        # Normalize file ending
+        name, extension = os.path.splitext(improved_name)
+        
+        return f"{name}{extension.lower()}"

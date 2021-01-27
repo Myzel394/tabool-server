@@ -1,7 +1,9 @@
+import traceback
 from datetime import datetime
 from pathlib import Path
 from typing import *
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -150,7 +152,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
                 time_id = self.lesson.lessonscoosodata.time_id
                 targeted_date = datetime.combine(self.lesson.date, self.lesson.lesson_data.start_time)
                 filename = self.file.name
-                content = Path(self.file.path).read_text()
+                content = Path(self.file.path).read_bytes()
                 
                 with MaterialRequest(user.scoosodata.username, user.scoosodata.password) as scraper:
                     scraper.upload_material(
@@ -166,6 +168,9 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
                 material = self._get_material_from_scooso()
                 self._create_material_from_scooso(material)
             except:
+                if settings.DEBUG:
+                    traceback.print_exc()
+                
                 push_submission_scooso_upload_failed(self)
             else:
                 push_submission_scooso_upload_succeeded(self)
