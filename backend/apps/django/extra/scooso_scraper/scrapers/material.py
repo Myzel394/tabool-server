@@ -171,7 +171,7 @@ class MaterialRequest(Request):
             time_id: int,
             targeted_datetime: datetime,
             filename: str,
-            data: str,
+            data: bytes,
             material_type: MaterialTypeOptions = MaterialTypeOptions.HOMEWORK,
     ) -> None:
         method = constants.MATERIAL_UPLOAD_CONNECTION["method"]

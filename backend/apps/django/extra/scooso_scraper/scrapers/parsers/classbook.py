@@ -52,6 +52,8 @@ class PureLessonContentParser(BaseParser):
             },
             "homework": {
                 "information": base64.b64decode(homework).decode(self.ENCODING_TYPE) if homework else None,
-                "due_date": data["homework_until"]
+                "due_date": data.get("homework_until", None)
+                if type(data.get("homework_until", None)) is datetime
+                else None
             }
         }
