@@ -71,6 +71,9 @@ class SubmissionTest(SubmissionTestMixin, ClientTestMixin, UtilsTestMixin):
 
 class ScoosoTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin):
     def setUp(self) -> None:
+        if os.getenv("GITHUB_WORKFLOW"):
+            return
+        
         self.load_lesson_upload()
     
     def test_upload(self):
@@ -100,7 +103,10 @@ class ScoosoTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin):
         ]
         self.assertIn(filename, available_filenames)
     
-    def _test_upload_api(self):
+    def test_upload_api(self):
+        if os.getenv("GITHUB_WORKFLOW"):
+            return
+        
         submission = self.Create_submission(
             lesson=self.lesson,
             associated_user=self.logged_user
@@ -118,7 +124,10 @@ class ScoosoTest(SubmissionTestMixin, ClientTestMixin, LessonUploadTestMixin):
         self.assertStatusOk(response.status_code)
         self.assertEqual("UPLOADED", response.data["upload_status"])
     
-    def _test_upload_api_get(self):
+    def test_upload_api_get(self):
+        if os.getenv("GITHUB_WORKFLOW"):
+            return
+        
         submission = self.Create_submission(
             lesson=self.lesson,
             associated_user=self.logged_user
