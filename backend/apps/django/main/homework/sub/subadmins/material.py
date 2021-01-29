@@ -20,7 +20,7 @@ class MaterialScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
 @admin.register(Material)
 class MaterialAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["lesson", "file", "name", "!..."]
+        "default": ["lesson", "file", "_original_filename", "!..."]
     }
     list_display = ["__str__", "added_at", "subject"]
     list_filter = ["lesson__lesson_data__course__subject"]

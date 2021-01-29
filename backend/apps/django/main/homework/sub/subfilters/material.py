@@ -5,6 +5,7 @@ from django_filters import rest_framework as filters
 from django_hint import QueryType
 
 from apps.django.main.lesson.models import Course
+from apps.django.main.school_data.models import Subject
 from ...models import Material
 
 __all__ = [
@@ -22,6 +23,11 @@ class MaterialFilterSet(filters.FilterSet):
     course = filters.CharFilter(
         field_name="lesson__lesson_data__course__id",
         label=model_verbose(Course)
+    )
+    
+    subject = filters.CharFilter(
+        field_name="lesson__lesson_data__course__subject__id",
+        label=model_verbose(Subject)
     )
     
     lesson_date__lte = filters.DateTimeFilter(method="lesson__date__filter_lte")

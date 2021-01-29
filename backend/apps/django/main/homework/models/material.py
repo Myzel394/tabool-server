@@ -1,6 +1,7 @@
 import mimetypes
 import os
 import re
+from datetime import datetime
 from pathlib import Path
 from typing import *
 
@@ -79,27 +80,28 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         )
     
     def clean(self):
-        if self.file.name != "" and self.file.name is not None:
-            if self.name is None:
-                raise ValidationError(_("Dateiname fehlt!"))
-            
-            # Validate name extension
-            m = Magic(mime=True)
-            mimetype = m.from_buffer(self.file.open().read())
-            extensions = mimetypes.guess_all_extensions(mimetype, strict=False)
-            
-            extension = Path(self.name).suffix
-            
-            if extension not in extensions:
-                raise ValidationError(_(
-                    'Die Endung "{extension}" im angegebenen Dateinamen ist für die hochgeladene Datei nicht gültig. '
-                    'Wähle aus zwischen: {available_extensions}.'
-                ).format(
-                    extension=extension,
-                    available_extensions=listify(extensions)
-                ))
-            
-            safe_file_validator(self.file)
+        if self._original_filename is None:
+            raise ValidationError(_("Dateiname fehlt!"))
+        
+        self.name = self.improve_name(self._original_filename)
+        
+        # Validate name extension
+        m = Magic(mime=True)
+        mimetype = m.from_buffer(self.file.open().read())
+        extensions = mimetypes.guess_all_extensions(mimetype, strict=False)
+        
+        extension = Path(self.name).suffix
+        
+        if extension not in extensions:
+            raise ValidationError(_(
+                'Die Endung "{extension}" im angegebenen Dateinamen ist für die hochgeladene Datei nicht gültig. '
+                'Wähle aus zwischen: {available_extensions}.'
+            ).format(
+                extension=extension,
+                available_extensions=listify(extensions)
+            ))
+        
+        safe_file_validator(self.file)
         
         return super().clean()
     
@@ -110,14 +112,15 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     def _hook_delete_file(self):
         Path(self.file.path).unlink(missing_ok=True)
     
+    @hook(BEFORE_SAVE)
+    def _hook_set_added_at(self):
+        # Set added_at if it doesn't exists. (Probably because it was added via admin panel)
+        self.added_at = self.added_at or datetime.now()
+    
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when_any=["name", "file"], has_changed=True)
     def _hook_full_clean(self):
         self.full_clean()
-    
-    @hook(BEFORE_SAVE)
-    def _hook_improve_name(self):
-        self.name = self.improve_name(self._original_filename)
     
     @property
     def folder_name(self) -> str:
