@@ -1,11 +1,10 @@
 from django.contrib import admin
 from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
-from django_common_utils.libraries.utils import field_verbose
+from django_common_utils.libraries.utils import model_verbose
 
 from apps.django.extra.scooso_scraper.mixins.admins import ScoosoDataAdminInlineMixin
-from apps.django.main.school_data.public import model_names as school_names
-from ...models import Lesson, LessonData, LessonScoosoData
-from ...public import model_names
+from apps.django.main.school_data.models import Teacher
+from ...models import Lesson, LessonScoosoData
 
 __all__ = [
     "LessonAdmin"
@@ -15,42 +14,26 @@ __all__ = [
 class LessonScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
     model = LessonScoosoData
     fieldset_fields = {
-        "default": ["time_id"]
+        "default": ["time_id", "lesson_type"]
     }
-    readonly_fields = ["time_id"]
+    readonly_fields = ["time_id", "lesson_type"]
 
 
 @admin.register(Lesson)
 class LessonAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["date", "lesson_data"]
+        "default": ["date", "course", "teacher", "room", "start_time", "end_time", "weekday", ]
     }
-    list_display = ["course_name", "date", "start_time", "end_time", "teacher", "room", ]
-    search_fields = ["lesson_data__course__subject__name", "lesson_data__course__teacher__first_name",
-                     "lesson_data__course__teacher__last_name"]
+    list_display = ["course_name", "date", "start_time", "end_time", "course_teacher", "room", ]
+    search_fields = ["course__subject__name", "course__teacher__first_name", "course__teacher__last_name"]
     inlines = [LessonScoosoDataAdminInline]
     
     def course_name(self, instance: Lesson):
-        return instance.lesson_data.course.name
+        return instance.course.name
     
-    course_name.short_description = model_names.COURSE
+    course_name.short_description = model_verbose(Lesson)
     
-    def teacher(self, instance: Lesson):
-        return instance.lesson_data.course.teacher
+    def course_teacher(self, instance: Lesson):
+        return instance.course.teacher
     
-    teacher.short_description = school_names.TEACHER
-    
-    def room(self, instance: Lesson):
-        return instance.lesson_data.room
-    
-    room.short_description = school_names.ROOM
-    
-    def start_time(self, instance: Lesson):
-        return instance.lesson_data.start_time
-    
-    start_time.short_description = field_verbose(LessonData, "start_time")
-    
-    def end_time(self, instance: Lesson):
-        return instance.lesson_data.end_time
-    
-    end_time.short_description = field_verbose(LessonData, "end_time")
+    course_teacher.short_description = model_verbose(Teacher)

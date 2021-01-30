@@ -22,7 +22,7 @@ class ModificationAdmin(DefaultAdminMixin):
         ]
     }
     list_display = ["__str__", "lesson", "modifications"]
-    list_filter = ["lesson__lesson_data__course__subject", "modification_type"]
+    list_filter = ["lesson__course__subject", "modification_type"]
     autocomplete_fields = ["new_room", "new_subject", "new_teacher", "lesson"]
     search_fields = ["information", "modification_type", "course"]
     

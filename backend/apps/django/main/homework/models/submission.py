@@ -150,7 +150,7 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
                 user = self.associated_user
                 
                 time_id = self.lesson.lessonscoosodata.time_id
-                targeted_date = datetime.combine(self.lesson.date, self.lesson.lesson_data.start_time)
+                targeted_date = datetime.combine(self.lesson.date, self.lesson.start_time)
                 filename = self.file.name
                 content = Path(self.file.path).read_bytes()
                 
@@ -202,4 +202,4 @@ class Submission(RandomIDMixin, AssociatedUserMixin, CreationDateMixin, Lifecycl
     
     @property
     def folder_name(self) -> str:
-        return f"{self.lesson.lesson_data.course.folder_name}"
+        return f"{self.lesson.course.folder_name}"

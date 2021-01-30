@@ -11,8 +11,8 @@ def push_homework_added(homework: "Homework") -> None:
     if homework.due_date and homework.due_date < datetime.now():
         return
     
-    users = homework.lesson.lesson_data.course.participants.all()
-    subject_name = homework.lesson.lesson_data.course.subject.name
+    users = homework.lesson.course.participants.all()
+    subject_name = homework.lesson.course.subject.name
     
     message_parts = []
     

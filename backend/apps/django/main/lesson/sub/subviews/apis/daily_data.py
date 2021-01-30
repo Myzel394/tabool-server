@@ -49,8 +49,8 @@ def daily_data(request: RequestType):
     lessons = user_lessons \
         .only("date") \
         .filter(date=targeted_date) \
-        .order_by("lesson_data__start_time")
-    course_ids = lessons.values_list("lesson_data__course", flat=True).distinct()
+        .order_by("start_time")
+    course_ids = lessons.values_list("course", flat=True).distinct()
     modifications = Modification.objects \
         .only("lesson") \
         .filter(lesson__in=lessons) \

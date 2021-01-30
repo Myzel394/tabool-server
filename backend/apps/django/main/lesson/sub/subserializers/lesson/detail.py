@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from apps.django.main.event.models import Modification
 from apps.django.main.homework.models import Homework, Material, Submission
+from apps.django.main.school_data.public.serializer_fields.room import RoomField
 from .absence import LessonAbsenceSerializer
 from .base import BaseLessonSerializer
 from .homework import LessonHomeworkSerializer
@@ -10,23 +11,24 @@ from .material import LessonMaterialSerializer
 from .modification import LessonModificationSerializer
 from .submission import LessonSubmissionSerializer
 from ..classbook import ClassbookSerializer
-from ..lesson_data.detail import DetailLessonDataSerializer
 from ....models import Lesson, LessonAbsence
 
 __all__ = [
     "DetailLessonSerializer"
 ]
 
+from ....public.serializer_fields.course import CourseField
+
 
 class DetailLessonSerializer(BaseLessonSerializer):
     class Meta(BaseLessonSerializer.Meta):
         model = Lesson
         fields = [
-            "lesson_data", "date", "id", "absence", "classbook", "materials", "homeworks", "modifications",
-            "submissions", "video_conference_link"
+            "room", "course", "start_time", "end_time", "weekday",
+            "date", "id", "absence", "classbook", "materials", "homeworks", "modifications", "submissions",
+            "video_conference_link"
         ]
     
-    lesson_data = DetailLessonDataSerializer()
     classbook = ClassbookSerializer()
     
     absence = serializers.SerializerMethodField()
@@ -34,6 +36,9 @@ class DetailLessonSerializer(BaseLessonSerializer):
     homeworks = serializers.SerializerMethodField()
     modifications = serializers.SerializerMethodField()
     submissions = serializers.SerializerMethodField()
+    
+    course = CourseField(detail=True)
+    room = RoomField(required=False, detail=True)
     
     def get_absence(self, instance: Lesson):
         user = self.context["request"].user

@@ -5,7 +5,7 @@ from rest_framework import serializers
 from apps.django.main.school_data.public.serializer_fields.subject import SubjectField
 from apps.django.main.school_data.public.serializer_fields.teacher import TeacherField
 from .base import BaseCourseSerializer
-from ....models import LessonData
+from ....models import Lesson
 
 if TYPE_CHECKING:
     from ....models import Course
@@ -34,7 +34,7 @@ class DetailCourseSerializer(BaseCourseSerializer):
     @staticmethod
     def get_weekdays(instance: "Course"):
         return list(set(
-            LessonData.objects
+            Lesson.objects
                 .only("course")
                 .filter(course=instance)
                 .values_list("weekday", flat=True)

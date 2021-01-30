@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 def push_submission_scooso_upload_failed(submission: "Submission"):
-    subject = submission.lesson.lesson_data.course.subject.name
+    subject = submission.lesson.course.subject.name
     path = Path(submission.file.path)
     
     send_notification(
@@ -27,7 +27,7 @@ def push_submission_scooso_upload_failed(submission: "Submission"):
 
 
 def push_submission_scooso_upload_succeeded(submission: "Submission"):
-    subject = submission.lesson.lesson_data.course.subject.name
+    subject = submission.lesson.course.subject.name
     path = Path(submission.file.path)
     
     send_notification(

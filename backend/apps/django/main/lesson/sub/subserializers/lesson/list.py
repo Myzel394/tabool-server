@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from .base import BaseLessonSerializer
-from ..lesson_data.detail import DetailLessonDataSerializer
 from ....models import Lesson
+from ....public.serializer_fields.course import CourseField
 
 __all__ = [
     "ListLessonSerializer"
@@ -13,10 +13,11 @@ class ListLessonSerializer(BaseLessonSerializer):
     class Meta(BaseLessonSerializer.Meta):
         model = Lesson
         fields = [
-            "lesson_data", "date", "has_video_conference", "id"
+            "course", "start_time", "end_time", "weekday",
+            "date", "has_video_conference", "id"
         ]
     
-    lesson_data = DetailLessonDataSerializer()
+    course = CourseField()
     
     has_video_conference = serializers.SerializerMethodField()
     

@@ -19,7 +19,7 @@ class HomeworkTestMixin(LessonTestMixin, ABC):
                 ])
             )
              ).date(),
-            random.choice(LessonData.objects.all().values_list("weekday", flat=True).distinct())
+            random.choice(Lesson.objects.all().values_list("weekday", flat=True).distinct())
         )
     
     @classmethod

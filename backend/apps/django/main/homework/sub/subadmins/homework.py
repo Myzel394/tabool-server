@@ -21,7 +21,7 @@ class HomeworkAdmin(DefaultAdminMixin, SimpleHistoryAdmin):
         "extra": ["private_to_user", "!..."]
     }
     list_display = ["__str__", "lesson", "subject", "due_date", "is_private"]
-    list_filter = ["lesson__lesson_data__course__subject"]
+    list_filter = ["lesson__course__subject"]
     search_fields = ["information", "type"]
     autocomplete_fields = ["lesson"]
     date_hierarchy = "created_at"
@@ -34,7 +34,7 @@ class HomeworkAdmin(DefaultAdminMixin, SimpleHistoryAdmin):
     is_private.short_description = _("Privat")
     
     def subject(self, instance: Homework):
-        return instance.lesson.lesson_data.course.subject
+        return instance.lesson.course.subject
     
     subject.short_description = school_names.SUBJECT
     

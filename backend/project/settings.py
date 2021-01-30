@@ -285,12 +285,12 @@ SILENCED_SYSTEM_CHECKS = ['admin.E410']
 # EMAIL
 DEFAULT_FROM_EMAIL = "testfrom@gmail.com"
 SERVER_EMAIL = "test@gmail.com"
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_HOST = "127.0.0.1"
-EMAIL_PORT = 1025
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = os.getenv("EMAIL_HOST", "127.0.0.1")
+EMAIL_PORT = os.getenv("EMAIL_PORT", 1025)
 EMAIL_SUBJECT_PREFIX = ""
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = False
+EMAIL_USE_TLS = bool(os.getenv("EMAIL_USE_TLS", False))
+EMAIL_USE_SSL = bool(os.getenv("EMAIL_USE_SSL", False))
 
 SIMPLE_EMAIL_CONFIRMATION_KEY_LENGTH = 40
 
@@ -327,7 +327,6 @@ DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
 DJANGO_REST_PASSWORDRESET_NO_INFORMATION_LEAKAGE = False
 
 FCM_DJANGO_SETTINGS = {
-    # Your firebase API KEY
     "FCM_SERVER_KEY": os.getenv("FCM_SERVER_KEY"),
     "ONE_DEVICE_PER_USER": False,
     "DELETE_INACTIVE_DEVICES": True,

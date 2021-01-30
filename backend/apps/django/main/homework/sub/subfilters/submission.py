@@ -23,6 +23,6 @@ class SubmissionFilterSet(filters.FilterSet):
     )
     
     course = filters.CharFilter(
-        field_name="lesson__lesson_data__course__id",
+        field_name="lesson__course__id",
         label=model_verbose(Course)
     )

@@ -1,5 +1,3 @@
-from datetime import time
-
 from apps.django.utils.admins import DefaultAdminInlineMixin
 from ..models import Course, Lesson
 
@@ -30,20 +28,5 @@ class CourseAdminInline(DefaultAdminInlineMixin):
 class LessonAdminInline(DefaultAdminInlineMixin):
     model = Lesson
     fieldset_fields = {
-        "default": ["date", "get_room", "get_course", "get_start_time", "get_end_time", "!..."],
+        "default": ["date", "room", "course", "start_time", "end_time", "!..."],
     }
-    readonly_fields = [
-        "get_lesson_room", "get_lesson_course", "get_lesson_start_time", "get_lesson_end_time"
-    ]
-    
-    def get_lesson_room(self, obj: Lesson) -> str:
-        return str(obj.lesson_data.room)
-    
-    def get_lesson_course(self, obj: Lesson) -> str:
-        return str(obj.lesson_data.course)
-    
-    def get_lesson_start_time(self, obj: Lesson) -> time:
-        return obj.lesson_data.start_time
-    
-    def get_lesson_end_time(self, obj: Lesson) -> time:
-        return obj.lesson_data.end_time

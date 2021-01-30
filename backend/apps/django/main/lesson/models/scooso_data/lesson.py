@@ -34,5 +34,11 @@ class LessonScoosoData(RandomIDMixin):
         null=True
     )  # type: int
     
+    lesson_type = models.UUIDField(
+        verbose_name=_("Stundentyp"),
+        blank=True,
+        null=True
+    )  # type: str
+    
     def __str__(self):
         return str(self.lesson)

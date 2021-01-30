@@ -97,10 +97,8 @@ class Modification(RandomIDMixin, LifecycleModel):
     
     @hook(BEFORE_SAVE)
     def _hook_autofill_times(self):
-        self.start_datetime = self.start_datetime \
-                              or datetime.combine(self.lesson.date, self.lesson.lesson_data.start_time)
-        self.end_datetime = self.end_datetime \
-                            or datetime.combine(self.lesson.date, self.lesson.lesson_data.end_time)
+        self.start_datetime = self.start_datetime or datetime.combine(self.lesson.date, self.lesson.start_time)
+        self.end_datetime = self.end_datetime or datetime.combine(self.lesson.date, self.lesson.end_time)
     
     @hook(AFTER_CREATE)
     def _hook_send_modification_changed_event(self):

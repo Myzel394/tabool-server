@@ -17,7 +17,7 @@ class LessonAbsenceCreateTest(LessonAbsenceTestMixin, ClientTestMixin):
     
     def test_create_not_participant(self):
         lesson = self.Create_lesson()
-        course = lesson.lesson_data.course
+        course = lesson.course
         course.participants.remove(self.user)
         course.save()
         
@@ -43,7 +43,7 @@ class LessonAbsenceUpdateTest(LessonAbsenceTestMixin, ClientTestMixin):
     
     def test_update_not_participant(self):
         lesson = self.Create_lesson()
-        course = lesson.lesson_data.course
+        course = lesson.course
         course.participants.remove(self.user)
         course.save()
         

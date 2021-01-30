@@ -21,12 +21,12 @@ class MaterialFilterSet(filters.FilterSet):
         }
     
     course = filters.CharFilter(
-        field_name="lesson__lesson_data__course__id",
+        field_name="lesson__course__id",
         label=model_verbose(Course)
     )
     
     subject = filters.CharFilter(
-        field_name="lesson__lesson_data__course__subject__id",
+        field_name="lesson__course__subject__id",
         label=model_verbose(Subject)
     )
     
@@ -36,11 +36,11 @@ class MaterialFilterSet(filters.FilterSet):
     def lesson_date_filter_lte(self, qs: QueryType[Material], value: datetime, *args, **kwargs):
         return qs.filter(
             lesson__date__exact=value.date(),
-            lesson__lesson_data__start_time__lte=value.time()
+            lesson__start_time__lte=value.time()
         )
     
     def lesson_date_filter_gte(self, qs: QueryType[Material], value: datetime, *args, **kwargs):
         return qs.filter(
             lesson__date__exact=value.date(),
-            lesson__lesson_data__start_time__gte=value.time()
+            lesson__start_time__gte=value.time()
         )

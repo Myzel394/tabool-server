@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 from apps.django.main.lesson.mixins.tests import *
-from apps.django.main.lesson.models import LessonData
+from apps.django.main.lesson.models import Lesson
 from apps.django.main.school_data.models import Subject, TeacherScoosoData
 from ...actions import import_teachers
 from ...mixins.tests import *
@@ -123,10 +123,9 @@ class ForeignSerializerTest(LessonTestMixin):
         lesson = TimetableRequest(self.username, self.password).import_lesson_from_scraper(random_lesson)
         
         # Validation
-        lesson_data = lesson.lesson_data
-        course = lesson_data.course
+        course = lesson.course
         subject = course.subject
-        room = lesson_data.room
+        room = lesson.room
         
         course_data = random_lesson['course']
         subject_data = random_lesson['subject']
@@ -136,8 +135,8 @@ class ForeignSerializerTest(LessonTestMixin):
         self.assertEqual(subject.short_name, subject_data['code'])
         self.assertEqual(course.course_number, course_data['course_number'])
         self.assertEqual(room.place, room_data['code'])
-        self.assertEqual(lesson_data.start_time, lesson_data_data['start_time'])
-        self.assertEqual(lesson_data.end_time, lesson_data_data['end_time'])
+        self.assertEqual(lesson.start_time, lesson_data_data['start_time'])
+        self.assertEqual(lesson.end_time, lesson_data_data['end_time'])
         self.assertEqual(lesson.date, lesson_data_data['date'])
         self.assertEqual(lesson.date, lesson_data_data['date'])
     
@@ -245,13 +244,13 @@ class ForeignSerializerTest(LessonTestMixin):
         print("First fetch. Fixed date")
         timetable = self.scraper.get_timetable(start_date=self.start_date, end_date=self.end_date)
         self.scraper.import_timetable_from_scraper(timetable)
-        count = LessonData.objects.all().count()
+        count = Lesson.objects.all().count()
         print("Amount:", count)
         
         print("Second fetch. Fixed date")
         timetable = self.scraper.get_timetable(start_date=self.start_date, end_date=self.end_date)
         self.scraper.import_timetable_from_scraper(timetable)
-        new_count = LessonData.objects.all().count()
+        new_count = Lesson.objects.all().count()
         print("Amount:", new_count)
         
         self.assertEqual(count, new_count)
@@ -259,13 +258,13 @@ class ForeignSerializerTest(LessonTestMixin):
         print("Third fetch. Current date")
         timetable = self.scraper.get_timetable()
         self.scraper.import_timetable_from_scraper(timetable)
-        today_count = LessonData.objects.all().count()
+        today_count = Lesson.objects.all().count()
         print("Amount:", today_count)
         
         print("Fourth fetch. Current date")
         timetable = self.scraper.get_timetable()
         self.scraper.import_timetable_from_scraper(timetable)
-        new_today_count = LessonData.objects.all().count()
+        new_today_count = Lesson.objects.all().count()
         print("Amount:", new_today_count)
         
         self.assertEqual(today_count, new_today_count)

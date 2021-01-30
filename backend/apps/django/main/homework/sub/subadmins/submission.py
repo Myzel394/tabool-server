@@ -24,13 +24,13 @@ class SubmissionAdmin(DefaultAdminMixin):
         "advanced": ["associated_user"]
     }
     autocomplete_fields = ["lesson"]
-    list_filter = ["is_uploaded", "lesson__lesson_data__course__subject"]
+    list_filter = ["is_uploaded", "lesson__course__subject"]
     list_display = ["__str__", "lesson", "subject", "upload_date"]
     mixins = [CreationDateAdminFieldsetMixin]
     readonly_fields = ["is_uploaded"]
     inlines = [SubmissionScoosoDataAdminInline]
     
     def subject(self, instance: Submission):
-        return instance.lesson.lesson_data.course.subject
+        return instance.lesson.course.subject
     
     subject.short_description = school_names.SUBJECT

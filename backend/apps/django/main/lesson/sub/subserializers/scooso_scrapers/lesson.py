@@ -18,16 +18,24 @@ class LessonScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     
     scooso_id = None
     time_id = serializers.IntegerField(min_value=0)
+    lesson_type = serializers.UUIDField()
     
+    start_time = serializers.TimeField()
+    end_time = serializers.TimeField()
     date = serializers.DateField()
     
     def get_unique_data(self, validated_data: dict) -> dict:
         return {
-            "lesson_data": validated_data["lesson_data"],
-            "date": validated_data["date"]
+            "date": validated_data["date"],
+            "start_time": validated_data["start_time"],
+            "end_time": validated_data["end_time"],
+            "weekday": validated_data["date"].weekday(),
+            
+            "course": validated_data["course"]
         }
     
     def pop_scooso_data(self, validated_data: dict) -> dict:
         return {
-            "time_id": validated_data.pop("time_id")
+            "time_id": validated_data.pop("time_id"),
+            "lesson_type": validated_data.pop("lesson_type"),
         }

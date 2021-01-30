@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 from apps.django.main.event.models import Modification
 from apps.django.main.event.options import ModificationTypeOptions
-from apps.django.main.lesson.models import Lesson, LessonData
+from apps.django.main.lesson.models import Lesson
 from apps.django.utils.viewsets import RetrieveAllMixin
 from ...models import Teacher
 from ...paginations import LargeSetPagination
@@ -47,7 +47,7 @@ class TeacherViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
                 (
                     missing_modifications
                         .only("lesson")
-                        .filter(lesson__in=user_lessons.filter(lesson_data__course__teacher=teacher).distinct())
+                        .filter(lesson__in=user_lessons.filter(course__teacher=teacher).distinct())
                         .distinct()
                         .count()
                 ) /
@@ -55,7 +55,7 @@ class TeacherViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
                     max(
                         1,
                         user_lessons
-                            .filter(lesson_data__course__teacher=teacher)
+                            .filter(course__teacher=teacher)
                             .distinct()
                             .count()
                     )
@@ -64,7 +64,7 @@ class TeacherViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
         teacher_missing_ratio = (
                 (
                     missing_modifications
-                        .filter(lesson__lesson_data__course__teacher=teacher)
+                        .filter(lesson__course__teacher=teacher)
                         .distinct()
                         .count()
                 ) /
@@ -73,7 +73,7 @@ class TeacherViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
                         1,
                         Lesson
                             .objects
-                            .filter(lesson_data__course__teacher=teacher)
+                            .filter(course__teacher=teacher)
                             .distinct()
                             .count()
                     )
@@ -82,18 +82,18 @@ class TeacherViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
         
         return Response({
             "course_count": len(set(
-                LessonData.objects
+                Lesson.objects
                     .from_user(request.user)
                     .filter(course__teacher=teacher)
                     .values_list("course", flat=True)
             )),
             "teacher_course_count": len(set(
-                LessonData.objects
+                Lesson.objects
                     .filter(course__teacher=teacher)
                     .values_list("course", flat=True)
             )),
             "teacher_participants_count": (
-                LessonData.objects
+                Lesson.objects
                     .filter(course__teacher=teacher)
                     .annotate(participants_count=Count("course__participants"))
                     .aggregate(full_count=Sum("participants_count"))["full_count"]

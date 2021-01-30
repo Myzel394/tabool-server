@@ -37,11 +37,11 @@ class ModificationScoosoScraperSerializer(GetOrCreateSerializerMixin):
         }
         
         # Make sure new data is not the same as the old one
-        if new_subject != lesson.lesson_data.course.subject:
+        if new_subject != lesson.course.subject:
             other_data["new_subject"] = new_subject
-        if new_room != lesson.lesson_data.room:
+        if new_room != lesson.room:
             other_data["new_room"] = new_room
-        if new_teacher != lesson.lesson_data.course.teacher:
+        if new_teacher != lesson.course.teacher:
             other_data["new_teacher"] = new_teacher
         
         # Create instance

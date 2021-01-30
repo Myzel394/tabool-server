@@ -8,14 +8,14 @@ from django.utils.translation import gettext_lazy as _
 from apps.utils import format_datetime
 
 if TYPE_CHECKING:
-    from .models import LessonData
+    from .models import Lesson
 
 __all__ = [
     "validate_lesson_weekday"
 ]
 
 
-def validate_lesson_weekday(actual_date: date, lesson: "LessonData"):
+def validate_lesson_weekday(actual_date: date, lesson: "Lesson"):
     abbreviations = list(calendar.day_abbr)
     
     if (weekday := actual_date.weekday()) != lesson.weekday:

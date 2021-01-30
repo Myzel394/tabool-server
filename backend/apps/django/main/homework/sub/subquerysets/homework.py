@@ -48,7 +48,7 @@ class HomeworkQuerySet(CustomQuerySetMixin.QuerySet):
     
     def from_user(self, user: settings.AUTH_USER_MODEL) -> "HomeworkQuerySet":
         return self.filter(
-            Q(lesson__lesson_data__course__participants__in=[user], private_to_user=None)
+            Q(lesson__course__participants__in=[user], private_to_user=None)
             | Q(private_to_user=user)
         )
     

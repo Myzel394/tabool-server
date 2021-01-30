@@ -23,12 +23,12 @@ class MaterialAdmin(DefaultAdminMixin):
         "default": ["lesson", "file", "_original_filename", "!..."]
     }
     list_display = ["__str__", "added_at", "subject"]
-    list_filter = ["lesson__lesson_data__course__subject"]
+    list_filter = ["lesson__course__subject"]
     autocomplete_fields = ["lesson"]
     date_hierarchy = "added_at"
     inlines = [MaterialScoosoDataAdminInline]
     
     def subject(self, instance: Material):
-        return instance.lesson.lesson_data.course.subject
+        return instance.lesson.course.subject
     
     subject.short_description = school_names.SUBJECT

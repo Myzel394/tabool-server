@@ -29,6 +29,5 @@ class ListHomeworkSerializer(BaseHomeworkSerializer):
             return create_short(instance.information)
         return
     
-    @staticmethod
-    def get_subject(instance: Homework):
-        return SubjectSerializer(instance=instance.lesson.lesson_data.course.subject, context=self.context).data
+    def get_subject(self, instance: Homework):
+        return SubjectSerializer(instance=instance.lesson.course.subject, context=self.context).data

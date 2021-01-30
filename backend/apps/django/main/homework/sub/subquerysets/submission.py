@@ -12,4 +12,4 @@ __all__ = [
 
 class SubmissionQuerySet(CustomQuerySetMixin.QuerySet):
     def user_accessible(self, user: "User") -> "SubmissionQuerySet":
-        return self.filter(lesson__lesson_data__course__participants__in=[user])
+        return self.filter(lesson__course__participants__in=[user])

@@ -12,7 +12,7 @@ from apps.utils import find_next_date_by_weekday
 from apps.utils.time import dummy_datetime_from_target
 from constants.weekdays import ALLOWED_WEEKDAYS
 from .course import CourseTestMixin
-from ...models import Lesson, LessonData, LessonScoosoData
+from ...models import Lesson, LessonScoosoData
 
 __all__ = [
     "LessonTestMixin"
@@ -26,28 +26,17 @@ class LessonTestMixin(
 ):
     @classmethod
     def Create_lesson(cls, **kwargs) -> Lesson:
-        lesson_data = kwargs.pop("lesson_data", cls.Create_lesson_data())
+        weekday = random.choice([x[0] for x in ALLOWED_WEEKDAYS])
         
         return Lesson.objects.create(
             **joinkwargs(
                 {
-                    "date": lambda: find_next_date_by_weekday(date.today(), lesson_data.weekday),
-                    "lesson_data": lambda: lesson_data,
-                },
-                kwargs
-            )
-        )
-    
-    @classmethod
-    def Create_lesson_data(cls, **kwargs) -> LessonData:
-        return LessonData.objects.create(
-            **joinkwargs(
-                {
+                    "date": lambda: find_next_date_by_weekday(date.today(), weekday),
                     "room": cls.Create_room,
                     "course": cls.Create_course,
                     "start_time": cls.start_time,
                     "end_time": cls.end_time,
-                    "weekday": lambda: random.choice([x[0] for x in ALLOWED_WEEKDAYS]),
+                    "weekday": lambda: weekday,
                 },
                 kwargs
             )
@@ -60,7 +49,7 @@ class LessonTestMixin(
             end_time: Optional[time] = None,
             duration: int = 45,
             **kwargs
-    ) -> List[LessonData]:
+    ) -> List[Lesson]:
         start_time = start_time or time(hour=7, minute=55)
         end_time = end_time or (
                 dummy_datetime_from_target(time(hour=13, minute=10)) - timedelta(minutes=duration)).time()
@@ -76,7 +65,7 @@ class LessonTestMixin(
                     dtstart=dummy_datetime_from_target(start_time),
                     until=dummy_datetime_from_target(end_time)
             ):
-                lesson = cls.Create_lesson_data(
+                lesson = cls.Create_lesson(
                     **joinkwargs(
                         {
                             "start_time": lambda: current_time.time(),

@@ -80,33 +80,34 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         )
     
     def clean(self):
-        if self._original_filename is None:
-            raise ValidationError(_("Dateiname fehlt!"))
-        
-        self.name = self.improve_name(self._original_filename)
-        
-        # Validate name extension
-        m = Magic(mime=True)
-        mimetype = m.from_buffer(self.file.open().read())
-        extensions = mimetypes.guess_all_extensions(mimetype, strict=False)
-        
-        extension = Path(self.name).suffix
-        
-        if extension not in extensions:
-            raise ValidationError(_(
-                'Die Endung "{extension}" im angegebenen Dateinamen ist für die hochgeladene Datei nicht gültig. '
-                'Wähle aus zwischen: {available_extensions}.'
-            ).format(
-                extension=extension,
-                available_extensions=listify(extensions)
-            ))
-        
-        safe_file_validator(self.file)
+        if self.file.name is not None:
+            if self._original_filename is None:
+                raise ValidationError(_("Dateiname fehlt!"))
+            
+            self.name = self.improve_name(self._original_filename)
+            
+            # Validate name extension
+            m = Magic(mime=True)
+            mimetype = m.from_buffer(self.file.open().read())
+            extensions = mimetypes.guess_all_extensions(mimetype, strict=False)
+            
+            extension = Path(self.name).suffix
+            
+            if extension not in extensions:
+                raise ValidationError(_(
+                    'Die Endung "{extension}" im angegebenen Dateinamen ist für die hochgeladene Datei nicht gültig. '
+                    'Wähle aus zwischen: {available_extensions}.'
+                ).format(
+                    extension=extension,
+                    available_extensions=listify(extensions)
+                ))
+            
+            safe_file_validator(self.file)
         
         return super().clean()
     
     def can_user_access_file(self, user: "User") -> bool:
-        return self.lesson.lesson_data.course.participants.only("id").filter(id=user.id).exists()
+        return self.lesson.course.participants.only("id").filter(id=user.id).exists()
     
     @hook(AFTER_DELETE)
     def _hook_delete_file(self):
@@ -124,7 +125,7 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
     
     @property
     def folder_name(self) -> str:
-        return f"{self.lesson.lesson_data.course.folder_name}"
+        return f"{self.lesson.course.folder_name}"
     
     @property
     def is_downloaded(self) -> bool:
@@ -158,7 +159,7 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         improved_name = re.sub(search, "", improved_name, flags=re.IGNORECASE)
         
         # Remove unnecessary course name
-        course = self.lesson.lesson_data.course
+        course = self.lesson.course
         course_name = re.escape(course.name)
         number_reversed_course_name = re.escape(
             f"{course.get_class_number()}{course.name}"

@@ -26,4 +26,4 @@ class ListMaterialSerializer(BaseMaterialSerializer, SizeMixin):
     subject = serializers.SerializerMethodField()
     
     def get_subject(self, instance: "Material"):
-        return SubjectSerializer(instance=instance.lesson.lesson_data.course.subject, context=self.context).data
+        return SubjectSerializer(instance=instance.lesson.course.subject, context=self.context).data

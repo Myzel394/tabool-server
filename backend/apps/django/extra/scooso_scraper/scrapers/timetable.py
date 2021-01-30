@@ -10,9 +10,9 @@ from apps.django.main.event.serializers import EventScoosoScraperSerializer, Mod
 from apps.django.main.homework.models import Material
 from apps.django.main.homework.public import *
 from apps.django.main.homework.serializers import MaterialScoosoScraperSerializer
-from apps.django.main.lesson.models import Course, Lesson, LessonData, LessonScoosoData
+from apps.django.main.lesson.models import Course, Lesson, LessonScoosoData
 from apps.django.main.lesson.serializers import (
-    CourseScoosoScraperSerializer, LessonDataScoosoScraperSerializer, LessonScoosoScraperSerializer,
+    CourseScoosoScraperSerializer, LessonScoosoScraperSerializer,
 )
 from apps.django.main.school_data.models import Room, Subject, Teacher
 from apps.django.main.school_data.serializers import (
@@ -27,7 +27,7 @@ from .parsers.timetable import (
     CourseType, EventType, LessonType, ModificationType, RoomType, SingleEventType, SingleLessonType,
     SingleModificationType, SubjectType, TeacherType,
 )
-from .request import Request
+from .request import FileManipulatedException, LoginFailed, Request, RequestFailed
 from .. import constants
 from ..utils import build_url, import_from_scraper
 
@@ -123,10 +123,6 @@ class TimetableRequest(Request):
         return import_from_scraper(LessonScoosoScraperSerializer, data, **kwargs)
     
     @staticmethod
-    def import_lesson_data(data: LessonType, **kwargs) -> LessonData:
-        return import_from_scraper(LessonDataScoosoScraperSerializer, data, **kwargs)
-    
-    @staticmethod
     def import_event(data: EventType, **kwargs) -> Event:
         return import_from_scraper(EventScoosoScraperSerializer, data, **kwargs)
     
@@ -149,11 +145,6 @@ class TimetableRequest(Request):
             teacher=teacher,
             participants=participants
         )
-        lesson_data = self.import_lesson_data(
-            lesson['lesson'],
-            room=room,
-            course=course,
-        )
         
         video_conference_link = None
         if lesson['lesson']['has_video_conference']:
@@ -167,8 +158,9 @@ class TimetableRequest(Request):
         
         lesson = self.import_lesson(
             lesson['lesson'],
-            lesson_data=lesson_data,
-            video_conference_link=video_conference_link
+            video_conference_link=video_conference_link,
+            room=room,
+            course=course,
         )
         
         return lesson
@@ -224,14 +216,17 @@ class TimetableRequest(Request):
             materials_list.append(material_instance)
             
             if not material_instance.is_downloaded:
-                path = scraper.download_material(
-                    material['scooso_id'],
-                    settings.MEDIA_ROOT / build_material_upload_to(material_instance, material['filename'])
-                )
-                
-                material_instance.file = str(path.relative_to(settings.MEDIA_ROOT))
-                
-                material_instance.save()
+                try:
+                    path = scraper.download_material(
+                        material['scooso_id'],
+                        settings.MEDIA_ROOT / build_material_upload_to(material_instance, material['filename'])
+                    )
+                except (FileManipulatedException, RequestFailed, LoginFailed):
+                    continue
+                else:
+                    material_instance.file = str(path.relative_to(settings.MEDIA_ROOT))
+                    
+                    material_instance.save()
         
         # Mark deleted materials as deleted
         imported_materials_ids = [
@@ -281,7 +276,7 @@ class TimetableRequest(Request):
                 with LessonContentRequest(self.username, self.password) as scraper:
                     homework_data = scraper.get_homework(
                         homework_information['time_id'],
-                        datetime.combine(lesson.date, lesson.lesson_data.start_time)
+                        datetime.combine(lesson.date, lesson.start_time)
                     )
                 
                 scraper.import_homework_from_scraper(homework_data['homework'], lesson)

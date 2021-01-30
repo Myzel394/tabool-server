@@ -47,7 +47,7 @@ def timetable(request):
     lessons = user_lessons \
         .only("date") \
         .filter(date__gte=start_datetime.date(), date__lte=end_datetime.date())
-    course_ids = lessons.values_list("lesson_data__course__id", flat=True).distinct()
+    course_ids = lessons.values_list("course__id", flat=True).distinct()
     events = Event.objects \
         .from_user(user) \
         .only("start_datetime", "end_datetime") \

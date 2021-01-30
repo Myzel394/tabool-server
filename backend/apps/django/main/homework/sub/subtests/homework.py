@@ -81,18 +81,14 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         # Public homework
         self.Create_homework(
             lesson=self.Create_lesson(
-                lesson_data=self.Create_lesson_data(
-                    course=course
-                )
+                course=course
             )
         )
         
         # Public homework, that will be added via post
         homework = self.Create_homework(
             lesson=self.Create_lesson(
-                lesson_data=self.Create_lesson_data(
-                    course=course
-                )
+                course=course
             )
         )
         homework.delete()
@@ -106,9 +102,7 @@ class APITest(HomeworkTestMixin, ClientTestMixin):
         # Private homework
         private_homework = self.Create_homework(
             lesson=self.Create_lesson(
-                lesson_data=self.Create_lesson_data(
-                    course=course
-                )
+                course=course
             ),
             private_to_user=first_user,
         )

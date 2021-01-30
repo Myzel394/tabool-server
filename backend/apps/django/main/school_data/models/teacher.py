@@ -1,18 +1,12 @@
-from typing import *
-
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers.mixins import WhiteSpaceStripHandler
 from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_hint import QueryType
 
 from constants import maxlength
 from ..options import GenderChoices
 from ..public import model_names
-
-if TYPE_CHECKING:
-    from apps.django.main.lesson.models import LessonData
 
 __all__ = [
     "Teacher"
@@ -62,10 +56,6 @@ class Teacher(RandomIDMixin, HandlerMixin):
             last_name=self.last_name,
             short_name=self.short_name
         )
-    
-    @property
-    def lessons_data(self) -> QueryType["LessonData"]:
-        return self.lessons_data.all()
     
     @staticmethod
     def handlers():
