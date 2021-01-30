@@ -186,6 +186,9 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         improved_name = improved_name.strip()
         improved_name = re.sub(r"\s\s+", " ", improved_name)
         
+        # Umlaute
+        improved_name = improved_name.replace("ae", "ä").replace("ue", "ü").replace("oe", "ö")
+        
         # Capitalize
         improved_name = improved_name.title()
         

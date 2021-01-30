@@ -33,7 +33,7 @@ class ScoosoDataRegistrationSerializer(serializers.ModelSerializer):
             # Check if login is successful
             scraper = Request(username=attrs["username"], password=attrs["password"])
             try:
-                scraper.login()
+                scraper.login(login_attempts=1)
             except LoginFailed:
                 raise ValidationError(
                     _("Mit diesen Scooso-Anmeldedaten konnte der Server sich nicht anmelden.")
