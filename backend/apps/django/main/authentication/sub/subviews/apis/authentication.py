@@ -12,7 +12,7 @@ from apps.django.main.otp.utils import is_ip_geolocation_suspicious, send_otp_me
 from apps.django.utils.request import get_client_ip
 from ....models import KnownIp
 from ....serializers import (
-    LoginSerializer, UserAuthenticationSerializer,
+    LoginSerializer, UserInformationSerializer,
 )
 
 if TYPE_CHECKING:
@@ -101,7 +101,7 @@ class LoginView(views.APIView):
         
         login(request, user)
         
-        user_data = UserAuthenticationSerializer(user).data
+        user_data = UserInformationSerializer(user).data
         return Response(user_data)
 
 

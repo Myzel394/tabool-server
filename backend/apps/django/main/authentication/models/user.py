@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, hook, LifecycleModel
 from simple_email_confirmation.models import SimpleEmailConfirmationUserMixin
 
+from .preference import Preference
 from ..helpers import send_email_verification
 from ..querysets import UserManager, UserQuerySet
 
@@ -15,7 +16,6 @@ __all__ = [
 ]
 
 
-# TODO: Add "load_scooso_data" field!
 # TODO: Add student data!
 class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     class Meta:
@@ -82,6 +82,12 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     @hook(AFTER_CREATE)
     def _hook_send_mail(self):
         send_email_verification(self)
+    
+    @hook(AFTER_CREATE)
+    def _hook_create_preference(self):
+        Preference.objects.create(
+            user=self
+        )
     
     @property
     def is_scooso_data_valid(self) -> bool:

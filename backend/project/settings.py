@@ -54,10 +54,9 @@ INSTALLED_APPS = [
     "user_sessions",
     
     "rest_framework",
-    "django_rest_passwordreset",
+    "django_common_utils.apps.Config",
     "simple_history",
     "django_filters",
-    "django_common_utils.apps.Config",
     "django_bleach",
     "private_storage",
     "simple_email_confirmation",
@@ -66,6 +65,7 @@ INSTALLED_APPS = [
     "django_object_actions",
     "corsheaders",
     "fcm_django",
+    "django_rest_passwordreset",
     
     "apps.django.main.authentication.apps.AuthenticationConfig",
     "apps.django.main.school_data",

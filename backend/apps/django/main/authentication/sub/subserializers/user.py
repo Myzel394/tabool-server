@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from .preference import DetailPreferenceSerializer
 from ...models import User
 
 __all__ = [
-    "UserInformationSerializer", "UserDetailSerializer", "UserAuthenticationSerializer", "UserUpdateSerializer"
+    "UserInformationSerializer", "UserDetailSerializer", "UserUpdateSerializer"
 ]
 
 
@@ -11,8 +12,14 @@ class UserInformationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "email", "first_name", "last_name", "id", "load_scooso_data"
+            "has_filled_out_data", "load_scooso_data", "preference", "is_confirmed", "first_name", "last_name",
+            "email", "id"
         ]
+    
+    preference = serializers.SerializerMethodField()
+    
+    def get_preference(self, instance: User):
+        return DetailPreferenceSerializer(instance=instance.preference, context=self.context).data
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
@@ -20,14 +27,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "first_name"
-        ]
-
-
-class UserAuthenticationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = [
-            "has_filled_out_data", "is_confirmed", "first_name", "last_name", "email", "id"
         ]
 
 

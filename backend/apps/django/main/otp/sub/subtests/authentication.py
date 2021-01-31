@@ -2,7 +2,6 @@ import random
 import string
 from datetime import datetime, timedelta
 
-from apps.django.main.authentication.sub.subserializers.user import UserAuthenticationSerializer
 from apps.django.main.otp.models.otp import OTP
 from apps.django.utils.tests import ClientTestMixin, UserTestMixin
 
@@ -35,7 +34,6 @@ class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):
         }, content_type="application/json")
         
         self.assertStatusOk(response.status_code)
-        self.assertCountEqual(UserAuthenticationSerializer(self.user).data, response.data)
     
     def test_otp_invalid(self):
         otp = self.request()

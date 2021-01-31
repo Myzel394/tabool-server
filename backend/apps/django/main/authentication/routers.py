@@ -8,3 +8,4 @@ __all__ = [
 
 data_router = SimpleRouter()
 data_router.register("user", UserViewSet, basename="user")
+data_router.register("preference", PreferenceViewSet, basename="preference")
