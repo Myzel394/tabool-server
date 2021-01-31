@@ -56,3 +56,6 @@ class HomeworkQuerySet(CustomQuerySetMixin.QuerySet):
         return self.filter(
             due_date__lte=datetime.now() - timedelta(days=14)
         )
+    
+    def public(self) -> "HomeworkQuerySet":
+        return self.only("private_to_user").filter(private_to_user=None)

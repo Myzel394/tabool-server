@@ -1,170 +1,64 @@
-import random
-from pprint import pp
-
-import lorem
 from django.test import RequestFactory
 
 from apps.django.main.homework.mixins.tests import HomeworkTestMixin
 from apps.django.main.homework.models import Homework
 from apps.django.main.homework.serializers import *
-from apps.django.main.homework.sub.subserializers.tests import *
 from apps.django.main.lesson.mixins.tests import *
 from apps.django.utils.tests import ClientTestMixin
 
 
-class APITest(HomeworkTestMixin, ClientTestMixin):
+class HomeworkTest(HomeworkTestMixin, ClientTestMixin):
     def setUp(self) -> None:
-        self.logged_user = self.Login_user()
-        self.__class__.associated_user = self.logged_user
+        self.first_user = self.Login_user()
+        
+        self.course = self.Create_course()
+        self.course.participants.add(self.first_user)
+        self.lesson = self.Create_lesson(
+            course=self.course
+        )
+        
+        self.private_homework = self.Create_homework(
+            lesson=self.lesson,
+            private_to_user=self.first_user
+        )
     
-    def test_create_user_homework(self):
-        homework = self.Create_homework()
-        homework.delete()
-        
-        response = self.client.post(
-            f"/api/data/homework/",
-            HomeworkDetailSerializerTest(homework).data,
-            content_type="application/json"
+    def create_public_homework(self):
+        return self.Create_homework(
+            lesson=self.lesson
         )
-        
-        self.assertStatusOk(response.status_code)
-        
-        self.assertTrue(Homework.objects.all().exists())
     
-    def test_update_user_homework(self):
-        homework = self.Create_homework()
-        new_information = lorem.sentence()
-        
-        response = self.client.patch(
-            f"/api/data/homework/{homework.id}/",
-            {
-                "information": new_information
-            },
-            content_type="application/json"
-        )
-        
-        self.assertStatusOk(response.status_code)
-        
-        homework.refresh_from_db(fields=["information"])
-        self.assertEqual(homework.information, new_information)
-    
-    def test_filtering_relation(self):
-        homework = self.Create_homework()
-        completed_homework = self.Create_homework()
-        
-        relation = completed_homework.user_relations.get(user=self.logged_user)
-        relation.completed = True
-        relation.save()
-        
-        response = self.client.get(f"/api/data/homework/", {
-            "completed": False
-        }, content_type="application/json")
-        expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=False).distinct()
-        
-        self.assertStatusOk(response.status_code)
-        
-        response = self.client.get(f"/api/data/homework/", {
-            "completed": True
-        }, content_type="application/json")
-        expected = Homework.objects.from_user(self.logged_user).filter(userhomeworkrelation__completed=True).distinct()
-        
-        self.assertStatusOk(response.status_code)
-    
-    def test_private_homework(self):
-        first_user = self.logged_user
-        second_user = self.Create_user()
-        
-        course = self.Create_course()
-        course.participants.add(first_user, second_user)
-        course.save()
-        
-        # Public homework
-        self.Create_homework(
-            lesson=self.Create_lesson(
-                course=course
-            )
-        )
-        
-        # Public homework, that will be added via post
-        homework = self.Create_homework(
-            lesson=self.Create_lesson(
-                course=course
-            )
-        )
-        homework.delete()
-        
-        self.client.post(
-            f"/api/data/homework/",
-            HomeworkDetailSerializerTest(homework).data,
-            content_type="application/json"
-        )
-        
-        # Private homework
-        private_homework = self.Create_homework(
-            lesson=self.Create_lesson(
-                course=course
-            ),
-            private_to_user=first_user,
-        )
-        private_homework.delete()
-        
-        self.client.logout()
-        with self.Login_user_as_context(first_user):
-            self.client.post(
-                f"/api/data/homework/",
-                HomeworkDetailSerializerTest(private_homework).data,
-                content_type="application/json"
-            )
-        
-        private_homework = Homework.objects.get(private_to_user=first_user)
-        
-        # Check
-        
-        # Should return public + private
-        with self.Login_user_as_context(first_user):
-            response = self.client.get(f"/api/data/homework/")
-            homeworks = Homework.objects.from_user(first_user).distinct()
+    def test_public_cant_change_private_homework(self):
+        # Login as another user
+        with self.Login_user_as_context() as public_user:
+            # Add to course, otherwise it would block the request because the user isn't a participant
+            self.course.participants.add(public_user)
             
-            self.assertStatusOk(response.status_code)
-            self.assertIn(private_homework, homeworks)
-        
-        # Should return only public
-        with self.Login_user_as_context(second_user):
-            response = self.client.get(f"/api/data/homework/")
-            homeworks = Homework.objects.from_user(second_user).distinct()
+            # Try GET
+            response = self.client.get(f"/api/data/homework/{self.private_homework.id}/")
+            self.assertStatusNotOk(response.status_code)
+            self.assertEqual(404, response.status_code)  # 404 is more secure than 403
             
-            self.assertStatusOk(response.status_code)
-            self.assertNotIn(private_homework, homeworks)
+            # Try PATCH
+            response = self.client.patch(f"/api/data/homework/{self.private_homework.id}/", {
+                "information": "test"
+            })
+            self.assertStatusNotOk(response.status_code)
+            self.assertEqual(404, response.status_code)  # 404 is more secure than 403
     
-    def test_information(self):
-        for _ in range(5):
-            self.Create_homework()
-        
-        response = self.client.get(f"/api/data/homework/homework-information/")
-        
-        self.assertStatusOk(response.status_code)
-        pp(response.data)
-    
-    def test_delete_list(self):
-        DELETE_AMOUNT = 3
-        
-        for _ in range(10):
-            self.Create_homework(private_to_user=self.__class__.associated_user)
-        
-        homework_ids = random.choices(Homework.objects.all().values_list("id", flat=True).distinct(), k=DELETE_AMOUNT)
-        
-        response = self.client.delete("/api/data/homework/", {
-            "ids": homework_ids
+    def test_private_user_can_change_private_homework(self):
+        response = self.client.patch(f"/api/data/homework/{self.private_homework.id}/", {
+            "information": "test"
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
-        self.assertEqual(Homework.objects.all().count(), 10 - DELETE_AMOUNT)
-        print(response.data)
+    
+    def test_users_cant_update_public_homework(self):
+        public_homework = self.create_public_homework()
         
-        random_id = random.choice(Homework.objects.all().values_list('id', flat=True).distinct())
-        response = self.client.delete(f"/api/data/homework/{random_id}/")
-        self.assertStatusOk(response.status_code)
-        self.assertEqual(Homework.objects.all().count(), 10 - DELETE_AMOUNT - 1)
-        print(response.data)
+        response = self.client.patch(f"/api/data/homework/{public_homework.id}/", {
+            "information": "test"
+        }, content_type="application/json")
+        self.assertStatusNotOk(response.status_code)
+        self.assertEqual(403, response.status_code)
 
 
 class SerializerTest(HomeworkTestMixin, ClientTestMixin):

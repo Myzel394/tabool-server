@@ -34,7 +34,8 @@ def get_results(instance: Poll, precision: int = 2):
     return [
         {
             "choice_id": choice.id,
-            "percentage_value": round(instance.votes.filter(choices__in=[choice]).count() / max(1, votes_amount))
+            "percentage_value": round(instance.votes.filter(choices__in=[choice]).count() / max(1, votes_amount),
+                                      precision)
         }
         for choice in instance.choices
     ]

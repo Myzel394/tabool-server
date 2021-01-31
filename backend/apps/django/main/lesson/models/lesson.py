@@ -3,7 +3,6 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_hint import QueryType
 from django_lifecycle import BEFORE_SAVE, hook
 
 from apps.django.main.school_data.public import model_names as school_names, model_references as school_references
@@ -19,7 +18,6 @@ if TYPE_CHECKING:
     from datetime import date as typing_date, time
     from . import Course
     from apps.django.main.school_data.models import Room
-    from apps.django.main.homework.models import Homework
 
 __all__ = [
     "Lesson"
@@ -85,7 +83,3 @@ class Lesson(RandomIDMixin):
     @hook(BEFORE_SAVE)
     def _hook_full_clean(self):
         self.full_clean()
-    
-    @property
-    def homeworks(self) -> QueryType["Homework"]:
-        return self.homework_set.all()

@@ -36,7 +36,7 @@ class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):
         self.assertStatusOk(response.status_code)
     
     def test_otp_invalid(self):
-        otp = self.request()
+        self.request()
         
         response = self.client.post("/api/auth/login/", {
             "email": self.user.email,
@@ -85,3 +85,23 @@ class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):
         
         new_otp = self.request()
         self.assertNotEqual(otp, new_otp)
+    
+    def test_no_new_otp_created_after_wrong_input(self):
+        otp = self.request()
+        
+        response = self.client.post("/api/auth/login/", {
+            "email": self.user.email,
+            "password": self.user_password,
+            "otp_key": "123456"
+        }, content_type="application/json")
+        
+        self.assertStatusNotOk(response.status_code)
+        
+        self.assertEqual(1, OTP.objects.all().count())
+        
+        response = self.client.post("/api/auth/login/", {
+            "email": self.user.email,
+            "password": self.user_password,
+            "otp_key": otp.token
+        }, content_type="application/json")
+        self.assertStatusOk(response.status_code)

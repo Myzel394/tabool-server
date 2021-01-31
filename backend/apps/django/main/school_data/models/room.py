@@ -3,7 +3,6 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_hint import *
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.django.utils.validators import validate_place
@@ -11,7 +10,7 @@ from constants import maxlength
 from ..public import model_names
 
 if TYPE_CHECKING:
-    from apps.django.main.lesson.models import Lesson
+    pass
 
 __all__ = [
     "Room"
@@ -42,7 +41,3 @@ class Room(RandomIDMixin, LifecycleModel):
     def _hook_place_validation_and_constraining(self):
         self.place = self.place.upper()
         self.full_clean()
-    
-    @property
-    def lessons(self) -> QueryType["Lesson"]:
-        return self.lesson_set.all()

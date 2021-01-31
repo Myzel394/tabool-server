@@ -39,7 +39,7 @@ def timetable(request):
     if Lesson.objects.count() == 0:
         return Response({
             "detail": _("Der Stundenplan wurde noch nicht geladen.")
-        }, status=status.HTTP_501_NOT_IMPLEMENTED)
+        }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
     
     # Get data
     user_lessons = Lesson.objects \

@@ -41,7 +41,7 @@ class HomeworkAdmin(DefaultAdminMixin, SimpleHistoryAdmin):
     def get_queryset(self, request: RequestType):
         if request.user.has_perm("homework.view_private_homework"):
             return Homework.objects.all()
-        return Homework.objects.all().only("private_to_user").filter(private_to_user=None)
+        return Homework.objects.public()
     
     def has_view_permission(self, request: RequestType, obj: Optional[Homework] = None) -> bool:
         if not request.user.has_perm("homework.view_homework"):

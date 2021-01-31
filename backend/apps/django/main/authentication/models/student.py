@@ -58,7 +58,7 @@ class Student(RandomIDMixin, LifecycleModel):
     
     def clean(self):
         if not self.user.is_confirmed:
-            raise ValidationError(_("Der Benutzer ist noch nicht aktiviert!"))
+            raise ValidationError(_("Bestätige deine E-Mail."))
         
         if self.has_changed("user"):
             raise ValidationError(_("Der Benutzer kann nicht verändert werden."))

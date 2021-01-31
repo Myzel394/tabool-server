@@ -285,3 +285,5 @@ exposes
 login_procedure.txt
 venv
 postgres_data
+
+.coverage

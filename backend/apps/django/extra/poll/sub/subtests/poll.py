@@ -16,6 +16,14 @@ class PollTest(UserTestMixin, PollTestMixin):
             poll.max_vote_choices = 2
             poll.save()
     
+    def test_create_invalid_min_vote_choices_over_max_vote_choices(self):
+        poll = self.Create_poll(choices=["Ja", "Nein", "Vielleicht", "Bla", "Blaaa"])
+        
+        with self.assertRaises(ValidationError):
+            poll.max_vote_choices = 2
+            poll.min_vote_choices = 4
+            poll.save()
+    
     def test_qs(self):
         user = self.Login_user()
         poll = self.Create_poll()
@@ -122,3 +130,12 @@ class PollAmountTest(ClientTestMixin, UserTestMixin, PollTestMixin):
             ],
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
+    
+    def test_ok(self):
+        response = self.client.post(f"/api/data/poll/{self.poll.id}/vote/", {
+            "choices": [
+                self.poll.choices[0].id,
+                self.poll.choices[1].id,
+            ],
+        }, content_type="application/json")
+        self.assertStatusOk(response.status_code)

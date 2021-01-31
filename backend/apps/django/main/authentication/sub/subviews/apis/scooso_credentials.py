@@ -34,7 +34,7 @@ class ScoosoCredentialsView(views.APIView):
         scraper = Request(username, password)
         
         try:
-            logged_in_data = scraper.login()
+            logged_in_data = scraper.login(login_attempts=1)
         except LoginFailed:
             raise ValidationError({
                 "detail": _("Mit diesen Scooso-Anmeldedaten konnte der Server sich nicht anmelden."),

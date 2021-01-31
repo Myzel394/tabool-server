@@ -14,7 +14,7 @@ from ..public.model_names import POLL_NAME, POLL_NAME_PLURAL
 from ..querysets import PollQuerySet
 
 if TYPE_CHECKING:
-    from .choice import Choice, Vote
+    from . import Choice, Vote
 
 __all__ = [
     "Poll"
@@ -68,9 +68,9 @@ class Poll(RandomIDMixin, CreationDateMixin, LifecycleModel):
         super().clean()
         
         if self.min_vote_choices > self.max_vote_choices:
-            raise ValidationError(_(f"Das Feld \"{self._meta.get_field('min_voter_choices').verbose_name}\" kann "
-                                    f"nicht kleiner sein als das Feld \""
-                                    f"{self._meta.get_field('min_voter_choices').verbose_name}\""))
+            raise ValidationError(_(
+                f"Das Feld \"{self._meta.get_field('min_vote_choices').verbose_name}\" kann nicht kleiner sein als "
+                f"das Feld \"{self._meta.get_field('min_vote_choices').verbose_name}\""))
     
     @hook(BEFORE_SAVE)
     def _hook_full_clean(self):

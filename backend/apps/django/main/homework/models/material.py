@@ -25,8 +25,6 @@ from ..querysets import MaterialQuerySet
 
 if TYPE_CHECKING:
     from apps.django.main.authentication.models import User
-
-if TYPE_CHECKING:
     from apps.django.main.lesson.models import Lesson
     from django.db.models.fields.files import FieldFile
 

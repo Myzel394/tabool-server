@@ -10,7 +10,7 @@ __all__ = [
 
 class CourseTestMixin(TeacherTestMixin, SubjectTestMixin):
     @classmethod
-    def Create_course(cls, **kwargs):
+    def Create_course(cls, **kwargs) -> Course:
         course = Course.objects.create(
             **joinkwargs(
                 {
