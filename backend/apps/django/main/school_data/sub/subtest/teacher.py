@@ -2,7 +2,7 @@ import random
 
 from apps.django.main.school_data.mixins.tests import TeacherTestMixin
 from apps.django.main.school_data.models import Teacher
-from apps.django.utils.tests import ClientTestMixin, UserTestMixin
+from apps.django.utils.tests_mixins import ClientTestMixin, UserTestMixin
 
 
 class TeacherAPITest(TeacherTestMixin, ClientTestMixin, UserTestMixin):

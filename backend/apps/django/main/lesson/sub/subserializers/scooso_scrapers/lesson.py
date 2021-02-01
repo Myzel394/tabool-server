@@ -29,7 +29,6 @@ class LessonScoosoScraperSerializer(ScoosoScraperSerializerMixin):
             "date": validated_data["date"],
             "start_time": validated_data["start_time"],
             "end_time": validated_data["end_time"],
-            "weekday": validated_data["date"].weekday(),
             
             "course": validated_data["course"]
         }

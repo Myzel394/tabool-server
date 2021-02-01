@@ -3,7 +3,7 @@ import string
 from datetime import datetime, timedelta
 
 from apps.django.main.otp.models.otp import OTP
-from apps.django.utils.tests import ClientTestMixin, UserTestMixin
+from apps.django.utils.tests_mixins import ClientTestMixin, UserTestMixin
 
 
 class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):

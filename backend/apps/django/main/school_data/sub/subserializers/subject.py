@@ -1,5 +1,5 @@
 from apps.django.extra.scooso_scraper.utils import rename_name_for_color_mapping
-from apps.django.utils.serializers import PreferredIdsMixin, RandomIDSerializerMixin, UserRelationField
+from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField
 from .user_relations import UserSubjectRelationSerializer
 from ... import constants
 from ...models import Subject
@@ -9,9 +9,7 @@ __all__ = [
 ]
 
 
-class SubjectSerializer(RandomIDSerializerMixin, PreferredIdsMixin):
-    preferred_id_key = "subject"
-    
+class SubjectSerializer(RandomIDSerializerMixin):
     class Meta:
         model = Subject
         fields = [

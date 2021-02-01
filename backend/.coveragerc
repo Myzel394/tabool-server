@@ -1,0 +1,20 @@
+[report]
+show_missing = true
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
+    if settings.DEBUG
+    def __str__
+    raise NotImplementedError()
+omit =
+    project/*
+    */sub/subadmins/*
+    */migrations/*
+    */admin.py
+    */admins.py
+    */debug/*
+    */public/admin_inlines.py
+    */serializer_fields/*
+    manage.py
+    */debug_utils.py
+    */apps.py

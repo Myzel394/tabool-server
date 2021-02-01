@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers.mixins import WhiteSpaceStripHandler
 from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
+from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook, LifecycleModel
 
 from apps.django.main.school_data.public import model_names as school_names
 from apps.django.utils.validators import validate_weekday_in_lesson_data_available
@@ -24,7 +24,7 @@ __all__ = [
 ]
 
 
-class Event(RandomIDMixin, HandlerMixin):
+class Event(RandomIDMixin, HandlerMixin, LifecycleModel):
     class Meta:
         verbose_name = model_names.EVENT
         verbose_name_plural = model_names.EVENT_PLURAL

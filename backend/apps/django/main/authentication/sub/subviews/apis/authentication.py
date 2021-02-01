@@ -108,6 +108,7 @@ class LoginView(views.APIView):
 class LogoutView(views.APIView):
     permission_classes = []
     
+    # pragma: no cover
     def post(self, request):
         if request.user.is_authenticated:
             logout(request)

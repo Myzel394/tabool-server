@@ -4,10 +4,8 @@ from typing import *
 
 from apps.django.main.school_data.models import Teacher
 from apps.utils import find_next_date_by_weekday
-from apps.utils.threads import list_in_thread
 from .other_scrapers.scrape_teachers import scrape_teachers
 from .scrapers.timetable import TimetableRequest
-from .sub.subjobs.fetch_timetable import yield_lessons_with_materials
 
 if TYPE_CHECKING:
     from apps.django.main.authentication.models import User, ScoosoData
@@ -71,10 +69,5 @@ def fetch_timetable(user: "User", start_date: date = None, end_date: date = None
         data = scraper.get_timetable(start_date, end_date)
         lessons = scraper.import_timetable_from_scraper(data, [user])
         
-        materials = yield_lessons_with_materials(data, lessons)
-        
-        if in_thread:
-            list_in_thread(materials, fetch_material, [scraper])
-        else:
-            for material in materials:
-                scraper.import_materials_from_lesson(material)
+        for lesson in lessons:
+            scraper.import_materials_from_lesson(lesson)

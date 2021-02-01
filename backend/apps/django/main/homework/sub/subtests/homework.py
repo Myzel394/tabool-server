@@ -1,13 +1,14 @@
+import lorem
 from django.test import RequestFactory
 
 from apps.django.main.homework.mixins.tests import HomeworkTestMixin
 from apps.django.main.homework.models import Homework
 from apps.django.main.homework.serializers import *
 from apps.django.main.lesson.mixins.tests import *
-from apps.django.utils.tests import ClientTestMixin
+from apps.django.utils.tests_mixins import ClientTestMixin
 
 
-class HomeworkTest(HomeworkTestMixin, ClientTestMixin):
+class APITest(HomeworkTestMixin, ClientTestMixin):
     def setUp(self) -> None:
         self.first_user = self.Login_user()
         
@@ -92,3 +93,54 @@ class SerializerTest(HomeworkTestMixin, ClientTestMixin):
 class QuerySetTest(HomeworkTestMixin, AssociatedUserTestMixin):
     def test_association(self):
         self.check_queryset_from_user(Homework)
+
+
+class APIPrivateHomeworkTest(HomeworkTestMixin, ClientTestMixin):
+    def setUp(self) -> None:
+        self.user = self.Login_user()
+        self.__class__.associated_user = self.user
+        
+        self.lesson = self.Create_lesson()
+    
+    @property
+    def valid_data(self):
+        return {
+            "lesson": self.lesson.id,
+            "due_date": self.get_random_due_date(self.lesson).strftime("%Y-%m-%dT%H:%M:%S"),
+            "type": "Vortrag",
+            "information": lorem.text()
+        }
+    
+    @property
+    def homework(self) -> Homework:
+        return Homework.objects.all().first()
+    
+    def test_create_private_homework(self):
+        data = {
+            **self.valid_data,
+            "is_private": True
+        }
+        response = self.client.post("/api/data/homework/", data, content_type="application/json")
+        self.assertStatusOk(response.status_code)
+        
+        self.assertTrue(self.homework.is_private)
+    
+    def test_create_public_homework(self):
+        data = {
+            **self.valid_data,
+            "is_private": False
+        }
+        response = self.client.post("/api/data/homework/", data, content_type="application/json")
+        self.assertStatusOk(response.status_code)
+        
+        self.assertFalse(self.homework.is_private)
+    
+    def test_update_to_private(self):
+        data = {
+            **self.valid_data,
+            "is_private": False
+        }
+        response = self.client.post("/api/data/homework/", data, content_type="application/json")
+        self.assertStatusOk(response.status_code)
+        
+        self.assertFalse(self.homework.is_private)

@@ -4,7 +4,7 @@ from abc import ABC
 from django.test import TestCase
 
 from apps.django.main.school_data.models import Room
-from apps.django.utils.tests import joinkwargs
+from apps.django.utils.tests_mixins import joinkwargs
 
 __all__ = [
     "RoomTestMixin"

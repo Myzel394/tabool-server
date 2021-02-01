@@ -21,8 +21,11 @@ __all__ = [
     "haversine", "is_ip_geolocation_suspicious", "send_otp_message"
 ]
 
+EARTH_RADIUS_IN_KILOMETERS = 6371
+
 
 # https://stackoverflow.com/a/4913653/9878135
+# pragma: no cover
 def haversine(lon1: int, lat1: int, lon2: int, lat2: int) -> float:
     """
     Calculate the great circle distance between two points
@@ -36,8 +39,7 @@ def haversine(lon1: int, lat1: int, lon2: int, lat2: int) -> float:
     dlat = lat2 - lat1
     a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
     c = 2 * asin(sqrt(a))
-    r = 6371  # Radius of earth in kilometers. Use 3956 for miles
-    return c * r
+    return c * EARTH_RADIUS_IN_KILOMETERS
 
 
 def float_to_integer(value: float) -> int:
@@ -117,7 +119,7 @@ def send_otp_message(request: RequestType, user: "User", otp: "OTP"):
         pass
     
     try:
-        os, browser = httpagentparser.simple_detect(requests["HTTP_USER_AGENT"])
+        os, browser = httpagentparser.simple_detect(request["HTTP_USER_AGENT"])
         
         message_parts.append(f"Browser: {browser} auf einem {os} Gerät")
     except:

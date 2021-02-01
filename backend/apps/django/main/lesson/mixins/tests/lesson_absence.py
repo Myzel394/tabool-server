@@ -1,6 +1,6 @@
 from apps.django.main.lesson.mixins.tests import LessonTestMixin
 from apps.django.main.lesson.models import LessonAbsence
-from apps.django.utils.tests import joinkwargs
+from apps.django.utils.tests_mixins import joinkwargs
 
 
 class LessonAbsenceTestMixin(LessonTestMixin):

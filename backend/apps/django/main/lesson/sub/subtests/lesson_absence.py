@@ -1,5 +1,6 @@
-from apps.django.main.lesson.mixins.tests import LessonAbsenceTestMixin
-from apps.django.utils.tests import ClientTestMixin
+from apps.django.main.lesson.mixins.tests import LessonAbsence, LessonAbsenceTestMixin, QueryType
+from apps.django.main.lesson.sub.subfilters import AbsenceFilterSet
+from apps.django.utils.tests_mixins import ClientTestMixin
 
 
 class LessonAbsenceCreateTest(LessonAbsenceTestMixin, ClientTestMixin):
@@ -58,3 +59,35 @@ class LessonAbsenceUpdateTest(LessonAbsenceTestMixin, ClientTestMixin):
     def test_delete(self):
         response = self.client.delete(f"/api/data/lesson-absence/{self.absence.id}/")
         self.assertStatusOk(response.status_code)
+
+
+class FilterTest(LessonAbsenceTestMixin):
+    def setUp(self) -> None:
+        self.user = self.Create_user()
+        self.__class__.associated_user = self.user
+        self.with_reason = self.Create_lesson_absence(
+            reason="test"
+        )
+        self.without_reason = self.Create_lesson_absence(
+            reason=None
+        )
+    
+    @property
+    def absences(self) -> QueryType["LessonAbsence"]:
+        return LessonAbsence.objects.all()
+    
+    def test_filters_reason_isnull(self):
+        filtered = AbsenceFilterSet({
+            "contains_reason": False,
+        }, queryset=self.absences)
+        
+        self.assertIn(self.without_reason, filtered.qs)
+        self.assertNotIn(self.with_reason, filtered.qs)
+    
+    def test_filters_not_reason_isnull(self):
+        filtered = AbsenceFilterSet({
+            "contains_reason": True,
+        }, queryset=self.absences)
+        
+        self.assertNotIn(self.without_reason, filtered.qs)
+        self.assertIn(self.with_reason, filtered.qs)

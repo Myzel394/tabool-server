@@ -22,7 +22,7 @@ class LessonScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
 @admin.register(Lesson)
 class LessonAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["date", "course", "teacher", "room", "start_time", "end_time", "weekday", ]
+        "default": ["date", "course", "teacher", "room", "start_time", "end_time", ]
     }
     list_display = ["course_name", "date", "start_time", "end_time", "course_teacher", "room", ]
     search_fields = ["course__subject__name", "course__teacher__first_name", "course__teacher__last_name"]

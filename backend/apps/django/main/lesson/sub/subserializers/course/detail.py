@@ -33,9 +33,14 @@ class DetailCourseSerializer(BaseCourseSerializer):
     
     @staticmethod
     def get_weekdays(instance: "Course"):
-        return list(set(
-            Lesson.objects
-                .only("course")
-                .filter(course=instance)
-                .values_list("weekday", flat=True)
-        ))
+        dates = Lesson.objects \
+            .only("date", "course") \
+            .filter(course=instance) \
+            .values_list("date", flat=True) \
+            .distinct()
+        weekdays = {
+            date.weekday()
+            for date in dates
+        }
+        
+        return list(weekdays)

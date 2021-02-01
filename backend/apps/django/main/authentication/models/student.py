@@ -37,8 +37,7 @@ class Student(RandomIDMixin, LifecycleModel):
         TEACHER,
         on_delete=models.SET_NULL,
         verbose_name=school_names.TEACHER,
-        blank=True,
-        null=True,
+        null=True
     )  # type: Teacher
     
     class_number = models.PositiveSmallIntegerField(

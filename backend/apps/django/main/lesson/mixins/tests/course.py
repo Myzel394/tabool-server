@@ -1,6 +1,6 @@
 from apps.django.main.school_data.mixins.tests import *
 from apps.django.main.school_data.mixins.tests.teacher import TeacherTestMixin
-from apps.django.utils.tests import joinkwargs
+from apps.django.utils.tests_mixins import joinkwargs
 from ...models.course import Course
 
 __all__ = [

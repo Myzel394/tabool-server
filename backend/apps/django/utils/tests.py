@@ -1,217 +1,35 @@
-import random
-import string
-from contextlib import contextmanager
-from datetime import date, datetime, time, timedelta
 from typing import *
+from datetime import date, datetime, time, timedelta
 
-import names
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.test import Client, TestCase
+from django.test import TestCase
 
-from apps.django.extra.scooso_scraper.mixins.tests import *
-from apps.django.main.authentication.models import ScoosoData
-from apps.utils.dates import find_next_date_by_weekday
-from apps.utils.time import dummy_datetime_from_target
-from constants import weekdays
-
-if TYPE_CHECKING:
-    from apps.django.main.authentication.models import User
-
-__all__ = [
-    "UserTestMixin", "StartTimeEndTimeTestMixin", "ClientTestMixin", "joinkwargs", "DateUtilsTestMixin",
-    "UtilsTestMixin"
-]
+from apps.utils import is_all_day
 
 
-class UserTestMixin(DummyUser):
-    def Create_user(
-            self,
-            is_confirmed: bool = True,
-            create_scooso_data: bool = True,
-            is_active: bool = True,
-            has_filled_out_data: bool = True,
-            **kwargs
-    ) -> settings.AUTH_USER_MODEL:
-        Model = get_user_model()
-        first_name = names.get_first_name()
-        last_name = names.get_last_name()
-        password = kwargs.pop("password", first_name)
+class DateText(TestCase):
+    def assertIsAllDay(self, first: Union[date, datetime], second: Union[date, datetime]):
+        self.assertTrue(is_all_day(first, second))
+    
+    def test_same_date_zero(self):
+        first_date = datetime(2020, 1, 1, 0, 0, 0)
+        second_date = datetime(2020, 1, 1, 0, 0, 0)
         
-        user: "User" = Model.objects.create_user(
-            **{
-                "first_name": first_name,
-                "last_name": last_name,
-                "email": f"{first_name}.{last_name}@gmail.com",
-                "password": password,
-                **kwargs
-            }
-        )
+        self.assertIsAllDay(first_date, second_date)
+    
+    def test_same_date_min_max(self):
+        first_date = datetime.combine(date(2020, 1, 1), time.min)
+        second_date = datetime.combine(date(2020, 1, 1), time.max)
         
-        if is_confirmed:
-            user.confirm_email(user.confirmation_key)
-        if create_scooso_data:
-            self.load_dummy_user()
-            ScoosoData.objects.create(
-                user=user,
-                username=self.username,
-                password=self.password,
-                scooso_id=self.scooso_id
-            )
-        user.has_filled_out_data = has_filled_out_data
-        user.is_active = is_active
-        user.save()
+        self.assertIsAllDay(first_date, second_date)
+    
+    def test_same_date_exactly_24_hours(self):
+        first_date = datetime(2020, 1, 1, 0, 0, 0)
+        second_date = first_date + timedelta(hours=24)
         
-        return user
+        self.assertIsAllDay(first_date, second_date)
     
-    def Login_user(
-            self,
-            user: Optional[settings.AUTH_USER_MODEL] = None,
-            password: Optional[str] = None
-    ) -> settings.AUTH_USER_MODEL:
-        """Logs the client in and returns the user with which the client was logged in"""
-        self.assertTrue(hasattr(self, "client"), "`client` not available. Add it to the mixins of the test class.")
+    def test_not_same_date(self):
+        first_date = datetime(2020, 1, 1, 0, 0, 0)
+        second_date = first_date + timedelta(hours=1)
         
-        user = user or self.Create_user()
-        
-        is_login = self.client.login(
-            email=user.email,
-            password=password or user.first_name
-        )
-        
-        self.assertTrue(is_login, "Couldn't login the user")
-        
-        return user
-    
-    @staticmethod
-    def Get_random_password(level: str = "strong") -> str:
-        if level == "weak":
-            return random.choice(string.ascii_letters + string.digits) * random.choice([2, 5, 12, 20])
-        return "".join(
-            random.choices(
-                string.ascii_letters + string.digits,
-                k=random.choice([12, 14, 20, 24])
-            )
-        )
-    
-    @contextmanager
-    def Login_user_as_context(self, *args, **kwargs):
-        previous_value = getattr(self.__class__, "associated_user", None)
-        
-        try:
-            user = self.Login_user(*args, **kwargs)
-            self.__class__.associated_user = user
-            yield user
-        finally:
-            self.client.logout()
-            self.__class__.associated_user = previous_value
-
-
-class StartTimeEndTimeTestMixin(TestCase):
-    DURATION = 45
-    
-    @staticmethod
-    def start_time() -> time:
-        return datetime.now().time()
-    
-    @classmethod
-    def end_time(cls) -> time:
-        return (dummy_datetime_from_target(cls.start_time()) + timedelta(minutes=cls.DURATION)).time()
-
-
-class DateUtilsTestMixin(TestCase):
-    @staticmethod
-    def dummy_datetime_from_target(target: Union[date, datetime, time]) -> datetime:
-        try:
-            return dummy_datetime_from_target(target)
-        except ValueError:
-            # Just return anything, so the test can pass with any value
-            return datetime.now()
-    
-    @staticmethod
-    def Random_future_datetime(
-            start_from: Optional[datetime] = None,
-            max_days_future: int = 30,
-            min_days_future: int = 1
-    ) -> datetime:
-        return (start_from or datetime.now()) + random.choice([
-            timedelta(days=days)
-            for days in range(min_days_future, max_days_future + 1)
-        ]) + random.choice([
-            timedelta(hours=hour)
-            for hour in range(0, 24)
-        ]) + random.choice([
-            timedelta(minutes=minute)
-            for minute in range(0, 60)
-        ])
-    
-    @classmethod
-    def Random_future_date(
-            cls,
-            start_from: Optional[date] = None,
-            max_days_future: int = 30,
-            min_days_future: int = 1
-    ) -> date:
-        return cls.Random_future_datetime(
-            cls.dummy_datetime_from_target(start_from),
-            max_days_future,
-            min_days_future
-        ).date()
-    
-    @classmethod
-    def Random_future_time(
-            cls,
-            start_from: Optional[time] = None
-    ) -> time:
-        return cls.Random_future_datetime(
-            cls.dummy_datetime_from_target(start_from),
-        ).time()
-    
-    @classmethod
-    def Random_allowed_datetime(
-            cls,
-            start_from: Optional[datetime] = None,
-            allowed: Sequence[int] = [x[0] for x in weekdays.ALLOWED_WEEKDAYS],
-            *args,
-            **kwargs
-    ) -> datetime:
-        return find_next_date_by_weekday(
-            cls.Random_future_datetime(start_from, *args, **kwargs),
-            random.choice(allowed)
-        )
-
-
-class ClientTestMixin(TestCase):
-    client = Client()
-    
-    def assertStatusOk(self, status_code: int) -> None:
-        self.assertTrue(200 <= status_code <= 299, f"status_code is '{status_code}'")
-    
-    def assertStatusNotOk(self, status_code: int) -> None:
-        self.assertTrue(status_code < 200 or status_code > 299, f"status_code is '{status_code}'")
-
-
-class UtilsTestMixin(TestCase):
-    @staticmethod
-    def Random_data(size: int = 6, choices: str = string.ascii_letters + string.digits) -> str:
-        return "".join(random.choices(choices, k=size))
-    
-    @classmethod
-    def Random_filename(cls, extension: str = ".txt") -> str:
-        return f"random_filename_{cls.Random_data(8)}{extension}"
-
-
-def joinkwargs(defaults: Dict[str, Callable], given: dict, /) -> dict:
-    data = {}
-    for key, value in defaults.items():
-        if key in given:
-            data[key] = given[key]
-        else:
-            data[key] = value()
-    
-    remaining_keys = set(given.keys()) - set(defaults.keys())
-    
-    for key in remaining_keys:
-        data[key] = given[key]
-    
-    return data
+        self.assertFalse(is_all_day(first_date, second_date))

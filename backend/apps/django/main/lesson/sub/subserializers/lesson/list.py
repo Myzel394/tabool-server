@@ -13,7 +13,7 @@ class ListLessonSerializer(BaseLessonSerializer):
     class Meta(BaseLessonSerializer.Meta):
         model = Lesson
         fields = [
-            "course", "start_time", "end_time", "weekday",
+            "course", "start_time", "end_time",
             "date", "has_video_conference", "id"
         ]
     

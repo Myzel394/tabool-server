@@ -1,6 +1,5 @@
 import random
 
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
@@ -17,7 +16,7 @@ __all__ = [
 ]
 
 
-def random_color():
+def random_color() -> str:
     return "#" + "".join(random.choice("0123456789ABCDEF") for _ in range(6))
 
 
@@ -47,8 +46,3 @@ class Choice(RandomIDMixin, LifecycleModel):
     @hook(BEFORE_CREATE)
     def _hook_create_color_if_none(self):
         self.color = self.color or DEFAULT_COLOR_TEXT_MAPPING.get(self.text.lower()) or random_color()
-        
-        if not self.color:
-            raise ValidationError(_(
-                "Wähle eine Farbe aus."
-            ))

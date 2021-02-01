@@ -4,7 +4,6 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_hint import *
 from django_lifecycle import LifecycleModel
 
 from apps.django.main.authentication.models import Student
@@ -70,19 +69,19 @@ class Course(RandomIDMixin, LifecycleModel):
     
     @property
     def folder_name(self) -> str:
-        prefix: str
-        
-        if class_number := self.get_class_number():
-            prefix = str(class_number)
-        else:
+        try:
+            class_number = self.get_class_number()
+        except TypeError:
             prefix = "unknown_class_number"
+        else:
+            prefix = str(class_number)
         
         return f"{prefix}/{self.name}/{self.id}"
     
-    def get_class_number(self) -> Optional[int]:
+    def get_class_number(self) -> int:
         # Get a class number from a student
         for participant in self.participants.all():
             if student := getattr(participant, "student", None):  # type: Student
                 return student.class_number
         
-        return None
+        raise TypeError("Course has no participants. Class number can't be detected.")

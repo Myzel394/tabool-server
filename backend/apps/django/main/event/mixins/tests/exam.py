@@ -5,7 +5,7 @@ import lorem
 
 from apps.django.main.lesson.mixins.tests import *
 from apps.django.main.school_data.mixins.tests import *
-from apps.django.utils.tests import *
+from apps.django.utils.tests_mixins import *
 from apps.utils.dates import find_next_date_by_weekday
 from ...models import Exam
 

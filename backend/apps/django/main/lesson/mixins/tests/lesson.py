@@ -7,7 +7,7 @@ from dateutil.rrule import MINUTELY, rrule
 
 from apps.django.extra.scooso_scraper.mixins.tests import DummyUser
 from apps.django.main.school_data.mixins.tests import *
-from apps.django.utils.tests import *
+from apps.django.utils.tests_mixins import *
 from apps.utils import find_next_date_by_weekday
 from apps.utils.time import dummy_datetime_from_target
 from constants.weekdays import ALLOWED_WEEKDAYS
@@ -36,7 +36,6 @@ class LessonTestMixin(
                     "course": cls.Create_course,
                     "start_time": cls.start_time,
                     "end_time": cls.end_time,
-                    "weekday": lambda: weekday,
                 },
                 kwargs
             )
@@ -70,7 +69,6 @@ class LessonTestMixin(
                         {
                             "start_time": lambda: current_time.time(),
                             "end_time": lambda: (current_time + timedelta(minutes=duration)).time(),
-                            "weekday": lambda: weekday,
                         },
                         kwargs
                     )

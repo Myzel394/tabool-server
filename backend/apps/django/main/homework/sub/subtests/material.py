@@ -6,13 +6,17 @@ import lorem
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from apps.django.utils.tests import *
+from apps.django.utils.tests_mixins import *
 from apps.utils.files import get_file_dates, set_file_dates
 from constants import upload_sizes
 from ...mixins.tests import MaterialTestMixin
 
 
 class MaterialTest(MaterialTestMixin, ClientTestMixin, UtilsTestMixin):
+    def setUp(self) -> None:
+        self.user = self.Login_user()
+        self.__class__.associated_user = self.user
+    
     def test_size(self):
         ok_data = self.Random_data(random.randint(
             int(upload_sizes.MIN_UPLOAD_SIZE * 1.1),

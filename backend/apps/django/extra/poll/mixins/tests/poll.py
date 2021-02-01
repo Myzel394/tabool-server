@@ -4,7 +4,7 @@ from django.test import TestCase
 from django_hint import QueryType
 
 from apps.django.main.authentication.models import User
-from apps.django.utils.tests import joinkwargs
+from apps.django.utils.tests_mixins import joinkwargs
 from ...models import Choice, Poll
 
 __all__ = [

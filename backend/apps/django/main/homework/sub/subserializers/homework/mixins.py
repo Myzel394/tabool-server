@@ -12,7 +12,7 @@ __all__ = [
 ]
 
 
-class IsPrivateMixin:
+class IsPrivateMixin(serializers.Serializer):
     is_private = WritableSerializerMethodField(
         deserializer_field=serializers.BooleanField(allow_null=True)
     )

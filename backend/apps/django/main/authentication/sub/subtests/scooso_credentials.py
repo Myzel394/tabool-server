@@ -1,6 +1,6 @@
 import os
 
-from apps.django.utils.tests import ClientTestMixin, DummyUser, UserTestMixin
+from apps.django.utils.tests_mixins import ClientTestMixin, DummyUser, UserTestMixin
 
 
 class ScoosoCredentialsTest(UserTestMixin, DummyUser, ClientTestMixin):

@@ -4,7 +4,7 @@ import string
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from apps.django.main.lesson.mixins.tests import *
-from apps.django.utils.tests import *
+from apps.django.utils.tests_mixins import *
 from ...models import Submission
 
 __all__ = [

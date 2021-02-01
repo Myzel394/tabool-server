@@ -5,7 +5,7 @@ import names
 from django.test import TestCase
 
 from apps.django.main.school_data.models import Teacher
-from apps.django.utils.tests import joinkwargs
+from apps.django.utils.tests_mixins import joinkwargs
 
 __all__ = [
     "TeacherTestMixin"

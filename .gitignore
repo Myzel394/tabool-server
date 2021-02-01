@@ -84,7 +84,7 @@ pip-delete-this-directory.txt
 htmlcov/
 .tox/
 .nox/
-.coverage
+backend/.coverage
 .coverage.*
 .cache
 nosetests.xml
@@ -286,4 +286,4 @@ login_procedure.txt
 venv
 postgres_data
 
-.coverage
+backend/.coverage

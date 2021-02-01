@@ -119,4 +119,5 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
     
     @property
     def edited_at(self) -> "datetime":
+        # pragma: no cover
         return self.history.latest().history_date

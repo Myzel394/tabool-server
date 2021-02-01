@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta
 
 from django.core.exceptions import ValidationError
+from django.test import override_settings
 
 from apps.django.extra.poll.mixins.tests import PollTestMixin
 from apps.django.extra.poll.models import Poll, Vote
-from apps.django.extra.poll.utils import add_user_vote, has_voted
-from apps.django.utils.tests import ClientTestMixin, UserTestMixin
+from apps.django.extra.poll.utils import add_user_vote, get_results, has_voted
+from apps.django.utils.tests_mixins import ClientTestMixin, UserTestMixin
 
 
 class PollTest(UserTestMixin, PollTestMixin):
@@ -36,6 +37,9 @@ class PollTest(UserTestMixin, PollTestMixin):
         self.assertEqual(1, Poll.objects.voted(user).count())
         self.assertNotIn(poll, Poll.objects.not_voted(user))
         self.assertEqual(0, Poll.objects.not_voted(user).count())
+    
+    def test_get_results(self):
+        get_results(self.Create_poll())
 
 
 class APITest(ClientTestMixin, UserTestMixin, PollTestMixin):
@@ -67,6 +71,14 @@ class APITest(ClientTestMixin, UserTestMixin, PollTestMixin):
         self.assertTrue(has_voted(self.poll, self.user))
         self.assertEqual(1, Vote.objects.filter(associated_user=self.user).count())
     
+    def test_invalid_choices(self):
+        other_poll = self.Create_poll(["Ja", "Nein"])
+        
+        response = self.client.post(f"/api/data/poll/{self.poll.id}/vote/", {
+            "choices": [other_poll.choices[0].id],
+        }, content_type="application/json")
+        self.assertStatusNotOk(response.status_code)
+    
     def test_get_empty_selections_before_vote(self):
         response = self.client.get(f"/api/data/poll/{self.poll.id}/")
         self.assertStatusOk(response.status_code)
@@ -83,6 +95,7 @@ class APITest(ClientTestMixin, UserTestMixin, PollTestMixin):
     def test_with_feedback(self):
         self.vote(feedback="Test")
     
+    @override_settings(SHOW_VOTES_RESULTS=True)
     def test_dont_show_results(self):
         self.poll.show_results_date = datetime.now() + timedelta(days=2)
         self.poll.save()
@@ -90,11 +103,19 @@ class APITest(ClientTestMixin, UserTestMixin, PollTestMixin):
         response = self.vote()
         self.assertIsNone(response.data["results"])
     
+    @override_settings(SHOW_VOTES_RESULTS=True)
     def test_dont_show_results_before_vote(self):
         response = self.client.get(f"/api/data/poll/{self.poll.id}/")
         self.assertStatusOk(response.status_code)
         # Ensure no results visible
         self.assertIsNone(response.data["results"])
+    
+    @override_settings(SHOW_VOTES_RESULTS=True)
+    def test_show_results_after_vote(self):
+        self.vote()
+        response = self.client.get(f"/api/data/poll/{self.poll.id}/")
+        self.assertStatusOk(response.status_code)
+        self.assertIsNotNone(response.data["results"])
 
 
 class PollAmountTest(ClientTestMixin, UserTestMixin, PollTestMixin):

@@ -45,7 +45,7 @@ class UserSubjectRelation(RandomIDMixin, UserModelRelationMixin, LifecycleModel)
     
     @property
     def default_color_for_name(self) -> str:
-        return constants.SUBJECT_COLORS_MAPPING[rename_name_for_color_mapping(self.subject.name)]
+        return constants.SUBJECT_COLORS_MAPPING.get(rename_name_for_color_mapping(self.subject.name), "#888")
     
     @hook(BEFORE_CREATE)
     def _hook_set_color(self):

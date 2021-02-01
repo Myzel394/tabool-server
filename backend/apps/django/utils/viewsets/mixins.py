@@ -4,14 +4,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 from django_hint import *
-from rest_framework import status, viewsets
-from rest_framework.decorators import action
+from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
-from rest_framework.response import Response
 
 __all__ = [
-    "UserRelationViewSetMixin", "RetrieveFromUserMixin", "RetrieveAllMixin", "ModelHistoryMixin", "BulkDeleteMixin"
+    "UserRelationViewSetMixin", "RetrieveFromUserMixin", "RetrieveAllMixin", "ModelHistoryMixin"
 ]
 
 
@@ -114,24 +112,3 @@ class ModelHistoryMixin(viewsets.ReadOnlyModelViewSet):
         return context | {
             "latest_history_instance": latest_instance.next_record  # Getting the current instance
         }
-
-
-class BulkDeleteMixin:
-    @action(methods=["DELETE"], detail=False)
-    def delete(self, request: RequestType):
-        ids = request.GET.getlist("ids[]", [])
-        
-        if type(ids) is list and len(ids) > 0:
-            queryset = self.get_queryset().only("id").filter(id__in=ids)
-            
-            if len(queryset) == len(ids):
-                # Delete each object, otherwise some signals would be missing
-                for obj in queryset:
-                    obj.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            return Response({
-                "message": _("Nicht alle Objekte gefunden.")
-            }, status=status.HTTP_400_BAD_REQUEST)
-        return Response({
-            "message": _('Feld "ids" fehlt oder ist ungültig.')
-        }, status=status.HTTP_400_BAD_REQUEST)

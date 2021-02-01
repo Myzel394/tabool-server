@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 
 from apps.django.main.authentication.models import Token
-from apps.django.utils.tests import UserTestMixin
+from apps.django.utils.tests_mixins import UserTestMixin
 
 
 class TokenTest(UserTestMixin):

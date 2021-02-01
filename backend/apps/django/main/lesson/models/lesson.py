@@ -3,16 +3,13 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_lifecycle import BEFORE_SAVE, hook
+from django_lifecycle import LifecycleModel
 
 from apps.django.main.school_data.public import model_names as school_names, model_references as school_references
-from apps.django.utils.fields import WeekdayField
 from apps.utils import format_datetime
-from constants import weekdays
 from ..public import *
 from ..public import model_names
 from ..querysets import LessonQuerySet
-from ..validators import validate_lesson_weekday
 
 if TYPE_CHECKING:
     from datetime import date as typing_date, time
@@ -24,11 +21,11 @@ __all__ = [
 ]
 
 
-class Lesson(RandomIDMixin):
+class Lesson(RandomIDMixin, LifecycleModel):
     class Meta:
         verbose_name = model_names.LESSON
         verbose_name_plural = model_names.LESSON_PLURAL
-        ordering = ("date", "start_time", "end_time", "weekday")
+        ordering = ("date", "start_time", "end_time")
     
     objects = LessonQuerySet.as_manager()
     
@@ -36,7 +33,7 @@ class Lesson(RandomIDMixin):
         verbose_name=_("Datum")
     )  # type: typing_date
     
-    video_conference_link = models.CharField(
+    video_conference_link = models.URLField(
         max_length=1023,
         verbose_name=_("Videokonferenz-Link"),
         blank=True,
@@ -65,21 +62,12 @@ class Lesson(RandomIDMixin):
         verbose_name=_("Endzeit"),
     )  # type: time
     
-    weekday = WeekdayField(
-        verbose_name=_("Wochentag"),
-        choices=weekdays.ALLOWED_WEEKDAYS
-    )  # type: int
-    
     def __str__(self):
         return _("{date}, {course}").format(
             date=format_datetime(self.date),
             course=self.course
         )
     
-    def clean(self):
-        validate_lesson_weekday(self.date, self)
-        return super().clean()
-    
-    @hook(BEFORE_SAVE)
-    def _hook_full_clean(self):
-        self.full_clean()
+    @property
+    def weekday(self) -> int:
+        return self.date.weekday()

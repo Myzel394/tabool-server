@@ -7,7 +7,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 from apps.django.main.homework.models import Material
 from apps.django.main.lesson.mixins.tests import *
-from apps.django.utils.tests import *
+from apps.django.utils.tests_mixins import *
 
 __all__ = [
     "MaterialTestMixin"

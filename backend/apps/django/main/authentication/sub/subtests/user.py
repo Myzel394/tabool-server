@@ -8,7 +8,7 @@ from django.core import mail
 
 from apps.django.extra.scooso_scraper.mixins.tests import DummyUser
 from apps.django.main.authentication.models import *
-from apps.django.utils.tests import *
+from apps.django.utils.tests_mixins import *
 from ... import constants
 
 __all__ = [

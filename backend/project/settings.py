@@ -96,7 +96,6 @@ MIDDLEWARE = [
     
     "simple_history.middleware.HistoryRequestMiddleware",
     "django_grip.GripMiddleware",
-    "apps.django.utils.middleware.RequestPreferredIdMiddleware",
 ]
 
 REST_FRAMEWORK = {

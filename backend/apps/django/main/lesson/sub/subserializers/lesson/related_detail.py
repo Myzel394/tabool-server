@@ -14,7 +14,7 @@ class RelatedDetailLessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = [
-            "room", "course", "start_time", "end_time", "weekday",
+            "room", "course", "start_time", "end_time",
             "date", "id", "classbook", "video_conference_link"
         ]
     

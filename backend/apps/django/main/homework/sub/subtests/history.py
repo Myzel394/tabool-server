@@ -1,7 +1,7 @@
 from pprint import pp
 
 from apps.django.main.homework.mixins.tests import HomeworkTestMixin
-from apps.django.utils.tests import *
+from apps.django.utils.tests_mixins import *
 
 
 class HistoryTest(HomeworkTestMixin, ClientTestMixin):

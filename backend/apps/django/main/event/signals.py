@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from simple_history.signals import pre_create_historical_record
 
-from apps.django.utils.history_extras.extras import set_user_information
+from apps.django.utils.history_extras.extras.user_information.setter import set_user_information
 from .models import Exam
 
 

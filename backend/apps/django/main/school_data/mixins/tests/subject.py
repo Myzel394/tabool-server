@@ -2,7 +2,7 @@ import random
 from abc import ABC
 
 from apps.django.main.school_data.models import Subject
-from apps.django.utils.tests import joinkwargs, UserTestMixin
+from apps.django.utils.tests_mixins import joinkwargs, UserTestMixin
 
 __all__ = [
     "SubjectTestMixin"

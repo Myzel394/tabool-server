@@ -5,7 +5,7 @@ import names
 from apps.django.extra.scooso_scraper.mixins.tests import DummyUser
 from apps.django.main.authentication.models import *
 from apps.django.main.school_data.mixins.tests import *
-from apps.django.utils.tests import *
+from apps.django.utils.tests_mixins import *
 from ... import constants
 
 

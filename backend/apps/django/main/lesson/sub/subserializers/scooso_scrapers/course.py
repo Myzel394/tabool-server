@@ -14,9 +14,19 @@ class CourseScoosoScraperSerializer(GetOrCreateSerializerMixin):
         ]
     
     def create(self, validated_data):
+        unique_data = {
+            "subject": validated_data.pop("subject"),
+            "course_number": validated_data.pop("course_number"),
+        }
+        
         participants = validated_data.pop("participants", [])
-        instance: Course = super().create(validated_data)
+        instance: Course = super().create(unique_data)
         instance.participants.add(*participants)
+        
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        
+        instance.save()
         
         return instance
     

@@ -24,7 +24,7 @@ class DetailLessonSerializer(BaseLessonSerializer):
     class Meta(BaseLessonSerializer.Meta):
         model = Lesson
         fields = [
-            "room", "course", "start_time", "end_time", "weekday",
+            "room", "course", "start_time", "end_time",
             "date", "id", "absence", "classbook", "materials", "homeworks", "modifications", "submissions",
             "video_conference_link"
         ]

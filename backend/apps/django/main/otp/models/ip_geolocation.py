@@ -29,6 +29,7 @@ class IPGeolocation(RandomIDMixin):
         null=True
     )
     
+    # pragma: no cover
     @property
     def position(self) -> str:
         return f"{self.longitude} {self.latitude}"

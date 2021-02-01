@@ -19,15 +19,15 @@ class AbsenceFilterSet(filters.FilterSet):
     lesson__date__lte = filters.DateTimeFilter(field_name="lesson__date", lookup_expr="lte")
     lesson__date__gte = filters.DateTimeFilter(field_name="lesson__date", lookup_expr="gte")
     
-    reason__is_null = filters.BooleanFilter(method="reason__isnull")
+    contains_reason = filters.BooleanFilter(method="contains_reason_func")
     
-    def reason__isnull(self, qs: QueryType[LessonAbsence], name: str, value: bool, *args, **kwargs):
+    def contains_reason_func(self, qs: QueryType[LessonAbsence], name: str, value: bool, *args, **kwargs):
         if value:
             return qs \
                 .only("reason") \
-                .filter(Q(reason__isnull=True) | Q(reason__exact="")) \
-                .distinct()
+                .filter(reason__isnull=False) \
+                .exclude(reason="")
         return qs \
             .only("reason") \
-            .filter(reason__isnull=False) \
-            .exclude(reason="")
+            .filter(Q(reason__isnull=True) | Q(reason__exact="")) \
+            .distinct()

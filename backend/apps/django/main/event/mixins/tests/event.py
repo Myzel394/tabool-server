@@ -3,7 +3,7 @@ from abc import ABC
 import lorem
 
 from apps.django.main.school_data.mixins.tests import *
-from apps.django.utils.tests import *
+from apps.django.utils.tests_mixins import *
 from ...models import Event
 
 

@@ -4,7 +4,7 @@ from abc import ABC
 from django.db import models
 from django_hint import *
 
-from apps.django.utils.tests import UserTestMixin
+from apps.django.utils.tests_mixins import UserTestMixin
 
 
 class AssociatedUserTestMixin(UserTestMixin, ABC):
