@@ -14,7 +14,7 @@ from apps.django.main.event.sub.subserializers.modification.detail import Detail
 from apps.django.main.homework.models import Homework, Material
 from apps.django.main.homework.sub.subserializers.homework.detail import DetailHomeworkSerializer
 from apps.django.main.homework.sub.subserializers.material.detail import DetailMaterialSerializer
-from ....models import Lesson
+from ....models import Course, Lesson
 from ....serializers import DailyDataSerializer, RelatedDetailLessonSerializer
 
 
@@ -50,7 +50,7 @@ def daily_data(request: RequestType):
         .only("date") \
         .filter(date=targeted_date) \
         .order_by("start_time")
-    course_ids = lessons.values_list("course", flat=True).distinct()
+    course_ids = Course.objects.from_user(user).values_list("id", flat=True).distinct()
     modifications = Modification.objects \
         .only("lesson") \
         .filter(lesson__in=lessons) \
@@ -58,7 +58,8 @@ def daily_data(request: RequestType):
     homeworks = Homework.objects \
         .only("lesson", "due_date") \
         .filter(Q(userhomeworkrelation__isnull=True) | Q(userhomeworkrelation__completed=False)) \
-        .filter(Q(lesson__in=lessons) | Q(due_date__range=targeted_date_range)) \
+        .filter(Q(lesson__in=lessons) |
+                Q(due_date__gte=targeted_date, due_date__lte=targeted_date + timedelta(days=max_future_days))) \
         .distinct()
     exams = Exam.objects \
         .only("course", "targeted_date") \

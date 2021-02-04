@@ -25,7 +25,7 @@ class RoomViewSet(
     serializer_action_map = {
         "create": CreateRoomSerializer,
         "retrieve": DetailRoomSerializer,
-        "list": DetailSerializerViewSetMixin
+        "list": DetailRoomSerializer,
     }
     
     def get_queryset(self):

@@ -1,6 +1,8 @@
+import os
 from typing import *
 
 import gender_guesser.detector as gender
+import requests
 from bs4 import BeautifulSoup, Tag
 from torrequest import TorRequest
 
@@ -38,23 +40,27 @@ def scrape_teachers() -> List[TeacherInformationType]:
     found = []
     gender_detector = gender.Detector()
     
-    with TorRequest() as tr:
-        response = tr.get(URL)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.content, "html.parser")
+    if os.getenv("USE_TOR"):
+        client = TorRequest()
+    else:
+        client = requests.Session()
+    
+    response = client.get(URL)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.content, "html.parser")
+    
+    for row in soup.select("tbody tr"):  # type: Tag
+        first_name = row.select_one(f"td:nth-child({FIRST_NAME_INDEX})").get_text().strip()
+        last_name = row.select_one(f"td:nth-child({LAST_NAME_INDEX})").get_text().strip()
+        short_name = row.select_one(f"td:nth-child({SHORT_NAME_INDEX})").get_text().strip()
+        email = row.select_one("a[href^='mailto']")["href"].strip().lower()
         
-        for row in soup.select("tbody tr"):  # type: Tag
-            first_name = row.select_one(f"td:nth-child({FIRST_NAME_INDEX})").get_text().strip()
-            last_name = row.select_one(f"td:nth-child({LAST_NAME_INDEX})").get_text().strip()
-            short_name = row.select_one(f"td:nth-child({SHORT_NAME_INDEX})").get_text().strip()
-            email = row.select_one("a[href^='mailto']")["href"].strip().lower()
-            
-            found.append({
-                "first_name": first_name,
-                "last_name": last_name,
-                "short_name": short_name,
-                "email": email,
-                "gender": GENDER_MAP[gender_detector.get_gender(first_name, "germany")]
-            })
+        found.append({
+            "first_name": first_name,
+            "last_name": last_name,
+            "short_name": short_name,
+            "email": email,
+            "gender": GENDER_MAP[gender_detector.get_gender(first_name, "germany")]
+        })
     
     return found

@@ -1,7 +1,9 @@
+import os
 import random
 from dataclasses import dataclass
 from typing import *
 
+import requests
 from torrequest import TorRequest
 
 from .parsers import BaseParser, LoginParser
@@ -22,7 +24,10 @@ class Request:
     second_session_data: Optional[str] = None
     
     def __post_init__(self):
-        self.client = TorRequest()
+        if os.getenv("USE_TOR"):
+            self.client = TorRequest()
+        else:
+            self.client = requests.Session()
     
     def __enter__(self):
         self.login()
