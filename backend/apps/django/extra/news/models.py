@@ -7,8 +7,8 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_common_utils.libraries.models.mixins.date import EditCreationDateMixin
 from django_lifecycle import LifecycleModel
 
+from apps.django.authentication.user.public import *
 from apps.django.extra.news.public import *
-from apps.django.main.authentication.public import *
 from constants import maxlength
 
 __all__ = [

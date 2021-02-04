@@ -3,9 +3,8 @@ from django.contrib.auth import get_user_model
 
 if settings.DEBUG:
     from dotenv import load_dotenv
-    import random, string, names, os
+    import random, string, names
     
-    from apps.django.main.authentication.models import *
     # noinspection PyUnresolvedReferences
     from apps.django.main.event.models import *
     # noinspection PyUnresolvedReferences
@@ -22,7 +21,7 @@ if settings.DEBUG:
         return set(model.objects.all().values_list(field, flat=True))
     
     
-    def create_user(confirm: bool = True, scooso_data: bool = True, staff: bool = False):
+    def create_user(confirm: bool = True, staff: bool = False):
         load_dotenv()
         User = get_user_model()
         
@@ -35,12 +34,6 @@ if settings.DEBUG:
         
         if confirm:
             user.confirm_email(user.confirmation_key)
-        if scooso_data:
-            user_scooso_data = ScoosoData.objects.create(
-                user=user,
-                username=os.getenv("SCOOSO_USERNAME", "username"),
-                password=os.getenv("SCOOSO_PASSWORD", "password")
-            )
         if staff:
             user.is_superuser = True
             user.is_staff = True

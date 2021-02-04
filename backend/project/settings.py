@@ -67,15 +67,11 @@ INSTALLED_APPS = [
     "fcm_django",
     "django_rest_passwordreset",
     
-    "apps.django.main.authentication.apps.AuthenticationConfig",
-    "apps.django.main.school_data",
-    "apps.django.main.lesson",
-    "apps.django.main.event",
-    "apps.django.main.homework",
-    "apps.django.main.otp",
-    "apps.django.main.sessions.apps.SessionsConfig",
+    "apps.django.authentication.user",
+    "apps.django.authentication.otp",
+    "apps.django.authentication.sessions.apps.SessionsConfig",
+    "apps.django.main.course",
     
-    "apps.django.extra.scooso_scraper",
     "apps.django.extra.news",
     "apps.django.extra.poll",
     
@@ -139,7 +135,7 @@ CRONJOBS = [
 ]
 CRONTAB_LOCK_JOBS = True
 
-AUTH_USER_MODEL = "authentication.User"
+AUTH_USER_MODEL = "user.User"
 
 ROOT_URLCONF = "project.urls"
 

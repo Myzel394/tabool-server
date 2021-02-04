@@ -1,138 +1,18 @@
 import random
 import string
-from contextlib import contextmanager
 from datetime import date, datetime, time, timedelta
 from typing import *
 
-import names
-from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 
-from apps.django.extra.scooso_scraper.mixins.tests import *
-from apps.django.main.authentication.models import ScoosoData, Student
-from apps.django.main.school_data.models import Teacher
-from apps.django.main.school_data.options import GenderChoices
 from apps.utils.dates import find_next_date_by_weekday
 from apps.utils.time import dummy_datetime_from_target
 from constants import weekdays
 
-if TYPE_CHECKING:
-    from apps.django.main.authentication.models import User
-
 __all__ = [
-    "UserTestMixin", "StartTimeEndTimeTestMixin", "ClientTestMixin", "joinkwargs", "DateUtilsTestMixin",
+    "ClientTestMixin", "joinkwargs", "DateUtilsTestMixin",
     "UtilsTestMixin"
 ]
-
-
-class UserTestMixin(DummyUser):
-    def Create_user(
-            self,
-            is_confirmed: bool = True,
-            create_scooso_data: bool = True,
-            is_active: bool = True,
-            has_filled_out_data: bool = True,
-            student: bool = True,
-            **kwargs
-    ) -> settings.AUTH_USER_MODEL:
-        Model = get_user_model()
-        first_name = names.get_first_name()
-        last_name = names.get_last_name()
-        password = kwargs.pop("password", first_name)
-        
-        user: "User" = Model.objects.create_user(
-            **{
-                "first_name": first_name,
-                "last_name": last_name,
-                "email": f"{first_name}.{last_name}@gmail.com",
-                "password": password,
-                **kwargs
-            }
-        )
-        
-        if is_confirmed:
-            user.confirm_email(user.confirmation_key)
-            
-            if student:
-                Student.objects.create(
-                    class_number=12,
-                    user=user,
-                    main_teacher=Teacher.objects.create(
-                        first_name="A",
-                        last_name="B",
-                        email="test@gmail.com",
-                        gender=GenderChoices.MALE,
-                        short_name="BLL"
-                    )
-                )
-        if create_scooso_data:
-            self.load_dummy_user()
-            ScoosoData.objects.create(
-                user=user,
-                username=self.username,
-                password=self.password,
-                scooso_id=self.scooso_id
-            )
-        user.has_filled_out_data = has_filled_out_data
-        user.is_active = is_active
-        user.save()
-        
-        return user
-    
-    def Login_user(
-            self,
-            user: Optional[settings.AUTH_USER_MODEL] = None,
-            password: Optional[str] = None
-    ) -> settings.AUTH_USER_MODEL:
-        """Logs the client in and returns the user with which the client was logged in"""
-        self.assertTrue(hasattr(self, "client"), "`client` not available. Add it to the mixins of the test class.")
-        
-        user = user or self.Create_user()
-        
-        is_login = self.client.login(
-            email=user.email,
-            password=password or user.first_name
-        )
-        
-        self.assertTrue(is_login, "Couldn't login the user")
-        
-        return user
-    
-    @staticmethod
-    def Get_random_password(level: str = "strong") -> str:
-        if level == "weak":
-            return random.choice(string.ascii_letters + string.digits) * random.choice([2, 5, 12, 20])
-        return "".join(
-            random.choices(
-                string.ascii_letters + string.digits,
-                k=random.choice([12, 14, 20, 24])
-            )
-        )
-    
-    @contextmanager
-    def Login_user_as_context(self, *args, **kwargs):
-        previous_value = getattr(self.__class__, "associated_user", None)
-        
-        try:
-            user = self.Login_user(*args, **kwargs)
-            self.__class__.associated_user = user
-            yield user
-        finally:
-            self.client.logout()
-            self.__class__.associated_user = previous_value
-
-
-class StartTimeEndTimeTestMixin(TestCase):
-    DURATION = 45
-    
-    @staticmethod
-    def start_time() -> time:
-        return datetime.now().time()
-    
-    @classmethod
-    def end_time(cls) -> time:
-        return (dummy_datetime_from_target(cls.start_time()) + timedelta(minutes=cls.DURATION)).time()
 
 
 class DateUtilsTestMixin(TestCase):

@@ -1,13 +1,16 @@
+import secrets
+import string
+
 from django.db import models
 from django.utils.translation import gettext as _
-from django_common_utils.libraries.models.mixins import RandomIDMixin
+from django_lifecycle import LifecycleModel
 
-from apps.django.main.authentication.public import *
-from apps.django.main.authentication.public import model_names as auth_names
+from apps.django.authentication.user.public import *
+from apps.django.authentication.user.public import model_names as auth_names
 from apps.django.utils.fields.color import ColorField
 
 __all__ = [
-    "ColorMixin", "AssociatedUserMixin", "AddedAtMixin", "UserModelRelationMixin", "ScoosoDataMixin"
+    "ColorMixin", "AssociatedUserMixin", "AddedAtMixin", "UserModelRelationMixin", "IdMixin"
 ]
 
 
@@ -54,12 +57,30 @@ class UserModelRelationMixin(models.Model):
     )
 
 
-class ScoosoDataMixin(RandomIDMixin):
+class IdMixin(LifecycleModel):
     class Meta:
         abstract = True
     
-    scooso_id = models.PositiveIntegerField(
-        verbose_name=_("Scooso-ID"),
-        blank=True,
-        null=True
+    ID_LENGTH = 8
+    
+    id = models.CharField(
+        max_length=ID_LENGTH,
+        unique=True,
+        primary_key=True
     )
+    
+    def save(self, *args, **kwargs):
+        available_ids = set(self.__class__.objects.all().values_list("id", flat=True))
+        
+        while True:
+            object_id = "".join(
+                secrets.choice(string.ascii_letters + string.digits)
+                for _ in range(self.ID_LENGTH)
+            )
+            
+            if object_id not in available_ids:
+                break
+        
+        self.id = object_id
+        
+        return super().save(*args, **kwargs)

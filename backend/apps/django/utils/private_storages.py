@@ -3,14 +3,14 @@ from pathlib import Path
 from django.conf import settings
 from private_storage.models import PrivateFile
 
-from apps.django.main.homework.models import Material, Submission
+# from apps.django.main.homework.models import Material, Submission
 
 __all__ = [
     "private_storage_access_check"
 ]
 
 storage_models = [
-    Material, Submission
+    # Material, Submission
 ]
 
 

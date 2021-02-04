@@ -3,6 +3,7 @@ version: "3.7"
 services:
   web:
     build: ./
+    command:
     volumes:
       - .:/app/
     ports:

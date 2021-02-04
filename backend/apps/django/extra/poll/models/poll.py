@@ -9,7 +9,7 @@ from django_common_utils.libraries.models.mixins import CreationDateMixin, Rando
 from django_hint import *
 from django_lifecycle import BEFORE_SAVE, hook, LifecycleModel
 
-from apps.django.main.authentication.public import model_names as auth_names
+from apps.django.authentication.user.public import model_names as auth_names
 from ..public.model_names import POLL_NAME, POLL_NAME_PLURAL
 from ..querysets import PollQuerySet
 

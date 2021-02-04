@@ -1,8 +1,0 @@
-APP_LABEL = "homework"
-
-
-class UPLOAD_STATUSES:
-    RESTING = "RESTING"
-    UPLOADED = "UPLOADED"
-    PENDING = "PENDING"
-    FAILED = "FAILED"

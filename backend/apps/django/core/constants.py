@@ -1,4 +1,4 @@
-from apps.django.main.authentication.constants import ClassLevel
+from apps.django.authentication.user.constants import ClassLevel
 
 __all__ = [
     "PRIMARY_CLASS_CONTACT_EMAIL", "SECONDARY_CLASS_CONTACT_EMAIL", "CONTACT_MAIL_MAP"

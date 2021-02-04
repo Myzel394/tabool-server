@@ -2,7 +2,7 @@ from django_hint import RequestType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from apps.django.main.school_data.serializers import DetailTeacherSerializer
+# from apps.django.main.school_data.serializers import DetailTeacherSerializer
 from .... import constants
 
 
@@ -16,5 +16,5 @@ def contacts(request: RequestType):
     
     return Response({
         "illness_report_email": constants.CONTACT_MAIL_MAP[class_level],
-        "main_teacher": DetailTeacherSerializer(instance=main_teacher, context=serializer_context).data,
+        "main_teacher": None  # DetailTeacherSerializer(instance=main_teacher, context=serializer_context).data,
     })
