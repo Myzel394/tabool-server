@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "apps.django.authentication.otp",
     "apps.django.authentication.sessions.apps.SessionsConfig",
     "apps.django.main.course",
+    "apps.django.main.timetable",
     
     "apps.django.extra.news",
     "apps.django.extra.poll",

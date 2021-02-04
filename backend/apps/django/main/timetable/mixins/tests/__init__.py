@@ -1,2 +1,2 @@
-from .lesson import *
 from .timetable import *
+from .lesson import *
