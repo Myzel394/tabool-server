@@ -11,6 +11,7 @@ from apps.django.authentication.user.views import (
 from apps.django.core.views import contacts
 from apps.django.extra.poll import routers as poll_routers
 from apps.django.main.course import routers as course_routers
+from apps.django.main.homework import routers as homework_routers
 from apps.django.utils.urls import build_patterns
 
 
@@ -23,6 +24,15 @@ data_patterns = build_patterns("data", [
     poll_routers.data_router.urls,
     user_routers.data_router.urls,
     course_routers.data_router.urls,
+    homework_routers.data_router.urls,
+])
+
+student_patterns = build_patterns("student", [
+    homework_routers.student_router.urls
+])
+
+teacher_patterns = build_patterns("teacher", [
+    homework_routers.teacher_router.urls
 ])
 
 relation_patterns = build_patterns("user-relation", [
@@ -57,3 +67,5 @@ urlpatterns = [
 
 urlpatterns += data_patterns
 urlpatterns += relation_patterns
+urlpatterns += student_patterns
+urlpatterns += teacher_patterns

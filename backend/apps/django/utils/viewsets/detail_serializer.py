@@ -52,7 +52,7 @@ class DetailSerializerViewSetMixin(viewsets.GenericViewSet):
         
         # Return with detail serializer
         context = self.get_serializer_context()
-        instance_serializer = self.detail_serializer()(instance=instance, context=context)
+        instance_serializer = self.get_detail_serializer()(instance=instance, context=context)
         return Response(instance_serializer.data)
     
     def get_serializer_class(self):

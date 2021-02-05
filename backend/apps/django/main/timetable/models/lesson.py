@@ -10,6 +10,7 @@ from apps.django.main.course.public import model_names as course_names
 from apps.django.utils.fields import WeekdayField
 from ..public import *
 from ..public import model_names
+from ..sub.subquerysets.lesson import LessonQuerySet
 from ..validators import validate_no_timetable_overlap
 
 if TYPE_CHECKING:
@@ -26,6 +27,8 @@ class Lesson(RandomIDMixin, LifecycleModel):
         verbose_name = model_names.LESSON
         verbose_name_plural = model_names.LESSON_PLURAL
         ordering = ("weekday", "start_hour", "end_hour")
+    
+    objects = LessonQuerySet.as_manager()
     
     timetable = models.ForeignKey(
         TIMETABLE,

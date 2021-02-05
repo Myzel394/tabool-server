@@ -73,7 +73,6 @@ class WritableIDField(serializers.Field):
         "object_not_found": _("Das Objekt wurde nicht gefunden"),
         "invalid_type": _("Ungültiger Typ")
     }
-    detail_serializer: Optional[Type[serializers.Serializer]] = None
     
     @staticmethod
     def default_get_qs(key, request: RequestType, instance):
@@ -93,15 +92,10 @@ class WritableIDField(serializers.Field):
         self.lookup_field = lookup_field
         self.many = many
         self.detail = detail
+        self.write_only = True
     
     def to_representation(self, value):
-        assert hasattr(self, "detail_serializer") and self.detail_serializer is not None, \
-            f"No `detail_serializer` found on {self.__class__.__name__}."
-        
-        if not self.detail:
-            return getattr(value, self.lookup_field)
-        
-        return self.detail_serializer(value, context=self.context).data
+        raise NotImplementedError("to_representation shouldn't be called")
     
     def to_internal_value(self, data):
         if data is empty:

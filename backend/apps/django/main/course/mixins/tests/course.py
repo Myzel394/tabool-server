@@ -8,6 +8,8 @@ from .subject import SubjectTestMixin
 
 
 class CourseTestMixin(RoomTestMixin, SubjectTestMixin, UserTestMixin):
+    associated_participants = []
+    
     @classmethod
     def Create_course(cls, **kwargs) -> Course:
         participants = kwargs.pop("participants", [])
@@ -19,6 +21,12 @@ class CourseTestMixin(RoomTestMixin, SubjectTestMixin, UserTestMixin):
                 "course_number": lambda: random.randint(1, 5)
             }, kwargs)
         )
-        course.participants.add(*participants)
+        course.participants.add(
+            *participants,
+            *getattr(cls, "associated_participants", [])
+        )
+        
+        if hasattr(cls, "associated_user"):
+            course.participants.add(cls.associated_user)
         
         return course

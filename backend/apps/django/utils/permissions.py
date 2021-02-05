@@ -8,7 +8,8 @@ if TYPE_CHECKING:
     from apps.django.authentication.user.models import User
 
 __all__ = [
-    "AuthenticationAndActivePermission", "unauthorized_handler", "AdvancedPermissionsForTeacher"
+    "AuthenticationAndActivePermission", "unauthorized_handler", "IsTeacher", "IsStudent", "IsTeacherElseReadOnly",
+    "IsStudentElseReadOnly"
 ]
 
 
@@ -35,9 +36,27 @@ class AuthenticationAndActivePermission(permissions.IsAuthenticated):
         return is_user_authorized(request.user)
 
 
-class AdvancedPermissionsForTeacher(permissions.BasePermission):
+class IsTeacher(permissions.BasePermission):
     def has_permission(self, request: RequestType, view):
+        return request.user.is_teacher
+
+
+class IsStudent(permissions.BasePermission):
+    def has_permission(self, request: RequestType, view):
+        return request.user.is_student
+
+
+class IsTeacherElseReadOnly(IsTeacher):
+    def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
         
-        return request.user.is_teacher
+        return super().has_permission(request, view)
+
+
+class IsStudentElseReadOnly(IsStudent):
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        
+        return super().has_permission(request, view)

@@ -4,10 +4,7 @@ from rest_framework.filters import SearchFilter
 from apps.django.authentication.user.constants import STUDENT, TEACHER
 from apps.django.utils.viewsets import DetailSerializerViewSetMixin, RetrieveFromUserMixin
 from ....models import Course
-from ....serializers import (
-    StudentDetailCourseSerializer, StudentListCourseSerializer, TeacherDetailCourseSerializer,
-    TeacherListCourseSerializer,
-)
+from ....serializers import ListCourseSerializer, StudentDetailCourseSerializer, TeacherDetailCourseSerializer
 
 __all__ = [
     "CourseViewSet"
@@ -28,9 +25,11 @@ class CourseViewSet(
     }
     serializer_action_map = {
         STUDENT: {
-            "list": StudentListCourseSerializer,
+            "list": ListCourseSerializer,
+            "retrieve": StudentDetailCourseSerializer
         },
         TEACHER: {
-            "list": TeacherListCourseSerializer
+            "list": ListCourseSerializer,
+            "retrieve": TeacherDetailCourseSerializer
         }
     }

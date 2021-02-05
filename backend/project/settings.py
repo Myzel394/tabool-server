@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     "apps.django.authentication.sessions.apps.SessionsConfig",
     "apps.django.main.course",
     "apps.django.main.timetable",
+    "apps.django.main.homework",
     
     "apps.django.extra.news",
     "apps.django.extra.poll",

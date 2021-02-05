@@ -6,7 +6,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_hint import *
 
 from ..public import model_names
-from ..querysets import TimetableQuerySet
+from ..sub.subquerysets.timetable import TimetableQuerySet
 
 if TYPE_CHECKING:
     from . import Lesson
