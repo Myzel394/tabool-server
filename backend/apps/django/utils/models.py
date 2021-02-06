@@ -70,17 +70,18 @@ class IdMixin(LifecycleModel):
     )
     
     def save(self, *args, **kwargs):
-        available_ids = set(self.__class__.objects.all().values_list("id", flat=True))
-        
-        while True:
-            object_id = "".join(
-                secrets.choice(string.ascii_letters + string.digits)
-                for _ in range(self.ID_LENGTH)
-            )
+        if self.id is None or self.id == "":
+            available_ids = set(self.__class__.objects.all().values_list("id", flat=True))
             
-            if object_id not in available_ids:
-                break
-        
-        self.id = object_id
+            while True:
+                object_id = "".join(
+                    secrets.choice(string.ascii_letters + string.digits)
+                    for _ in range(self.ID_LENGTH)
+                )
+                
+                if object_id not in available_ids:
+                    break
+            
+            self.id = object_id
         
         return super().save(*args, **kwargs)

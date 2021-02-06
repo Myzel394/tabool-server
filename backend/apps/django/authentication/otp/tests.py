@@ -1,1 +1,2 @@
-from .sub.subtests import *
+from .sub.subtests.otp import *
+from .sub.subtests.authentication import *

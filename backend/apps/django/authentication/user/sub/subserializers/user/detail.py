@@ -14,9 +14,10 @@ class DetailUserSerializer(BaseUserSerializer):
 
 
 class UserInformationSerializer(BaseUserSerializer):
-    fields = [
-        "has_filled_out_data", "preference", "is_confirmed", "first_name", "last_name",
-        "email", "id"
-    ]
+    class Meta(BaseUserSerializer.Meta):
+        fields = [
+            "preference", "is_confirmed", "first_name", "last_name",
+            "email", "id"
+        ]
     
     preference = DetailPreferenceSerializer()

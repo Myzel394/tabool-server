@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.test import TestCase
 from user_sessions.models import Session
 
-from apps.django.utils.tests_mixins import UserTestMixin
+from apps.django.authentication.user.mixins import UserTestMixin
 
 
 class SessionsTest(UserTestMixin):

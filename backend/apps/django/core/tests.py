@@ -1,12 +1,10 @@
+from apps.django.authentication.user.mixins import UserTestMixin
 from apps.django.core.constants import PRIMARY_CLASS_CONTACT_EMAIL, SECONDARY_CLASS_CONTACT_EMAIL
-from apps.django.main.authentication.models import Student
-from apps.django.main.school_data.mixins.tests import TeacherTestMixin
-from apps.django.utils.tests_mixins import ClientTestMixin, UserTestMixin
 
 
-class ContactAPI(UserTestMixin, TeacherTestMixin, ClientTestMixin):
+class ContactAPI(UserTestMixin):
     def setUp(self) -> None:
-        self.user = self.Login_user()
+        self.user = self.Login_student()
         self.__class__.associated_user = self.user
     
     def change_class_number(self, class_number: int):

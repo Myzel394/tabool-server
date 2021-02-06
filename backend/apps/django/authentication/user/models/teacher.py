@@ -50,8 +50,11 @@ class Teacher(IdMixin):
     def clean(self):
         if not self.user.is_confirmed:
             raise ValidationError(_("Bestätige deine E-Mail."))
+        
+        if self.has_changed("user.id"):
+            raise ValidationError(_("Der Benutzer kann nicht verändert werden."))
     
     @hook(BEFORE_CREATE)
-    @hook(BEFORE_UPDATE, when="user", has_changed=True)
+    @hook(BEFORE_UPDATE, when="user.id", has_changed=True)
     def _hook_call_full_clean(self):
         self.full_clean()

@@ -1,10 +1,10 @@
-from apps.django.authentication.otp import OTP
-from apps.django.utils.tests_mixins import UserTestMixin
+from apps.django.authentication.otp.models import OTP
+from apps.django.authentication.user.mixins import UserTestMixin
 
 
 class OTPISValidTest(UserTestMixin):
     def setUp(self) -> None:
-        self.user = self.Create_user()
+        self.user = self.Create_student_user()
         self.otp = OTP.objects.create(
             associated_user=self.user
         )

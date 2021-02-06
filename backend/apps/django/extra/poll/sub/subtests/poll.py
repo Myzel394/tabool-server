@@ -3,10 +3,10 @@ from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 from django.test import override_settings
 
+from apps.django.authentication.user.mixins import UserTestMixin
 from apps.django.extra.poll.mixins.tests import PollTestMixin
 from apps.django.extra.poll.models import Poll, Vote
 from apps.django.extra.poll.utils import add_user_vote, get_results, has_voted
-from apps.django.utils.tests_mixins import ClientTestMixin, UserTestMixin
 
 
 class PollTest(UserTestMixin, PollTestMixin):
@@ -26,7 +26,7 @@ class PollTest(UserTestMixin, PollTestMixin):
             poll.save()
     
     def test_qs(self):
-        user = self.Login_user()
+        user = self.Login_student()
         poll = self.Create_poll()
         add_user_vote(
             poll=poll,
@@ -42,7 +42,7 @@ class PollTest(UserTestMixin, PollTestMixin):
         get_results(self.Create_poll())
 
 
-class APITest(ClientTestMixin, UserTestMixin, PollTestMixin):
+class APITest(UserTestMixin, PollTestMixin):
     def setUp(self):
         self.user = self.Login_user()
         self.__class__.associated_user = self.user
@@ -118,7 +118,7 @@ class APITest(ClientTestMixin, UserTestMixin, PollTestMixin):
         self.assertIsNotNone(response.data["results"])
 
 
-class PollAmountTest(ClientTestMixin, UserTestMixin, PollTestMixin):
+class PollAmountTest(UserTestMixin, PollTestMixin):
     def setUp(self):
         self.user = self.Login_user()
         self.__class__.associated_user = self.user

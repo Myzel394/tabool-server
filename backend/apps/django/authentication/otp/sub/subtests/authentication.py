@@ -2,11 +2,11 @@ import random
 import string
 from datetime import datetime, timedelta
 
-from apps.django.authentication.otp import OTP
-from apps.django.utils.tests_mixins import ClientTestMixin, UserTestMixin
+from apps.django.authentication.otp.models import OTP
+from apps.django.authentication.user.mixins import UserTestMixin
 
 
-class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):
+class AuthenticationOTPTest(UserTestMixin):
     def setUp(self) -> None:
         self.user_password = self.Get_random_password()
         
@@ -51,7 +51,7 @@ class AuthenticationOTPTest(UserTestMixin, ClientTestMixin):
         otp = self.request()
         
         # Make otp expired
-        otp.expire_date = datetime.now() - timedelta(minutes=20)
+        otp.expire_date = datetime.now() - timedelta(days=20)
         otp.save()
         
         response = self.client.post("/api/auth/login/", {

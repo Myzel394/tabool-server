@@ -1,9 +1,9 @@
 from django_rest_passwordreset.models import ResetPasswordToken
 
-from apps.django.utils.tests_mixins import ClientTestMixin, UserTestMixin
+from apps.django.authentication.user.mixins import UserTestMixin
 
 
-class ForgotPasswordTest(UserTestMixin, ClientTestMixin):
+class ForgotPasswordTest(UserTestMixin):
     def setUp(self):
         self.user = self.Login_user()
         self.__class__.associated_user = self.user

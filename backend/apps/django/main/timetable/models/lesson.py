@@ -60,6 +60,6 @@ class Lesson(RandomIDMixin, LifecycleModel):
         return super().clean()
     
     @hook(BEFORE_CREATE)
-    @hook(BEFORE_UPDATE, when="timetable", has_changed=True)
+    @hook(BEFORE_UPDATE, when="timetable.id", has_changed=True)
     def _hook_full_clean(self):
         self.full_clean()

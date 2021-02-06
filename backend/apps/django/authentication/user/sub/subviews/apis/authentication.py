@@ -43,7 +43,9 @@ class LoginView(views.APIView):
         
         :return: Valid, payload
         """
-        available_otps = OTP.objects.only("associated_user").filter(associated_user=user)
+        available_otps = OTP.objects \
+            .only("associated_user") \
+            .filter(associated_user=user)
         valid_otps = available_otps \
             .only("expire_date") \
             .filter(expire_date__gte=datetime.now())
@@ -101,7 +103,7 @@ class LoginView(views.APIView):
         
         login(request, user)
         
-        user_data = UserInformationSerializer(user).data
+        user_data = UserInformationSerializer(instance=user).data
         return Response(user_data)
 
 

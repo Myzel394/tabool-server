@@ -12,7 +12,7 @@ class LessonTestMixin(TimetableTestMixin, CourseTestMixin):
     associated_timetable: Optional[Timetable]
     
     @classmethod
-    def Create_lesson_argument(cls):
+    def Create_lesson_argument(cls, lesson: Optional[Lesson] = None):
         lesson = cls.Create_lesson()
         
         return {

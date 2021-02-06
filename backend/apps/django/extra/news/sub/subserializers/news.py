@@ -1,4 +1,4 @@
-from apps.django.main.authentication.sub.subserializers.user import UserDetailSerializer
+from apps.django.authentication.user.serializers import DetailUserSerializer
 from apps.django.utils.serializers import RandomIDSerializerMixin
 from ...models import News
 
@@ -22,4 +22,4 @@ class NewsDetailSerializer(RandomIDSerializerMixin):
             "title", "html", "author", "created_at", "edited_at", "id"
         ]
     
-    user = UserDetailSerializer()
+    author = DetailUserSerializer()
