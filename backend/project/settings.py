@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     "apps.django.main.course",
     "apps.django.main.timetable",
     "apps.django.main.homework",
+    "apps.django.main.event",
     
     "apps.django.extra.news",
     "apps.django.extra.poll",
