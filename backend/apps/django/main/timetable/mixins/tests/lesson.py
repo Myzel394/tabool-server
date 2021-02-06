@@ -12,21 +12,21 @@ class LessonTestMixin(TimetableTestMixin, CourseTestMixin):
     associated_timetable: Optional[Timetable]
     
     @classmethod
-    def Create_lesson_argument(cls, lesson: Optional[Lesson] = None):
+    def Create_lesson_argument(cls, lesson: Optional[Lesson] = None, lesson_date: Optional[date] = None):
         lesson = cls.Create_lesson()
         
         return {
             "lesson": lambda: lesson,
-            "lesson_date": lambda: find_next_date_by_weekday(date.today(), lesson.weekday)
+            "lesson_date": lambda: lesson_date or find_next_date_by_weekday(date.today(), lesson.weekday)
         }
     
     @classmethod
-    def get_lesson_argument(cls, lesson: Optional[Lesson] = None) -> dict:
+    def get_lesson_argument(cls, lesson: Optional[Lesson] = None, lesson_date: Optional[date] = None) -> dict:
         lesson = lesson or cls.Create_lesson()
         
         return {
             "lesson": lesson.id,
-            "lesson_date": find_next_date_by_weekday(date.today(), lesson.weekday)
+            "lesson_date": lesson_date or find_next_date_by_weekday(date.today(), lesson.weekday)
         }
     
     @classmethod

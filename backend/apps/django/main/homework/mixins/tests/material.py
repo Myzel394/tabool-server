@@ -16,6 +16,7 @@ __all__ = [
 class MaterialTestMixin(LessonTestMixin):
     @classmethod
     def Create_material(cls, **kwargs) -> Material:
+        lesson = kwargs.pop("lesson", None) or cls.Create_lesson()
         random_id = "".join(random.choices(string.ascii_letters + string.digits, k=5))
         filename = f"uploaded_file_at_{random_id}.txt"
         
@@ -27,6 +28,6 @@ class MaterialTestMixin(LessonTestMixin):
                     (lorem.paragraph() * 3).encode(),
                     "text/plain"
                 ),
-                **cls.Create_lesson_argument()
+                **cls.Create_lesson_argument(lesson, kwargs.pop("lesson_date", None))
             }, kwargs)
         )

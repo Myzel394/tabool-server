@@ -40,6 +40,6 @@ class HomeworkTestMixin(LessonTestMixin, UtilsTestMixin):
             **joinkwargs({
                 "due_date": lambda: find_next_date_by_weekday(date.today(), lesson.weekday),
                 "information": lorem.text,
-                **cls.Create_lesson_argument(lesson)
+                **cls.Create_lesson_argument(lesson, kwargs.pop("lesson_date", None))
             }, kwargs)
         )

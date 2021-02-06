@@ -11,8 +11,9 @@ from apps.django.authentication.user.views import (
 from apps.django.core.views import contacts
 from apps.django.extra.poll import routers as poll_routers
 from apps.django.main.course import routers as course_routers
+from apps.django.main.day.views import student_day_view, student_lesson_view, teacher_day_view, teacher_lesson_view
 from apps.django.main.homework import routers as homework_routers
-from apps.django.main.homework.sub.subviews import HomeworkAutocompleteView
+from apps.django.main.homework.views import HomeworkAutocompleteView
 from apps.django.utils.urls import build_patterns
 
 
@@ -49,6 +50,13 @@ urlpatterns = [
     path("api/data/contacts/", contacts),
     # path("api/data/timetable/", timetable),
     # path("api/data/daily-data/", daily_data),
+    
+    # Student
+    path("api/student/day/", student_day_view),
+    path("api/student/lesson/", student_lesson_view),
+    # Teacher
+    path("api/teacher/day/", teacher_day_view),
+    path("api/teacher/lesson/", teacher_lesson_view),
     
     # Autocomplete
     path("api/autocomplete/homework/type/", HomeworkAutocompleteView.as_view()),

@@ -1,3 +1,4 @@
+from apps.django.main.timetable.sub.subserializers.lesson import DetailLessonSerializer
 from .base import BaseModificationSerializer
 
 __all__ = [

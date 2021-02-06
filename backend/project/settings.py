@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "apps.django.main.timetable",
     "apps.django.main.homework",
     "apps.django.main.event",
+    "apps.django.main.day",
     
     "apps.django.extra.news",
     "apps.django.extra.poll",
