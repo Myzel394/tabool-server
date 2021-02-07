@@ -1,5 +1,4 @@
 import calendar
-from typing import *
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -16,17 +15,6 @@ __all__ = [
 
 
 def validate_lesson(instance: "LessonMixin"):
-    if instance.USER_FIELD:
-        qs = Lesson.objects.from_user(getattr(instance, instance.USER_FIELD))
-    else:
-        qs = Lesson.objects.all()
-    
-    # Validate access
-    if instance.lesson not in qs:
-        raise ValidationError(
-            _("Du hast keinen Zugriff auf diese Unterrichtsstunde.")
-        )
-    
     # Validate date
     valid_weekday = instance.lesson.weekday
     if instance.lesson_date.weekday() != valid_weekday:
@@ -41,8 +29,6 @@ def validate_lesson(instance: "LessonMixin"):
 class LessonMixin(LifecycleModel):
     class Meta:
         abstract = True
-    
-    USER_FIELD: Optional[str] = None
     
     lesson = models.ForeignKey(
         LESSON,

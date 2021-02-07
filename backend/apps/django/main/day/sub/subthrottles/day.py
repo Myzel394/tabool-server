@@ -6,8 +6,14 @@ __all__ = [
 
 
 class BurstDayViewThrottle(UserRateThrottle):
-    THROTTLE_RATES = "10/min"
+    THROTTLE_RATES = {
+        "burst_day": "30/min"
+    }
+    scope = "burst_day"
 
 
 class SustainedDayViewThrottle(UserRateThrottle):
-    THROTTLE_RATES = "200/day"
+    THROTTLE_RATES = {
+        "sustained_day": "500/day"
+    }
+    scope = "sustained_day"

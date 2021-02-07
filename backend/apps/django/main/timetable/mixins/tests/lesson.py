@@ -13,7 +13,7 @@ class LessonTestMixin(TimetableTestMixin, CourseTestMixin):
     
     @classmethod
     def Create_lesson_argument(cls, lesson: Optional[Lesson] = None, lesson_date: Optional[date] = None):
-        lesson = cls.Create_lesson()
+        lesson = lesson or cls.Create_lesson()
         
         return {
             "lesson": lambda: lesson,
@@ -35,7 +35,7 @@ class LessonTestMixin(TimetableTestMixin, CourseTestMixin):
             **joinkwargs({
                 "timetable": lambda: getattr(cls, "associated_timetable", cls.Create_timetable()),
                 "course": cls.Create_course,
-                "weekday": lambda: random.randint(1, 5),
+                "weekday": lambda: random.randint(0, 4),
                 "start_hour": lambda: random.randint(1, 13),
                 "end_hour": lambda: random.randint(1, 13),
             }, kwargs)

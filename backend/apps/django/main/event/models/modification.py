@@ -9,8 +9,6 @@ from apps.django.authentication.user.public import model_names as auth_names
 from apps.django.main.course.public import *
 from apps.django.main.course.public import model_names as course_names
 from apps.django.main.timetable.mixins import LessonMixin
-from apps.django.main.timetable.public import *
-from apps.django.main.timetable.public import model_names as timetable_names
 from apps.utils.texts import max_length_from_choices
 from ..options import ModificationTypeOptions
 from ..public import model_names
@@ -19,7 +17,6 @@ from ..querysets import ModificationQuerySet
 if TYPE_CHECKING:
     from apps.django.authentication.user.models import Teacher
     from apps.django.main.course.models import Room, Subject
-    from apps.django.main.timetable.models import Lesson
 
 __all__ = [
     "Modification"
@@ -33,12 +30,6 @@ class Modification(RandomIDMixin, LessonMixin):
         ordering = ("lesson_date", "lesson__start_hour",)
     
     objects = ModificationQuerySet.as_manager()
-    
-    lesson = models.ForeignKey(
-        LESSON,
-        on_delete=models.CASCADE,
-        verbose_name=timetable_names.LESSON
-    )  # type: Lesson
     
     new_room = models.ForeignKey(
         ROOM,

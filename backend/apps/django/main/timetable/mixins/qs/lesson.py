@@ -43,7 +43,7 @@ def get_via_referenced_lesson_date_range(
         **kwargs,
 ) -> Union[T, QueryType[T], None]:
     if many:
-        qs \
+        return qs \
             .only("lesson_date", *kwargs.keys()) \
             .filter(lesson_date__gte=start_date, lesson_date__lte=end_date, **kwargs)
     

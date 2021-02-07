@@ -7,6 +7,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from apps.django.main.course.public import *
 from apps.django.main.course.public import model_names as course_names
 from ..public import model_names
+from ..sub.subquerysets.event import EventQuerySet
 
 if TYPE_CHECKING:
     from apps.django.main.course.models import Room
@@ -20,6 +21,8 @@ class Event(RandomIDMixin):
     class Meta:
         verbose_name = model_names.EVENT
         verbose_name_plural = model_names.EVENT_PLURAL
+    
+    objects = EventQuerySet.as_manager()
     
     room = models.ForeignKey(
         ROOM,

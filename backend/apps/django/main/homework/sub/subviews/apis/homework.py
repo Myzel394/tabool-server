@@ -45,9 +45,9 @@ class StudentHomeworkViewSet(
         "retrieve": StudentDetailHomeworkSerializer
     }
     
-    def check_object_permissions(self, request: RequestType, obj: Homework) -> bool:
+    def check_object_permissions(self, request: RequestType, obj: Homework) -> None:
         if request.method in SAFE_METHODS:
-            return True
+            return
         
         if obj.private_to_user != request.user:
             raise PermissionDenied(_("Du kannst öffentliche Hausaufgaben nicht verändern."))

@@ -31,8 +31,10 @@ class DayViewSerializer(serializers.Serializer):
         label=_("Enddatum")
     )
     
-    def validate(self):
-        if self.end_date < self.start_date:
+    def validate(self, attrs):
+        if attrs["end_date"] < attrs["start_date"]:
             raise ValidationError(
                 _("Das Startdatum ist unter dem Enddatum.")
             )
+        
+        return super().validate(attrs)

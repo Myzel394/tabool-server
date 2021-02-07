@@ -34,6 +34,10 @@ class HomeworkTestMixin(LessonTestMixin, UtilsTestMixin):
     
     @classmethod
     def Create_homework(cls, **kwargs) -> Homework:
+        """
+
+        :rtype: object
+        """
         lesson = kwargs.pop("lesson", None) or cls.Create_lesson()
         
         return Homework.objects.create(

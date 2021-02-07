@@ -6,4 +6,7 @@ __all__ = [
 
 
 class LessonViewThrottle(UserRateThrottle):
-    THROTTLE_RATES = "30/min"
+    THROTTLE_RATES = {
+        "lesson": "30/min"
+    }
+    scope = "lesson"

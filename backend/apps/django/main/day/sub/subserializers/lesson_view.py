@@ -16,7 +16,7 @@ class LessonViewSerializer(serializers.Serializer):
     lesson_date = serializers.DateField()
     
     def validate(self, attrs):
-        if attrs["lesson_date"].weekday() != (required_weekday := attrs["lesson"].weekday()):
+        if attrs["lesson_date"].weekday() != (required_weekday := attrs["lesson"].weekday):
             weekdays = list(calendar.day_name)
             
             raise ValidationError({

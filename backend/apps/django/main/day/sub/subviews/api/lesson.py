@@ -2,7 +2,7 @@ from datetime import date
 from typing import *
 
 from django_hint import RequestType
-from rest_framework.decorators import api_view, throttle_classes
+from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.response import Response
 
 from apps.django.main.event.models import Modification
@@ -16,6 +16,7 @@ from apps.django.main.homework.sub.subserializers.homework import (
 from apps.django.main.homework.sub.subserializers.material import DetailMaterialSerializer
 from apps.django.main.homework.sub.subserializers.submission import DetailSubmissionSerializer
 from apps.django.main.timetable.mixins import get_via_referenced_lesson_date
+from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent, IsTeacher
 from ....serializers import LessonViewSerializer
 from ....throttles import LessonViewThrottle
 
@@ -28,8 +29,8 @@ __all__ = [
 ]
 
 
-def parse_serializer(data: dict) -> tuple["Lesson", date]:
-    serializer = LessonViewSerializer(data=data)
+def parse_serializer(data: dict, serializer_context: dict) -> tuple["Lesson", date]:
+    serializer = LessonViewSerializer(data=data, context=serializer_context)
     serializer.is_valid(raise_exception=True)
     
     validated_data = serializer.validated_data
@@ -59,43 +60,71 @@ def get_elements(user: "User", lesson: "Lesson", lesson_date: date) -> dict:
 
 @api_view(["GET"])
 @throttle_classes([LessonViewThrottle])
+@permission_classes([AuthenticationAndActivePermission & IsStudent])
 def student_lesson_view(request: RequestType):
-    lesson_args = parse_serializer(request.data)
-    user = request.user
     serializer_context = {
         "request": request
     }
-    elements = get_elements(user=user, *lesson_args)
+    lesson_args = parse_serializer(request.GET, serializer_context)
+    user = request.user
+    elements = get_elements(user, *lesson_args)
     
     return Response({
         "classbook": DetailClassbookSerializer(instance=elements["classbook"], context=serializer_context).data,
-        "materials": DetailMaterialSerializer(instance=elements["materials"], context=serializer_context).data,
-        "submissions": DetailSubmissionSerializer(instance=elements["submissions"], context=serializer_context).data,
-        "modifications": DetailModificationSerializer(
-            instance=elements["modifications"],
+        "materials": DetailMaterialSerializer(
+            instance=elements["materials"],
+            many=True,
             context=serializer_context
         ).data,
-        "homeworks": StudentDetailHomeworkSerializer(instance=elements["homeworks"], context=serializer_context).data,
+        "submissions": DetailSubmissionSerializer(
+            instance=elements["submissions"],
+            many=True,
+            context=serializer_context
+        ).data,
+        "modifications": DetailModificationSerializer(
+            instance=elements["modifications"],
+            many=True,
+            context=serializer_context
+        ).data,
+        "homeworks": StudentDetailHomeworkSerializer(
+            instance=elements["homeworks"],
+            many=True,
+            context=serializer_context
+        ).data,
     })
 
 
 @api_view(["GET"])
 @throttle_classes([LessonViewThrottle])
+@permission_classes([AuthenticationAndActivePermission & IsTeacher])
 def teacher_lesson_view(request: RequestType):
-    lesson_args = parse_serializer(request.data)
-    user = request.user
     serializer_context = {
         "request": request
     }
-    elements = get_elements(user=user, *lesson_args)
+    lesson_args = parse_serializer(request.GET, serializer_context)
+    user = request.user
+    elements = get_elements(user, *lesson_args)
     
-    return {
+    return Response({
         "classbook": DetailClassbookSerializer(instance=elements["classbook"], context=serializer_context).data,
-        "materials": DetailMaterialSerializer(instance=elements["materials"], context=serializer_context).data,
-        "submissions": DetailSubmissionSerializer(instance=elements["submissions"], context=serializer_context).data,
-        "modifications": DetailModificationSerializer(
-            instance=elements["modifications"],
+        "materials": DetailMaterialSerializer(
+            instance=elements["materials"],
+            many=True,
             context=serializer_context
         ).data,
-        "homeworks": TeacherDetailHomeworkSerializer(instance=elements["homeworks"], context=serializer_context).data,
-    }
+        "submissions": DetailSubmissionSerializer(
+            instance=elements["submissions"],
+            many=True,
+            context=serializer_context
+        ).data,
+        "modifications": DetailModificationSerializer(
+            instance=elements["modifications"],
+            many=True,
+            context=serializer_context
+        ).data,
+        "homeworks": TeacherDetailHomeworkSerializer(
+            instance=elements["homeworks"],
+            many=True,
+            context=serializer_context
+        ).data,
+    })
