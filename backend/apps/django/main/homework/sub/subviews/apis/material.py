@@ -1,6 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsTeacherElseReadOnly
 from apps.django.utils.viewsets import DetailSerializerViewSetMixin
@@ -19,9 +19,10 @@ class MaterialViewSet(
 ):
     permission_classes = [AuthenticationAndActivePermission & IsTeacherElseReadOnly]
     
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = MaterialFilterSet
     ordering_fields = ["created_at", "publish_datetime"]
+    search_fields = ["name"]
     
     detail_serializer = DetailMaterialSerializer
     serializer_action_map = {

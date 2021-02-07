@@ -4,7 +4,7 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
-from django_lifecycle import AFTER_DELETE, BEFORE_CREATE, BEFORE_UPDATE, hook
+from django_lifecycle import AFTER_DELETE, BEFORE_CREATE, BEFORE_SAVE, BEFORE_UPDATE, hook
 from private_storage.fields import PrivateFileField
 
 from apps.django.main.timetable.mixins import LessonMixin
@@ -26,9 +26,15 @@ class Material(RandomIDMixin, LessonMixin, CreationDateMixin):
     class Meta:
         verbose_name = model_names.MATERIAL
         verbose_name_plural = model_names.MATERIAL_PLURAL
-        ordering = ("-lesson_date", "publish_datetime")
+        ordering = ("name", "publish_datetime", "created_at")
     
     objects = MaterialQuerySet.as_manager()
+    
+    name = models.CharField(
+        verbose_name=_("Name"),
+        max_length=31,
+        blank=True,
+    )
     
     publish_datetime = models.DateTimeField(
         verbose_name=_("Veröffentlichkeitsdatum"),
@@ -71,3 +77,8 @@ class Material(RandomIDMixin, LessonMixin, CreationDateMixin):
         
         if not self.publish_datetime:
             self.announce = False
+    
+    @hook(BEFORE_SAVE)
+    def _hook_autofill_name(self):
+        if not self.name or self.name == "":
+            self.name = Path(self.file.path).name

@@ -22,6 +22,7 @@ class SubmissionTestMixin(MaterialTestMixin):
         
         return Submission.objects.create(
             **joinkwargs({
+                "name": lambda: lorem.text().split(" ")[0],
                 "publish_datetime": lambda: datetime.now() + timedelta(days=random.randint(1, 10)),
                 "file": lambda: SimpleUploadedFile(
                     filename,

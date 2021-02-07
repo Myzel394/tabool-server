@@ -1,4 +1,22 @@
+from datetime import datetime, timedelta
+
+from django.core.exceptions import ValidationError
+
 from apps.django.main.homework.mixins import MaterialTestMixin
+
+
+class ModelTest(MaterialTestMixin):
+    def test_date_must_be_in_future(self):
+        with self.assertRaises(ValidationError):
+            self.Create_material(
+                publish_datetime=datetime.now() - timedelta(days=5)
+            )
+    
+    def test_autofill_name(self):
+        material = self.Create_material(
+            name=None
+        )
+        self.assertIsNotNone(material.name)
 
 
 class APITest(MaterialTestMixin):

@@ -42,3 +42,14 @@ class StorageTest(SubmissionTestMixin):
         
         response = self.client.get(self.url)
         self.assertStatusNotOk(response.status_code)
+
+
+class APITest(SubmissionTestMixin):
+    def setUp(self):
+        self.student = self.Login_student()
+        self.__class__.associated_user = self.student
+        self.submission = self.Create_submission()
+    
+    def test_get(self):
+        response = self.client.get(f"/api/student/submission/")
+        self.assertStatusOk(response.status_code)

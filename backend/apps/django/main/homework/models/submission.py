@@ -27,8 +27,15 @@ class Submission(RandomIDMixin, LessonMixin, AssociatedUserMixin, LifecycleModel
     class Meta:
         verbose_name = model_names.SUBMISSION
         verbose_name_plural = model_names.SUBMISSION_PLURAL
+        ordering = ("name", "publish_datetime", "-created_at")
     
     objects = SubmissionQuerySet.as_manager()
+    
+    name = models.CharField(
+        verbose_name=_("Name"),
+        max_length=31,
+        blank=True,
+    )
     
     file = PrivateFileField(
         verbose_name=_("Datei"),
@@ -60,3 +67,8 @@ class Submission(RandomIDMixin, LessonMixin, AssociatedUserMixin, LifecycleModel
     @hook(BEFORE_SAVE)
     def _hook_full_clean(self):
         self.full_clean()
+    
+    @hook(BEFORE_SAVE)
+    def _hook_autofill_name(self):
+        if not self.name or self.name == "":
+            self.name = Path(self.file.path).name

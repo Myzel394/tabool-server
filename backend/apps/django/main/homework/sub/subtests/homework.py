@@ -1,8 +1,18 @@
 from datetime import date, timedelta
 
+from django.core.exceptions import ValidationError
+
 from apps.django.main.homework.mixins.tests.homework import HomeworkTestMixin
 from apps.django.main.homework.models import Homework, UserHomeworkRelation
 from apps.utils import find_next_date_by_weekday
+
+
+class ModelTest(HomeworkTestMixin):
+    def test_private_to_user_validator_works(self):
+        with self.assertRaises(ValidationError):
+            self.Create_homework(
+                private_to_user=self.Create_user()
+            )
 
 
 class TeacherAPITest(HomeworkTestMixin):
