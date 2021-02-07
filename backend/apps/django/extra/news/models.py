@@ -9,7 +9,6 @@ from django_lifecycle import LifecycleModel
 
 from apps.django.authentication.user.public import *
 from apps.django.extra.news.public import *
-from constants import maxlength
 
 __all__ = [
     "News"
@@ -23,7 +22,7 @@ class News(RandomIDMixin, HandlerMixin, EditCreationDateMixin, LifecycleModel):
         ordering = ("-created_at", "-edited_at", "title")
     
     title = models.CharField(
-        max_length=maxlength.TITLE,
+        max_length=127,
         verbose_name=_("Titel")
     )
     

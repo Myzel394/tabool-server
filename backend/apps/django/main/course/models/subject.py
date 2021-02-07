@@ -5,7 +5,6 @@ from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_lifecycle import LifecycleModel
 
-from constants import maxlength
 from ..public import model_names
 
 __all__ = [
@@ -21,7 +20,7 @@ class Subject(RandomIDMixin, LifecycleModel, HandlerMixin):
     
     name = models.CharField(
         verbose_name=_("Name"),
-        max_length=maxlength.SUBJECT
+        max_length=31
     )  # type: str
     
     short_name = models.CharField(

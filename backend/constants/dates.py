@@ -3,10 +3,8 @@ from datetime import date, datetime, time
 from django.utils.translation import gettext_lazy as _
 
 __all__ = [
-    "DEFAULT_TRACE_DATE"
+    "FORMATS"
 ]
-
-DEFAULT_TRACE_DATE = datetime(2001, 1, 1, 1, 1, 1)
 
 FORMATS = {
     # Translators: Formatierung für Daten (Datum). Befehle: https://strftime.org/
