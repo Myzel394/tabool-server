@@ -21,6 +21,7 @@ class Event(RandomIDMixin):
     class Meta:
         verbose_name = model_names.EVENT
         verbose_name_plural = model_names.EVENT_PLURAL
+        ordering = ("start_datetime", "title")
     
     objects = EventQuerySet.as_manager()
     

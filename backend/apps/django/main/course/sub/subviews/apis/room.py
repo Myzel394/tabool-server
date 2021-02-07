@@ -23,10 +23,8 @@ class RoomViewSet(
     serializer_action_map = {
         "create": CreateRoomSerializer,
         "retrieve": DetailRoomSerializer,
-        "list": DetailSerializerViewSetMixin
+        "list": DetailRoomSerializer
     }
     
     def get_queryset(self):
-        if self.action in ["list", "retrieve"]:
-            return Room.objects.all()
-        return
+        return Room.objects.all()

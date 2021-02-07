@@ -1,7 +1,7 @@
 from apps.django.main.event.mixins import ExamTestMixin
 
 
-class APITest(ExamTestMixin):
+class ExamAPITest(ExamTestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.__class__.associated_user = self.student

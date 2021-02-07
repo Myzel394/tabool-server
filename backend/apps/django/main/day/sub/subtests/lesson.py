@@ -1,10 +1,10 @@
-from datetime import date
+from datetime import date, timedelta
 
 from apps.django.main.homework.mixins import ClassbookTestMixin, HomeworkTestMixin, MaterialTestMixin
 from apps.django.main.timetable.mixins import find_next_date_by_weekday
 
 
-class APITest(ClassbookTestMixin, MaterialTestMixin, HomeworkTestMixin):
+class LessonAPITest(ClassbookTestMixin, MaterialTestMixin, HomeworkTestMixin):
     def setUp(self):
         self.teacher = self.Create_teacher_user()
         self.student = self.Create_student_user()
@@ -61,12 +61,6 @@ class APITest(ClassbookTestMixin, MaterialTestMixin, HomeworkTestMixin):
         self.assertStatusOk(response.status_code)
         self.assertContent(response.data)
     
-    def test_teacher_can_access_teacher_endpoint(self):
-        self.as_teacher()
-        response = self.teacher_request()
-        self.assertStatusOk(response.status_code)
-        self.assertContent(response.data)
-    
     def test_student_cant_access_teacher_endpoint(self):
         self.as_student()
         response = self.client.get(
@@ -76,11 +70,26 @@ class APITest(ClassbookTestMixin, MaterialTestMixin, HomeworkTestMixin):
         )
         self.assertStatusNotOk(response.status_code)
     
+    def test_teacher_can_access_teacher_endpoint(self):
+        self.as_teacher()
+        response = self.teacher_request()
+        self.assertStatusOk(response.status_code)
+        self.assertContent(response.data)
+    
     def test_teacher_cant_access_student_endpoint(self):
         self.as_teacher()
         response = self.client.get(
             "/api/student/lesson/",
             self.get_lesson_argument(self.lesson, self.date),
+            content_type="application/json"
+        )
+        self.assertStatusNotOk(response.status_code)
+    
+    def test_invalid_date_for_lesson(self):
+        self.as_student()
+        response = self.client.get(
+            "/api/student/lesson/",
+            self.get_lesson_argument(self.lesson, self.date + timedelta(days=1)),
             content_type="application/json"
         )
         self.assertStatusNotOk(response.status_code)

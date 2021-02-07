@@ -11,7 +11,7 @@ class StudentDetailSubmissionSerializer(BaseSubmissionSerializer):
     class Meta(BaseSubmissionSerializer.Meta):
         fields = [
             "lesson", "lesson_date",
-            "publish_datetime", "file", "name", "created_at" "id"
+            "publish_datetime", "file", "name", "created_at", "id"
         ]
     
     lesson = DetailLessonSerializer()

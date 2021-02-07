@@ -44,7 +44,7 @@ class StorageTest(SubmissionTestMixin):
         self.assertStatusNotOk(response.status_code)
 
 
-class APITest(SubmissionTestMixin):
+class SubmissionAPITest(SubmissionTestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.__class__.associated_user = self.student

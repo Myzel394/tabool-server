@@ -1,7 +1,7 @@
 from apps.django.main.course.mixins import CourseTestMixin
 
 
-class CourseTest(CourseTestMixin):
+class CourseAPITest(CourseTestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.teacher = self.Create_teacher_user()

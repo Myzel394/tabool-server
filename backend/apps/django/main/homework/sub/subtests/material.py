@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from apps.django.main.homework.mixins import MaterialTestMixin
 
 
-class ModelTest(MaterialTestMixin):
+class MaterialModelTest(MaterialTestMixin):
     def test_date_must_be_in_future(self):
         with self.assertRaises(ValidationError):
             self.Create_material(
@@ -19,7 +19,7 @@ class ModelTest(MaterialTestMixin):
         self.assertIsNotNone(material.name)
 
 
-class APITest(MaterialTestMixin):
+class MaterialAPITest(MaterialTestMixin):
     def setUp(self):
         self.teacher = self.Login_teacher()
         self.__class__.associated_user = self.teacher

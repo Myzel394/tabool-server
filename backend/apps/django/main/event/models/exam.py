@@ -21,6 +21,7 @@ class Exam(RandomIDMixin):
     class Meta:
         verbose_name = model_names.EXAM
         verbose_name_plural = model_names.EXAM_PLURAL
+        ordering = ("title", "date")
     
     objects = ExamQuerySet.as_manager()
     

@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from apps.django.main.timetable.mixins import LessonTestMixin
 
 
-class ModelTest(LessonTestMixin):
+class TimetableModelTest(LessonTestMixin):
     def test_works_on_valid(self):
         self.Create_whole_timetable()
     

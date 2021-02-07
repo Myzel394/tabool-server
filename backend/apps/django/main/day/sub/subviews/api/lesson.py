@@ -14,7 +14,10 @@ from apps.django.main.homework.sub.subserializers.homework import (
     TeacherDetailHomeworkSerializer,
 )
 from apps.django.main.homework.sub.subserializers.material import DetailMaterialSerializer
-from apps.django.main.homework.sub.subserializers.submission import DetailSubmissionSerializer
+from apps.django.main.homework.sub.subserializers.submission import (
+    StudentDetailSubmissionSerializer,
+    TeacherDetailSubmissionSerializer,
+)
 from apps.django.main.timetable.mixins import get_via_referenced_lesson_date
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent, IsTeacher
 from ....serializers import LessonViewSerializer
@@ -76,7 +79,7 @@ def student_lesson_view(request: RequestType):
             many=True,
             context=serializer_context
         ).data,
-        "submissions": DetailSubmissionSerializer(
+        "submissions": StudentDetailSubmissionSerializer(
             instance=elements["submissions"],
             many=True,
             context=serializer_context
@@ -112,7 +115,7 @@ def teacher_lesson_view(request: RequestType):
             many=True,
             context=serializer_context
         ).data,
-        "submissions": DetailSubmissionSerializer(
+        "submissions": TeacherDetailSubmissionSerializer(
             instance=elements["submissions"],
             many=True,
             context=serializer_context

@@ -9,7 +9,7 @@ from apps.django.extra.poll.models import Poll, Vote
 from apps.django.extra.poll.utils import add_user_vote, get_results, has_voted
 
 
-class PollTest(UserTestMixin, PollTestMixin):
+class PollModelTest(UserTestMixin, PollTestMixin):
     def test_create_invalid_max_vote_choices(self):
         poll = self.Create_poll(choices=["Ja", "Nein"])
         
@@ -42,7 +42,7 @@ class PollTest(UserTestMixin, PollTestMixin):
         get_results(self.Create_poll())
 
 
-class APITest(UserTestMixin, PollTestMixin):
+class PollAPITest(UserTestMixin, PollTestMixin):
     def setUp(self):
         self.user = self.Login_student()
         self.__class__.associated_user = self.user
@@ -118,7 +118,7 @@ class APITest(UserTestMixin, PollTestMixin):
         self.assertIsNotNone(response.data["results"])
 
 
-class PollAmountTest(UserTestMixin, PollTestMixin):
+class PollAPIChoicesAmountTest(UserTestMixin, PollTestMixin):
     def setUp(self):
         self.user = self.Login_user()
         self.__class__.associated_user = self.user

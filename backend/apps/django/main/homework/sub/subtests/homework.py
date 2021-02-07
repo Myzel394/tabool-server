@@ -7,7 +7,7 @@ from apps.django.main.homework.models import Homework, UserHomeworkRelation
 from apps.utils import find_next_date_by_weekday
 
 
-class ModelTest(HomeworkTestMixin):
+class HomeworkModelTest(HomeworkTestMixin):
     def test_private_to_user_validator_works(self):
         with self.assertRaises(ValidationError):
             self.Create_homework(
