@@ -25,4 +25,4 @@ class EventViewSet(
     }
     
     def get_queryset(self):
-        return Event.ordering.from_user(self.request.user)
+        return Event.objects.from_user(self.request.user)

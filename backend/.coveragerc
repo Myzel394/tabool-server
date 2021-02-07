@@ -13,6 +13,7 @@ omit =
     */admin.py
     */admins.py
     */debug/*
+    */mixins/tests/*
     */public/admin_inlines.py
     */serializer_fields/*
     manage.py

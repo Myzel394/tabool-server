@@ -1,5 +1,4 @@
 import random
-import string
 from datetime import date, datetime, time, timedelta
 from typing import *
 
@@ -11,7 +10,6 @@ from constants import weekdays
 
 __all__ = [
     "ClientTestMixin", "joinkwargs", "DateUtilsTestMixin",
-    "UtilsTestMixin"
 ]
 
 
@@ -85,16 +83,6 @@ class ClientTestMixin(TestCase):
     
     def assertStatusNotOk(self, status_code: int) -> None:
         self.assertTrue(status_code < 200 or status_code > 299, f"status_code is '{status_code}'")
-
-
-class UtilsTestMixin(TestCase):
-    @staticmethod
-    def Random_data(size: int = 6, choices: str = string.ascii_letters + string.digits) -> str:
-        return "".join(random.choices(choices, k=size))
-    
-    @classmethod
-    def Random_filename(cls, extension: str = ".txt") -> str:
-        return f"random_filename_{cls.Random_data(8)}{extension}"
 
 
 def joinkwargs(defaults: Dict[str, Callable], given: dict, /) -> dict:

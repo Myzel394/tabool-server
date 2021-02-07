@@ -57,3 +57,69 @@ class StudentAPITest(Mixin):
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
         self.assertContent(response.data)
+    
+    def test_get_not_in_range(self):
+        self.as_student()
+        response = self.client.get("/api/student/day/", {
+            "start_date": self.date - timedelta(days=300),
+            "end_date": self.date - timedelta(days=299)
+        }, content_type="application/json")
+        self.assertStatusOk(response.status_code)
+        self.assertEqual(0, sum(len(element) for element in response.data.values()))
+    
+    def test_get_invalid_dates(self):
+        self.as_student()
+        response = self.client.get("/api/student/day/", {
+            "start_date": self.date + timedelta(days=3),
+            "end_date": self.date - timedelta(days=1)
+        }, content_type="application/json")
+        self.assertStatusNotOk(response.status_code)
+    
+    def test_student_cant_access_teacher_endpoint(self):
+        self.as_student()
+        response = self.client.get("/api/teacher/day/", {
+            "start_date": self.date - timedelta(days=1),
+            "end_date": self.date + timedelta(days=1)
+        }, content_type="application/json")
+        self.assertEqual(403, response.status_code)
+    
+    def test_date_autofill(self):
+        self.as_student()
+        response = self.client.get("/api/student/day/")
+        self.assertStatusOk(response.status_code)
+
+
+class TeacherAPITest(Mixin):
+    def test_get_in_range(self):
+        self.as_teacher()
+        response = self.client.get("/api/teacher/day/", {
+            "start_date": self.date - timedelta(days=1),
+            "end_date": self.date + timedelta(days=1)
+        }, content_type="application/json")
+        self.assertStatusOk(response.status_code)
+        self.assertContent(response.data)
+    
+    def test_get_not_in_range(self):
+        self.as_teacher()
+        response = self.client.get("/api/teacher/day/", {
+            "start_date": self.date - timedelta(days=300),
+            "end_date": self.date - timedelta(days=299)
+        }, content_type="application/json")
+        self.assertStatusOk(response.status_code)
+        self.assertEqual(0, sum(len(element) for element in response.data.values()))
+    
+    def test_get_invalid_dates(self):
+        self.as_teacher()
+        response = self.client.get("/api/teacher/day/", {
+            "start_date": self.date + timedelta(days=3),
+            "end_date": self.date - timedelta(days=1)
+        }, content_type="application/json")
+        self.assertStatusNotOk(response.status_code)
+    
+    def test_teacher_cant_access_student_endpoint(self):
+        self.as_teacher()
+        response = self.client.get("/api/student/day/", {
+            "start_date": self.date - timedelta(days=1),
+            "end_date": self.date + timedelta(days=1)
+        }, content_type="application/json")
+        self.assertEqual(403, response.status_code)

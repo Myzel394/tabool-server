@@ -2,26 +2,14 @@ import secrets
 import string
 
 from django.db import models
-from django.utils.translation import gettext as _
 from django_lifecycle import LifecycleModel
 
 from apps.django.authentication.user.public import *
 from apps.django.authentication.user.public import model_names as auth_names
-from apps.django.utils.fields.color import ColorField
 
 __all__ = [
-    "ColorMixin", "AssociatedUserMixin", "AddedAtMixin", "UserModelRelationMixin", "IdMixin"
+    "AssociatedUserMixin", "UserModelRelationMixin", "IdMixin"
 ]
-
-
-class ColorMixin(models.Model):
-    class Meta:
-        abstract = True
-    
-    color = ColorField(
-        verbose_name=_("Farbe"),
-        blank=True,
-    )
 
 
 class AssociatedUserMixin(models.Model):
@@ -32,17 +20,6 @@ class AssociatedUserMixin(models.Model):
         USER,
         on_delete=models.CASCADE,
         verbose_name=auth_names.USER
-    )
-
-
-class AddedAtMixin(models.Model):
-    class Meta:
-        abstract = True
-    
-    added_at = models.DateTimeField(
-        verbose_name=_("Hinzugefügt"),
-        blank=True,
-        null=True
     )
 
 

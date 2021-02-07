@@ -1,3 +1,2 @@
-from django.shortcuts import render
-
-# Create your views here.
+# noinspection PyUnresolvedReferences
+from .sub.subviews import *

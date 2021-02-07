@@ -4,7 +4,7 @@ from .models import Poll, Vote
 
 if TYPE_CHECKING:
     from .models import Choice
-    from apps.django.main.authentication.models import User
+    from apps.django.authentication.user.models import User
 
 __all__ = [
     "has_voted", "add_user_vote", "get_results"

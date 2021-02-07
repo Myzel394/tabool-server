@@ -1,6 +1,8 @@
+from rest_framework import serializers
+
 from apps.django.main.course import constants
 from apps.django.main.course.models import Subject
-from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField
+from apps.django.utils.serializers import UserRelationField
 from .relation import UserSubjectRelationSerializer
 
 __all__ = [
@@ -8,7 +10,7 @@ __all__ = [
 ]
 
 
-class DetailSubjectSerializer(RandomIDSerializerMixin):
+class DetailSubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = [

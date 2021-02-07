@@ -6,15 +6,27 @@ if settings.DEBUG:
     import random, string, names
     
     # noinspection PyUnresolvedReferences
+    from apps.django.authentication.user.models import *
+    # noinspection PyUnresolvedReferences
+    from apps.django.authentication.otp.models import *
+    # noinspection PyUnresolvedReferences
+    from apps.django.authentication.sessions.models import *
+    
+    # noinspection PyUnresolvedReferences
     from apps.django.main.event.models import *
     # noinspection PyUnresolvedReferences
-    from apps.django.main.lesson.models import *
+    from apps.django.main.day.models import *
+    # noinspection PyUnresolvedReferences
+    from apps.django.main.course.models import *
+    # noinspection PyUnresolvedReferences
+    from apps.django.main.timetable.models import *
     # noinspection PyUnresolvedReferences
     from apps.django.main.homework.models import *
-    # noinspection PyUnresolvedReferences
-    from apps.django.main.school_data.models import *
+    
     # noinspection PyUnresolvedReferences
     from apps.django.extra.news.models import *
+    # noinspection PyUnresolvedReferences
+    from apps.django.extra.poll.models import *
     
     
     def get_set_values(model, field):

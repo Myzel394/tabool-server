@@ -28,4 +28,4 @@ class ModificationViewSet(
     }
     
     def get_queryset(self):
-        return Modification.ordering.from_user(self.request.user)
+        return Modification.objects.from_user(self.request.user)

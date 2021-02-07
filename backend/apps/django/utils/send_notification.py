@@ -5,7 +5,7 @@ from django_hint import QueryType
 from fcm_django.models import FCMDevice, FCMDeviceQuerySet
 
 if TYPE_CHECKING:
-    from apps.django.main.authentication.models import User
+    from apps.django.authentication.user.models import User
 
 
 def get_as_list(value) -> list:

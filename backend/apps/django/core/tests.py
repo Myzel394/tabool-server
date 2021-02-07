@@ -19,21 +19,21 @@ class ContactAPI(UserTestMixin):
         
         teacher_id = self.user.student.main_teacher_id
         
-        response = self.client.get("/api/data/contacts/")
+        response = self.client.get("/api/student/contacts/")
         self.assertStatusOk(response.status_code)
         self.assertEqual(teacher_id, response.data["main_teacher"]["id"])
     
     def test_get_correct_illness_report_email_for_primary(self):
         self.change_class_number(7)
         
-        response = self.client.get("/api/data/contacts/")
+        response = self.client.get("/api/student/contacts/")
         self.assertStatusOk(response.status_code)
         self.assertEqual(PRIMARY_CLASS_CONTACT_EMAIL, response.data["illness_report_email"])
     
     def test_get_correct_illness_report_email_for_secondary(self):
         self.change_class_number(12)
         
-        response = self.client.get("/api/data/contacts/")
+        response = self.client.get("/api/student/contacts/")
         self.assertStatusOk(response.status_code)
         self.assertEqual(SECONDARY_CLASS_CONTACT_EMAIL, response.data["illness_report_email"])
         

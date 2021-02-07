@@ -11,28 +11,12 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 
 if TYPE_CHECKING:
-    from apps.django.main.authentication.models import User
+    from apps.django.authentication.user.models import User
 
 __all__ = [
-    "RetrieveObjectByIDSerializerField", "WritableSerializerMethodField", "WritableIDField",
+    "WritableSerializerMethodField", "WritableIDField",
     "WritableFromUserFieldMixin", "WritableAllFieldMixin", "UserRelationField", "HistoryUserField"
 ]
-
-
-class RetrieveObjectByIDSerializerField(serializers.CharField):
-    def __init__(self, retrieve_func: Callable[[str, "RetrieveObjectByIDSerializerField"], None], *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._retrieve_func = retrieve_func
-    
-    def run_validation(self, data):
-        value = super().run_validation(data)
-        
-        try:
-            obj = self._retrieve_func(value, self)
-        except ObjectDoesNotExist:
-            self.fail("object_not_found")
-        
-        return obj
 
 
 class WritableSerializerMethodField(serializers.SerializerMethodField):

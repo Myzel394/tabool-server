@@ -11,7 +11,7 @@ class CourseTest(CourseTestMixin):
         )
     
     def test_student_gets_correct_serialized_course(self):
-        response = self.client.get(f"/api/data/course/{self.course.id}/", )
+        response = self.client.get(f"/api/student/course/{self.course.id}/", )
         self.assertStatusOk(response.status_code)
         
         self.assertIn("participants_count", response.data)
@@ -20,7 +20,7 @@ class CourseTest(CourseTestMixin):
     def test_teacher_gets_correct_serialized_course(self):
         self.Login_user(self.teacher, self.teacher.first_name)
         
-        response = self.client.get(f"/api/data/course/{self.course.id}/", )
+        response = self.client.get(f"/api/student/course/{self.course.id}/", )
         self.assertStatusOk(response.status_code)
         
         self.assertNotIn("participants_count", response.data)

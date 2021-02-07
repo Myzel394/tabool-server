@@ -1,5 +1,6 @@
+from rest_framework import serializers
+
 from apps.django.authentication.user.serializers import DetailUserSerializer
-from apps.django.utils.serializers import RandomIDSerializerMixin
 from ...models import News
 
 __all__ = [
@@ -7,7 +8,7 @@ __all__ = [
 ]
 
 
-class NewsListSerializer(RandomIDSerializerMixin):
+class NewsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = [
@@ -15,7 +16,7 @@ class NewsListSerializer(RandomIDSerializerMixin):
         ]
 
 
-class NewsDetailSerializer(RandomIDSerializerMixin):
+class NewsDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = [

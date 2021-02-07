@@ -44,12 +44,12 @@ class PollTest(UserTestMixin, PollTestMixin):
 
 class APITest(UserTestMixin, PollTestMixin):
     def setUp(self):
-        self.user = self.Login_user()
+        self.user = self.Login_student()
         self.__class__.associated_user = self.user
         self.poll = self.Create_poll()
     
     def vote(self, **kwargs):
-        response = self.client.post(f"/api/data/poll/{self.poll.id}/vote/", {
+        response = self.client.post(f"/api/student/poll/{self.poll.id}/vote/", {
             "choices": [self.poll.choices[0].id],
             **kwargs
         }, content_type="application/json")
@@ -64,7 +64,7 @@ class APITest(UserTestMixin, PollTestMixin):
     
     def test_vote_two_times_invalid(self):
         self.vote()
-        response = self.client.post(f"/api/data/poll/{self.poll.id}/vote/", {
+        response = self.client.post(f"/api/student/poll/{self.poll.id}/vote/", {
             "choices": [self.poll.choices[1].id],
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
@@ -74,20 +74,20 @@ class APITest(UserTestMixin, PollTestMixin):
     def test_invalid_choices(self):
         other_poll = self.Create_poll(["Ja", "Nein"])
         
-        response = self.client.post(f"/api/data/poll/{self.poll.id}/vote/", {
+        response = self.client.post(f"/api/student/poll/{self.poll.id}/vote/", {
             "choices": [other_poll.choices[0].id],
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
     
     def test_get_empty_selections_before_vote(self):
-        response = self.client.get(f"/api/data/poll/{self.poll.id}/")
+        response = self.client.get(f"/api/student/poll/{self.poll.id}/")
         self.assertStatusOk(response.status_code)
         self.assertEqual(None, response.data["user_vote"])
     
     def test_get_correct_selections_after_vote(self):
         self.vote()
         
-        response = self.client.get(f"/api/data/poll/{self.poll.id}/")
+        response = self.client.get(f"/api/student/poll/{self.poll.id}/")
         self.assertStatusOk(response.status_code)
         self.assertEqual(1, len(response.data["user_vote"]["choices"]))
         self.assertEqual([self.poll.choices[0].id], list(response.data["user_vote"]["choices"]))
@@ -105,7 +105,7 @@ class APITest(UserTestMixin, PollTestMixin):
     
     @override_settings(SHOW_VOTES_RESULTS=True)
     def test_dont_show_results_before_vote(self):
-        response = self.client.get(f"/api/data/poll/{self.poll.id}/")
+        response = self.client.get(f"/api/student/poll/{self.poll.id}/")
         self.assertStatusOk(response.status_code)
         # Ensure no results visible
         self.assertIsNone(response.data["results"])
@@ -113,7 +113,7 @@ class APITest(UserTestMixin, PollTestMixin):
     @override_settings(SHOW_VOTES_RESULTS=True)
     def test_show_results_after_vote(self):
         self.vote()
-        response = self.client.get(f"/api/data/poll/{self.poll.id}/")
+        response = self.client.get(f"/api/student/poll/{self.poll.id}/")
         self.assertStatusOk(response.status_code)
         self.assertIsNotNone(response.data["results"])
 
@@ -133,7 +133,7 @@ class PollAmountTest(UserTestMixin, PollTestMixin):
         )
     
     def test_too_much(self):
-        response = self.client.post(f"/api/data/poll/{self.poll.id}/vote/", {
+        response = self.client.post(f"/api/student/poll/{self.poll.id}/vote/", {
             "choices": [
                 self.poll.choices[0].id,
                 self.poll.choices[1].id,
@@ -145,7 +145,7 @@ class PollAmountTest(UserTestMixin, PollTestMixin):
         self.assertStatusNotOk(response.status_code)
     
     def test_too_little(self):
-        response = self.client.post(f"/api/data/poll/{self.poll.id}/vote/", {
+        response = self.client.post(f"/api/student/poll/{self.poll.id}/vote/", {
             "choices": [
                 self.poll.choices[0].id,
             ],
@@ -153,7 +153,7 @@ class PollAmountTest(UserTestMixin, PollTestMixin):
         self.assertStatusNotOk(response.status_code)
     
     def test_ok(self):
-        response = self.client.post(f"/api/data/poll/{self.poll.id}/vote/", {
+        response = self.client.post(f"/api/student/poll/{self.poll.id}/vote/", {
             "choices": [
                 self.poll.choices[0].id,
                 self.poll.choices[1].id,

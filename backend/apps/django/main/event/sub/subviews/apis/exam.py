@@ -38,4 +38,4 @@ class ExamViewSet(
     }
     
     def get_queryset(self):
-        return Exam.ordering.from_user(self.request.user)
+        return Exam.objects.from_user(self.request.user)

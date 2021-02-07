@@ -5,7 +5,6 @@ import lorem
 
 from apps.django.main.homework.models import Homework
 from apps.django.main.timetable.mixins import joinkwargs, Lesson, LessonTestMixin
-from apps.django.utils.tests_mixins import UtilsTestMixin
 from apps.utils import find_next_date_by_weekday
 
 __all__ = [
@@ -13,7 +12,7 @@ __all__ = [
 ]
 
 
-class HomeworkTestMixin(LessonTestMixin, UtilsTestMixin):
+class HomeworkTestMixin(LessonTestMixin):
     @classmethod
     def get_random_due_date(cls) -> datetime:
         weekdays = Lesson.objects.all().values_list("weekday", flat=True).distinct()

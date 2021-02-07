@@ -1,3 +1,2 @@
-from django.test import TestCase
-
-# Create your tests here.
+from .sub.subtests.lesson import *
+from .sub.subtests.day import *
