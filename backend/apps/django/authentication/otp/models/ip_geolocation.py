@@ -19,8 +19,8 @@ class IPGeolocation(IdMixin):
         verbose_name=_("Ip-Adresse"),
     )
     
-    longitude = models.PositiveSmallIntegerField()
-    latitude = models.PositiveSmallIntegerField()
+    longitude = models.FloatField()
+    latitude = models.FloatField()
     
     city = models.CharField(
         verbose_name=_("Stadt"),

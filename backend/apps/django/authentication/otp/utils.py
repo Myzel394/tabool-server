@@ -5,7 +5,6 @@ from typing import *
 import httpagentparser
 import requests
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django_hint import RequestType
 
@@ -25,7 +24,7 @@ EARTH_RADIUS_IN_KILOMETERS = 6371
 
 
 # https://stackoverflow.com/a/4913653/9878135
-def haversine(lon1: int, lat1: int, lon2: int, lat2: int) -> float:
+def haversine(lon1: float, lat1: float, lon2: float, lat2: float) -> float:  # pragma: no cover
     """
     Calculate the great circle distance between two points
     on the earth (specified in decimal degrees)
@@ -41,22 +40,18 @@ def haversine(lon1: int, lat1: int, lon2: int, lat2: int) -> float:
     return c * EARTH_RADIUS_IN_KILOMETERS
 
 
-def float_to_integer(value: float) -> int:
-    return int(str(value).replace(".", ""))
-
-
 def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:
     try:
-        url = f"https:/api.ipgeolocationapi.com/geolocate/{ip}"
+        url = f"https://api.ipgeolocationapi.com/geolocate/{ip}"
         response = requests.get(url)
         
         if 400 <= response.status_code < 600:
-            return True
+            return
         
         geo_data = response.data["geo"]
         longitude = geo_data["longitude"]
         latitude = geo_data["latitude"]
-        city = geo_data["name"]
+        city = response.data["name"]
     except:
         return None
     else:
@@ -66,15 +61,15 @@ def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:
 def get_ip_location(ip: str) -> Optional[IPGeolocation]:
     try:
         ip_location = IPGeolocation.objects.only("ip_address").get(ip_address=ip)
-    except ObjectDoesNotExist:
+    except IPGeolocation.DoesNotExist:
         # Fetch new location
         if location := fetch_location(ip):
             longitude, latitude, city = location
             
             ip_location = IPGeolocation.objects.create(
-                longitude=float_to_integer(longitude),
-                latitude=float_to_integer(latitude),
-                ip=ip,
+                longitude=longitude,
+                latitude=latitude,
+                ip_address=ip,
                 city=city
             )
             

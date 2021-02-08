@@ -15,7 +15,7 @@ class HomeworkModelTest(HomeworkTestMixin):
             )
 
 
-class TeacherAPITest(HomeworkTestMixin):
+class TeacherHomeworkAPITest(HomeworkTestMixin):
     def setUp(self):
         self.__class__.associated_user = self.Login_teacher()
     
@@ -60,7 +60,7 @@ class TeacherAPITest(HomeworkTestMixin):
         self.assertStatusOk(response.status_code)
 
 
-class StudentAPITest(HomeworkTestMixin):
+class StudentHomeworkAPITest(HomeworkTestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.__class__.associated_user = self.student
@@ -116,7 +116,7 @@ class StudentAPITest(HomeworkTestMixin):
         self.assertStatusOk(response.status_code)
 
 
-class StudentAPIInformationTest(HomeworkTestMixin):
+class StudentHomeworkAPIInformationTest(HomeworkTestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.__class__.associated_user = self.student

@@ -37,3 +37,13 @@ class AuthenticationTest(UserTestMixin):
             "password": self.password + "aaa"
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
+    
+    def test_deactivated_account(self):
+        self.user.is_active = False
+        self.user.save()
+        
+        response = self.client.post("/api/auth/login/", {
+            "email": self.user.email,
+            "password": self.password
+        }, content_type="application/json")
+        self.assertStatusNotOk(response.status_code)
