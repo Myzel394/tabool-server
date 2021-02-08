@@ -31,8 +31,6 @@ class UserSubjectRelation(RandomIDMixin, UserModelRelationMixin, LifecycleModel)
     
     color = ColorField(
         verbose_name=_("Farbe"),
-        blank=True,
-        null=True,
     )  # type: str
     
     def __str__(self):

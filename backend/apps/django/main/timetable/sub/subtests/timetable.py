@@ -44,3 +44,14 @@ class TimetableModelTest(LessonTestMixin):
                 start_hour=2,
                 end_hour=4
             )
+
+
+class TimetableAPITest(LessonTestMixin):
+    def setUp(self):
+        self.student = self.Login_student()
+        self.__class__.associated_user = self.student
+        self.timetable = self.Create_whole_timetable()
+    
+    def test_get(self):
+        response = self.client.get(f"/api/student/timetable/{self.timetable.id}/")
+        self.assertStatusOk(response.status_code)

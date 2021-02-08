@@ -19,10 +19,10 @@ class PollViewSet(ReadOnlyModelViewSet):
     serializer_class = PollSerializer
     
     def get_queryset(self):
-        from_user = Poll.objects.from_user(self.request.user)
-        if self.action in ["retrieve", "list"]:
-            return from_user
-        return from_user.not_voted(self.request.user)
+        user = self.request.user
+        
+        return Poll.objects \
+            .from_user(user)
     
     @action(["POST"], detail=True)
     def vote(self, request: RequestType, pk):

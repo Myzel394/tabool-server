@@ -15,6 +15,7 @@ from apps.django.main.day.views import student_day_view, student_lesson_view, te
 from apps.django.main.event import routers as event_routers
 from apps.django.main.homework import routers as homework_routers
 from apps.django.main.homework.views import HomeworkAutocompleteView
+from apps.django.main.timetable import routers as timetable_routers
 from apps.django.utils.urls import build_patterns
 
 
@@ -24,7 +25,6 @@ def build_url(prefix: str) -> str:
 
 data_patterns = build_patterns("auth", [
     sessions_routers.data_router.urls,
-    user_routers.data_router.urls,
 ])
 
 student_patterns = build_patterns("student", [
@@ -33,6 +33,8 @@ student_patterns = build_patterns("student", [
     homework_routers.student_router.urls,
     poll_routers.student_router.urls,
     event_routers.student_router.urls,
+    timetable_routers.student_router.urls,
+    user_routers.student_router.urls,
 ])
 
 teacher_patterns = build_patterns("teacher", [
@@ -41,6 +43,8 @@ teacher_patterns = build_patterns("teacher", [
     homework_routers.teacher_router.urls,
     poll_routers.teacher_router.urls,
     event_routers.teacher_router.urls,
+    timetable_routers.teacher_router.urls,
+    user_routers.teacher_router.urls,
 ])
 
 relation_patterns = build_patterns("user-relation", [

@@ -25,7 +25,6 @@ EARTH_RADIUS_IN_KILOMETERS = 6371
 
 
 # https://stackoverflow.com/a/4913653/9878135
-# pragma: no cover
 def haversine(lon1: int, lat1: int, lon2: int, lat2: int) -> float:
     """
     Calculate the great circle distance between two points

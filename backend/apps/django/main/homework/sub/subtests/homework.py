@@ -75,23 +75,9 @@ class StudentAPITest(HomeworkTestMixin):
         response = self.client.post("/api/student/homework/", {
             **self.get_lesson_argument(lesson),
             "information": "Test",
-            "is_private": True
         })
         self.assertStatusOk(response.status_code)
-    
-    def test_can_not_create_public_homework(self):
-        lesson = self.Create_lesson(
-            course=self.Create_course(
-                participants=[self.student]
-            )
-        )
-        
-        response = self.client.post("/api/student/homework/", {
-            **self.get_lesson_argument(lesson),
-            "information": "Test",
-            "is_private": False
-        })
-        self.assertStatusOk(response.status_code)
+        self.assertTrue(Homework.objects.all()[0].is_private)
     
     def test_can_edit_private_homework(self):
         lesson = self.Create_lesson(
@@ -124,6 +110,10 @@ class StudentAPITest(HomeworkTestMixin):
             "information": "Blaaaa",
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
+    
+    def test_get_list(self):
+        response = self.client.get("/api/student/homework/")
+        self.assertStatusOk(response.status_code)
 
 
 class StudentAPIInformationTest(HomeworkTestMixin):
