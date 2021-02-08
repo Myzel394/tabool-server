@@ -1,26 +1,26 @@
+from datetime import datetime
 from typing import *
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from datetime import datetime
 
 if TYPE_CHECKING:
     from .models import Homework
 
 __all__ = [
-    "validate_private_to_user", "only_future"
+    "validate_private_to_student", "only_future"
 ]
 
 
-def validate_private_to_user(homework: "Homework") -> None:
-    user = homework.private_to_user
+def validate_private_to_student(homework: "Homework") -> None:
+    student = homework.private_to_student
     
-    if user:
-        available_users = homework.lesson.course.participants.all()
+    if student:
+        available_students = homework.lesson.course.participants.all()
         
-        if user not in available_users:
+        if student not in available_students:
             raise ValidationError({
-                "private_to_user": _("Dieser Benutzer ist kein Mitglied des Kurses {course}.").format(
+                "private_to_student": _("Dieser Benutzer ist kein Mitglied des Kurses {course}.").format(
                     course=homework.lesson.course.name
                 )})
 

@@ -1,6 +1,7 @@
 from apps.django.authentication.user.serializers import (
-    DetailTeacherSerializer, DetailUserSerializer,
+    DetailTeacherSerializer,
 )
+from apps.django.authentication.user.sub.subserializers.student import DetailStudentSerializer
 from .base import BaseCourseSerializer, ParticipantsCountMixin
 from ..subject import DetailSubjectSerializer
 
@@ -27,4 +28,4 @@ class TeacherDetailCourseSerializer(BaseCourseSerializer):
     
     subject = DetailSubjectSerializer()
     teacher = DetailTeacherSerializer()
-    participants = DetailUserSerializer(many=True)
+    participants = DetailStudentSerializer(many=True)

@@ -30,7 +30,7 @@ class Mixin(ClassbookTestMixin, MaterialTestMixin, EventTestMixin, ModificationT
         )
     
     def as_student(self):
-        self.lesson.course.participants.add(self.student)
+        self.lesson.course.participants.add(self.student.student)
         
         self.Login_user(self.student)
     

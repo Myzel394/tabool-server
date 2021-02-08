@@ -14,3 +14,8 @@ class CreateSubmissionSerializer(BaseSubmissionSerializer):
         ]
     
     lesson = LessonField()
+    
+    def create(self, validated_data):
+        validated_data["student"] = self.context["request"].user.student
+        
+        return super().create()

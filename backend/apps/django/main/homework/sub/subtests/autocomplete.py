@@ -12,7 +12,7 @@ class HomeworkAutocompleteTest(HomeworkTestMixin):
     
     def setUp(self) -> None:
         self.user = self.Login_student()
-        self.__class__.associated_user = self.user
+        self.__class__.associated_student = self.user
         
         for element in self.TEST_TYPES:
             self.Create_homework(

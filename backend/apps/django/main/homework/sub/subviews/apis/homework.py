@@ -49,7 +49,7 @@ class StudentHomeworkViewSet(
         if request.method in SAFE_METHODS:
             return
         
-        if obj.private_to_user != request.user:
+        if obj.private_to_student != request.user.student:
             raise PermissionDenied(_("Du kannst öffentliche Hausaufgaben nicht verändern."))
     
     def get_queryset(self):
@@ -61,7 +61,7 @@ class StudentHomeworkViewSet(
         
         earliest_due_date = homeworks.earliest("due_date").due_date
         latest_due_date = homeworks.latest("due_date").due_date
-        private_count = homeworks.only("private_to_user").filter(private_to_user=request.user).count()
+        private_count = homeworks.only("private_to_student").filter(private_to_student=request.user.student).count()
         completed_count = homeworks \
             .only("userhomeworkrelation__completed") \
             .filter(userhomeworkrelation__completed=True) \

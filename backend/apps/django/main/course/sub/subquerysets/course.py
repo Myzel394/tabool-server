@@ -15,4 +15,4 @@ class CourseQuerySet(CustomQuerySetMixin.QuerySet):
                 .filter(teacher=user.teacher)
         return self \
             .only("participants", "teacher") \
-            .filter(participants__in=[user])
+            .filter(participants__in=[user.student])

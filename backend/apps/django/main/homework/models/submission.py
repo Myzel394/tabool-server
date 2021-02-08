@@ -7,7 +7,8 @@ from django_common_utils.libraries.models.mixins import CreationDateMixin, Rando
 from django_lifecycle import AFTER_DELETE, BEFORE_SAVE, hook, LifecycleModel
 from private_storage.fields import PrivateFileField
 
-from apps.django.utils.models import AssociatedUserMixin
+from apps.django.authentication.user.public import *
+from apps.django.authentication.user.public import model_names as auth_names
 from ..file_uploads import build_submission_upload_to
 from ..public import model_names
 from ..sub.subquerysets.submission import SubmissionQuerySet
@@ -15,7 +16,7 @@ from ..validators import only_future
 from ...timetable.mixins import LessonMixin
 
 if TYPE_CHECKING:
-    from apps.django.authentication.user.models import User
+    from apps.django.authentication.user.models import User, Student
     from django.db.models.fields.files import FieldFile
 
 __all__ = [
@@ -23,7 +24,7 @@ __all__ = [
 ]
 
 
-class Submission(RandomIDMixin, LessonMixin, AssociatedUserMixin, LifecycleModel, CreationDateMixin):
+class Submission(RandomIDMixin, LessonMixin, LifecycleModel, CreationDateMixin):
     class Meta:
         verbose_name = model_names.SUBMISSION
         verbose_name_plural = model_names.SUBMISSION_PLURAL
@@ -51,10 +52,16 @@ class Submission(RandomIDMixin, LessonMixin, AssociatedUserMixin, LifecycleModel
         validators=[only_future]
     )
     
+    student = models.ForeignKey(
+        STUDENT,
+        verbose_name=auth_names.STUDENT,
+        on_delete=models.CASCADE,
+    )  # type: Student
+    
     def can_user_access_file(self, user: "User") -> bool:
         if user.is_student:
-            return self.associated_user == user
-        return self.lesson.course.teacher.user == user
+            return self.student == user.student
+        return self.lesson.course.teacher == user.teacher
     
     @property
     def folder_name(self) -> str:

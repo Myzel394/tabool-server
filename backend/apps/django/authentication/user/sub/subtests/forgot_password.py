@@ -6,7 +6,7 @@ from apps.django.authentication.user.mixins import UserTestMixin
 class ForgotPasswordTest(UserTestMixin):
     def setUp(self):
         self.user = self.Login_user()
-        self.__class__.associated_user = self.user
+        self.__class__.associated_student = self.user
     
     def request(self) -> None:
         response = self.client.post("/api/auth/reset-password/", {

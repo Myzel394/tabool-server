@@ -11,10 +11,9 @@ __all__ = [
 @admin.register(Teacher)
 class TeacherAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["first_name", "last_name", "short_name", "email", "gender", "id", "!..."],
+        "default": ["short_name", "!..."],
         "creation": ["id", "!..."]
     }
     # TODO: Add first_name and last_name
     list_display = ["short_name"]
-    readonly_fields = ["email"]
     search_fields = ["user__first_name", "user__last_name", "short_name"]

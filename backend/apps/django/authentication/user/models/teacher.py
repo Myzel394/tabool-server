@@ -6,8 +6,6 @@ from django.utils.translation import gettext_lazy as _
 from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
 from apps.django.utils.models import IdMixin
-from apps.utils.texts import max_length_from_choices
-from ..choices import GenderChoices
 from ..public import *
 from ..public import model_names
 
@@ -35,17 +33,6 @@ class Teacher(IdMixin):
         verbose_name=_("Initialien"),
         max_length=32
     )  # type: str
-    
-    email = models.EmailField(
-        verbose_name=_("E-Mail"),
-    )  # type: str
-    
-    gender = models.CharField(
-        choices=GenderChoices.choices,
-        verbose_name=_("Geschlecht"),
-        default=GenderChoices.DIVERSE,
-        max_length=max_length_from_choices(GenderChoices.choices)
-    )  # type: int
     
     def clean(self):
         if not self.user.is_confirmed:

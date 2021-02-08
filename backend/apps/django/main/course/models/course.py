@@ -1,11 +1,12 @@
 from typing import *
 
-from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
+from django_hint import QueryType
 from django_lifecycle import LifecycleModel
 
+from apps.django.authentication.user.models.user import User
 from apps.django.authentication.user.public import *
 from apps.django.authentication.user.public import model_names as auth_names
 from ..public import *
@@ -30,7 +31,7 @@ class Course(RandomIDMixin, LifecycleModel):
     objects = CourseQuerySet.as_manager()
     
     participants = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        STUDENT,
         verbose_name=_("Teilnehmer"),
     )
     
@@ -79,3 +80,10 @@ class Course(RandomIDMixin, LifecycleModel):
                 return student.class_number
         
         raise TypeError("Course has no participants. Class number can't be detected.")
+    
+    @property
+    def user_participants(self) -> QueryType[User]:
+        user_ids = self.participants.all().values_list("user", flat=True).distinct()
+        users = User.objects.only("id").filter(id__in=user_ids)
+        
+        return users

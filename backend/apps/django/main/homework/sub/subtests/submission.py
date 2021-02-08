@@ -4,7 +4,7 @@ from apps.django.main.homework.mixins import SubmissionTestMixin
 class StorageTest(SubmissionTestMixin):
     def setUp(self):
         self.student = self.Login_student()
-        self.__class__.associated_user = self.student
+        self.__class__.associated_student = self.student
         
         self.submission = self.Create_submission()
         self.url = self.submission.file.url
@@ -47,7 +47,7 @@ class StorageTest(SubmissionTestMixin):
 class SubmissionAPITest(SubmissionTestMixin):
     def setUp(self):
         self.student = self.Login_student()
-        self.__class__.associated_user = self.student
+        self.__class__.associated_student = self.student
         self.submission = self.Create_submission()
     
     def test_get(self):

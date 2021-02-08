@@ -20,6 +20,11 @@ class SubmissionTestMixin(MaterialTestMixin):
         random_id = "".join(random.choices(string.ascii_letters + string.digits, k=5))
         filename = f"uploaded_file_at_{random_id}.txt"
         
+        if hasattr(cls, "associated_student"):
+            student = getattr(cls, "associated_student").student
+        else:
+            student = cls.Create_student_user().student
+        
         return Submission.objects.create(
             **joinkwargs({
                 "name": lambda: lorem.text().split(" ")[0],
@@ -29,7 +34,7 @@ class SubmissionTestMixin(MaterialTestMixin):
                     (lorem.paragraph() * 3).encode(),
                     "text/plain"
                 ),
-                "associated_user": lambda: getattr(cls, "associated_user", None) or cls.Create_user(),
+                "student": lambda: student,
                 **cls.Create_lesson_argument()
             }, kwargs)
         )

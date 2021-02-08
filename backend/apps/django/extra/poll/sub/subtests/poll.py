@@ -45,7 +45,7 @@ class PollModelTest(UserTestMixin, PollTestMixin):
 class PollAPITest(UserTestMixin, PollTestMixin):
     def setUp(self):
         self.user = self.Login_student()
-        self.__class__.associated_user = self.user
+        self.__class__.associated_student = self.user
         self.poll = self.Create_poll()
     
     def vote(self, **kwargs):
@@ -121,7 +121,7 @@ class PollAPITest(UserTestMixin, PollTestMixin):
 class PollAPIChoicesAmountTest(UserTestMixin, PollTestMixin):
     def setUp(self):
         self.user = self.Login_user()
-        self.__class__.associated_user = self.user
+        self.__class__.associated_student = self.user
         
         choices = ["Ja", "Nein", "Vielleicht", "A", "B"]
         min_vote_choices = 2

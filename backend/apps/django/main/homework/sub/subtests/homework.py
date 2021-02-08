@@ -8,16 +8,16 @@ from apps.utils import find_next_date_by_weekday
 
 
 class HomeworkModelTest(HomeworkTestMixin):
-    def test_private_to_user_validator_works(self):
+    def test_private_to_student_validator_works(self):
         with self.assertRaises(ValidationError):
             self.Create_homework(
-                private_to_user=self.Create_user()
+                private_to_student=self.Create_student_user().student
             )
 
 
 class TeacherHomeworkAPITest(HomeworkTestMixin):
     def setUp(self):
-        self.__class__.associated_user = self.Login_teacher()
+        self.__class__.associated_teacher = self.Login_teacher()
     
     def test_can_create_public_homework(self):
         response = self.client.post("/api/teacher/homework/", {
@@ -37,20 +37,20 @@ class TeacherHomeworkAPITest(HomeworkTestMixin):
         self.student = self.Create_student_user()
         lesson = self.Create_lesson(
             course=self.Create_course(
-                participants=[self.student]
+                participants=[self.student.student]
             )
         )
         
         response = self.client.post("/api/teacher/homework/", {
             **self.get_lesson_argument(lesson),
             "information": "Test",
-            "private_to_user": self.student.id
+            "private_to_student": self.student.id
         })
         self.assertStatusOk(response.status_code)
         
         homework = Homework.objects.all()[0]
         
-        self.assertEqual(self.student, homework.private_to_user)
+        self.assertEqual(self.student.student, homework.private_to_student)
     
     def test_can_edit_homework(self):
         homework = self.Create_homework()
@@ -58,17 +58,24 @@ class TeacherHomeworkAPITest(HomeworkTestMixin):
             "information": "Blaaaa",
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
+    
+    def test_can_not_privatize_public_homework(self):
+        homework = self.Create_homework()
+        response = self.client.patch(f"/api/teacher/homework/{homework.id}/", {
+            "private_to_student": self.Create_student_user().id,
+        }, content_type="application/json")
+        self.assertStatusOk(response.status_code)
 
 
 class StudentHomeworkAPITest(HomeworkTestMixin):
     def setUp(self):
         self.student = self.Login_student()
-        self.__class__.associated_user = self.student
+        self.__class__.associated_student = self.student
     
     def test_can_create_private_homework(self):
         lesson = self.Create_lesson(
             course=self.Create_course(
-                participants=[self.student]
+                participants=[self.student.student]
             )
         )
         
@@ -82,12 +89,12 @@ class StudentHomeworkAPITest(HomeworkTestMixin):
     def test_can_edit_private_homework(self):
         lesson = self.Create_lesson(
             course=self.Create_course(
-                participants=[self.student]
+                participants=[self.student.student]
             )
         )
         
         homework = self.Create_homework(
-            private_to_user=self.student,
+            private_to_student=self.student.student,
             lesson=lesson,
         )
         response = self.client.patch(f"/api/student/homework/{homework.id}/", {
@@ -98,12 +105,12 @@ class StudentHomeworkAPITest(HomeworkTestMixin):
     def test_can_not_edit_public_homework(self):
         lesson = self.Create_lesson(
             course=self.Create_course(
-                participants=[self.student]
+                participants=[self.student.student]
             )
         )
         
         homework = self.Create_homework(
-            private_to_user=None,
+            private_to_student=None,
             lesson=lesson,
         )
         response = self.client.patch(f"/api/student/homework/{homework.id}/", {
@@ -119,7 +126,7 @@ class StudentHomeworkAPITest(HomeworkTestMixin):
 class StudentHomeworkAPIInformationTest(HomeworkTestMixin):
     def setUp(self):
         self.student = self.Login_student()
-        self.__class__.associated_user = self.student
+        self.__class__.associated_student = self.student
         
         self.lesson = self.Create_lesson()
         
@@ -135,7 +142,7 @@ class StudentHomeworkAPIInformationTest(HomeworkTestMixin):
         self.private_homework = self.Create_homework(
             due_date=find_next_date_by_weekday(date.today(), self.lesson.weekday),
             lesson=self.lesson,
-            private_to_user=self.student
+            private_to_student=self.student.student
         )
         self.type_homework = self.Create_homework(
             lesson=self.lesson,

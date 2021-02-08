@@ -12,7 +12,7 @@ from apps.django.authentication.user.public import model_names as auth_names
 from ..notifications import push_homework_added
 from ..public import model_names
 from ..querysets import HomeworkQuerySet
-from ..validators import validate_private_to_user
+from ..validators import validate_private_to_student
 from ...timetable.mixins import LessonMixin
 
 if TYPE_CHECKING:
@@ -35,10 +35,10 @@ class Homework(RandomIDMixin, CreationDateMixin, HandlerMixin, LessonMixin):
     
     objects = HomeworkQuerySet.as_manager()
     
-    private_to_user = models.ForeignKey(
-        USER,
+    private_to_student = models.ForeignKey(
+        STUDENT,
         on_delete=models.CASCADE,
-        verbose_name=auth_names.USER,
+        verbose_name=auth_names.STUDENT,
         blank=True,
         null=True,
     )  # type: User
@@ -65,13 +65,13 @@ class Homework(RandomIDMixin, CreationDateMixin, HandlerMixin, LessonMixin):
     )  # type: str
     
     def clean(self):
-        validate_private_to_user(self)
+        validate_private_to_student(self)
         
         return super().clean()
     
     @property
     def is_private(self) -> bool:
-        return self.private_to_user is not None
+        return self.private_to_student is not None
     
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="due_date", has_changed=True)

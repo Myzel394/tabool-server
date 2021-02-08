@@ -24,7 +24,7 @@ class LessonAPITest(ClassbookTestMixin, MaterialTestMixin, HomeworkTestMixin):
         )
     
     def as_student(self):
-        self.lesson.course.participants.add(self.student)
+        self.lesson.course.participants.add(self.student.student)
         
         self.Login_user(self.student)
     

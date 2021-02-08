@@ -37,6 +37,7 @@ class UserTestMixin(ClientTestMixin):
                 "last_name": lambda: last_name,
                 "email": lambda: f"{first_name}.{last_name}@gmail.com",
                 "password": lambda: password,
+                "gender": lambda: random.choice(GenderChoices.values)
             }, kwargs)
         )
         
@@ -57,14 +58,11 @@ class UserTestMixin(ClientTestMixin):
     @classmethod
     def Create_teacher(cls, **kwargs) -> Teacher:
         first_name = names.get_first_name()
-        last_name = names.get_last_name()
         
         return Teacher.objects.create(
             **joinkwargs({
                 "user": cls.Create_user,
                 "short_name": lambda: first_name[:3],
-                "email": lambda: f"{first_name}@{last_name}.com",
-                "gender": lambda: random.choice([GenderChoices.DIVERSE, GenderChoices.MALE, GenderChoices.FEMALE])
             }, kwargs)
         )
     

@@ -5,7 +5,7 @@ from apps.django.main.homework.models import UserHomeworkRelation
 class StudentHomeworkUserRelationTest(HomeworkTestMixin):
     def setUp(self):
         self.user = self.Login_student()
-        self.__class__.associated_user = self.user
+        self.__class__.associated_student = self.user
         self.homework = self.Create_homework()
     
     def test_get_when_not_changed(self):

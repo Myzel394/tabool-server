@@ -22,7 +22,7 @@ class MaterialModelTest(MaterialTestMixin):
 class MaterialAPITest(MaterialTestMixin):
     def setUp(self):
         self.teacher = self.Login_teacher()
-        self.__class__.associated_user = self.teacher
+        self.__class__.associated_teacher = self.teacher
     
     def test_can_not_change_announce_when_already_true(self):
         material = self.Create_material(

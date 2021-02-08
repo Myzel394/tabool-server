@@ -7,7 +7,7 @@ class CourseAPITest(CourseTestMixin):
         self.teacher = self.Create_teacher_user()
         self.course = self.Create_course(
             teacher=self.teacher.teacher,
-            participants=[self.student]
+            participants=[self.student.student]
         )
     
     def test_student_gets_correct_serialized_course(self):

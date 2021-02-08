@@ -20,6 +20,9 @@ class DetailTeacherSerializer(BaseTeacherSerializer):
     
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
+    gender = serializers.SerializerMethodField()
     
     @staticmethod
     def get_first_name(instance: "Teacher") -> str:
@@ -28,3 +31,15 @@ class DetailTeacherSerializer(BaseTeacherSerializer):
     @staticmethod
     def get_last_name(instance: "Teacher") -> str:
         return instance.user.last_name
+    
+    @staticmethod
+    def get_email(instance: "Teacher") -> str:
+        return instance.user.email
+    
+    @staticmethod
+    def get_id(instance: "Teacher") -> str:
+        return instance.user.id
+    
+    @staticmethod
+    def get_gender(instance: "Teacher") -> str:
+        return instance.user.gender

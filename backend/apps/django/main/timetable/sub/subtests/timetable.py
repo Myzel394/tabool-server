@@ -49,7 +49,7 @@ class TimetableModelTest(LessonTestMixin):
 class TimetableAPITest(LessonTestMixin):
     def setUp(self):
         self.student = self.Login_student()
-        self.__class__.associated_user = self.student
+        self.__class__.associated_student = self.student
         self.timetable = self.Create_whole_timetable()
     
     def test_get(self):

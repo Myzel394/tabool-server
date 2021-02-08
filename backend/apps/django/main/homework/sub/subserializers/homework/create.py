@@ -1,4 +1,4 @@
-from apps.django.authentication.user.public.serializer_fields.user import UserField
+from apps.django.authentication.user.public.serializer_fields.student import StudentField
 from apps.django.main.timetable.public.serializer_fields.lesson import LessonField
 from .base import BaseHomeworkSerializer
 
@@ -16,7 +16,7 @@ class StudentCreateHomeworkSerializer(BaseHomeworkSerializer):
     lesson = LessonField()
     
     def create(self, validated_data):
-        validated_data["private_to_user"] = self.context["request"].user
+        validated_data["private_to_student"] = self.context["request"].user.student
         
         return super().create(validated_data)
 
@@ -26,8 +26,8 @@ class TeacherCreateHomeworkSerializer(BaseHomeworkSerializer):
         fields = [
             "due_date", "information", "type", "lesson", "lesson_date",
             
-            "private_to_user"
+            "private_to_student"
         ]
     
     lesson = LessonField()
-    private_to_user = UserField(required=False)
+    private_to_student = StudentField(required=False)

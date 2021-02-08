@@ -1,4 +1,4 @@
-from apps.django.authentication.user.sub.subserializers.user import DetailUserSerializer
+from apps.django.authentication.user.sub.subserializers.student import DetailStudentSerializer
 from apps.django.main.timetable.sub.subserializers.lesson import DetailLessonSerializer
 from .base import BaseSubmissionSerializer
 
@@ -25,4 +25,4 @@ class TeacherDetailSubmissionSerializer(BaseSubmissionSerializer):
         ]
     
     lesson = DetailLessonSerializer()
-    associated_user = DetailUserSerializer()
+    student = DetailStudentSerializer()

@@ -5,7 +5,7 @@ from apps.django.core.constants import PRIMARY_CLASS_CONTACT_EMAIL, SECONDARY_CL
 class ContactAPI(UserTestMixin):
     def setUp(self) -> None:
         self.user = self.Login_student()
-        self.__class__.associated_user = self.user
+        self.__class__.associated_student = self.user
     
     def change_class_number(self, class_number: int):
         student = self.user.student
@@ -17,7 +17,7 @@ class ContactAPI(UserTestMixin):
         for _ in range(10):
             self.Create_teacher()
         
-        teacher_id = self.user.student.main_teacher_id
+        teacher_id = self.user.student.main_teacher.user_id
         
         response = self.client.get("/api/student/contacts/")
         self.assertStatusOk(response.status_code)

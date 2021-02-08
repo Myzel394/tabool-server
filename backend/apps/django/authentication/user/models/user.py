@@ -9,7 +9,9 @@ from django.utils.translation import gettext_lazy as _
 from django_lifecycle import AFTER_CREATE, BEFORE_CREATE, hook, LifecycleModel
 from simple_email_confirmation.models import SimpleEmailConfirmationUserMixin
 
+from apps.utils.texts import max_length_from_choices
 from .preference import Preference
+from ..choices import GenderChoices
 from ..constants import STUDENT, TEACHER
 from ..helpers import send_email_verification
 from ..querysets import UserManager, UserQuerySet
@@ -42,6 +44,13 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     email = models.EmailField(
         verbose_name=_("Email-Adresse"),
         unique=True,
+    )  # type: str
+    
+    gender = models.CharField(
+        choices=GenderChoices.choices,
+        verbose_name=_("Geschlecht"),
+        default=GenderChoices.DIVERSE,
+        max_length=max_length_from_choices(GenderChoices.choices)
     )  # type: str
     
     username = None
