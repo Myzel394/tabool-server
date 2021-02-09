@@ -1,4 +1,13 @@
+from datetime import datetime
+from typing import *
+
+from django.utils.translation import gettext_lazy as _
+from rest_framework.exceptions import ValidationError
+
 from .base import BaseSubmissionSerializer
+
+if TYPE_CHECKING:
+    from ....models import Submission
 
 __all__ = [
     "UpdateSubmissionSerializer"
@@ -6,7 +15,15 @@ __all__ = [
 
 
 class UpdateSubmissionSerializer(BaseSubmissionSerializer):
+    instance: "Submission"
+    
     class Meta(BaseSubmissionSerializer.Meta):
         fields = [
             "publish_datetime",
         ]
+    
+    def validate_publish_datetime(self, value: datetime):
+        if self.instance.publish_datetime <= datetime.now():
+            raise ValidationError(
+                _("Diese Einsendung wurde bereits hochgeladen.")
+            )

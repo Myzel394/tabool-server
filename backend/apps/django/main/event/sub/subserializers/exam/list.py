@@ -12,7 +12,7 @@ __all__ = [
 class StudentListExamSerializer(BaseExamSerializer):
     class Meta(BaseExamSerializer.Meta):
         fields = [
-            "course", "date", "title"
+            "course", "date", "title", "id"
         ]
     
     course = StudentDetailCourseSerializer()
@@ -21,7 +21,7 @@ class StudentListExamSerializer(BaseExamSerializer):
 class TeacherListExamSerializer(BaseExamSerializer):
     class Meta(BaseExamSerializer.Meta):
         fields = [
-            "course", "date", "title"
+            "course", "date", "title", "id"
         ]
     
     course = TeacherDetailCourseSerializer()

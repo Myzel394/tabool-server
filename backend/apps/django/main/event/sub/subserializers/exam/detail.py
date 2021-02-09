@@ -21,7 +21,7 @@ class StudentDetailExamSerializer(BaseExamSerializer):
 class TeacherDetailExamSerializer(BaseExamSerializer):
     class Meta(BaseExamSerializer.Meta):
         fields = [
-            "course", "date", "title", "information", "id"
+            "course", "date", "title", "created_at", "information", "id"
         ]
     
     course = TeacherDetailCourseSerializer()

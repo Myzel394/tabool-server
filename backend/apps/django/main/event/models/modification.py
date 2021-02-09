@@ -2,7 +2,7 @@ from typing import *
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_common_utils.libraries.models.mixins import RandomIDMixin
+from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
 
 from apps.django.authentication.user.public import *
 from apps.django.authentication.user.public import model_names as auth_names
@@ -23,7 +23,7 @@ __all__ = [
 ]
 
 
-class Modification(RandomIDMixin, LessonMixin):
+class Modification(RandomIDMixin, LessonMixin, CreationDateMixin):
     class Meta:
         verbose_name = model_names.MODIFICATION
         verbose_name_plural = model_names.MODIFICATION_PLURAL

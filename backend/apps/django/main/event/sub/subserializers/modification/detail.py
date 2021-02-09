@@ -29,7 +29,7 @@ class TeacherDetailModificationSerializer(BaseModificationSerializer):
     class Meta(BaseModificationSerializer.Meta):
         fields = [
             "lesson", "lesson_date",
-            "new_room", "new_subject", "new_teacher", "information", "modification_type", "id"
+            "new_room", "new_subject", "new_teacher", "information", "created_at", "modification_type", "id"
         ]
     
     new_room = DetailRoomSerializer()

@@ -13,7 +13,7 @@ class StudentListModificationSerializer(BaseModificationSerializer):
     class Meta(BaseModificationSerializer.Meta):
         fields = [
             "lesson", "lesson_date",
-            "modification_type"
+            "modification_type", "id"
         ]
     
     lesson = StudentDetailLessonSerializer()
@@ -23,7 +23,7 @@ class TeacherListModificationSerializer(BaseModificationSerializer):
     class Meta(BaseModificationSerializer.Meta):
         fields = [
             "lesson", "lesson_date",
-            "modification_type"
+            "modification_type", "id"
         ]
     
     lesson = TeacherDetailLessonSerializer()

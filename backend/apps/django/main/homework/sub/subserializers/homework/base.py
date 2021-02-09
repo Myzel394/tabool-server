@@ -6,7 +6,7 @@ from rest_framework import serializers
 from ....models import Homework
 
 __all__ = [
-    "BaseHomeworkSerializer", "TruncatedInformationSerializer"
+    "BaseHomeworkSerializer", "TruncatedInformationSerializer", "IsPrivateMixin"
 ]
 
 
@@ -22,3 +22,11 @@ class TruncatedInformationSerializer(serializers.Serializer):
         if instance.information:
             return create_short(instance.information)
         return
+
+
+class IsPrivateMixin(serializers.Serializer):
+    is_private = serializers.SerializerMethodField()
+    
+    @staticmethod
+    def get_is_private(instance: Homework) -> bool:
+        return instance.is_private
