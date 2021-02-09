@@ -16,7 +16,7 @@ __all__ = [
 class DetailStudentSerializer(BaseStudentSerializer):
     class Meta(BaseStudentSerializer.Meta):
         fields = [
-            "main_teacher", "class_number", "first_name", "last_name", "gender", "email", "gender", "id"
+            "main_teacher", "class_number", "first_name", "last_name", "email", "gender", "id"
         ]
     
     main_teacher = DetailTeacherSerializer()

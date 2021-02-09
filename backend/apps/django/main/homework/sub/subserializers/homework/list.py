@@ -1,30 +1,29 @@
-from typing import *
-
-from django_common_utils.libraries.utils import create_short
-from rest_framework import serializers
-
-from apps.django.main.timetable.sub.subserializers.lesson import DetailLessonSerializer
-from .base import BaseHomeworkSerializer
-from ....models import Homework
+from apps.django.main.timetable.sub.subserializers.lesson import (
+    StudentDetailLessonSerializer,
+    TeacherDetailLessonSerializer,
+)
+from .base import BaseHomeworkSerializer, TruncatedInformationSerializer
 
 __all__ = [
-    "ListHomeworkSerializer"
+    "StudentListHomeworkSerializer", "TeacherListHomeworkSerializer"
 ]
 
 
-class ListHomeworkSerializer(BaseHomeworkSerializer):
+class StudentListHomeworkSerializer(BaseHomeworkSerializer, TruncatedInformationSerializer):
     class Meta(BaseHomeworkSerializer.Meta):
         fields = [
             "lesson", "lesson_date",
             "due_date", "id", "truncated_information",
         ]
     
-    lesson = DetailLessonSerializer()
+    lesson = StudentDetailLessonSerializer()
+
+
+class TeacherListHomeworkSerializer(BaseHomeworkSerializer, TruncatedInformationSerializer):
+    class Meta(BaseHomeworkSerializer.Meta):
+        fields = [
+            "lesson", "lesson_date",
+            "due_date", "id", "truncated_information",
+        ]
     
-    truncated_information = serializers.SerializerMethodField()
-    
-    @staticmethod
-    def get_truncated_information(instance: Homework) -> Optional[str]:
-        if instance.information:
-            return create_short(instance.information)
-        return
+    lesson = TeacherDetailLessonSerializer()

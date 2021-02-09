@@ -3,7 +3,7 @@ from typing import *
 from rest_framework import serializers
 
 from .base import BaseTimetableSerializer
-from ..lesson import DetailLessonSerializer
+from ..lesson import StudentDetailLessonSerializer, TeacherDetailLessonSerializer
 
 if TYPE_CHECKING:
     from ....models import Timetable
@@ -21,6 +21,7 @@ class DetailTimetableSerializer(BaseTimetableSerializer):
     
     lessons = serializers.SerializerMethodField()
     
-    @staticmethod
-    def get_lessons(instance: "Timetable") -> list:
-        return DetailLessonSerializer(instance=instance.lessons, many=True).data
+    def get_lessons(self, instance: "Timetable") -> list:
+        if self.context["request"].user.is_student:
+            return StudentDetailLessonSerializer(instance=instance.lessons, many=True, context=self.context).data
+        return TeacherDetailLessonSerializer(instance=instance.lessons, many=True, context=self.context).data

@@ -1,5 +1,8 @@
-from apps.django.authentication.user.sub.subserializers.student import DetailStudentSerializer
-from apps.django.main.timetable.sub.subserializers.lesson import DetailLessonSerializer
+from apps.django.authentication.user.serializers import DetailStudentSerializer
+from apps.django.main.timetable.sub.subserializers.lesson import (
+    StudentDetailLessonSerializer,
+    TeacherDetailLessonSerializer,
+)
 from .base import BaseSubmissionSerializer
 
 __all__ = [
@@ -14,7 +17,7 @@ class StudentDetailSubmissionSerializer(BaseSubmissionSerializer):
             "publish_datetime", "file", "name", "created_at", "id"
         ]
     
-    lesson = DetailLessonSerializer()
+    lesson = StudentDetailLessonSerializer()
 
 
 class TeacherDetailSubmissionSerializer(BaseSubmissionSerializer):
@@ -24,5 +27,5 @@ class TeacherDetailSubmissionSerializer(BaseSubmissionSerializer):
             "publish_datetime", "file", "name", "associated_user", "id"
         ]
     
-    lesson = DetailLessonSerializer()
+    lesson = TeacherDetailLessonSerializer()
     student = DetailStudentSerializer()

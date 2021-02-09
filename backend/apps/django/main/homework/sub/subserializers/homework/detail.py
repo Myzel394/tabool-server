@@ -1,5 +1,8 @@
 from apps.django.authentication.user.sub.subserializers.student import DetailStudentSerializer
-from apps.django.main.timetable.sub.subserializers.lesson import DetailLessonSerializer
+from apps.django.main.timetable.sub.subserializers.lesson import (
+    StudentDetailLessonSerializer,
+    TeacherDetailLessonSerializer,
+)
 from apps.django.utils.serializers import UserRelationField
 from .base import BaseHomeworkSerializer
 from ..user_relations import UserHomeworkRelationSerializer
@@ -17,7 +20,7 @@ class StudentDetailHomeworkSerializer(BaseHomeworkSerializer):
             "user_relation",
         ]
     
-    lesson = DetailLessonSerializer()
+    lesson = StudentDetailLessonSerializer()
     
     user_relation = UserRelationField(
         UserHomeworkRelationSerializer,
@@ -36,5 +39,5 @@ class TeacherDetailHomeworkSerializer(BaseHomeworkSerializer):
             "private_to_student",
         ]
     
-    lesson = DetailLessonSerializer()
+    lesson = TeacherDetailLessonSerializer()
     private_to_student = DetailStudentSerializer()

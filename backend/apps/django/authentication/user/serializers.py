@@ -3,3 +3,4 @@ from .sub.subserializers.password_change import *
 from .sub.subserializers.user import *
 from .sub.subserializers.preference import *
 from .sub.subserializers.teacher import *
+from .sub.subserializers.student import *

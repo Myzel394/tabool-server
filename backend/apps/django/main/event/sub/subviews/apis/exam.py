@@ -25,13 +25,13 @@ class ExamViewSet(
     }
     serializer_action_map = {
         STUDENT: {
-            "create": CreateExamSerializer,
-            "update": UpdateExamSerializer,
-            "partial_update": UpdateExamSerializer,
             "detail": StudentDetailExamSerializer,
             "list": StudentListExamSerializer,
         },
         TEACHER: {
+            "create": CreateExamSerializer,
+            "update": UpdateExamSerializer,
+            "partial_update": UpdateExamSerializer,
             "detail": TeacherDetailExamSerializer,
             "list": TeacherListExamSerializer,
         }

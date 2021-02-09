@@ -13,9 +13,9 @@ from apps.django.utils.viewsets import DetailSerializerViewSetMixin
 from ....filters import HomeworkFilterSet
 from ....models import Homework
 from ....serializers import (
-    ListHomeworkSerializer, StudentCreateHomeworkSerializer, StudentDetailHomeworkSerializer,
+    StudentCreateHomeworkSerializer, StudentDetailHomeworkSerializer, StudentListHomeworkSerializer,
     StudentUpdateHomeworkSerializer, TeacherCreateHomeworkSerializer, TeacherDetailHomeworkSerializer,
-    TeacherUpdateHomeworkSerializer,
+    TeacherListHomeworkSerializer, TeacherUpdateHomeworkSerializer,
 )
 
 __all__ = [
@@ -41,7 +41,7 @@ class StudentHomeworkViewSet(
         "create": StudentCreateHomeworkSerializer,
         "update": StudentUpdateHomeworkSerializer,
         "partial_update": StudentUpdateHomeworkSerializer,
-        "list": ListHomeworkSerializer,
+        "list": StudentListHomeworkSerializer,
         "retrieve": StudentDetailHomeworkSerializer
     }
     
@@ -101,7 +101,7 @@ class TeacherHomeworkViewSet(
         "create": TeacherCreateHomeworkSerializer,
         "update": TeacherUpdateHomeworkSerializer,
         "partial_update": TeacherUpdateHomeworkSerializer,
-        "list": ListHomeworkSerializer,
+        "list": TeacherListHomeworkSerializer,
         "retrieve": TeacherDetailHomeworkSerializer
     }
     

@@ -1,16 +1,29 @@
-from apps.django.main.timetable.sub.subserializers.lesson import DetailLessonSerializer
+from apps.django.main.timetable.sub.subserializers.lesson import (
+    StudentDetailLessonSerializer,
+    TeacherDetailLessonSerializer,
+)
 from .base import BaseClassbookSerializer
 
 __all__ = [
-    "DetailClassbookSerializer"
+    "StudentDetailClassbookSerializer", "TeacherDetailClassbookSerializer"
 ]
 
 
-class DetailClassbookSerializer(BaseClassbookSerializer):
+class StudentDetailClassbookSerializer(BaseClassbookSerializer):
     class Meta(BaseClassbookSerializer.Meta):
         fields = [
             "lesson", "lesson_date",
             "presence_content", "online_content", "id"
         ]
     
-    lesson = DetailLessonSerializer()
+    lesson = StudentDetailLessonSerializer()
+
+
+class TeacherDetailClassbookSerializer(BaseClassbookSerializer):
+    class Meta(BaseClassbookSerializer.Meta):
+        fields = [
+            "lesson", "lesson_date",
+            "presence_content", "online_content", "id"
+        ]
+    
+    lesson = TeacherDetailLessonSerializer()

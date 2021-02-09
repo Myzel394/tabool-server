@@ -6,17 +6,12 @@ from rest_framework.decorators import api_view, permission_classes, throttle_cla
 from rest_framework.response import Response
 
 from apps.django.main.event.models import Modification
-from apps.django.main.event.sub.subserializers.modification import DetailModificationSerializer
+from apps.django.main.event.serializers import StudentDetailModificationSerializer, TeacherDetailModificationSerializer
 from apps.django.main.homework.models import Classbook, Homework, Material, Submission
-from apps.django.main.homework.sub.subserializers.classbook import DetailClassbookSerializer
-from apps.django.main.homework.sub.subserializers.homework import (
-    StudentDetailHomeworkSerializer,
-    TeacherDetailHomeworkSerializer,
-)
-from apps.django.main.homework.sub.subserializers.material import DetailMaterialSerializer
-from apps.django.main.homework.sub.subserializers.submission import (
-    StudentDetailSubmissionSerializer,
-    TeacherDetailSubmissionSerializer,
+from apps.django.main.homework.serializers import (
+    StudentDetailClassbookSerializer, StudentDetailHomeworkSerializer,
+    StudentDetailMaterialSerializer, StudentDetailSubmissionSerializer, TeacherDetailClassbookSerializer,
+    TeacherDetailHomeworkSerializer, TeacherDetailMaterialSerializer, TeacherDetailSubmissionSerializer,
 )
 from apps.django.main.timetable.mixins import get_via_referenced_lesson_date
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent, IsTeacher
@@ -73,8 +68,8 @@ def student_lesson_view(request: RequestType):
     elements = get_elements(user, *lesson_args)
     
     return Response({
-        "classbook": DetailClassbookSerializer(instance=elements["classbook"], context=serializer_context).data,
-        "materials": DetailMaterialSerializer(
+        "classbook": StudentDetailClassbookSerializer(instance=elements["classbook"], context=serializer_context).data,
+        "materials": StudentDetailMaterialSerializer(
             instance=elements["materials"],
             many=True,
             context=serializer_context
@@ -84,7 +79,7 @@ def student_lesson_view(request: RequestType):
             many=True,
             context=serializer_context
         ).data,
-        "modifications": DetailModificationSerializer(
+        "modifications": StudentDetailModificationSerializer(
             instance=elements["modifications"],
             many=True,
             context=serializer_context
@@ -109,8 +104,8 @@ def teacher_lesson_view(request: RequestType):
     elements = get_elements(user, *lesson_args)
     
     return Response({
-        "classbook": DetailClassbookSerializer(instance=elements["classbook"], context=serializer_context).data,
-        "materials": DetailMaterialSerializer(
+        "classbook": TeacherDetailClassbookSerializer(instance=elements["classbook"], context=serializer_context).data,
+        "materials": TeacherDetailMaterialSerializer(
             instance=elements["materials"],
             many=True,
             context=serializer_context
@@ -120,7 +115,7 @@ def teacher_lesson_view(request: RequestType):
             many=True,
             context=serializer_context
         ).data,
-        "modifications": DetailModificationSerializer(
+        "modifications": TeacherDetailModificationSerializer(
             instance=elements["modifications"],
             many=True,
             context=serializer_context
