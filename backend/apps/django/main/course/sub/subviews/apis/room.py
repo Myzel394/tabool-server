@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from apps.django.utils.viewsets import DetailSerializerViewSetMixin
 from ....models import Room
@@ -16,8 +16,9 @@ class RoomViewSet(
     viewsets.mixins.RetrieveModelMixin,
     viewsets.mixins.ListModelMixin,
 ):
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["place"]
+    ordering_fields = ["place", "-place"]
     model = Room
     detail_serializer = DetailRoomSerializer
     serializer_action_map = {

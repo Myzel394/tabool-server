@@ -31,6 +31,7 @@ class StudentHomeworkViewSet(
     viewsets.mixins.UpdateModelMixin,
 ):
     permission_classes = [AuthenticationAndActivePermission & IsStudent]
+    
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = HomeworkFilterSet
     search_fields = ["information"]
