@@ -10,7 +10,7 @@ class AuthenticationOTPTest(UserTestMixin):
     def setUp(self) -> None:
         self.user_password = self.Get_random_password()
         
-        self.user = self.Create_user(password=self.user_password)
+        self.user = self.Create_student_user(password=self.user_password)
     
     def request(self) -> OTP:
         response = self.client.post("/api/auth/login/", {
