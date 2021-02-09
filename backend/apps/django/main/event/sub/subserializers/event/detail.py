@@ -9,7 +9,7 @@ __all__ = [
 class DetailEventSerializer(BaseEventSerializer):
     class Meta(BaseEventSerializer.Meta):
         fields = [
-            "room", "title", "start_datetime", "end_datetime", "id"
+            "room", "title", "start_datetime", "end_datetime", "information", "id"
         ]
     
     room = DetailRoomSerializer()

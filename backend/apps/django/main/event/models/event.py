@@ -38,6 +38,13 @@ class Event(RandomIDMixin):
         max_length=31,
     )
     
+    information = models.CharField(
+        blank=True,
+        null=True,
+        max_length=1023,
+        verbose_name=_("Informationen")
+    )
+    
     start_datetime = models.DateTimeField(
         verbose_name=_("Start"),
     )
