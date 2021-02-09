@@ -4,6 +4,7 @@ asgiref==3.2.10
 attrs==20.2.0
 autobahn==20.7.1
 Automat==20.2.0
+bandit==1.7.0
 beautifulsoup4==4.9.1
 bleach==3.2.1
 certifi==2020.6.20
@@ -12,6 +13,7 @@ channels==2.4.0
 chardet==3.0.4
 colour==0.1.5
 constantly==15.1.0
+coverage==5.4
 cryptography==3.1.1
 cssselect2==0.3.0
 daphne==2.5.0
@@ -41,6 +43,8 @@ et-xmlfile==1.0.1
 fcm-django==0.3.7
 future==0.18.2
 gender-guesser==0.4.0
+gitdb==4.0.5
+GitPython==3.1.13
 gripcontrol==4.0.0
 htmlmin==0.1.12
 httpagentparser==1.9.0
@@ -54,9 +58,10 @@ lxml==4.5.2
 Markdown==3.2.2
 mock==4.0.2
 names==0.3.0
-numpy
+numpy==1.19.2
 openpyxl==3.0.5
 packaging==20.4
+pbr==5.5.1
 pdfminer.six==20200726
 Pillow==7.2.0
 pluggy==0.13.1
@@ -83,17 +88,20 @@ python-dotenv==0.14.0
 python-magic==0.4.18
 python-pptx==0.6.18
 pytz==2020.1
+PyYAML==5.4.1
 reportlab==3.5.53
 requests==2.24.0
 requests-toolbelt==0.9.1
 secure-file-detection==0.1.5
 service-identity==18.1.0
 six==1.15.0
+smmap==3.0.5
 sortedcontainers==2.2.2
 soupsieve==2.0.1
 sqlparse==0.3.1
 sseclient==0.0.27
 stem==1.8.0
+stevedore==3.3.0
 svglib==1.0.1
 tinycss2==1.0.2
 toml==0.10.1
