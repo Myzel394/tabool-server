@@ -7,7 +7,8 @@ __all__ = [
 
 
 def find_next_date_by_weekday(start_date: Union[date, datetime], weekday: int) -> Union[date, datetime]:
-    assert 0 <= weekday <= 6, "Weekday not valid!"
+    if not 0 <= weekday <= 6:
+        raise TypeError("Weekday not valid!")
     
     found_date = start_date
     

@@ -17,7 +17,8 @@ __all__ = [
 
 
 def random_color() -> str:
-    return "#" + "".join(random.choice("0123456789ABCDEF") for _ in range(6))
+    # Random color doesn't need to be cryptographically secure
+    return "#" + "".join(random.choice("0123456789ABCDEF") for _ in range(6))  # nosec
 
 
 class Choice(RandomIDMixin, LifecycleModel):
