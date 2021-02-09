@@ -3,7 +3,7 @@ from django_filters import rest_framework as filters
 from apps.django.authentication.user.public import model_names as auth_names
 from apps.django.main.course.public import model_names as course_names
 from apps.django.main.timetable.mixins import LessonFilterSetMixin
-from ...models import Event
+from ...models import Modification
 
 __all__ = [
     "ModificationFilterSet"
@@ -12,7 +12,7 @@ __all__ = [
 
 class ModificationFilterSet(LessonFilterSetMixin):
     class Meta:
-        model = Event
+        model = Modification
         fields = [
             "modification_type"
         ]

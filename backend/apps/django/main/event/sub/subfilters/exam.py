@@ -2,7 +2,7 @@ from django_filters import rest_framework as filters
 
 from apps.django.main.course.public import model_names as course_names
 from apps.django.main.timetable.mixins import LessonFilterSetMixin
-from ...models import Event
+from ...models import Exam
 
 __all__ = [
     "ExamFilterSet"
@@ -11,7 +11,7 @@ __all__ = [
 
 class ExamFilterSet(LessonFilterSetMixin):
     class Meta:
-        model = Event
+        model = Exam
         fields = {
             "date": ["lte", "gte"],
         }
