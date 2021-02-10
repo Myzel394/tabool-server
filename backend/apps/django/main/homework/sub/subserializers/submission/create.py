@@ -10,7 +10,7 @@ class CreateSubmissionSerializer(BaseSubmissionSerializer):
     class Meta(BaseSubmissionSerializer.Meta):
         fields = [
             "lesson", "lesson_date",
-            "publish_datetime", "file"
+            "publish_datetime", "file", "name"
         ]
     
     lesson = LessonField()

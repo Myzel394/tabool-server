@@ -14,7 +14,7 @@ class MaterialFilterSet(LessonFilterSetMixin):
         model = Material
         fields = {
             "announce": ["exact"],
-            "publish_datetime": ["lte", "gte", "date__exact"],
+            "publish_datetime": ["lte", "gte"],
         }
     
     course = filters.CharFilter(

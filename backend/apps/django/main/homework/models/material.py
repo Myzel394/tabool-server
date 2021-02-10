@@ -39,8 +39,6 @@ class Material(RandomIDMixin, LessonMixin, CreationDateMixin):
     publish_datetime = models.DateTimeField(
         verbose_name=_("Veröffentlichkeitsdatum"),
         help_text=_("Ab wann Schüler auf die Datei zugreifen können"),
-        null=True,
-        blank=True,
         validators=[only_future]
     )
     

@@ -10,7 +10,7 @@ class CreateMaterialSerializer(BaseMaterialSerializer):
     class Meta(BaseMaterialSerializer.Meta):
         fields = [
             "lesson", "lesson_date",
-            "publish_datetime", "announce", "file"
+            "publish_datetime", "announce", "file", "name"
         ]
     
     lesson = LessonField()
