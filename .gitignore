@@ -287,3 +287,5 @@ venv
 postgres_data
 
 backend/.coverage
+
+backend/static_root
