@@ -23,8 +23,8 @@ def build_url(prefix: str) -> str:
     return f"api/{prefix}/"
 
 
-data_patterns = build_patterns("auth", [
-    sessions_routers.data_router.urls,
+auth_patterns = build_patterns("auth", [
+    sessions_routers.auth_router.urls,
 ])
 
 student_patterns = build_patterns("student", [
