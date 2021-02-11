@@ -84,7 +84,7 @@ urlpatterns = [
     path("api/fcm/devices/", FCMDeviceAuthorizedViewSet.as_view({"post": "create"}), name="create_fcm_device"),
 ]
 
-urlpatterns += data_patterns
+urlpatterns += auth_patterns
 urlpatterns += relation_patterns
 urlpatterns += student_patterns
 urlpatterns += teacher_patterns

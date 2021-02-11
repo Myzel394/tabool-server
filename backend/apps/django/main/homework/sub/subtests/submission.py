@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta
 
 from apps.django.main.homework.mixins import SubmissionTestMixin
@@ -57,8 +58,9 @@ class SubmissionAPITest(SubmissionTestMixin):
         self.assertStatusOk(response.status_code)
     
     def test_cant_edit_publish_datetime_when_already_published(self):
-        self.submission.publish_datetime = datetime.now() + timedelta(milliseconds=1)
+        self.submission.publish_datetime = datetime.now() + timedelta(seconds=.1)
         self.submission.save()
+        time.sleep(1)
         
         response = self.client.patch(f"/api/student/submission/{self.submission.id}/", {
             "publish_datetime": datetime.now() + timedelta(days=1)
