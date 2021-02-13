@@ -26,12 +26,12 @@ class PollViewSet(ReadOnlyModelViewSet):
     
     @action(["POST"], detail=True)
     def vote(self, request: RequestType, pk):
-        # Validation
         data = request.data
         data.update({
             "poll": pk
         })
         
+        # Validation
         serializer = PollUserVoteSerializer(data=data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
