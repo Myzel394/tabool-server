@@ -21,12 +21,14 @@ class TimetableViewSet(
     def get_queryset(self):
         return Timetable.objects.from_user(self.request.user)
     
-    @action(["GET"])
+    @action(["GET"], detail=False)
     def current(self, request: RequestType):
         today = date.today()
         timetables = self \
             .get_queryset() \
             .only("start_date", "end_date") \
             .filter(start_date__lte=today, end_date__gte=today)
+        current_timetable = timetables.first()
+        serializer = self.serializer_class(current_timetable)
         
-        return timetables.first()
+        return serializer
