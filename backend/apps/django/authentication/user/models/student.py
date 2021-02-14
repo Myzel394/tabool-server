@@ -46,7 +46,7 @@ class Student(IdMixin):
     )  # type: int
     
     def __str__(self):
-        return _("{user} in Klasse {class_number} mit Lehrer {teacher}").format(
+        return _("{user} in Klasse {class_number} mit Kurslehrer {teacher}").format(
             user=self.user,
             class_number=self.class_number,
             teacher=self.main_teacher

@@ -34,6 +34,9 @@ class Teacher(IdMixin):
         max_length=32
     )  # type: str
     
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} ({self.short_name})"
+    
     @hook(BEFORE_UPDATE, when="user.id", has_changed=True, was_not=None)
     def _hook_cant_change_user(self):
         raise ValidationError(_("Der Benutzer kann nicht verändert werden."))
