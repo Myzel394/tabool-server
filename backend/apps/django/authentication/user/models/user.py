@@ -110,6 +110,9 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
     
     @hook(AFTER_CREATE)
     def _hook_send_mail(self):
+        if getattr(self, "_dont_send_confirmation_mail", False):
+            return
+        
         send_email_verification(self)
     
     @hook(AFTER_CREATE)
