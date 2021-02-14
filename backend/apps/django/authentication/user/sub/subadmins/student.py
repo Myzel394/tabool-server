@@ -3,33 +3,36 @@ from django.contrib.auth import get_user_model
 from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 from django_common_utils.libraries.utils import field_verbose
 
-from ...models import Teacher
+from ...models import Student
 
 __all__ = [
-    "TeacherAdmin"
+    "StudentAdmin"
 ]
 
 User = get_user_model()
 
 
-@admin.register(Teacher)
-class TeacherAdmin(DefaultAdminMixin):
+@admin.register(Student)
+class StudentAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["short_name", "user"],
+        "default": ["class_number", "main_teacher", "user"],
         "created": ["id"]
     }
-    list_display = ["short_name", "first_name", "last_name"]
+    list_display = ["first_name", "last_name", "class_number", "main_teacher__str"]
     search_fields = ["user__first_name", "user__last_name", "short_name"]
     
-    def first_name(self, teacher: Teacher):
-        return teacher.user.first_name
+    def first_name(self, student: Student):
+        return student.user.first_name
     
     first_name.short_description = field_verbose(User, "first_name")
     
-    def last_name(self, teacher: Teacher):
-        return teacher.user.first_name
+    def last_name(self, student: Student):
+        return student.user.first_name
     
     last_name.short_description = field_verbose(User, "last_name")
+    
+    def main_teacher__str(self, student: Student):
+        return student.main_teacher.short_name
     
     def get_readonly_fields(self, request=None, obj=None) -> list:
         base = ["id"]
