@@ -16,11 +16,11 @@ __all__ = [
 @admin.register(User)
 class UserAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["first_name", "last_name", "email", "id", "is_active", "!..."],
-        "advanced": ["last_login", "user_permissions", "is_staff", "confirmation_key"]
+        "default": ["first_name", "last_name", "email", "gender", "is_active", "!..."],
+        "advanced": ["last_login", "user_permissions", "is_staff", "confirmation_key", "id"]
     }
-    list_display = ["email", "id", "is_active", "is_confirmed"]
-    list_filter = ["is_active"]
+    list_display = ["email", "first_name", "last_name", "user_type", "is_active", "is_confirmed"]
+    list_filter = ["is_active", "is_staff", "gender"]
     readonly_fields = ["confirmation_key", "last_login", "first_name", "last_name", "email"]
     filter_horizontal = ["user_permissions"]
     
