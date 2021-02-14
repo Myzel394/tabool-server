@@ -98,7 +98,9 @@ def send_otp_message(request: RequestType, user: "User", otp: "OTP"):
     ip = get_client_ip(request)
     
     # Create message
-    message_parts = []
+    message_parts = [
+        f"Ip: {ip}"
+    ]
     
     try:
         ip_location = get_ip_location(ip)
@@ -124,7 +126,7 @@ def send_otp_message(request: RequestType, user: "User", otp: "OTP"):
     message = f"""
     Hi {user.first_name}!
 
-    Es gab eine neue Anmeldung gegen am {now}.
+    Es gab eine neue Anmeldung gegen am {now.strftime('%d.%m.%Y %H:%M:%S')}.
     
     Wenn diese Anmeldung von dir ist, gib diesen Code ein:
         {otp.token}

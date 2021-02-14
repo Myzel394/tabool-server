@@ -67,7 +67,10 @@ class LoginView(views.APIView):
         # No OTP exists, create one
         if valid_otps.count() == 0:
             self.create_new_otp(user)
-            return False, {}
+            return False, {
+                "otp_key": _("Kein OTP gefunden (eventuell lange schon abgelaufen?). Es wurde dir ein neues "
+                             "zugeschickt.")
+            }
         
         return False, {
             "otp_key": _("Ungültiges OTP.")
