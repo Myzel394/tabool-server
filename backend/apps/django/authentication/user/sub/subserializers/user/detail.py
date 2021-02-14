@@ -1,5 +1,6 @@
+from rest_framework import serializers
+
 from .base import BaseUserSerializer
-from ..preference import DetailPreferenceSerializer
 
 __all__ = [
     "DetailUserSerializer", "UserInformationSerializer"
@@ -19,4 +20,7 @@ class UserInformationSerializer(BaseUserSerializer):
             "preference", "first_name", "last_name", "email", "id", "user_type", "gender"
         ]
     
-    preference = DetailPreferenceSerializer()
+    preference = serializers.SerializerMethodField()
+    
+    def get_preference(self, instance: "User"):
+        return instance.preference.data
