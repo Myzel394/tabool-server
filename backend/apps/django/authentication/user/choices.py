@@ -7,6 +7,6 @@ __all__ = [
 
 
 class GenderChoices(models.TextChoices):
-    MALE = "MAN", _("Männlich")
-    FEMALE = "WOMAN", _("Weiblich")
+    MALE = "MALE", _("Männlich")
+    FEMALE = "FEMALE", _("Weiblich")
     DIVERSE = "DIVERSE", _("Divers")
