@@ -15,7 +15,8 @@ class CreateSubmissionSerializer(BaseSubmissionSerializer):
     
     lesson = LessonField()
     
+    # TODO: Add tests!
     def create(self, validated_data):
         validated_data["student"] = self.context["request"].user.student
         
-        return super().create()
+        return super().create(validated_data)

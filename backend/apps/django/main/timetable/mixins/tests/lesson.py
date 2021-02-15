@@ -42,8 +42,8 @@ class LessonTestMixin(TimetableTestMixin, CourseTestMixin):
         )
     
     @classmethod
-    def Create_whole_timetable(cls) -> Timetable:
-        timetable = cls.Create_timetable()
+    def Create_whole_timetable(cls, **kwargs) -> Timetable:
+        timetable = cls.Create_timetable(**kwargs)
         
         for weekday in range(1, 5 + 1):
             for hour in range(1, 5):

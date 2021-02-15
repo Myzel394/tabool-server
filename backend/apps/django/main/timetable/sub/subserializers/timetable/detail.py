@@ -16,7 +16,7 @@ __all__ = [
 class DetailTimetableSerializer(BaseTimetableSerializer):
     class Meta(BaseTimetableSerializer.Meta):
         fields = [
-            "lessons",
+            "lessons", "id"
         ]
     
     lessons = serializers.SerializerMethodField()

@@ -3,6 +3,7 @@ from datetime import date
 from django_hint import RequestType
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from ....models import Timetable
 from ....serializers import DetailTimetableSerializer
@@ -29,6 +30,8 @@ class TimetableViewSet(
             .only("start_date", "end_date") \
             .filter(start_date__lte=today, end_date__gte=today)
         current_timetable = timetables.first()
-        serializer = self.serializer_class(current_timetable)
+        serializer = self.serializer_class(current_timetable, context={
+            "request": self.request
+        })
         
-        return serializer
+        return Response(serializer.data)
