@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from django.core.exceptions import ValidationError
 
 from apps.django.main.timetable.mixins import LessonTestMixin
@@ -55,3 +57,15 @@ class TimetableAPITest(LessonTestMixin):
     def test_get(self):
         response = self.client.get(f"/api/student/timetable/{self.timetable.id}/")
         self.assertStatusOk(response.status_code)
+    
+    def test_get_current(self):
+        self.Create_whole_timetable(
+            start_date=date.today() + timedelta(days=500),
+            end_date=date.today() + timedelta(days=700)
+        )
+        self.Create_whole_timetable(
+            start_date=date.today() - timedelta(days=700),
+            end_date=date.today() - timedelta(days=500)
+        )
+        response = self.client.get("/api/student/timetable/current/")
+        self.assertEqual(self.timetable.id, response.data["id"])
