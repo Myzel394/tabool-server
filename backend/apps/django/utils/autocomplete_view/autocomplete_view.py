@@ -10,7 +10,7 @@ from apps.django.utils.autocomplete_view.exceptions import InvalidQueryError
 from apps.django.utils.autocomplete_view.type_hints import DefaultResultType
 
 if TYPE_CHECKING:
-    from apps.django.main.authentication.models import User
+    from apps.django.authentication.user.models import User
 
 __all__ = [
     "AutocompleteView", ]
