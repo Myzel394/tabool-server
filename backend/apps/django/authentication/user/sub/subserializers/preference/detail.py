@@ -8,5 +8,5 @@ __all__ = [
 class DetailPreferenceSerializer(BasePreferenceSerializer):
     class Meta(BasePreferenceSerializer.Meta):
         fields = [
-            "id", "data"
+            "data"
         ]
