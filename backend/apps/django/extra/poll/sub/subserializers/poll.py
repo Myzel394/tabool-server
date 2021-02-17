@@ -20,12 +20,9 @@ class PollSerializer(serializers.ModelSerializer):
             "id", "choices", "user_vote", "results"
         ]
     
-    choices = serializers.SerializerMethodField()
+    choices = ChoiceSerializer(many=True)
     user_vote = serializers.SerializerMethodField()
     results = serializers.SerializerMethodField()
-    
-    def get_choices(self, instance: Poll):
-        return ChoiceSerializer(instance.choices, many=True, context=self.context).data
     
     def get_user_vote(self, instance: Poll):
         user = self.context["request"].user
