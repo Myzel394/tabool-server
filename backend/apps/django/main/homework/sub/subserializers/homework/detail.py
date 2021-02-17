@@ -4,7 +4,7 @@ from apps.django.main.timetable.sub.subserializers.lesson import (
     TeacherDetailLessonSerializer,
 )
 from apps.django.utils.serializers import UserRelationField
-from .base import BaseHomeworkSerializer, IsPrivateMixin
+from .base import BaseHomeworkSerializer
 from ..user_relations import UserHomeworkRelationSerializer
 
 __all__ = [
@@ -12,7 +12,7 @@ __all__ = [
 ]
 
 
-class StudentDetailHomeworkSerializer(BaseHomeworkSerializer, IsPrivateMixin):
+class StudentDetailHomeworkSerializer(BaseHomeworkSerializer):
     class Meta(BaseHomeworkSerializer.Meta):
         fields = [
             "lesson", "lesson_date",

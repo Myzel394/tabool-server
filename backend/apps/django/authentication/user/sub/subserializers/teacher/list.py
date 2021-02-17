@@ -14,18 +14,6 @@ class ListTeacherSerializer(serializers.ModelSerializer):
             "short_name", "last_name", "gender", "id"
         ]
     
-    last_name = serializers.SerializerMethodField()
-    gender = serializers.SerializerMethodField()
-    id = serializers.SerializerMethodField()
-    
-    @staticmethod
-    def get_last_name(instance: "Teacher") -> str:
-        return instance.user.last_name
-    
-    @staticmethod
-    def get_id(instance: "Teacher") -> str:
-        return instance.user.id
-    
-    @staticmethod
-    def get_gender(instance: "Teacher") -> str:
-        return instance.user.gender
+    last_name = serializers.ReadOnlyField(source="user.last_name")
+    gender = serializers.ReadOnlyField(source="user.gender")
+    id = serializers.ReadOnlyField(source="user.id")
