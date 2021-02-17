@@ -1,26 +1,15 @@
-from datetime import date, timedelta
-
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
-
-__all__ = [
-    "DayViewSerializer"
-]
-
 from rest_framework.exceptions import ValidationError
 
+from ...utils import get_date
 
-def get_date():
-    today = date.today()
-    weekday = today.weekday()
-    
-    if weekday >= 5:
-        today += timedelta(days=7 - weekday)
-    
-    return today
+__all__ = [
+    "WeekViewSerializer"
+]
 
 
-class DayViewSerializer(serializers.Serializer):
+class WeekViewSerializer(serializers.Serializer):
     start_date = serializers.DateField(
         default=get_date,
         label=_("Startdatum")
@@ -34,7 +23,7 @@ class DayViewSerializer(serializers.Serializer):
     def validate(self, attrs):
         if attrs["end_date"] < attrs["start_date"]:
             raise ValidationError(
-                _("Das Startdatum ist unter dem Enddatum.")
+                _("Das Enddatum muss über dem Startdatum liegen.")
             )
         
         return super().validate(attrs)

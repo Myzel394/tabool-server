@@ -1,4 +1,6 @@
 # noinspection PyUnresolvedReferences
-from .sub.subthrottles.day import *
+from .sub.subthrottles.daily_data import *
 # noinspection PyUnresolvedReferences
 from .sub.subthrottles.lesson import *
+# noinspection PyUnresolvedReferences
+from .sub.subthrottles.week import *

@@ -1,2 +1,2 @@
 from .sub.subtests.lesson import *
-from .sub.subtests.day import *
+from .sub.subtests.week import *

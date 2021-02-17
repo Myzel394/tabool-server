@@ -6,7 +6,7 @@ from apps.django.main.homework.mixins import ClassbookTestMixin, MaterialTestMix
 from apps.utils import find_next_date_by_weekday
 
 
-class Mixin(ClassbookTestMixin, MaterialTestMixin, EventTestMixin, ModificationTestMixin, ExamTestMixin):
+class WeekMixin(ClassbookTestMixin, MaterialTestMixin, EventTestMixin, ModificationTestMixin, ExamTestMixin):
     def setUp(self):
         self.teacher = self.Create_teacher_user()
         self.student = self.Create_student_user()
@@ -48,7 +48,7 @@ class Mixin(ClassbookTestMixin, MaterialTestMixin, EventTestMixin, ModificationT
         self.assertEqual(data["exams"][0]["id"], self.exam.id)
 
 
-class StudentAPITest(Mixin):
+class StudentWeekViewAPITest(WeekMixin):
     def test_get_in_range(self):
         self.as_student()
         response = self.client.get("/api/student/day/", {
@@ -89,7 +89,7 @@ class StudentAPITest(Mixin):
         self.assertStatusOk(response.status_code)
 
 
-class TeacherAPITest(Mixin):
+class TeacherWeekViewAPITest(WeekMixin):
     def test_get_in_range(self):
         self.as_teacher()
         response = self.client.get("/api/teacher/day/", {

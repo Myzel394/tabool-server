@@ -1,18 +1,18 @@
 from rest_framework.throttling import UserRateThrottle
 
 __all__ = [
-    "BurstDayViewThrottle", "SustainedDayViewThrottle"
+    "BurstWeekViewThrottle", "SustainedWeekViewThrottle"
 ]
 
 
-class BurstDayViewThrottle(UserRateThrottle):
+class BurstWeekViewThrottle(UserRateThrottle):
     THROTTLE_RATES = {
-        "burst_day": "30/min"
+        "burst_day": "40/min"
     }
     scope = "burst_day"
 
 
-class SustainedDayViewThrottle(UserRateThrottle):
+class SustainedWeekViewThrottle(UserRateThrottle):
     THROTTLE_RATES = {
         "sustained_day": "500/day"
     }

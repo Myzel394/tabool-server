@@ -16,19 +16,19 @@ from apps.django.main.timetable.mixins import get_via_referenced_lesson_date_ran
 from apps.django.main.timetable.models import Lesson
 from apps.django.main.timetable.serializers import StudentDetailLessonSerializer, TeacherDetailLessonSerializer
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent, IsTeacher
-from ....serializers import DayViewSerializer
-from ....throttles import BurstDayViewThrottle, SustainedDayViewThrottle
+from ....serializers import WeekViewSerializer
+from ....throttles import BurstWeekViewThrottle, SustainedWeekViewThrottle
 
 if TYPE_CHECKING:
     from apps.django.authentication.user.models import User
 
 __all__ = [
-    "student_day_view", "teacher_day_view"
+    "student_week_view", "teacher_week_view"
 ]
 
 
 def parse_serializer(data: dict, serializer_context: dict) -> tuple[date, date]:
-    serializer = DayViewSerializer(data=data, context=serializer_context)
+    serializer = WeekViewSerializer(data=data, context=serializer_context)
     serializer.is_valid(raise_exception=True)
     
     validated_data = serializer.validated_data
@@ -70,9 +70,9 @@ def get_elements(user: "User", start_date: date, end_date: date) -> dict:
 
 
 @api_view(["GET"])
-@throttle_classes([BurstDayViewThrottle, SustainedDayViewThrottle])
+@throttle_classes([BurstWeekViewThrottle, SustainedWeekViewThrottle])
 @permission_classes([AuthenticationAndActivePermission & IsStudent])
-def student_day_view(request: RequestType):
+def student_week_view(request: RequestType):
     serializer_context = {
         "request": request
     }
@@ -110,9 +110,9 @@ def student_day_view(request: RequestType):
 
 
 @api_view(["GET"])
-@throttle_classes([BurstDayViewThrottle, SustainedDayViewThrottle])
+@throttle_classes([BurstWeekViewThrottle, SustainedWeekViewThrottle])
 @permission_classes([AuthenticationAndActivePermission & IsTeacher])
-def teacher_day_view(request: RequestType):
+def teacher_week_view(request: RequestType):
     serializer_context = {
         "request": request
     }
