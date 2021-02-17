@@ -51,7 +51,7 @@ class WeekMixin(ClassbookTestMixin, MaterialTestMixin, EventTestMixin, Modificat
 class StudentWeekViewAPITest(WeekMixin):
     def test_get_in_range(self):
         self.as_student()
-        response = self.client.get("/api/student/day/", {
+        response = self.client.get("/api/student/week/", {
             "start_date": self.date - timedelta(days=1),
             "end_date": self.date + timedelta(days=1)
         }, content_type="application/json")
@@ -60,7 +60,7 @@ class StudentWeekViewAPITest(WeekMixin):
     
     def test_get_not_in_range(self):
         self.as_student()
-        response = self.client.get("/api/student/day/", {
+        response = self.client.get("/api/student/week/", {
             "start_date": self.date - timedelta(days=300),
             "end_date": self.date - timedelta(days=299)
         }, content_type="application/json")
@@ -69,7 +69,7 @@ class StudentWeekViewAPITest(WeekMixin):
     
     def test_get_invalid_dates(self):
         self.as_student()
-        response = self.client.get("/api/student/day/", {
+        response = self.client.get("/api/student/week/", {
             "start_date": self.date + timedelta(days=3),
             "end_date": self.date - timedelta(days=1)
         }, content_type="application/json")
@@ -77,7 +77,7 @@ class StudentWeekViewAPITest(WeekMixin):
     
     def test_student_cant_access_teacher_endpoint(self):
         self.as_student()
-        response = self.client.get("/api/teacher/day/", {
+        response = self.client.get("/api/teacher/week/", {
             "start_date": self.date - timedelta(days=1),
             "end_date": self.date + timedelta(days=1)
         }, content_type="application/json")
@@ -85,14 +85,14 @@ class StudentWeekViewAPITest(WeekMixin):
     
     def test_date_autofill(self):
         self.as_student()
-        response = self.client.get("/api/student/day/")
+        response = self.client.get("/api/student/week/")
         self.assertStatusOk(response.status_code)
 
 
 class TeacherWeekViewAPITest(WeekMixin):
     def test_get_in_range(self):
         self.as_teacher()
-        response = self.client.get("/api/teacher/day/", {
+        response = self.client.get("/api/teacher/week/", {
             "start_date": self.date - timedelta(days=1),
             "end_date": self.date + timedelta(days=1)
         }, content_type="application/json")
@@ -101,7 +101,7 @@ class TeacherWeekViewAPITest(WeekMixin):
     
     def test_get_not_in_range(self):
         self.as_teacher()
-        response = self.client.get("/api/teacher/day/", {
+        response = self.client.get("/api/teacher/week/", {
             "start_date": self.date - timedelta(days=300),
             "end_date": self.date - timedelta(days=299)
         }, content_type="application/json")
@@ -110,7 +110,7 @@ class TeacherWeekViewAPITest(WeekMixin):
     
     def test_get_invalid_dates(self):
         self.as_teacher()
-        response = self.client.get("/api/teacher/day/", {
+        response = self.client.get("/api/teacher/week/", {
             "start_date": self.date + timedelta(days=3),
             "end_date": self.date - timedelta(days=1)
         }, content_type="application/json")
@@ -118,7 +118,7 @@ class TeacherWeekViewAPITest(WeekMixin):
     
     def test_teacher_cant_access_student_endpoint(self):
         self.as_teacher()
-        response = self.client.get("/api/student/day/", {
+        response = self.client.get("/api/student/week/", {
             "start_date": self.date - timedelta(days=1),
             "end_date": self.date + timedelta(days=1)
         }, content_type="application/json")
