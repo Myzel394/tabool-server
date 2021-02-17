@@ -10,7 +10,7 @@ from apps.utils import find_next_date_by_weekday
 class DailyDataMixin(ExamTestMixin, HomeworkTestMixin, ClassbookTestMixin, ModificationTestMixin, MaterialTestMixin):
     @property
     def random_lesson(self) -> tuple[Lesson, date]:
-        lesson = random.choice(self.lessons)
+        lesson = random.choice(self.lessons)  # nosec
         targeted_date = find_next_date_by_weekday(date.today(), lesson.weekday)
         
         return lesson, targeted_date
