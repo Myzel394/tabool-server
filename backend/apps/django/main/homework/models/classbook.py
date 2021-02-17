@@ -30,6 +30,12 @@ class Classbook(RandomIDMixin, LessonMixin, HandlerMixin):
         null=True,
     )
     
+    video_conference_link = models.URLField(
+        max_length=1023,
+        blank=True,
+        null=True,
+    )
+    
     @staticmethod
     def handlers():
         return {
