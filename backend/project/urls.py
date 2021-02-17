@@ -67,10 +67,10 @@ urlpatterns = [
     
     # Student
     path("api/student/daily-data/", student_daily_data_view),
-    path("api/student/day/", student_week_view),
+    path("api/student/week/", student_week_view),
     path("api/student/lesson/", student_lesson_view),
     # Teacher
-    path("api/teacher/day/", teacher_week_view),
+    path("api/teacher/week/", teacher_week_view),
     path("api/teacher/lesson/", teacher_lesson_view),
     
     # Autocomplete
