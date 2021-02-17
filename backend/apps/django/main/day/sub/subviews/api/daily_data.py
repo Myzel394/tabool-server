@@ -11,6 +11,7 @@ from apps.django.main.event.sub.subserializers.event import DetailEventSerialize
 from apps.django.main.event.sub.subserializers.exam import StudentDetailExamSerializer
 from apps.django.main.event.sub.subserializers.modification import StudentDetailModificationSerializer
 from apps.django.main.homework.models import Classbook, Homework, Material
+from apps.django.main.homework.sub.subserializers.classbook import StudentDetailClassbookSerializer
 from apps.django.main.homework.sub.subserializers.homework import StudentDetailHomeworkSerializer
 from apps.django.main.homework.sub.subserializers.material import StudentDetailMaterialSerializer
 from apps.django.main.timetable.models import Lesson
@@ -86,7 +87,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
         .filter(homework_not_completed_filter) \
         .filter(homework_date_filter) \
         .distinct()
-    lesson_with_video_conferences = Classbook.objects \
+    classbook_with_video_conferences = Classbook.objects \
         .from_user(user) \
         .only("video_conference_link", "lesson_date") \
         .filter(video_conference_link__isnull=False) \
@@ -99,7 +100,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
         "exams": exams,
         "events": events,
         "homeworks": homeworks,
-        "lesson_with_video_conferences": lesson_with_video_conferences
+        "classbook_with_video_conferences": classbook_with_video_conferences
     }
 
 
@@ -145,8 +146,8 @@ def student_daily_data_view(request: RequestType):
             many=True,
             context=serializer_context
         ).data,
-        "lesson_with_video_conferences": StudentDetailLessonSerializer(
-            instance=elements["lesson_with_video_conferences"],
+        "classbook_with_video_conferences": StudentDetailClassbookSerializer(
+            instance=elements["classbook_with_video_conferences"],
             many=True,
             context=serializer_context
         ).data
