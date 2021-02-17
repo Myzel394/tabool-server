@@ -14,13 +14,14 @@ class CourseTestMixin(RoomTestMixin, SubjectTestMixin, UserTestMixin):
         teacher = kwargs.pop("teacher", None)
         
         if associated_teacher := getattr(cls, "associated_teacher", None):
-            teacher = cls.associated_teacher.teacher
+            teacher = associated_teacher.teacher
         
         course = Course.objects.create(
             **joinkwargs({
                 "teacher": lambda: teacher or cls.Create_teacher(),
                 "subject": cls.Create_subject,
-                "course_number": lambda: random.randint(1, 5)
+                "course_number": lambda: random.randint(1, 5),
+                "room": cls.Create_room
             }, kwargs)
         )
         course.participants.add(

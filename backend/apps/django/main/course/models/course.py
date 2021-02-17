@@ -15,7 +15,7 @@ from ..querysets import CourseQuerySet
 
 if TYPE_CHECKING:
     from apps.django.authentication.user.models import Teacher
-    from . import Subject
+    from . import Room, Subject
 
 __all__ = [
     "Course"
@@ -34,6 +34,12 @@ class Course(RandomIDMixin, LifecycleModel):
         STUDENT,
         verbose_name=_("Teilnehmer"),
     )
+    
+    room = models.ForeignKey(
+        ROOM,
+        on_delete=models.CASCADE,
+        verbose_name=model_names.ROOM
+    )  # type: Room
     
     subject = models.ForeignKey(
         SUBJECT,
