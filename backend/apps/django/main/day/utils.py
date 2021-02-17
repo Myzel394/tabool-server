@@ -6,10 +6,10 @@ __all__ = [
 
 
 def get_date() -> date:
-    date = date.today()
-    weekday = today.weekday()
+    targeted_date = date.today()
+    weekday = targeted_date.weekday()
     
     if weekday >= 5:
-        today += timedelta(days=7 - weekday)
+        targeted_date += timedelta(days=7 - weekday)
     
-    return date
+    return targeted_date

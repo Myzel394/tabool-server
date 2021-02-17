@@ -4,7 +4,7 @@ from apps.django.main.homework.mixins import ClassbookTestMixin, HomeworkTestMix
 from apps.django.main.timetable.mixins import find_next_date_by_weekday
 
 
-class LessonAPITest(ClassbookTestMixin, MaterialTestMixin, HomeworkTestMixin):
+class LessonViewAPITest(ClassbookTestMixin, MaterialTestMixin, HomeworkTestMixin):
     def setUp(self):
         self.teacher = self.Create_teacher_user()
         self.student = self.Create_student_user()
