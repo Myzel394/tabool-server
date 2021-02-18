@@ -12,14 +12,12 @@ __all__ = [
 ]
 
 
-# [3, 4] - [4, 5]
-
-
 def validate_no_timetable_overlap(value: "Lesson"):
     lessons = value.timetable.lessons
     overlaps_available = any(
         lesson.weekday == value.weekday and (
                 (value.start_hour <= lesson.end_hour) and (value.end_hour >= lesson.start_hour)
+                or (value.start_hour == lesson.start_hour and value.end_hour == lesson.end_hour)
         )
         for lesson in lessons
     )

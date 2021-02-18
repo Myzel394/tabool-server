@@ -46,6 +46,15 @@ class TimetableModelTest(LessonTestMixin):
                 start_hour=2,
                 end_hour=4
             )
+        
+        # Invalid start and end same
+        with self.assertRaises(ValidationError):
+            self.Create_lesson(
+                timetable=timetable,
+                weekday=1,
+                start_hour=3,
+                end_hour=4
+            )
 
 
 class TimetableAPITest(LessonTestMixin):
