@@ -12,8 +12,7 @@ from apps.django.main.event.serializers import (
 )
 from apps.django.main.homework.models import Material
 from apps.django.main.homework.serializers import StudentDetailMaterialSerializer, TeacherDetailMaterialSerializer
-from apps.django.main.timetable.mixins import get_via_referenced_lesson_date_range
-from apps.django.main.timetable.models import Lesson
+from apps.django.main.timetable.models import Timetable
 from apps.django.main.timetable.serializers import StudentDetailLessonSerializer, TeacherDetailLessonSerializer
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent, IsTeacher
 from ....serializers import WeekViewSerializer
@@ -44,12 +43,20 @@ def get_elements(user: "User", start_date: date, end_date: date) -> dict:
     start_weekday = 0 if start_weekday >= 6 else start_weekday
     weekdays = list(range(min(start_weekday, end_weekday), max(start_weekday, end_weekday) + 1))
     
-    modifications = get_via_referenced_lesson_date_range(Modification.objects.from_user(user), start_date, end_date)
-    materials = get_via_referenced_lesson_date_range(Material.objects.from_user(user), start_date, end_date)
-    lessons = Lesson.objects \
-        .from_user(user) \
+    timetable = Timetable.objects.current(user)
+    user_lessons = timetable.lessons
+    lessons = user_lessons \
         .only("weekday") \
         .filter(weekday__in=weekdays)
+    
+    modifications = Modification.objects \
+        .from_user(user) \
+        .only("lesson_date", ) \
+        .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
+    materials = Material.objects \
+        .from_user(user) \
+        .only("lesson_date") \
+        .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
     exams = Exam.objects \
         .from_user(user) \
         .only("date") \

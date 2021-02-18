@@ -14,7 +14,7 @@ from apps.django.main.homework.models import Classbook, Homework, Material
 from apps.django.main.homework.sub.subserializers.classbook import StudentDetailClassbookSerializer
 from apps.django.main.homework.sub.subserializers.homework import StudentDetailHomeworkSerializer
 from apps.django.main.homework.sub.subserializers.material import StudentDetailMaterialSerializer
-from apps.django.main.timetable.models import Lesson
+from apps.django.main.timetable.models import Timetable
 from apps.django.main.timetable.sub.subserializers.lesson import StudentDetailLessonSerializer
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent
 from ....serializers import DailyDataViewSerializer
@@ -44,7 +44,8 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
     end_date = targeted_date + timedelta(days=max_future_days)
     end_date = datetime.combine(end_date, time.max)
     
-    user_lessons = Lesson.objects.from_user(user)
+    timetable = Timetable.objects.current(user)
+    user_lessons = timetable.lessons
     # Based on the courses we can fetch the other elements. If we would use `lessons`, we would only get elements
     # from `targeted_date`. We also want to fetch elements from the future based on `max_future_days`.
     course_ids = set(user_lessons.values_list("course", flat=True))

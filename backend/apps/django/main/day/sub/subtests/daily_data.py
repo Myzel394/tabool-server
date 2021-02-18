@@ -20,10 +20,7 @@ class DailyDataMixin(ExamTestMixin, HomeworkTestMixin, ClassbookTestMixin, Modif
         self.student = self.Create_student_user()
         self.__class__.associated_student = self.student
         self.__class__.associated_teacher = self.teacher
-        self.lessons = [
-            self.Create_lesson()
-            for _ in range(20)
-        ]
+        self.lessons = self.Create_whole_timetable().lessons
         lesson, targeted_date = self.random_lesson
         self.homework = self.Create_homework(
             lesson=lesson,
@@ -52,7 +49,7 @@ class StudentDailyDataAPITest(DailyDataMixin):
         self.Login_user(self.student)
     
     def test_get_invalid_date(self):
-        targeted_date = find_next_date_by_weekday(date.today(), 5)
+        targeted_date = find_next_date_by_weekday(date.today(), 6)
         response = self.client.get("/api/student/daily-data/", {
             "date": targeted_date,
         }, content_type="application/json")

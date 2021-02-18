@@ -1,5 +1,3 @@
-from datetime import date
-
 from django_hint import RequestType
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -24,12 +22,7 @@ class TimetableViewSet(
     
     @action(["GET"], detail=False)
     def current(self, request: RequestType):
-        today = date.today()
-        timetables = self \
-            .get_queryset() \
-            .only("start_date", "end_date") \
-            .filter(start_date__lte=today, end_date__gte=today)
-        current_timetable = timetables.first()
+        current_timetable = Timetable.objects.current(self.request.user)
         serializer = self.serializer_class(current_timetable, context={
             "request": self.request
         })
