@@ -3,7 +3,7 @@ from typing import *
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_lifecycle import BEFORE_SAVE, BEFORE_UPDATE, hook
+from django_lifecycle import AFTER_DELETE, BEFORE_SAVE, BEFORE_UPDATE, hook
 
 from apps.django.utils.models import IdMixin
 from ..public import *
@@ -44,3 +44,7 @@ class Teacher(IdMixin):
     @hook(BEFORE_SAVE, when="user.is_confirmed", is_now=False)
     def _hook_email_must_be_confirmed(self):
         raise ValidationError(_("Bestätige deine E-Mail."))
+    
+    @hook(AFTER_DELETE)
+    def _hook_delete_user(self):
+        self.user.delete()
