@@ -3,6 +3,7 @@ import string
 from typing import Optional
 
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.fieldsets.mixins import DefaultAdminMixin
 from django_hint import RequestType
 
@@ -19,7 +20,7 @@ class UserAdmin(DefaultAdminMixin):
         "default": ["first_name", "last_name", "email", "gender", "is_active", "!..."],
         "advanced": ["last_login", "user_permissions", "is_staff", "confirmation_key", "id"]
     }
-    list_display = ["email", "first_name", "last_name", "user_type", "is_active", "is_confirmed"]
+    list_display = ["email", "first_name", "last_name", "get_user_type", "is_active", "is_confirmed"]
     list_filter = ["is_active", "is_staff", "gender"]
     readonly_fields = ["confirmation_key", "last_login", "first_name", "last_name", "email"]
     filter_horizontal = ["user_permissions"]
@@ -59,3 +60,9 @@ class UserAdmin(DefaultAdminMixin):
             return response
         else:
             return super().save_model(request, obj, form, change)
+    
+    def get_user_type(self, instance: User):
+        try:
+            return instance.user_type
+        except TypeError:
+            return _("Unbekannt")
