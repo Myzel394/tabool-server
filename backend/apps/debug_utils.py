@@ -73,7 +73,7 @@ if settings.DEBUG:
         for _ in range(10):
             HomeworkTestMixin.associated_student = student
             HomeworkTestMixin.associated_teacher = teacher
-            HomeworkTestMixin.Create_homework()
+            HomeworkTestMixin.Create_homework(lesson=random.choice(lessons))
         
         for _ in range(10):
             ClassbookTestMixin.associated_student = student

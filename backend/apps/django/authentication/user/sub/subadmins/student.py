@@ -19,7 +19,7 @@ class StudentAdmin(DefaultAdminMixin):
         "created": ["id"]
     }
     list_display = ["first_name", "last_name", "class_number", "main_teacher__str"]
-    search_fields = ["user__first_name", "user__last_name", "short_name"]
+    search_fields = ["user__first_name", "user__last_name", ]
     
     def first_name(self, student: Student):
         return student.user.first_name
@@ -32,7 +32,9 @@ class StudentAdmin(DefaultAdminMixin):
     last_name.short_description = field_verbose(User, "last_name")
     
     def main_teacher__str(self, student: Student):
-        return student.main_teacher.short_name
+        if student.main_teacher:
+            return student.main_teacher.short_name
+        return None
     
     def get_readonly_fields(self, request=None, obj=None) -> list:
         base = ["id"]

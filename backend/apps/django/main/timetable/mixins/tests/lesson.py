@@ -36,17 +36,18 @@ class LessonTestMixin(TimetableTestMixin, CourseTestMixin):
                 "timetable": lambda: getattr(cls, "associated_timetable", cls.Create_timetable()),
                 "course": cls.Create_course,
                 "weekday": lambda: random.randint(0, 4),
-                "start_hour": lambda: random.randint(1, 13),
-                "end_hour": lambda: random.randint(1, 13),
+                "start_hour": lambda: random.randint(1, 5),
+                "end_hour": lambda: random.randint(5, 10),
             }, kwargs)
         )
     
     @classmethod
     def Create_whole_timetable(cls, **kwargs) -> Timetable:
         timetable = cls.Create_timetable(**kwargs)
+        cls.associated_timetable = timetable
         
         for weekday in range(1, 5 + 1):
-            for hour in range(1, 5):
+            for hour in range(1, 6, 2):
                 cls.Create_lesson(
                     timetable=timetable,
                     weekday=weekday,
