@@ -9,7 +9,7 @@ from apps.django.authentication.otp.utils import (
 
 class OTPLocationUtilsTest(TestCase):
     mock = Mock(
-        data={
+        json=lambda: {
             "geo": {
                 "latitude": 40.7128,
                 "longitude": 74.0060
@@ -19,7 +19,7 @@ class OTPLocationUtilsTest(TestCase):
         status_code=200,
     )
     not_suspicious_mock = Mock(
-        data={
+        json=lambda: {
             "geo": {
                 "latitude": 7.472690,
                 "longitude": 50.431960,

@@ -48,10 +48,11 @@ def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:
         if 400 <= response.status_code < 600:
             return
         
-        geo_data = response.data["geo"]
+        data = response.json()
+        geo_data = data["geo"]
         longitude = geo_data["longitude"]
         latitude = geo_data["latitude"]
-        city = response.data["name"]
+        city = data["name"]
     except:
         return None
     else:
