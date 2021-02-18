@@ -1,6 +1,9 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
+from apps.django.main.event.mixins import ExamTestMixin, ModificationTestMixin
+from apps.django.main.homework.mixins import ClassbookTestMixin, HomeworkTestMixin
+
 if settings.DEBUG:
     from dotenv import load_dotenv
     import random, string, names
@@ -27,6 +30,8 @@ if settings.DEBUG:
     from apps.django.extra.news.models import *
     # noinspection PyUnresolvedReferences
     from apps.django.extra.poll.models import *
+    # noinspection PyUnresolvedReferences
+    from apps.django.main.timetable.mixins import LessonTestMixin, TimetableTestMixin
     
     
     def get_set_values(model, field):
@@ -56,3 +61,41 @@ if settings.DEBUG:
         print("Password:", password)
         
         return user
+    
+    
+    def create_timetable(student: User = None, teacher: User = None):
+        LessonTestMixin.associated_student = student
+        LessonTestMixin.associated_teacher = teacher
+        
+        LessonTestMixin.Create_whole_timetable()
+        lessons = Lesson.objects.all()
+        
+        for _ in range(10):
+            HomeworkTestMixin.associated_student = student
+            HomeworkTestMixin.associated_teacher = teacher
+            HomeworkTestMixin.Create_homework()
+        
+        for _ in range(10):
+            ClassbookTestMixin.associated_student = student
+            ClassbookTestMixin.associated_teacher = teacher
+            
+            ClassbookTestMixin.Create_classbook(
+                lesson=random.choice(lessons),
+                video_conference_link="https://bbb.url.com/test/" if random.randint(1, 10) > 8 else None
+            )
+        
+        for _ in range(10):
+            ModificationTestMixin.associated_student = student
+            ModificationTestMixin.associated_teacher = teacher
+            
+            ModificationTestMixin.Create_modification(
+                lesson=random.choice(lessons),
+            )
+        
+        for _ in range(10):
+            ExamTestMixin.associated_student = student
+            ExamTestMixin.associated_teacher = teacher
+            
+            ExamTestMixin.Create_exam(
+                course=random.choice(Course.objects.all())
+            )
