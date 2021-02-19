@@ -73,15 +73,20 @@ if settings.DEBUG:
         for _ in range(10):
             HomeworkTestMixin.associated_student = student
             HomeworkTestMixin.associated_teacher = teacher
-            HomeworkTestMixin.Create_homework(lesson=random.choice(lessons))
+            HomeworkTestMixin.Create_homework(lesson=random.choice(lessons))  # nosec
         
         for _ in range(10):
             ClassbookTestMixin.associated_student = student
             ClassbookTestMixin.associated_teacher = teacher
             
+            url = None
+            
+            if random.randint(1, 10) >= 7:  # nosec
+                url = "https://example.com/test/"
+            
             ClassbookTestMixin.Create_classbook(
-                lesson=random.choice(lessons),
-                video_conference_link="https://bbb.url.com/test/" if random.randint(1, 10) > 8 else None
+                lesson=random.choice(lessons),  # nosec
+                video_conference_link=url
             )
         
         for _ in range(10):
@@ -89,7 +94,7 @@ if settings.DEBUG:
             ModificationTestMixin.associated_teacher = teacher
             
             ModificationTestMixin.Create_modification(
-                lesson=random.choice(lessons),
+                lesson=random.choice(lessons),  # nosec
             )
         
         for _ in range(10):
@@ -97,5 +102,6 @@ if settings.DEBUG:
             ExamTestMixin.associated_teacher = teacher
             
             ExamTestMixin.Create_exam(
-                course=random.choice(Course.objects.all())
+                
+                course=random.choice(Course.objects.all())  # nosec
             )
