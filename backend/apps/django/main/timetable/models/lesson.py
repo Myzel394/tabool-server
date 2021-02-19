@@ -54,6 +54,14 @@ class Lesson(RandomIDMixin, LifecycleModel):
         verbose_name=_("Endstunde")
     )
     
+    def __str__(self):
+        return "{course_name}: {start_hour} - {end_hour} ({timetable})".format(
+            course_name=self.course.name,
+            start_hour=self.start_hour,
+            end_hour=self.end_hour,
+            timetable=self.timetable.name,
+        )
+    
     def clean(self):
         validate_no_timetable_overlap(self)
         

@@ -64,6 +64,13 @@ class Homework(RandomIDMixin, CreationDateMixin, HandlerMixin, LessonMixin):
         null=True
     )  # type: str
     
+    def __str__(self):
+        return "{lesson} bis {due_date} (Privat: {is_private})".format(
+            lesson=str(self.lesson),
+            due_date=self.due_date,
+            is_private=self.is_private
+        )
+    
     def clean(self):
         validate_private_to_student(self)
         

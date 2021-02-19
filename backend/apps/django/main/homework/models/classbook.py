@@ -36,6 +36,9 @@ class Classbook(RandomIDMixin, LessonMixin, HandlerMixin):
         null=True,
     )
     
+    def __str__(self):
+        return str(self.lesson)
+    
     @staticmethod
     def handlers():
         return {

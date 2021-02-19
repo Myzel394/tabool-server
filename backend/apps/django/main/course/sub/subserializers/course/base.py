@@ -4,7 +4,7 @@ from apps.django.main.timetable.models import Timetable
 from ....models import Course
 
 __all__ = [
-    "BaseCourseSerializer", "ParticipantsCountMixin"
+    "BaseCourseSerializer", "ParticipantsCountMixin", "WeekdaysMixin"
 ]
 
 

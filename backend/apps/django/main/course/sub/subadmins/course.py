@@ -20,8 +20,8 @@ class CourseAdmin(DefaultAdminMixin):
     list_display = ["__str__", "subject", "teacher", "class_number", "participants_count"]
     list_filter = ["subject"]
     filter_horizontal = ["participants"]
-    autocomplete_fields = ["subject", "teacher"]
-    search_fields = ["name", "subject", "teacher"]
+    autocomplete_fields = ["subject"]
+    search_fields = ["subject__name"]
     
     def class_number(self, instance: Course):
         return instance.get_class_number()

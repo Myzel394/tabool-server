@@ -1,25 +1,20 @@
-from typing import *
-
 from apps.django.authentication.user.serializers import (
     DetailTeacherSerializer,
 )
 from apps.django.authentication.user.sub.subserializers.student import DetailStudentSerializer
-from .base import BaseCourseSerializer, ParticipantsCountMixin
+from .base import BaseCourseSerializer, ParticipantsCountMixin, WeekdaysMixin
 from ..room import DetailRoomSerializer
 from ..subject import DetailSubjectSerializer
-
-if TYPE_CHECKING:
-    pass
 
 __all__ = [
     "StudentDetailCourseSerializer", "TeacherDetailCourseSerializer"
 ]
 
 
-class StudentDetailCourseSerializer(BaseCourseSerializer, ParticipantsCountMixin):
+class StudentDetailCourseSerializer(BaseCourseSerializer, ParticipantsCountMixin, WeekdaysMixin):
     class Meta(BaseCourseSerializer.Meta):
         fields = [
-            "course_number", "participants_count", "subject", "teacher", "room", "id"
+            "course_number", "participants_count", "subject", "teacher", "room", "weekdays", "id"
         ]
     
     subject = DetailSubjectSerializer()
@@ -27,10 +22,10 @@ class StudentDetailCourseSerializer(BaseCourseSerializer, ParticipantsCountMixin
     room = DetailRoomSerializer()
 
 
-class TeacherDetailCourseSerializer(BaseCourseSerializer):
+class TeacherDetailCourseSerializer(BaseCourseSerializer, WeekdaysMixin):
     class Meta(BaseCourseSerializer.Meta):
         fields = [
-            "course_number", "participants", "subject", "teacher", "room", "id"
+            "course_number", "participants", "subject", "teacher", "room", "weekdays", "id"
         ]
     
     subject = DetailSubjectSerializer()
