@@ -68,8 +68,8 @@ class StudentHomeworkViewSet(
             .filter(userhomeworkrelation__completed=True) \
             .count()
         ignore_count = homeworks \
-            .only("userhomeworkrelation__ignore") \
-            .filter(userhomeworkrelation__ignore=True) \
+            .only("userhomeworkrelation__ignored") \
+            .filter(userhomeworkrelation__ignored=True) \
             .count()
         type_set = set(homeworks.values_list("type", flat=True))
         type_set.discard(None)

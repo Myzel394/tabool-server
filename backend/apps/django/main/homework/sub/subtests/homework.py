@@ -165,7 +165,7 @@ class StudentHomeworkAPIInformationTest(HomeworkTestMixin):
         )
         UserHomeworkRelation.objects.create(
             homework=self.ignore_homework,
-            ignore=True,
+            ignored=True,
             user=self.student
         )
     

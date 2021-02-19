@@ -26,7 +26,7 @@ class StudentDetailHomeworkSerializer(BaseHomeworkSerializer):
         UserHomeworkRelationSerializer,
         default={
             "completed": False,
-            "ignore": False
+            "ignored": False
         }
     )
 

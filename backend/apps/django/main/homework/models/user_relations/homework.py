@@ -36,7 +36,7 @@ class UserHomeworkRelation(RandomIDMixin, UserModelRelationMixin):
         verbose_name=_("Erledigt")
     )  # type: bool
     
-    ignore = models.BooleanField(
+    ignored = models.BooleanField(
         default=False,
         verbose_name=_("Ignorieren")
     )
