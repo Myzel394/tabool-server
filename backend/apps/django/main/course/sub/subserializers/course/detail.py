@@ -1,7 +1,5 @@
 from typing import *
 
-from rest_framework import serializers
-
 from apps.django.authentication.user.serializers import (
     DetailTeacherSerializer,
 )
@@ -11,7 +9,7 @@ from ..room import DetailRoomSerializer
 from ..subject import DetailSubjectSerializer
 
 if TYPE_CHECKING:
-    from ....models import Course
+    pass
 
 __all__ = [
     "StudentDetailCourseSerializer", "TeacherDetailCourseSerializer"
@@ -27,12 +25,6 @@ class StudentDetailCourseSerializer(BaseCourseSerializer, ParticipantsCountMixin
     subject = DetailSubjectSerializer()
     teacher = DetailTeacherSerializer()
     room = DetailRoomSerializer()
-    
-    participants_count = serializers.SerializerMethodField()
-    
-    @staticmethod
-    def get_participants_count(obj: "Course") -> int:
-        return obj.participants.all().count()
 
 
 class TeacherDetailCourseSerializer(BaseCourseSerializer):
