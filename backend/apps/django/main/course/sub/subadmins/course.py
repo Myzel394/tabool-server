@@ -24,7 +24,10 @@ class CourseAdmin(DefaultAdminMixin):
     search_fields = ["subject__name"]
     
     def class_number(self, instance: Course):
-        return instance.get_class_number()
+        try:
+            return instance.get_class_number()
+        except TypeError:
+            return
     
     class_number.short_description = field_verbose(Student, "class_number")
     

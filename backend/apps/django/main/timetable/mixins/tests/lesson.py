@@ -46,7 +46,7 @@ class LessonTestMixin(TimetableTestMixin, CourseTestMixin):
         timetable = cls.Create_timetable(**kwargs)
         cls.associated_timetable = timetable
         
-        for weekday in range(1, 5 + 1):
+        for weekday in range(0, 4 + 1):
             for hour in range(1, 6, 2):
                 cls.Create_lesson(
                     timetable=timetable,
