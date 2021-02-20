@@ -26,9 +26,12 @@ class WeekdaysMixin(serializers.ModelSerializer):
     
     def get_weekdays(self, obj: Course) -> list[int]:
         user = self.context["request"].user
-        timetable = Timetable.objects.current(user)
-        lessons = timetable.lessons
-        course_lessons = lessons.only("course").filter(course=obj)
-        weekdays = set(course_lessons.values_list("weekday", flat=True))
         
-        return list(weekdays)
+        if timetable := Timetable.objects.current(user):
+            lessons = timetable.lessons
+            course_lessons = lessons.only("course").filter(course=obj)
+            weekdays = set(course_lessons.values_list("weekday", flat=True))
+            
+            return list(weekdays)
+        
+        return []
