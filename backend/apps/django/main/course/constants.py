@@ -1,12 +1,14 @@
 APP_LABEL = "course"
 SUBJECT_COLORS_MAPPING = {
-    "englisch": "#14A5FF",
     "mathe": "#FF4834",
     "deutsch": "#2072FF",
+    
+    "englisch": "#14A5FF",
     "französisch": "#0050a4",
     "latein": "#73FFF2",
     "spanisch": "#f1bf00",
     "italienisch": "#008c45",
+    "griechisch": "#a0c3e2",
     
     "informatik": "#1E67FF",
     
