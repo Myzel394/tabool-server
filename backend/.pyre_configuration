@@ -1,0 +1,13 @@
+{
+  "binary": "/run/media/myzel394/Volume/Dokumente temp/Programmieren/tabool-server/venv/bin/pyre.bin",
+  "source_directories": [
+    "."
+  ],
+  "taint_models_path": "/run/media/myzel394/Volume/Dokumente temp/Programmieren/tabool-server/venv/lib",
+  "typeshed": "/run/media/myzel394/Volume/Dokumente temp/Programmieren/tabool-server/venv/lib/pyre_check/typeshed",
+  "exclude": [
+    ".*/subtests/.*",
+    ".*/tests/.*",
+    ".*/tests.py"
+  ]
+}

@@ -14,13 +14,17 @@ from apps.django.main.homework.serializers import (
     TeacherDetailHomeworkSerializer, TeacherDetailMaterialSerializer, TeacherDetailSubmissionSerializer,
 )
 from apps.django.main.timetable.mixins import get_via_referenced_lesson_date
+from apps.django.main.timetable.sub.subserializers.lesson import (
+    StudentDetailLessonSerializer,
+    TeacherDetailLessonSerializer,
+)
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent, IsTeacher
 from ....serializers import LessonViewSerializer
 from ....throttles import LessonViewThrottle
 
 if TYPE_CHECKING:
     from apps.django.authentication.user.models import User
-    from apps.django.main.timetable.models import Lesson
+    from apps.django.main.timetable.models import Lesson, Timetable
 
 __all__ = [
     "student_lesson_view", "teacher_lesson_view"
@@ -41,6 +45,10 @@ def parse_serializer(data: dict, serializer_context: dict) -> tuple["Lesson", da
 def get_elements(user: "User", lesson: "Lesson", lesson_date: date) -> dict:
     lesson_args = lesson, lesson_date
     
+    timetable = Timetable.objects.from_user(user)
+    lessons = timetable.lessons
+    lesson = lessons.only("id").get(id=lesson)
+    
     classbook = get_via_referenced_lesson_date(Classbook.objects.from_user(user), *lesson_args)
     materials = get_via_referenced_lesson_date(Material.objects.from_user(user), many=True, *lesson_args)
     submissions = get_via_referenced_lesson_date(Submission.objects.from_user(user), many=True, *lesson_args)
@@ -48,6 +56,7 @@ def get_elements(user: "User", lesson: "Lesson", lesson_date: date) -> dict:
     homeworks = get_via_referenced_lesson_date(Homework.objects.from_user(user), many=True, *lesson_args)
     
     return {
+        "lesson": lesson,
         "classbook": classbook,
         "materials": materials,
         "submissions": submissions,
@@ -89,6 +98,10 @@ def student_lesson_view(request: RequestType):
             many=True,
             context=serializer_context
         ).data,
+        "lesson_information": StudentDetailLessonSerializer(
+            instance=elements["lesson"],
+            context=serializer_context
+        ).data
     })
 
 
@@ -125,4 +138,8 @@ def teacher_lesson_view(request: RequestType):
             many=True,
             context=serializer_context
         ).data,
+        "lesson_information": TeacherDetailLessonSerializer(
+            instance=elements["lesson"],
+            context=serializer_context
+        ).data
     })
