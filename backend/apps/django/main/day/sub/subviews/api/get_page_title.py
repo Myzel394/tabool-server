@@ -46,7 +46,8 @@ def get_page_title_view(request: RequestType):
     if not (200 <= response.status_code < 300):
         return Response({
             "detail": f"Server responded status code '{response.status_code}'.",
-            "proxy_status_code": response.status_code
+            "proxy_status_code": response.status_code,
+            "code": "blocked" if response.status_code == 429 else "failed"
         }, status=status.HTTP_502_BAD_GATEWAY)
     
     try:
@@ -54,7 +55,8 @@ def get_page_title_view(request: RequestType):
         title = regex.search(html).group(1)
     except Exception:
         return Response({
-            "detail": "Title couldn't be found."
+            "detail": "Title couldn't be found.",
+            "code": "title_not_found"
         }, status=status.HTTP_502_BAD_GATEWAY)
     
     return Response({
