@@ -70,7 +70,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
         .from_user(user) \
         .only("course", "date") \
         .filter(course__in=course_ids) \
-        .filter(date__lte=start_date, date__gte=end_date)
+        .filter(date__gte=start_date, date__lte=end_date)
     events = Event.objects \
         .from_user(user) \
         .only("start_datetime", "end_datetime") \
