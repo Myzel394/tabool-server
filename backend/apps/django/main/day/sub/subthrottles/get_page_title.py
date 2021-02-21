@@ -1,18 +1,18 @@
 from rest_framework.throttling import UserRateThrottle
 
 __all__ = [
-    "BurstGetHeadViewThrottle", "SustainedGetHeadViewThrottle"
+    "BurstGetPageTitleViewThrottle", "SustainedGetPageTitleViewThrottle"
 ]
 
 
-class BurstGetHeadViewThrottle(UserRateThrottle):
+class BurstGetPageTitleViewThrottle(UserRateThrottle):
     THROTTLE_RATES = {
         "burst_get_head": "120/min"
     }
     scope = "burst_get_head"
 
 
-class SustainedGetHeadViewThrottle(UserRateThrottle):
+class SustainedGetPageTitleViewThrottle(UserRateThrottle):
     THROTTLE_RATES = {
         "sustained_get_head": "500/day"
     }

@@ -24,7 +24,7 @@ from ....throttles import LessonViewThrottle
 
 if TYPE_CHECKING:
     from apps.django.authentication.user.models import User
-    from apps.django.main.timetable.models import Lesson, Timetable
+    from apps.django.main.timetable.models import Lesson
 
 __all__ = [
     "student_lesson_view", "teacher_lesson_view"
@@ -44,10 +44,6 @@ def parse_serializer(data: dict, serializer_context: dict) -> tuple["Lesson", da
 
 def get_elements(user: "User", lesson: "Lesson", lesson_date: date) -> dict:
     lesson_args = lesson, lesson_date
-    
-    timetable = Timetable.objects.from_user(user)
-    lessons = timetable.lessons
-    lesson = lessons.only("id").get(id=lesson)
     
     classbook = get_via_referenced_lesson_date(Classbook.objects.from_user(user), *lesson_args)
     materials = get_via_referenced_lesson_date(Material.objects.from_user(user), many=True, *lesson_args)

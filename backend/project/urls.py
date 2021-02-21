@@ -12,7 +12,7 @@ from apps.django.core.views import contacts
 from apps.django.extra.poll import routers as poll_routers
 from apps.django.main.course import routers as course_routers
 from apps.django.main.day.views import (
-    get_head_view, student_daily_data_view, student_lesson_view, student_week_view, teacher_lesson_view,
+    get_page_title_view, student_daily_data_view, student_lesson_view, student_week_view, teacher_lesson_view,
     teacher_week_view,
 )
 from apps.django.main.event import routers as event_routers
@@ -61,17 +61,16 @@ urlpatterns = [
     
     # API
     path("api/data/", include("rest_framework.urls")),
+    path("api/data/get-page-title/", get_page_title_view),
     path("api/student/contacts/", contacts),
     # path("api/data/timetable/", timetable),
     # path("api/data/daily-data/", daily_data),
     
     # Student
-    path("api/student/get-head/", get_head_view),
     path("api/student/daily-data/", student_daily_data_view),
     path("api/student/week/", student_week_view),
     path("api/student/lesson/", student_lesson_view),
     # Teacher
-    path("api/teacher/get-head/", get_head_view),
     path("api/teacher/week/", teacher_week_view),
     path("api/teacher/lesson/", teacher_lesson_view),
     

@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
 __all__ = [
-    "GetHeadSerializer"
+    "GetPageTitleSerializer"
 ]
 
 
-class GetHeadSerializer(serializers.Serializer):
+class GetPageTitleSerializer(serializers.Serializer):
     VALID_DOMAINS = ["bbb-schulen.rlp.net"]
     
     url = serializers.URLField()

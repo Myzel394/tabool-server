@@ -9,11 +9,11 @@ from rest_framework.response import Response
 from urllib3.util.retry import Retry
 
 from apps.django.utils.permissions import AuthenticationAndActivePermission
-from ....serializers import GetHeadSerializer
-from ....throttles import BurstGetHeadViewThrottle, SustainedGetHeadViewThrottle
+from ....serializers import GetPageTitleSerializer
+from ....throttles import BurstGetPageTitleViewThrottle, SustainedGetPageTitleViewThrottle
 
 __all__ = [
-    "get_head_view"
+    "get_page_title_view"
 ]
 
 headers = {
@@ -33,9 +33,9 @@ regex = re.compile('<title>(.*?)</title>', re.IGNORECASE | re.DOTALL)
 
 @api_view(["GET"])
 @permission_classes([AuthenticationAndActivePermission])
-@throttle_classes([BurstGetHeadViewThrottle, SustainedGetHeadViewThrottle])
-def get_head_view(request: RequestType):
-    serializer = GetHeadSerializer(data=request.GET)
+@throttle_classes([BurstGetPageTitleViewThrottle, SustainedGetPageTitleViewThrottle])
+def get_page_title_view(request: RequestType):
+    serializer = GetPageTitleSerializer(data=request.GET)
     serializer.is_valid(raise_exception=True)
     
     validated_data = serializer.validated_data
