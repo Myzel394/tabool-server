@@ -1,5 +1,6 @@
 from functools import wraps
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.cache import cache_page
 from django_hint import RequestType
@@ -20,7 +21,7 @@ def cache_for_user(*func_args, **func_kwargs):
             if not request.user.is_authenticated:
                 return HttpResponse(status=401)
             
-            if request.GET.get("no-cache"):
+            if settings.DEBUG or request.GET.get("no-cache"):
                 return func(request, *args, **kwargs)
             
             user_id = request.user.id
