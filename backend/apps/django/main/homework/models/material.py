@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 from typing import *
 
@@ -39,7 +40,9 @@ class Material(RandomIDMixin, LessonMixin, CreationDateMixin):
     publish_datetime = models.DateTimeField(
         verbose_name=_("Veröffentlichkeitsdatum"),
         help_text=_("Ab wann Schüler auf die Datei zugreifen können"),
-        validators=[only_future]
+        validators=[only_future],
+        blank=True,
+        null=True,
     )
     
     announce = models.BooleanField(
@@ -57,7 +60,10 @@ class Material(RandomIDMixin, LessonMixin, CreationDateMixin):
     
     def can_user_access_file(self, user: "User") -> bool:
         if user.is_student:
-            return self.lesson.course.participants.only("id").filter(id=user.id).exists()
+            if not self.publish_datetime < datetime.now():
+                return False
+            
+            return self.lesson.course.participants.only("id").filter(user__id=user.id).exists()
         return self.lesson.course.teacher.user == user
     
     @property
