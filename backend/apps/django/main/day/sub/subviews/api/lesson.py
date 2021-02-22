@@ -18,6 +18,7 @@ from apps.django.main.timetable.sub.subserializers.lesson import (
     StudentDetailLessonSerializer,
     TeacherDetailLessonSerializer,
 )
+from apps.django.utils.cache import cache_for_user
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent, IsTeacher
 from ....serializers import LessonViewSerializer
 from ....throttles import LessonViewThrottle
@@ -29,6 +30,8 @@ if TYPE_CHECKING:
 __all__ = [
     "student_lesson_view", "teacher_lesson_view"
 ]
+
+ONE_HOUR_IN_SECONDS = 60 * 60
 
 
 def parse_serializer(data: dict, serializer_context: dict) -> tuple["Lesson", date]:
@@ -61,6 +64,7 @@ def get_elements(user: "User", lesson: "Lesson", lesson_date: date) -> dict:
     }
 
 
+@cache_for_user(ONE_HOUR_IN_SECONDS)
 @api_view(["GET"])
 @throttle_classes([LessonViewThrottle])
 @permission_classes([AuthenticationAndActivePermission & IsStudent])
@@ -101,6 +105,7 @@ def student_lesson_view(request: RequestType):
     })
 
 
+@cache_for_user(ONE_HOUR_IN_SECONDS)
 @api_view(["GET"])
 @throttle_classes([LessonViewThrottle])
 @permission_classes([AuthenticationAndActivePermission & IsTeacher])

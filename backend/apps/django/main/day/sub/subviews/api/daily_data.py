@@ -16,6 +16,7 @@ from apps.django.main.homework.sub.subserializers.homework import StudentDetailH
 from apps.django.main.homework.sub.subserializers.material import StudentDetailMaterialSerializer
 from apps.django.main.timetable.models import Timetable
 from apps.django.main.timetable.sub.subserializers.lesson import StudentDetailLessonSerializer
+from apps.django.utils.cache import cache_for_user
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent
 from ....serializers import DailyDataViewSerializer
 from ....throttles import BurstDailyDataViewThrottle, SustainedDailyDataViewThrottle
@@ -26,6 +27,8 @@ if TYPE_CHECKING:
 __all__ = [
     "student_daily_data_view"
 ]
+
+TEN_MINUTES_IN_SECONDS = 60 * 10
 
 
 def parse_serializer(data: dict, serializer_context: dict) -> tuple[date, int]:
@@ -105,6 +108,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
     }
 
 
+@cache_for_user(TEN_MINUTES_IN_SECONDS)
 @api_view(["GET"])
 @permission_classes([AuthenticationAndActivePermission & IsStudent])
 @throttle_classes([BurstDailyDataViewThrottle, SustainedDailyDataViewThrottle])

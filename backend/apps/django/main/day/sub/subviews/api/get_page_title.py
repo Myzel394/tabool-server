@@ -1,6 +1,7 @@
 import re
 
 import requests
+from django.views.decorators.cache import cache_page
 from django_hint import RequestType
 from requests.adapters import HTTPAdapter
 from rest_framework import status
@@ -15,6 +16,8 @@ from ....throttles import BurstGetPageTitleViewThrottle, SustainedGetPageTitleVi
 __all__ = [
     "get_page_title_view"
 ]
+
+ONE_MONTH_IN_SECONDS = 60 * 60 * 24 * 30
 
 headers = {
     "User-Agent": "TitleGrabber@tabool"
@@ -31,6 +34,7 @@ session.mount("https://", HTTPAdapter(max_retries=retries))
 regex = re.compile('<title>(.*?)</title>', re.IGNORECASE | re.DOTALL)
 
 
+@cache_page(ONE_MONTH_IN_SECONDS)
 @api_view(["GET"])
 @permission_classes([AuthenticationAndActivePermission])
 @throttle_classes([BurstGetPageTitleViewThrottle, SustainedGetPageTitleViewThrottle])

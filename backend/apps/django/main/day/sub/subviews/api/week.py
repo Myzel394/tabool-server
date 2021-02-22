@@ -14,6 +14,7 @@ from apps.django.main.homework.models import Material
 from apps.django.main.homework.serializers import StudentDetailMaterialSerializer, TeacherDetailMaterialSerializer
 from apps.django.main.timetable.models import Timetable
 from apps.django.main.timetable.serializers import StudentDetailLessonSerializer, TeacherDetailLessonSerializer
+from apps.django.utils.cache import cache_for_user
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent, IsTeacher
 from ....serializers import WeekViewSerializer
 from ....throttles import BurstWeekViewThrottle, SustainedWeekViewThrottle
@@ -24,6 +25,8 @@ if TYPE_CHECKING:
 __all__ = [
     "student_week_view", "teacher_week_view"
 ]
+
+TWO_HOURS_IN_SECONDS = 60 * 60 * 2
 
 
 def parse_serializer(data: dict, serializer_context: dict) -> tuple[date, date]:
@@ -76,6 +79,7 @@ def get_elements(user: "User", start_date: date, end_date: date) -> dict:
     }
 
 
+@cache_for_user(TWO_HOURS_IN_SECONDS)
 @api_view(["GET"])
 @throttle_classes([BurstWeekViewThrottle, SustainedWeekViewThrottle])
 @permission_classes([AuthenticationAndActivePermission & IsStudent])
@@ -116,6 +120,7 @@ def student_week_view(request: RequestType):
     })
 
 
+@cache_for_user(TWO_HOURS_IN_SECONDS)
 @api_view(["GET"])
 @throttle_classes([BurstWeekViewThrottle, SustainedWeekViewThrottle])
 @permission_classes([AuthenticationAndActivePermission & IsTeacher])

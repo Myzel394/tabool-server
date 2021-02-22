@@ -335,3 +335,10 @@ FCM_DJANGO_SETTINGS = {
 }
 
 SHOW_VOTES_RESULTS = False
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache',
+    }
+}
