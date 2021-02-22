@@ -18,15 +18,20 @@ class Classbook(RandomIDMixin, LessonMixin, HandlerMixin):
         verbose_name = model_names.CLASSBOOK
         verbose_name_plural = model_names.CLASSBOOK_PLURAL
         ordering = ("lesson_date",)
+        unique_together = (
+            ("lesson", "lesson_date")
+        )
     
     objects = ClassbookQuerySet.as_manager()
     
     presence_content = models.TextField(
         verbose_name=_("Inhalt Präsenzunterricht"),
+        blank=True,
         null=True,
     )
     online_content = models.TextField(
         verbose_name=_("Inhalt Fernunterricht"),
+        blank=True,
         null=True,
     )
     
