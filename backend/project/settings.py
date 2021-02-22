@@ -342,3 +342,10 @@ CACHES = {
         'LOCATION': 'cache',
     }
 }
+
+if DEBUG:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        }
+    }
