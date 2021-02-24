@@ -85,9 +85,9 @@ INSTALLED_APPS = [
 SESSION_ENGINE = "user_sessions.backends.db"
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "user_sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -308,11 +308,6 @@ PRIVATE_STORAGE_AUTH_FUNCTION = "apps.django.utils.private_storages.private_stor
 
 MAX_UPLOAD_SIZE = 5242880  # 50MB
 
-if DEBUG:
-    CORS_ORIGIN_ALLOW_ALL = True
-    CORS_ALLOW_CREDENTIALS = True
-    ALLOWED_HOSTS = ["*"]
-
 SESSION_COOKIE_HTTPONLY = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SAMESITE = ""
@@ -342,6 +337,11 @@ if DEBUG:
             "BACKEND": "django.core.cache.backends.dummy.DummyCache",
         }
     }
+    
+    CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ALLOW_CREDENTIALS = True
+    ALLOWED_HOSTS = ["*"]
+
 else:
     CACHES = {
         'default': {

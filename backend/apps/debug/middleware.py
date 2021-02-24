@@ -4,12 +4,9 @@ class CORSMiddleware:
     
     def __call__(self, request):
         response = self.get_response(request)
-        response["Access-Control-Allow-Origin"] = "http://127.0.0.1:3000"
-        response["Access-Control-Allow-Credentials"] = "true"
-        response["Access-Control-Allow-Headers"] = "x-requested-with, content-type, accept, origin, authorization, " \
-                                                   "x-csrftoken, user-agent, accept-encoding, cache-control, " \
-                                                   "Content-Type, Authorization"
-        response["Access-Control-Allow-Methods"] = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-        response["Access-Control-Max-Age"] = 86400
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
+        response["Access-Control-Allow-Credentials"] = True
+        response["Access-Control-Allow-Methods"] = "GET,PUT,POST,DELETE"
         
         return response
