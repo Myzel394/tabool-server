@@ -31,7 +31,7 @@ class UpdateSubmissionSerializer(BaseSubmissionSerializer):
     )
     
     def validate_publish_datetime(self, value: datetime):
-        if value and value <= datetime.now():
+        if self.instance.publish_datetime and self.instance.publish_datetime <= datetime.now():
             raise ValidationError(
                 _("Diese Einsendung wurde bereits hochgeladen.")
             )
