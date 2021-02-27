@@ -75,3 +75,23 @@ class SubmissionAPITest(SubmissionTestMixin):
             "publish_datetime": datetime.now() + timedelta(days=2)
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
+
+
+class StudentSubmissionAPITest(SubmissionTestMixin):
+    def setUp(self):
+        self.student = self.Login_student()
+        self.__class__.associated_student = self.student
+    
+    def test_can_upload(self):
+        submission = self.Create_submission()
+        
+        response = self.client.post(f"/api/student/submission/{submission.id}/upload/")
+        self.assertEqual(200, response.status_code)
+    
+    def test_can_not_upload_already_uploaded(self):
+        submission = self.Create_submission()
+        submission.publish_datetime = datetime.now() - timedelta(days=1)
+        submission.save()
+        
+        response = self.client.post(f"/api/student/submission/{submission.id}/upload/")
+        self.assertEqual(202, response.status_code)
