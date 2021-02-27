@@ -12,7 +12,6 @@ from apps.django.authentication.user.public import model_names as auth_names
 from ..file_uploads import build_submission_upload_to
 from ..public import model_names
 from ..sub.subquerysets.submission import SubmissionQuerySet
-from ..validators import only_future
 from ...timetable.mixins import LessonMixin
 
 if TYPE_CHECKING:
@@ -49,7 +48,6 @@ class Submission(RandomIDMixin, LessonMixin, LifecycleModel, CreationDateMixin):
         help_text=_("Ab wann die Datei für den Lehrer sichtbar ist."),
         null=True,
         blank=True,
-        validators=[only_future]
     )
     
     student = models.ForeignKey(

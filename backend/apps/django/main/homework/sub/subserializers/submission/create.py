@@ -1,3 +1,6 @@
+from rest_framework import serializers
+
+from apps.django.main.homework.validators import only_future
 from apps.django.main.timetable.public.serializer_fields.lesson import LessonField
 from .base import BaseSubmissionSerializer
 
@@ -14,6 +17,12 @@ class CreateSubmissionSerializer(BaseSubmissionSerializer):
         ]
     
     lesson = LessonField()
+    
+    publish_datetime = serializers.DateTimeField(
+        required=False,
+        allow_null=True,
+        validators=[only_future]
+    )
     
     # TODO: Add tests!
     def create(self, validated_data):
