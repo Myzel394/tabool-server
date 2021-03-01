@@ -5,10 +5,10 @@ echo "Collect static files"
 python3.9 backend/manage.py collectstatic --noinput
 
 echo "Make database migrations"
-python3.9 backend/manage.py makemigrations
+python3.9 backend/manage.py makemigrations --noinput
 
 echo "Apply database migrations"
-python3.9 backend/manage.py migrate
+python3.9 backend/manage.py migrate --noinput
 
 echo "Start server"
 python3.9 backend/manage.py runserver 0.0.0.0:8000

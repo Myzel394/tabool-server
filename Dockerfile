@@ -27,10 +27,10 @@ RUN python3.9 -m pip install --upgrade pip
 RUN python3.9 -m pip install -r ./requirements.txt
 
 # Copy project
-COPY .env .
-COPY prod.env .
-COPY backend .
+COPY .. /app/
+COPY .env /app/
+COPY prod.env /app/
 
 # Configuration
-COPY django-entrypoint.sh /
-ENTRYPOINT ["/django-entrypoint.sh"]
+COPY django-entrypoint.sh /app/django-entrypoint.sh
+ENTRYPOINT ["/app/django-entrypoint.sh"]
