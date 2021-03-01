@@ -1,4 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect as url_redirect, render
+
+
+def redirect(request):
+    return url_redirect("app")
 
 
 def index(request):

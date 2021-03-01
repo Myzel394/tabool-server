@@ -69,7 +69,6 @@ urlpatterns = [
     path("api/auth/confirmation/", EmailConfirmation.as_view()),
     path("api/auth/reset-password/", include("django_rest_passwordreset.urls", namespace="password_reset")),
     
-    path("", include("apps.django.core.urls")),
     path("admin/", admin.site.urls),
     path("", include("user_sessions.urls", "user_sessions")),
     path("api/fcm/devices/", FCMDeviceAuthorizedViewSet.as_view({"post": "create"}), name="create_fcm_device"),
