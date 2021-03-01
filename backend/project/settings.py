@@ -79,6 +79,8 @@ INSTALLED_APPS = [
     "apps.django.extra.news",
     "apps.django.extra.poll",
     
+    "apps.frontend",
+    
     "apps.django.core",
 ]
 
@@ -144,7 +146,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            BASE_DIR / ".." / "frontend" / "public"
+            BASE_DIR / ".." / "backend/apps/frontend" / "public"
         ],
         "APP_DIRS": True,
         "OPTIONS": {

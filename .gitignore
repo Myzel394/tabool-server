@@ -287,3 +287,8 @@ venv
 postgres_data
 
 backend/.coverage
+
+
+# React build
+/backend/apps/frontend/templates/*
+/backend/apps/frontend/static/*

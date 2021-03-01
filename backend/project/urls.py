@@ -73,6 +73,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("user_sessions.urls", "user_sessions")),
     path("api/fcm/devices/", FCMDeviceAuthorizedViewSet.as_view({"post": "create"}), name="create_fcm_device"),
+    
+    path("", include("apps.frontend.urls"))
 ]
 
 urlpatterns += data_patterns
