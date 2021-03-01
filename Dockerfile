@@ -2,6 +2,9 @@ FROM ubuntu:latest
 
 WORKDIR /app/
 
+# Copy project
+ADD . /app/
+
 # Environmental variables
 # Python
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -22,15 +25,8 @@ RUN apt-get install -y software-properties-common python3.9 python3-pip
 # Install tor
 RUN apt-get install -y tor
 # Python dependencies
-COPY requirements.txt .
 RUN python3.9 -m pip install --upgrade pip
 RUN python3.9 -m pip install -r ./requirements.txt
 
-# Copy project
-COPY .. /app/
-COPY .env /app/
-COPY prod.env /app/
-
 # Configuration
-COPY django-entrypoint.sh /app/django-entrypoint.sh
-ENTRYPOINT ["/app/django-entrypoint.sh"]
+ENTRYPOINT ["./django-entrypoint.sh"]
