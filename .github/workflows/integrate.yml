@@ -3,9 +3,7 @@ name: Django CI/CD Workflow
 on:
   push:
     branches:
-      - master
-      - develop
-      - scooso
+      - "**"
 
 jobs:
   healt-check-job:
