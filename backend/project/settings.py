@@ -331,6 +331,8 @@ FCM_DJANGO_SETTINGS = {
 
 SHOW_VOTES_RESULTS = False
 
+REST_MAX_PAGE_SIZE = 50
+
 if DEBUG:
     CACHES = {
         "default": {

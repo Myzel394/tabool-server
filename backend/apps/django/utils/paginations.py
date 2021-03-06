@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+from django.conf import settings
 from rest_framework.pagination import PageNumberPagination as DRFPNPagination
 from rest_framework.response import Response
 
