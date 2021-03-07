@@ -67,10 +67,27 @@ class TeacherHomeworkAPITest(HomeworkTestMixin):
         self.assertStatusOk(response.status_code)
 
 
+# TODO: Add more real cases tests!
 class StudentHomeworkAPITest(HomeworkTestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.__class__.associated_student = self.student
+    
+    def create_homework(self, student=None):
+        student = student or self.student.student
+        
+        lesson = self.Create_lesson(
+            course=self.Create_course(
+                participants=[student]
+            )
+        )
+        
+        homework = self.Create_homework(
+            private_to_student=student,
+            lesson=lesson,
+        )
+        
+        return homework
     
     def test_can_create_private_homework(self):
         lesson = self.Create_lesson(
@@ -82,22 +99,23 @@ class StudentHomeworkAPITest(HomeworkTestMixin):
         response = self.client.post("/api/student/homework/", {
             **self.get_lesson_argument(lesson),
             "information": "Test",
+            "is_private": False,
         })
         self.assertStatusOk(response.status_code)
         self.assertTrue(Homework.objects.all()[0].is_private)
     
     def test_can_edit_private_homework(self):
-        lesson = self.Create_lesson(
-            course=self.Create_course(
-                participants=[self.student.student]
-            )
-        )
+        homework = self.create_homework()
         
-        homework = self.Create_homework(
-            private_to_student=self.student.student,
-            lesson=lesson,
-        )
         response = self.client.patch(f"/api/student/homework/{homework.id}/", {
+            "information": "Blaaaa",
+        }, content_type="application/json")
+        self.assertStatusOk(response.status_code)
+    
+    def test_can_get_private_homework(self):
+        homework = self.create_homework()
+        
+        response = self.client.get(f"/api/student/homework/{homework.id}/", {
             "information": "Blaaaa",
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
@@ -118,8 +136,38 @@ class StudentHomeworkAPITest(HomeworkTestMixin):
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
     
+    def test_wrong_person_can_not_get_private(self):
+        student = self.Create_student_user().student
+        homework = self.create_homework(student)
+        
+        response = self.client.get(f"/api/student/homework/{homework.id}/")
+        self.assertStatusNotOk(response.status_code)
+    
+    def test_wrong_person_can_not_edit_homework(self):
+        student = self.Create_student_user().student
+        homework = self.create_homework(student)
+        
+        response = self.client.patch(f"/api/student/homework/{homework.id}/", {
+            "information": "Blaaaa",
+        }, content_type="application/json")
+        self.assertStatusNotOk(response.status_code)
+    
     def test_get_list(self):
         response = self.client.get("/api/student/homework/")
+        self.assertStatusOk(response.status_code)
+    
+    def test_can_get_public_homework(self):
+        lesson = self.Create_lesson(
+            course=self.Create_course(
+                participants=[self.student.student]
+            )
+        )
+        
+        homework = self.Create_homework(
+            private_to_student=None,
+            lesson=lesson,
+        )
+        response = self.client.get(f"/api/student/homework/{homework.id}/")
         self.assertStatusOk(response.status_code)
 
 

@@ -25,10 +25,7 @@ __all__ = [
 
 class StudentHomeworkViewSet(
     DetailSerializerViewSetMixin,
-    viewsets.mixins.ListModelMixin,
-    viewsets.mixins.RetrieveModelMixin,
-    viewsets.mixins.CreateModelMixin,
-    viewsets.mixins.UpdateModelMixin,
+    viewsets.ModelViewSet,
 ):
     permission_classes = [AuthenticationAndActivePermission & IsStudent]
     
