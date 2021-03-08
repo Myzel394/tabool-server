@@ -61,11 +61,9 @@ class StudentHomeworkViewSet(
         latest_due_date = homeworks.latest("due_date").due_date
         private_count = homeworks.only("private_to_student").filter(private_to_student=request.user.student).count()
         completed_count = homeworks \
-            .only("userhomeworkrelation__completed") \
             .filter(userhomeworkrelation__completed=True) \
             .count()
         ignore_count = homeworks \
-            .only("userhomeworkrelation__ignored") \
             .filter(userhomeworkrelation__ignored=True) \
             .count()
         type_set = set(homeworks.values_list("type", flat=True))
