@@ -11,7 +11,7 @@ __all__ = [
 
 class PageNumberPagination(DRFPNPagination):
     page_size_query_param = "page_size"
-    max_page_size = 50
+    max_page_size = settings.REST_MAX_PAGE_SIZE
     
     def get_paginated_response(self, data):
         return Response(OrderedDict([
