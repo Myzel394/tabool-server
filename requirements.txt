@@ -17,7 +17,6 @@ click==7.1.2
 click-log==0.3.2
 colour==0.1.5
 constantly==15.1.0
-lic-apis==5.4
 cryptography==3.1.1
 cssselect2==0.3.0
 daphne==2.5.0

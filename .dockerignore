@@ -6,6 +6,3 @@ paint
 docker-compose.yml
 Dockerfile
 login_procedure.txt
-
-
-app/migrations/0*

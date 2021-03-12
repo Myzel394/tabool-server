@@ -105,3 +105,19 @@ if settings.DEBUG:
                 
                 course=random.choice(Course.objects.all())  # nosec
             )
+    
+    
+    def create_test_env():
+        print("CREATING STAFF / TEACHER")
+        
+        staff = create_user(confirm=True, staff=True)
+        
+        teacher = Teacher.objects.create(user=staff, short_name="SHT")
+        
+        print("CREATING STUDENT")
+        
+        user_student = create_user(confirm=True)
+        
+        Student.objects.create(class_number=random.randint(5, 13), main_teacher=teacher)  # nosec
+        
+        create_timetable(user_student, staff)

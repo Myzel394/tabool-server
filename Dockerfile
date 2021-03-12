@@ -21,6 +21,8 @@ RUN apt-get install -y python3.9-dev libjpeg-dev zlib1g-dev
 RUN apt-get install -y software-properties-common python3.9 python3-pip
 # Install tor
 RUN apt-get install -y tor
+# Install cron
+RUN apt-get install -y cron
 # Python dependencies
 COPY requirements.txt .
 RUN python3.9 -m pip install --upgrade pip
@@ -31,6 +33,8 @@ COPY .env .
 COPY prod.env .
 COPY backend .
 
+ADD . /app/
+
 # Configuration
-COPY django-entrypoint.sh /
-ENTRYPOINT ["/django-entrypoint.sh"]
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
