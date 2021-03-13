@@ -28,7 +28,5 @@ RUN apt-get install -y tor
 RUN python3.9 -m pip install --upgrade pip
 RUN python3.9 -m pip install -r ./requirements.txt
 
-COPY init.sql /docker-entrypoint-initdb.d/init.sql
-
 # Configuration
 ENTRYPOINT ["./django-entrypoint.sh"]

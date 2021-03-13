@@ -16,10 +16,6 @@ Dockerfile
 **/__pycache__/
 **/*.py[cod]
 
-# Django migrations
-**/migrations/*
-!**/migrations/__init__.py
-
 # Swap files
 **/*.swp
 
