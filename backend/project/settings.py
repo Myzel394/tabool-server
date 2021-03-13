@@ -35,7 +35,7 @@ LIB_DIR = BASE_DIR / "lib"
 SECRET_KEY = os.getenv("SECRET_KEY", "secret_key")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = bool(os.getenv("DEBUG", 1))
+DEBUG = bool(int(os.getenv("DEBUG", "1")))
 
 if not DEBUG:
     load_dotenv("prod.env")
@@ -87,8 +87,8 @@ INSTALLED_APPS = [
 SESSION_ENGINE = "user_sessions.backends.db"
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "user_sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -334,3 +334,7 @@ FCM_DJANGO_SETTINGS = {
 }
 
 SHOW_VOTES_RESULTS = False
+
+SECURE_HSTS_SECONDS = 60
+CSRF_COOKIE_SECURE = True
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
