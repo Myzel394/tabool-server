@@ -292,3 +292,4 @@ backend/.coverage
 
 static_root
 media
+backend/static_root

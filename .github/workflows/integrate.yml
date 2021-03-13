@@ -1,23 +1,24 @@
 name: Django CI/CD Workflow
 
 on:
-  push:
-    branches:
-      - master
-      - develop
+  - push
 
 jobs:
   healt-check-job:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: github-actions
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-      - name: Setup Postgres database
-        uses: Daniel-Marynicz/postgresql-action@master
-        with:
-          postgres_image_tag: latest
-          postgres_user: postgres
-          postgres_password: postgres
-          postgres_db: github-actions
-          postgres_extensions: pg_trgm unaccent
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Cache dependency
@@ -31,13 +32,9 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.9'
-      - name: Check Python version
-        run: python --version
       - name: Install requirements
         run: pip install -r requirements.txt
-      - name: Run Makemigrations
-        run: python backend/manage.py makemigrations
-      - name: Run Migrations
+      - name: Apply migrations
         run: python backend/manage.py migrate
       - name: Run Test
         run: python backend/manage.py test ./backend/ --noinput
