@@ -118,6 +118,10 @@ if settings.DEBUG:
         
         user_student = create_user(confirm=True)
         
-        Student.objects.create(class_number=random.randint(5, 13), main_teacher=teacher)  # nosec
+        Student.objects.create(
+            class_number=random.randint(5, 13),  # nosec
+            main_teacher=teacher,
+            user=user_student
+        )
         
         create_timetable(user_student, staff)
