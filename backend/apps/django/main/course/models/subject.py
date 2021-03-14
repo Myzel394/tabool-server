@@ -6,6 +6,7 @@ from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_lifecycle import LifecycleModel
 
 from ..public import model_names
+from ..querysets import SubjectQuerySet
 
 __all__ = [
     "Subject"
@@ -17,6 +18,8 @@ class Subject(RandomIDMixin, LifecycleModel, HandlerMixin):
         verbose_name = model_names.SUBJECT
         verbose_name_plural = model_names.SUBJECT_PLURAL
         ordering = ("name",)
+    
+    objects = SubjectQuerySet.as_manager()
     
     name = models.CharField(
         verbose_name=_("Name"),
