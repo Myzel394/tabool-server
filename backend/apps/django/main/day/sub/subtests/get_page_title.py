@@ -48,4 +48,4 @@ class GetPageTitleTest(UserTestMixin):
             "url": "https://example.com"
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
-        self.assertEqual(self.invalid_status_code_mock_status_code, response.data["proxy_status_code"])
+        self.assertEqual(self.invalid_status_code_mock_status_code, response.data["status_code"])
