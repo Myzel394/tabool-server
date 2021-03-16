@@ -6,6 +6,7 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from project import settings
 from ....serializers import (
     FullRegistrationSerializer, RegisterSerializer, UserInformationSerializer,
 )
@@ -34,6 +35,10 @@ class RegisterView(generics.CreateAPIView):
         
         user = self.perform_create(serializer)
         serializer = UserInformationSerializer(user)
+        
+        if settings.IS_EXPERIMENTAL:
+            user.confirm_email(user.confirmation_key)
+            user.save()
         
         login(request, user)
         

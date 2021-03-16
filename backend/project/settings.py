@@ -338,3 +338,5 @@ SHOW_VOTES_RESULTS = False
 SECURE_HSTS_SECONDS = 60
 CSRF_COOKIE_SECURE = True
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
+IS_EXPERIMENTAL = bool(int(os.getenv("IS_EXPERIMENTAL", 1)))

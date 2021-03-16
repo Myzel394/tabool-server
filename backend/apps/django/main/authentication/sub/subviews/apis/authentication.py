@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from apps.django.main.otp.models.otp import OTP
 from apps.django.main.otp.utils import is_ip_geolocation_suspicious, send_otp_message
 from apps.django.utils.request import get_client_ip
+from project import settings
 from ....models import KnownIp
 from ....serializers import (
     LoginSerializer, UserInformationSerializer,
@@ -84,20 +85,21 @@ class LoginView(views.APIView):
         user = serializer.validated_data["user"]
         
         # OTP
-        ip_address = get_client_ip(request)
-        if not self.is_ip_known(user=user, ip_address=ip_address) or is_ip_geolocation_suspicious(ip_address):
-            valid, payload = self.handle_otp(user)
+        if not settings.IS_EXPERIMENTAL:
+            ip_address = get_client_ip(request)
+            if not self.is_ip_known(user=user, ip_address=ip_address) or is_ip_geolocation_suspicious(ip_address):
+                valid, payload = self.handle_otp(user)
+                
+                if not valid:
+                    return Response(payload, status=status.HTTP_401_UNAUTHORIZED)
             
-            if not valid:
-                return Response(payload, status=status.HTTP_401_UNAUTHORIZED)
-        
-        self.delete_old_otps()
-        
-        # Known ips
-        KnownIp.objects.create(
-            associated_user=user,
-            ip_address=ip_address
-        )
+            self.delete_old_otps()
+            
+            # Known ips
+            KnownIp.objects.create(
+                associated_user=user,
+                ip_address=ip_address
+            )
         
         login(request, user)
         
