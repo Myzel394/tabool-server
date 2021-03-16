@@ -6,7 +6,6 @@ from pathlib import Path
 from future.backports.datetime import datetime
 from magic import Magic
 from secure_file_detection import detector
-from secure_file_detection.exceptions import *
 
 from .parsers import PureMaterialParser
 from .parsers.material import PureMaterialParserDataType
@@ -54,7 +53,7 @@ class MaterialRequest(Request):
         # Validation
         try:
             true_type = detector.detect_true_type(original_path)
-        except (ManipulatedFileError, MimeTypeNotSupported, MimeTypeNotDetectable):
+        except:
             original_path.unlink()
             
             raise FileManipulatedException()

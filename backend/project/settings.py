@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     "user_sessions",
     
+    "corsheaders",
     "rest_framework",
     "django_common_utils.apps.Config",
     "simple_history",
@@ -63,7 +64,6 @@ INSTALLED_APPS = [
     "channels",
     "django_crontab",
     "django_object_actions",
-    "corsheaders",
     "fcm_django",
     "django_rest_passwordreset",
     
@@ -90,6 +90,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "user_sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
