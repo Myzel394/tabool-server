@@ -46,6 +46,7 @@ class LessonContentRequest(Request):
                 "url": self.build_get_homework_url(time_id=time_id, targeted_datetime=targeted_datetime),
                 "method": constants.LESSON_CONTENT_CONNECTION["method"]
             },
+            user_agent_name="GetHomework"
         )
     
     @staticmethod

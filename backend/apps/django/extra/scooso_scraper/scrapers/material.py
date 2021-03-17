@@ -100,7 +100,8 @@ class MaterialRequest(Request):
                     material_type=material_type
                 ),
                 "method": constants.MATERIAL_CONNECTION["method"]
-            }
+            },
+            user_agent_name="GetMaterials"
         )
     
     def get_teacher_homework(
@@ -153,7 +154,8 @@ class MaterialRequest(Request):
                     material_id=material_id
                 ),
                 "method": constants.MATERIAL_DOWNLOAD_CONNECTION["method"]
-            }
+            },
+            user_agent_name="DownloadMaterial"
         )
         
         return self.create_file(download_to, data)
@@ -199,7 +201,8 @@ class MaterialRequest(Request):
         
         self.request_with_parser(
             parser_class=MaterialUploadParser,
-            get_data=get_data
+            get_data=get_data,
+            user_agent_name="UploadMaterial"
         )
     
     def build_delete_material_url(
@@ -226,5 +229,6 @@ class MaterialRequest(Request):
             get_data=lambda: {
                 "url": self.build_delete_material_url(file_id),
                 "method": constants.MATERIAL_UPLOAD_CONNECTION["method"]
-            }
+            },
+            user_agent_name="DeleteMaterial"
         )

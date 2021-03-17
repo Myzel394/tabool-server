@@ -74,7 +74,8 @@ class TimetableRequest(Request):
                     end_date=end_date
                 ),
                 "method": constants.TIMETABLE_CONNECTION["method"]
-            }
+            },
+            user_agent_name="GetTimetable"
         )
     
     def get_video_conference_link(self, time_id: int, lesson_date: date) -> str:
@@ -99,7 +100,8 @@ class TimetableRequest(Request):
         
         return self.request_with_parser(
             parser_class=VideoConferenceParser,
-            get_data=get_data
+            get_data=get_data,
+            user_agent_name="GetVideoConference"
         )
     
     @staticmethod

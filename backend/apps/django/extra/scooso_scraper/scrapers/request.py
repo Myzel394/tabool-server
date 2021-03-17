@@ -4,6 +4,7 @@ from typing import *
 
 from torrequest import TorRequest
 
+from constants.requests import generate_session
 from .parsers import BaseParser, LoginParser
 from .. import constants
 from ..exceptions import *
@@ -56,9 +57,9 @@ class Request:
                 "asd": "Anmelden"
             }
         )
-        with self.client as tr:
+        with generate_session("Login") as session:
             for _ in range(login_attempts):
-                response = tr.session.request(constants.LOGIN_CONNECTION["method"], url, headers=get_headers())
+                response = session.request(constants.LOGIN_CONNECTION["method"], url, headers=get_headers())
                 content = response.content.decode("utf-8")
                 
                 parser = LoginParser(content)
@@ -84,8 +85,9 @@ class Request:
             parser_class: Type[BaseParser],
             get_data: Callable,
             attempts: int = 8,
+            user_agent_name: Optional[str] = None,
     ):
-        with self.client as tr:
+        with generate_session(user_agent_name) as session:
             for _ in range(attempts):
                 data = get_data()
                 url = data.pop("url")
@@ -101,7 +103,7 @@ class Request:
                 
                 print_request(prepared)"""
                 
-                response = tr.session.request(url=url, headers=headers, **data)
+                response = session.request(url=url, headers=headers, **data)
                 
                 if response.status_code == 200:
                     content = response.content
