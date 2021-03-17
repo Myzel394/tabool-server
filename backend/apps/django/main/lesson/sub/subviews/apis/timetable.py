@@ -12,6 +12,7 @@ from apps.django.main.event.sub.subserializers.modification.detail import Detail
 from apps.django.main.homework.models import Homework, Material
 from apps.django.main.homework.sub.subserializers.homework.detail import DetailHomeworkSerializer
 from apps.django.main.homework.sub.subserializers.material.detail import DetailMaterialSerializer
+from apps.django.utils.cache import cache_for_user
 from ....models import Lesson
 from ....serializers import RelatedDetailLessonSerializer, TimetableSerializer
 
@@ -19,7 +20,10 @@ __all__ = [
     "timetable"
 ]
 
+FOUR_MINUTES_IN_SECONDS = 60 * 4
 
+
+@cache_for_user(FOUR_MINUTES_IN_SECONDS)
 @api_view(["GET"])
 def timetable(request):
     # Validation
