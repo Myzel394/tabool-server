@@ -145,7 +145,8 @@ class TimetableRequest(Request):
             none_on_error=True,
             subject=subject,
             teacher=teacher,
-            participants=participants
+            participants=participants,
+            class_number=participants[0].student.class_number
         )
         
         video_conference_link = None

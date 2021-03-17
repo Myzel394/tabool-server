@@ -341,3 +341,4 @@ CSRF_COOKIE_SECURE = True
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 IS_EXPERIMENTAL = bool(int(os.getenv("IS_EXPERIMENTAL", 1)))
+IS_TOR = bool(int(os.getenv("IS_TOR", 1)))
