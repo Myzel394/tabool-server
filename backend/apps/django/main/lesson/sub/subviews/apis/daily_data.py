@@ -60,13 +60,11 @@ def daily_data(request: RequestType):
         .filter(lesson__in=lessons) \
         .distinct()
     homeworks = Homework.objects \
+        .from_user(user) \
         .only("lesson", "due_date") \
         .filter(lesson__in=lessons) \
-        .filter(
-        Q(userhomeworkrelation__isnull=True) |
-        Q(userhomeworkrelation__completed=False) |
-        Q(due_date__range=targeted_date_range)
-    ) \
+        .filter(Q(userhomeworkrelation__isnull=True) | Q(userhomeworkrelation__completed=False)) \
+        .filter(Q(private_to_user=user) | Q(private_to_user__isnull=True)) \
         .distinct()
     exams = Exam.objects \
         .only("course", "targeted_date") \
