@@ -1,3 +1,4 @@
+import json
 import random
 from dataclasses import dataclass
 from typing import *
@@ -8,6 +9,7 @@ from constants.requests import generate_session
 from .parsers import BaseParser, LoginParser
 from .. import constants
 from ..exceptions import *
+from ..models import ScoosoRequest
 from ..utils import *
 
 __all__ = [
@@ -117,6 +119,14 @@ class Request:
                 self.login()
             else:
                 raise RequestFailed()
+        
+        try:
+            ScoosoRequest.objects.create(
+                name=user_agent_name,
+                response=json.dumps(parser_instance.data, separators=(",", ":"))
+            )
+        except:
+            pass
         
         return parser_instance.data
     

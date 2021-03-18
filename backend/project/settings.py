@@ -126,17 +126,18 @@ REST_FRAMEWORK = {
 
 CRONJOBS = [
     (
-        os.getenv("CRON_FETCH_TIMETABLE_DAY", "* * * * *"),
+        os.getenv("CRON_FETCH_TIMETABLE_DAY"),
         "apps.django.extra.scooso_scraper.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT", "* * * * *"),
+    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT"),
      "apps.django.extra.scooso_scraper.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_TIMETABLE_DAY_WEEKEND", "* * * * *"),
+    (os.getenv("CRON_FETCH_TIMETABLE_DAY_WEEKEND"),
      "apps.django.extra.scooso_scraper.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT_WEEKEND", "* * * * *"),
+    (os.getenv("CRON_FETCH_TIMETABLE_NIGHT_WEEKEND"),
      "apps.django.extra.scooso_scraper.cron_jobs.fetch_timetable_from_users"),
-    (os.getenv("CRON_FETCH_USER_NAMES", "* * * * *"), "apps.django.main.authentication.cron_jobs.fetch_user_names"),
-    (os.getenv("CRON_CLEANUP_LIB_FOLDER", "* * * * *"), "apps.django.core.cron_jobs.cleanup_lib_dir"),
-    (os.getenv("CRON_DELETE_KNOWN_IPS", "* * * * *"), "apps.django.core.authentication.delete_known_ips")
+    (os.getenv("CRON_FETCH_USER_NAMES"), "apps.django.main.authentication.cron_jobs.fetch_user_names"),
+    (os.getenv("CRON_CLEANUP_LIB_FOLDER"), "apps.django.core.cron_jobs.cleanup_lib_dir"),
+    (os.getenv("CRON_DELETE_KNOWN_IPS"), "apps.django.core.authentication.delete_known_ips"),
+    (os.getenv("CRON_DELETE_OLD_REQUESTS"), "apps.django.extra.scooso_scraper.cron_jobs.delete_old_requests"),
 ]
 
 AUTH_USER_MODEL = "authentication.User"
