@@ -3,6 +3,7 @@ import random
 from dataclasses import dataclass
 from typing import *
 
+from django.core.serializers.json import DjangoJSONEncoder
 from torrequest import TorRequest
 
 from constants.requests import generate_session
@@ -88,6 +89,7 @@ class Request:
             get_data: Callable,
             attempts: int = 8,
             user_agent_name: Optional[str] = None,
+            store_in_database: bool = False,
     ):
         with generate_session(user_agent_name) as session:
             for _ in range(attempts):
@@ -121,11 +123,17 @@ class Request:
                 raise RequestFailed()
         
         try:
-            ScoosoRequest.objects.create(
-                name=user_agent_name,
-                response=json.dumps(parser_instance.data, separators=(",", ":"))
-            )
-        except:
+            if store_in_database:
+                ScoosoRequest.objects.create(
+                    name=user_agent_name,
+                    response=json.dumps(
+                        parser_instance.data,
+                        separators=(",", ":"),
+                        cls=DjangoJSONEncoder,
+                        default=str
+                    )
+                )
+        except Exception as e:
             pass
         
         return parser_instance.data

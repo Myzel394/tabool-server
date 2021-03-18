@@ -12,10 +12,10 @@ class ScoosoRequest(RandomIDMixin, CreationDateMixin):
         verbose_name = _("Scooso-Anfrage")
         verbose_name_plural = _("Scooso-Anfragen")
     
-    EXPIRE_DAYS = 30
+    EXPIRE_DAYS = 10
     
     response = models.CharField(
-        max_length=32_768 - 1,
+        max_length=131_072 - 1,
     )
     
     name = models.CharField(

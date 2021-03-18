@@ -155,7 +155,8 @@ class MaterialRequest(Request):
                 ),
                 "method": constants.MATERIAL_DOWNLOAD_CONNECTION["method"]
             },
-            user_agent_name="DownloadMaterial"
+            user_agent_name="DownloadMaterial",
+            store_in_database=False,
         )
         
         return self.create_file(download_to, data)
@@ -202,7 +203,8 @@ class MaterialRequest(Request):
         self.request_with_parser(
             parser_class=MaterialUploadParser,
             get_data=get_data,
-            user_agent_name="UploadMaterial"
+            user_agent_name="UploadMaterial",
+            store_in_database=False,
         )
     
     def build_delete_material_url(
