@@ -61,8 +61,12 @@ def daily_data(request: RequestType):
         .distinct()
     homeworks = Homework.objects \
         .only("lesson", "due_date") \
-        .filter(Q(userhomeworkrelation__isnull=True) | Q(userhomeworkrelation__completed=False)) \
-        .filter(Q(lesson__in=lessons) | Q(due_date__range=targeted_date_range)) \
+        .filter(lesson__in=lessons) \
+        .filter(
+        Q(userhomeworkrelation__isnull=True) |
+        Q(userhomeworkrelation__completed=False) |
+        Q(due_date__range=targeted_date_range)
+    ) \
         .distinct()
     exams = Exam.objects \
         .only("course", "targeted_date") \
@@ -75,8 +79,7 @@ def daily_data(request: RequestType):
         .filter(start_datetime__gte=datetime.combine(targeted_date, time.min),
                 end_datetime__lte=datetime.combine(targeted_date + timedelta(days=max_future_days), time.max)) \
         .distinct()
-    video_conference_lessons = Lesson.objects \
-        .from_user(user) \
+    video_conference_lessons = user_lessons \
         .only("video_conference_link", "date") \
         .filter(video_conference_link__isnull=False,
                 date__gte=targeted_date,
