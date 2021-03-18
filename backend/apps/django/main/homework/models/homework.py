@@ -14,7 +14,6 @@ from apps.django.main.authentication.public import model_names as auth_names
 from apps.django.main.lesson.public import *
 from apps.django.main.lesson.public import model_names as lesson_names
 from apps.django.utils.history_extras.extras import UserInformationHistoricalModel
-from apps.django.utils.validators import validate_weekday_in_lesson_data_available
 from constants import maxlength
 from ..notifications import push_homework_added
 from ..public import model_names
@@ -59,7 +58,6 @@ class Homework(RandomIDMixin, CreationDateMixin, LifecycleModel, HandlerMixin):
         verbose_name=_("Fälligkeitsdatum"),
         blank=True,
         null=True,
-        validators=[validate_weekday_in_lesson_data_available]
     )  # type: date
     
     information = models.TextField(
