@@ -88,8 +88,8 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
     homeworks = Homework.objects \
         .from_user(user) \
         .only("due_date", "lesson") \
-        .filter(homework_not_completed_filter) \
         .filter(homework_date_filter) \
+        .filter(homework_not_completed_filter) \
         .distinct()
     classbook_with_video_conferences = Classbook.objects \
         .from_user(user) \

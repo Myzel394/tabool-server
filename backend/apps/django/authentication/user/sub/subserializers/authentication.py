@@ -25,7 +25,7 @@ class LoginSerializer(serializers.Serializer):
             user = User.objects.only("email").get(email=email)
         except ObjectDoesNotExist:
             raise serializers.ValidationError({
-                "email": _("Diese E-Mail ist ungültig.")
+                "email": _("Diese E-Mail wurde nicht gefunden.")
             })
         
         # Check password
