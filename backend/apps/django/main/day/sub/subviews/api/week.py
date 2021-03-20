@@ -10,8 +10,11 @@ from apps.django.main.event.serializers import (
     DetailEventSerializer, StudentDetailExamSerializer,
     StudentDetailModificationSerializer, TeacherDetailExamSerializer, TeacherDetailModificationSerializer,
 )
-from apps.django.main.homework.models import Material
-from apps.django.main.homework.serializers import StudentDetailMaterialSerializer, TeacherDetailMaterialSerializer
+from apps.django.main.homework.models import Homework, Material
+from apps.django.main.homework.serializers import (
+    StudentDetailHomeworkSerializer, StudentDetailMaterialSerializer,
+    TeacherDetailMaterialSerializer,
+)
 from apps.django.main.timetable.models import Timetable
 from apps.django.main.timetable.serializers import StudentDetailLessonSerializer, TeacherDetailLessonSerializer
 from apps.django.utils.cache import cache_for_user
@@ -60,6 +63,10 @@ def get_elements(user: "User", start_date: date, end_date: date) -> dict:
         .from_user(user) \
         .only("lesson_date") \
         .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
+    homeworks = Homework.objects \
+        .from_user(user) \
+        .only("lesson_date") \
+        .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
     exams = Exam.objects \
         .from_user(user) \
         .only("date") \
@@ -76,6 +83,7 @@ def get_elements(user: "User", start_date: date, end_date: date) -> dict:
         "materials": materials,
         "exams": exams,
         "events": events,
+        "homeworks": homeworks,
     }
 
 
@@ -114,6 +122,11 @@ def student_week_view(request: RequestType):
         ).data,
         "events": DetailEventSerializer(
             instance=elements["events"],
+            many=True,
+            context=serializer_context
+        ).data,
+        "homeworks": StudentDetailHomeworkSerializer(
+            instance=elements["homeworks"],
             many=True,
             context=serializer_context
         ).data,

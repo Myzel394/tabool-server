@@ -8,6 +8,8 @@ __all__ = [
     "WeekViewSerializer"
 ]
 
+MAX_DAYS = 7 * 5  # 5 weeks
+
 
 class WeekViewSerializer(serializers.Serializer):
     start_date = serializers.DateField(
@@ -21,9 +23,19 @@ class WeekViewSerializer(serializers.Serializer):
     )
     
     def validate(self, attrs):
-        if attrs["end_date"] < attrs["start_date"]:
+        start_date = attrs["start_date"]
+        end_date = attrs["end_date"]
+        
+        if end_date < start_date:
             raise ValidationError(
                 _("Das Enddatum muss über dem Startdatum liegen.")
+            )
+        
+        diff = end_date - start_date
+        
+        if diff.days > MAX_DAYS:
+            raise ValidationError(
+                _(f"Du kannst höchstens {MAX_DAYS} Tage vorspulen.")
             )
         
         return super().validate(attrs)
