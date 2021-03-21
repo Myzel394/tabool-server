@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 
 from apps.django.main.authentication.models import Student
 from apps.django.utils.serializers import GetOrCreateSerializerMixin
@@ -30,13 +30,22 @@ class CourseScoosoScraperSerializer(GetOrCreateSerializerMixin):
                 for student in students
             ]
             
-            instance = Course.objects.get(
+            courses = Course.objects.filter(
                 subject=subject,
                 course_number=course_number,
                 teacher=teacher,
                 participants__in=users
-            )
-        except ObjectDoesNotExist:
+            ).distinct()
+            count = courses.count()
+            
+            if count == 1:
+                instance = courses[0]
+            elif count > 1:
+                raise MultipleObjectsReturned()
+            elif count == 0:
+                raise ObjectDoesNotExist()
+        
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
             instance = Course.objects.create(
                 subject=subject,
                 course_number=course_number,
