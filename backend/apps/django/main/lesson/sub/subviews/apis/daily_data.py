@@ -42,7 +42,7 @@ def daily_data(request: RequestType):
     max_future_days: int = data["max_future_days"]
     
     # Empty guard
-    if Lesson.objects.count() == 0:
+    if Lesson.objects.from_user(user).count() == 0:
         return Response({
             "detail": _("Der Stundenplan wurde noch nicht geladen.")
         }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
