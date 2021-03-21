@@ -89,7 +89,7 @@ class Request:
             get_data: Callable,
             attempts: int = 8,
             user_agent_name: Optional[str] = None,
-            store_in_database: bool = False,
+            store_in_database: bool = True
     ):
         with generate_session(user_agent_name) as session:
             for _ in range(attempts):

@@ -11,6 +11,7 @@ class ScoosoRequest(RandomIDMixin, CreationDateMixin):
     class Meta:
         verbose_name = _("Scooso-Anfrage")
         verbose_name_plural = _("Scooso-Anfragen")
+        ordering = ("created_at",)
     
     EXPIRE_DAYS = 10
     
