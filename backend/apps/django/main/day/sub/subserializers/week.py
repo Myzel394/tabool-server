@@ -8,7 +8,7 @@ __all__ = [
     "WeekViewSerializer"
 ]
 
-MAX_DAYS = 7 * 5  # 5 weeks
+MAX_DAYS = 7 * 6  # 6 weeks
 
 
 class WeekViewSerializer(serializers.Serializer):
