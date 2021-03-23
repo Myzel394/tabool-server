@@ -1,67 +1,76 @@
 from django.utils.translation import gettext_lazy as _
-from pydicti import dicti
 
 __all__ = [
     "APP_LABEL", "SUBJECT_NAMES_MAPPING", "SUBJECT_COLORS_MAPPING",
 ]
 
 APP_LABEL = "school_data"
-SUBJECT_NAMES_MAPPING = dicti(
-    E=_("Englisch"),
-    M=_("Mathe"),
-    D=_("Deutsch"),
-    F=_("Französisch"),
-    L=_("Latein"),
-    S=_("Spanisch"),
+SUBJECT_NAMES_MAPPING = {
+    "m": _("Mathe"),
+    "d": _("Deutsch"),
     
-    iN=_("Informatik"),
+    "e": _("Englisch"),
+    "f": _("Französisch"),
+    "l": _("Latein"),
+    "s": _("Spanisch"),
     
-    ch=_("Chemie"),
-    ph=_("Physik"),
-    bi=_("Biologie"),
+    "in": _("Informatik"),
     
-    skek=_("Sozialkunde-Erdkunde"),
-    sk=_("Sozialkunde"),
-    ek=_("Erdkunde"),
+    "ch": _("Chemie"),
+    "ph": _("Physik"),
+    "bi": _("Biologie"),
+    "nawi": _("Naturwissenschaften"),
     
-    kr=_("Katholische Religion"),
-    et=_("Ethik"),
-    er=_("Evangelische Religion"),
+    "skek": _("Sozialkunde-Erdkunde"),
+    "sk": _("Sozialkunde"),
+    "ek": _("Erdkunde"),
+    "g": _("Geschichte"),
     
-    mu=_("Musik"),
-    ds=_("Darstellendes Spiel"),
+    "kr": _("Katholische Religion"),
+    "et": _("Ethik"),
+    "er": _("Evangelische Religion"),
+    "mr": _("Mennonitische Religion"),
     
-    spk=_("Sport"),
-    spko=_("Sport"),
-    g=_("Geschichte"),
-    bk=_("Kunst"),
-)
-SUBJECT_COLORS_MAPPING = dicti(
-    englisch="#14A5FF",
-    mathe="#FF4834",
-    deutsch="#2072FF",
-    französisch="#FFDA28",
-    latein="#73FFF2",
-    spanisch="#EAFF00",
+    "mu": _("Musik"),
+    "ds": _("Darstellendes Spiel"),
+    "bk": _("Kunst"),
     
-    informatik="#1E67FF",
+    "sp": _("Sport"),
+    "spk": _("Sport"),
+    "spko": _("Sport"),
+}
+SUBJECT_COLORS_MAPPING = {
+    "m": "#FF4834",
+    "d": "#2072FF",
     
-    chemie="#F2FF06",
-    physik="#2FD0FF",
-    biologie="#86FF49",
+    "e": "#14A5FF",
+    "f": "#FFDA28",
+    "l": "#73FFF2",
+    "s": "#EAFF00",
     
-    sozialkunde_erdkunde="#BE10FF",
-    sozialkunde="#FF0021",
-    eerdunde="#CE8F24",
+    "in": "#1E67FF",
     
-    katholische_religion="#D70AFF",
-    ethik="#D70AFF",
-    evangelische_religion="#D70AFF",
+    "ch": "#F2FF06",
+    "ph": "#2FD0FF",
+    "bi": "#86FF49",
+    "nawi": "#24eda3",
     
-    musik="#FFFB00",
-    darstellendes_spiel="#48FFF7",
+    "skek": "#BE10FF",
+    "sk": "#FF0021",
+    "ek": "#CE8F24",
     
-    sport="#39D8FF",
-    geschichte="#FF6E37",
-    kunst="#5645FF"
-)
+    "g": "#FF6E37",
+    
+    "kr": "#D70AFF",
+    "et": "#D70AFF",
+    "er": "#D70AFF",
+    "mr": "#D70AFF",
+    
+    "mu": "#FFFB00",
+    "ds": "#48FFF7",
+    "bk": "#5645FF",
+    
+    "sp": "#39D8FF",
+    "spk": "#39D8FF",
+    "spko": "#39D8FF",
+}

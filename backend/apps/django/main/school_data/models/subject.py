@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.handlers.mixins import WhiteSpaceStripHandler
 from django_common_utils.libraries.handlers.models import HandlerMixin
 from django_common_utils.libraries.models.mixins import RandomIDMixin
-from django_lifecycle import LifecycleModel
+from django_lifecycle import BEFORE_SAVE, hook, LifecycleModel
 
 from constants import maxlength
 from ..public import model_names
@@ -37,3 +37,7 @@ class Subject(RandomIDMixin, LifecycleModel, HandlerMixin):
         return {
             "name": WhiteSpaceStripHandler()
         }
+    
+    @hook(BEFORE_SAVE)
+    def _hook_lowercase_short_name(self):
+        self.short_name = self.short_name.lower()

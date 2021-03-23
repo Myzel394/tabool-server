@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import RandomIDMixin
 from django_lifecycle import BEFORE_CREATE, hook, LifecycleModel
 
-from apps.django.extra.scooso_scraper.utils import rename_name_for_color_mapping
 from apps.django.utils.fields import ColorField
 from apps.django.utils.models import UserModelRelationMixin
 from ...public import *
@@ -45,7 +44,7 @@ class UserSubjectRelation(RandomIDMixin, UserModelRelationMixin, LifecycleModel)
     
     @property
     def default_color_for_name(self) -> str:
-        return constants.SUBJECT_COLORS_MAPPING.get(rename_name_for_color_mapping(self.subject.name), "#888")
+        return constants.SUBJECT_COLORS_MAPPING.get(self.subject.short_name, "#232323")
     
     @hook(BEFORE_CREATE)
     def _hook_set_color(self):

@@ -1,4 +1,3 @@
-from apps.django.extra.scooso_scraper.utils import rename_name_for_color_mapping
 from apps.django.utils.serializers import RandomIDSerializerMixin, UserRelationField
 from .user_relations import UserSubjectRelationSerializer
 from ... import constants
@@ -23,7 +22,7 @@ class SubjectSerializer(RandomIDSerializerMixin):
         UserSubjectRelationSerializer,
         default=lambda subject, _: {
             "color": constants.SUBJECT_COLORS_MAPPING.get(
-                rename_name_for_color_mapping(subject.name), "#232323"
+                subject.short_name, "#232323"
             )
         }
     )
