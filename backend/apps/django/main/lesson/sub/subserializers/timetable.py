@@ -10,7 +10,7 @@ __all__ = [
 
 
 class TimetableSerializer(serializers.Serializer):
-    MAX_DAYS_DIFF = 5
+    MAX_DAYS_DIFF = 7 * 6  # 6 Weeks
     
     start_datetime = serializers.DateTimeField()
     end_datetime = serializers.DateTimeField()
