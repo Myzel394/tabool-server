@@ -13,7 +13,7 @@ class RoomScoosoScraperSerializer(ScoosoScraperSerializerMixin):
         model = Room
         scooso_model = RoomScoosoData
     
-    code = serializers.CharField()
+    code = serializers.CharField(required=False, allow_null=True)
     
     @staticmethod
     def constrain_place(given_place: str) -> str:

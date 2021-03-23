@@ -16,8 +16,8 @@ class MaterialScoosoScraperSerializer(ScoosoScraperSerializerMixin):
             "scooso_id", "owner_id", "filename", "created_at"
         ]
     
-    scooso_id = serializers.IntegerField(min_value=0)
-    owner_id = serializers.IntegerField(min_value=0)
+    scooso_id = serializers.IntegerField(required=False, allow_null=True)
+    owner_id = serializers.IntegerField(required=False, allow_null=True)
     created_at = serializers.DateTimeField()
     filename = serializers.CharField()
     

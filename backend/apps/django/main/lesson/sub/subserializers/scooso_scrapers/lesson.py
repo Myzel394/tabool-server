@@ -17,8 +17,8 @@ class LessonScoosoScraperSerializer(ScoosoScraperSerializerMixin):
         ]
     
     scooso_id = None
-    time_id = serializers.IntegerField(min_value=0)
-    lesson_type = serializers.UUIDField()
+    time_id = serializers.IntegerField(required=False, allow_null=True)
+    lesson_type = serializers.UUIDField(required=False, allow_null=True)
     
     start_time = serializers.TimeField()
     end_time = serializers.TimeField()

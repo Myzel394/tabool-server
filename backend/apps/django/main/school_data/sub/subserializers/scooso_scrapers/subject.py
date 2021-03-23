@@ -15,7 +15,7 @@ class SubjectScoosoScraperSerializer(ScoosoScraperSerializerMixin):
         model = Subject
         scooso_model = SubjectScoosoData
     
-    code = serializers.CharField()
+    code = serializers.CharField(required=False, allow_null=True)
     
     def pop_scooso_data(self, validated_data: dict) -> dict:
         return {

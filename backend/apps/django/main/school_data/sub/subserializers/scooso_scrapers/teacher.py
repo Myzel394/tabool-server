@@ -13,7 +13,7 @@ class TeacherScoosoScraperSerializer(ScoosoScraperSerializerMixin):
         model = Teacher
         scooso_model = TeacherScoosoData
     
-    code = serializers.CharField()
+    code = serializers.CharField(required=False, allow_null=True)
     
     def pop_scooso_data(self, validated_data: dict) -> dict:
         return {
