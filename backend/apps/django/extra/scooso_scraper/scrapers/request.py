@@ -3,10 +3,12 @@ import random
 from dataclasses import dataclass
 from typing import *
 
+import requests
+from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from torrequest import TorRequest
 
-from constants.requests import generate_session
+from constants.request_generator import generate_session
 from .parsers import BaseParser, LoginParser
 from .. import constants
 from ..exceptions import *
@@ -16,6 +18,8 @@ from ..utils import *
 __all__ = [
     "Request"
 ]
+
+from ..utils import print_request
 
 
 @dataclass
@@ -43,6 +47,36 @@ class Request:
         
         return number
     
+    @staticmethod
+    def _print_request(encoding: str = "ascii", **kwargs) -> None:
+        request = requests.Request(**kwargs)
+        prepared = request.prepare()
+        
+        if type(prepared.body) is bytes:
+            prepared.body = prepared.body.decode(encoding)
+        
+        print_request(prepared)
+    
+    @staticmethod
+    def _minify_to_json(data: Union[list, dict]) -> str:
+        return json.dumps(
+            data,
+            separators=(",", ":"),
+            cls=DjangoJSONEncoder,
+            default=str
+        )
+    
+    @classmethod
+    def _store_request(cls, raw_response: str, attempts: int, identifier: str, request_data: dict):
+        minified_request = cls._minify_to_json(request_data)
+        
+        ScoosoRequest.objects.create(
+            name=identifier,
+            attempts_required=attempts,
+            response=raw_response,
+            request_data=minified_request
+        )
+    
     # Utils
     
     def build_url(self, url: str, data: dict) -> str:
@@ -60,17 +94,17 @@ class Request:
                 "asd": "Anmelden"
             }
         )
-        with generate_session("Login") as session:
-            for _ in range(login_attempts):
-                response = session.request(constants.LOGIN_CONNECTION["method"], url, headers=get_headers())
-                content = response.content.decode("utf-8")
-                
-                parser = LoginParser(content)
-                
-                if parser.is_valid:
-                    break
-            else:
-                raise LoginFailed()
+        session, _ = generate_session("Login")
+        for _ in range(login_attempts):
+            response = session.request(constants.LOGIN_CONNECTION["method"], url, headers=get_headers())
+            content = response.content.decode("utf-8")
+            
+            parser = LoginParser(content)
+            
+            if parser.is_valid:
+                break
+        else:
+            raise LoginFailed()
         
         self.session = parser.data["session"]
         self.second_session_data = parser.data["second_session_data"]
@@ -91,50 +125,45 @@ class Request:
             user_agent_name: Optional[str] = None,
             store_in_database: bool = True
     ):
-        with generate_session(user_agent_name) as session:
-            for _ in range(attempts):
-                data = get_data()
-                url = data.pop("url")
-                headers = get_headers()
-                headers.update(data.pop("headers", {}))
-                
-                """
-                request = requests.Request(url=url, headers=headers, **data)
-                prepared = request.prepare()
-                
-                if type(prepared.body) is bytes:
-                    prepared.body = prepared.body.decode("ascii")
-                
-                print_request(prepared)"""
-                
-                response = session.request(url=url, headers=headers, **data)
-                
-                if response.status_code == 200:
-                    content = response.content
-                    
-                    parser_instance = parser_class(content)
-                    
-                    if parser_instance.is_valid:
-                        break
-                
-                # Maybe session is not valid anymore
-                self.login()
-            else:
-                raise RequestFailed()
+        session, identifier = generate_session(user_agent_name)
         
-        try:
-            if store_in_database:
-                ScoosoRequest.objects.create(
-                    name=user_agent_name,
-                    response=json.dumps(
-                        parser_instance.data,
-                        separators=(",", ":"),
-                        cls=DjangoJSONEncoder,
-                        default=str
-                    )
+        for _ in range(attempts):
+            data = get_data()
+            url = data.pop("url")
+            headers = get_headers()
+            headers.update(data.pop("headers", {}))
+            
+            if settings.DEBUG:
+                self._print_request(url=url, headers=headers, **data)
+            
+            response = session.request(url=url, headers=headers, **data)
+            
+            if response.status_code == 200:
+                scooso_content = response.content
+                
+                parser_instance = parser_class(scooso_content)
+                
+                if parser_instance.is_valid:
+                    break
+            
+            # Maybe session is not valid anymore
+            self.login()
+        else:
+            raise RequestFailed()
+        
+        if store_in_database:
+            try:
+                self._store_request(
+                    raw_response=scooso_content,
+                    request_data={
+                        **data,
+                        "url": url,
+                    },
+                    attempts=attempts,
+                    identifier=identifier
                 )
-        except Exception as e:
-            pass
+            except Exception as e:
+                pass
         
         return parser_instance.data
     

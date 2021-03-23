@@ -1,10 +1,10 @@
 import random
 import string
-
-from torrequest import TorRequest
-from django.conf import settings
-from requests import request
 from typing import *
+
+import requests
+from django.conf import settings
+from torrequest import TorRequest
 
 __all__ = [
     "generate_session"
@@ -13,11 +13,11 @@ __all__ = [
 DEFAULT_HEADERS = "Windows 10NT; Firefox 78.0.1"
 
 
-def generate_session(user_agent_name: Optional[str] = None):
+def generate_session(user_agent_name: Optional[str] = None) -> tuple[requests.Session, str]:
     if settings.IS_TOR:
         session = TorRequest().session
     else:
-        session = request.Session()
+        session = requests.Session()
     
     if user_agent_name:
         identifier = "".join(random.choices(string.ascii_letters + string.digits, k=20))
@@ -29,5 +29,4 @@ def generate_session(user_agent_name: Optional[str] = None):
         "User-Agent": user_agent
     })
     
-    return session
-    
+    return session, user_agent

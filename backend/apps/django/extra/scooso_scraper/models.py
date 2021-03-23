@@ -15,7 +15,13 @@ class ScoosoRequest(RandomIDMixin, CreationDateMixin):
     
     EXPIRE_DAYS = 10
     
-    response = models.CharField(
+    attempts_required = models.PositiveSmallIntegerField()
+    
+    request_data = models.TextField(
+        max_length=131_072 - 1
+    )
+    
+    response = models.TextField(
         max_length=131_072 - 1,
     )
     
