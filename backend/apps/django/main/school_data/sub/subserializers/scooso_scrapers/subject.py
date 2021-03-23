@@ -25,7 +25,7 @@ class SubjectScoosoScraperSerializer(ScoosoScraperSerializerMixin):
     
     def rename_data(self, validated_data: dict) -> dict:
         code = validated_data.pop("code")
-        name = str(SUBJECT_NAMES_MAPPING[code])
+        name = str(SUBJECT_NAMES_MAPPING.get(code, "#888"))
         colors_mapping_name = rename_name_for_color_mapping(name)
         
         return {

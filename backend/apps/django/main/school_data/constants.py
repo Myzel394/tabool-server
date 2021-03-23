@@ -32,6 +32,7 @@ SUBJECT_NAMES_MAPPING = dicti(
     ds=_("Darstellendes Spiel"),
     
     spk=_("Sport"),
+    spko=_("Sport"),
     g=_("Geschichte"),
     bk=_("Kunst"),
 )
