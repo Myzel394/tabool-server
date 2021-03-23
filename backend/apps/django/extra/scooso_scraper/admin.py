@@ -7,7 +7,7 @@ from apps.django.extra.scooso_scraper.models import ScoosoRequest
 @admin.register(ScoosoRequest)
 class ScoosoRequestAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["name", "created_at", "response"]
+        "default": ["name", "attempts_required", "created_at", "response", "request_data"]
     }
     
     list_filter = ["name"]

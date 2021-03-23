@@ -20,7 +20,7 @@ class SubjectScoosoDataAdminInline(ScoosoDataAdminInlineMixin):
 @admin.register(Subject)
 class SubjectAdmin(DefaultAdminMixin):
     fieldset_fields = {
-        "default": ["name", "short_name", "color"],
+        "default": ["name", "short_name"],
     }
     inlines = [SubjectScoosoDataAdminInline]
     list_display = ["name", "short_name"]
