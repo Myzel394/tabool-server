@@ -80,7 +80,7 @@ class LoginView(views.APIView):
         return KnownIp.objects.filter(
             associated_user=user,
             ip_address=ip_address,
-            expire_date=datetime.now()
+            expire_date__gte=datetime.now()
         ).exists()
     
     def post(self, request: RequestType):
