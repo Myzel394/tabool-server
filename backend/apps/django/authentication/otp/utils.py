@@ -82,6 +82,9 @@ def get_ip_location(ip: str) -> Optional[IPGeolocation]:
 
 
 def is_ip_geolocation_suspicious(ip: str) -> bool:
+    if settings.DEBUG and ip == "127.0.0.1":
+        return False
+    
     if ip_location := get_ip_location(ip):
         longitude = ip_location.longitude
         latitude = ip_location.latitude
