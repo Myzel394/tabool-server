@@ -7,7 +7,7 @@ __all__ = [
 ]
 
 student_router = SimpleRouter()
-student_router.register("timetable", TimetableViewSet, basename="timetable")
+student_router.register("timetable", StudentTimetableViewSet, basename="timetable")
 
 teacher_router = SimpleRouter()
-teacher_router.register("timetable", TimetableViewSet, basename="timetable")
+teacher_router.register("timetable", TeacherTimetableViewSet, basename="timetable")
