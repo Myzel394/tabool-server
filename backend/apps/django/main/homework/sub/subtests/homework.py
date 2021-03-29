@@ -52,6 +52,17 @@ class TeacherHomeworkAPITest(HomeworkTestMixin):
         
         self.assertEqual(self.student.student, homework.private_to_student)
     
+    def test_can_not_create_private_homework_with_incorrect_participant(self):
+        lesson = self.Create_lesson()
+        self.student = self.Create_student_user()
+        
+        response = self.client.post("/api/teacher/homework/", {
+            **self.get_lesson_argument(lesson),
+            "information": "Test",
+            "private_to_student": self.student.id
+        })
+        self.assertStatusNotOk(response.status_code)
+    
     def test_can_edit_homework(self):
         homework = self.Create_homework()
         response = self.client.patch(f"/api/teacher/homework/{homework.id}/", {

@@ -1,3 +1,6 @@
+from django.utils.translation import gettext_lazy as _
+from rest_framework.exceptions import ValidationError
+
 from apps.django.authentication.user.public.serializer_fields.student import StudentField
 from apps.django.main.timetable.public.serializer_fields.lesson import LessonField
 from .base import BaseHomeworkSerializer
@@ -31,3 +34,18 @@ class TeacherCreateHomeworkSerializer(BaseHomeworkSerializer):
     
     lesson = LessonField()
     private_to_student = StudentField(required=False)
+    
+    def validate(self, validated_data):
+        student = validated_data.get("private_to_student")
+        lesson = validated_data["lesson"]
+        
+        if student:
+            available_students = lesson.course.participants.all()
+            
+            if student not in available_students:
+                raise ValidationError({
+                    "private_to_student": _("Dieser Benutzer ist kein Mitglied des Kurses {course}.").format(
+                        course=lesson.course.name
+                    )})
+        
+        return super().validate(validated_data)

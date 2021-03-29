@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
+from apps.django.authentication.user.choices import GenderChoices
 from apps.django.main.event.mixins import ExamTestMixin, ModificationTestMixin
 from apps.django.main.homework.mixins import ClassbookTestMixin, HomeworkTestMixin
 
@@ -31,7 +32,7 @@ if settings.DEBUG:
     # noinspection PyUnresolvedReferences
     from apps.django.extra.poll.models import *
     # noinspection PyUnresolvedReferences
-    from apps.django.main.timetable.mixins import LessonTestMixin, TimetableTestMixin
+    from apps.django.main.timetable.mixins import joinkwargs, LessonTestMixin, TimetableTestMixin
     
     
     def get_set_values(model, field):
@@ -48,7 +49,8 @@ if settings.DEBUG:
             email=f"{names.get_first_name()}@gmail.com",
             password=password,
             first_name=names.get_first_name(),
-            last_name=names.get_last_name()
+            last_name=names.get_last_name(),
+            gender=random.choice(GenderChoices.values)
         )
         
         if confirm:
@@ -109,21 +111,32 @@ if settings.DEBUG:
             )
     
     
+    def create_teacher(**kwargs) -> Teacher:
+        teacher = Teacher.objects.create(**joinkwargs({
+            "user": lambda: create_user(confirm=True, staff=True),
+            "short_name": lambda: "SHT"
+        }, kwargs))
+        
+        return teacher
+    
+    
+    def create_student(**kwargs) -> Student:
+        student = Student.objects.create(**joinkwargs({
+            "user": lambda: create_user(confirm=True),
+            "class_number": lambda: random.randint(5, 13),
+            "main_teacher": create_teacher,
+        }, kwargs))
+        
+        return student
+    
+    
     def create_test_env():
         print("CREATING STAFF / TEACHER")
         
-        staff = create_user(confirm=True, staff=True)
-        
-        teacher = Teacher.objects.create(user=staff, short_name="SHT")
+        teacher = create_teacher()
         
         print("CREATING STUDENT")
         
-        user_student = create_user(confirm=True)
+        student = create_student(main_teacher=teacher)
         
-        Student.objects.create(
-            class_number=random.randint(5, 13),  # nosec
-            main_teacher=teacher,
-            user=user_student
-        )
-        
-        create_timetable(user_student, staff)
+        create_timetable(student.user, teacher.user)
