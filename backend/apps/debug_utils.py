@@ -46,7 +46,9 @@ if settings.DEBUG:
         
         user = User.objects.create_user(
             email=f"{names.get_first_name()}@gmail.com",
-            password=password
+            password=password,
+            first_name=names.get_first_name(),
+            last_name=names.get_last_name()
         )
         
         if confirm:
