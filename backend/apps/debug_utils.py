@@ -50,7 +50,7 @@ if settings.DEBUG:
             password=password,
             first_name=names.get_first_name(),
             last_name=names.get_last_name(),
-            gender=random.choice(GenderChoices.values)
+            gender=random.choice(GenderChoices.values)  # nosec
         )
         
         if confirm:
@@ -123,7 +123,7 @@ if settings.DEBUG:
     def create_student(**kwargs) -> Student:
         student = Student.objects.create(**joinkwargs({
             "user": lambda: create_user(confirm=True),
-            "class_number": lambda: random.randint(5, 13),
+            "class_number": lambda: random.randint(5, 13),  # nosec
             "main_teacher": create_teacher,
         }, kwargs))
         
