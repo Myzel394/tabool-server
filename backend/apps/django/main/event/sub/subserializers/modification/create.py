@@ -17,6 +17,6 @@ class CreateModificationSerializer(BaseModificationSerializer):
         ]
     
     lesson = LessonField()
-    new_room = RoomField()
-    new_subject = SubjectField()
-    new_teacher = TeacherField()
+    new_room = RoomField(required=False, allow_null=True)
+    new_subject = SubjectField(required=False, allow_null=True)
+    new_teacher = TeacherField(required=False, allow_null=True)

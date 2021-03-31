@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 
 from apps.django.main.homework.mixins import MaterialTestMixin
+from apps.django.main.homework.models import Material
+from apps.django.utils.tests_mixins import GenericAPITestMixin
 
 
 class MaterialModelTest(MaterialTestMixin):
@@ -19,7 +21,28 @@ class MaterialModelTest(MaterialTestMixin):
         self.assertIsNotNone(material.name)
 
 
-class MaterialAPITest(MaterialTestMixin):
+class StudentMaterialAPITest(MaterialTestMixin, GenericAPITestMixin):
+    def setUp(self):
+        self.__class__.associated_student = self.Login_student()
+    
+    def test_can_access(self):
+        self.generic_access_test(
+            obj=self.Create_material(),
+            api_suffix="student/"
+        )
+    
+    def test_can_not_do_lifecycle_methods(self):
+        self.generic_lifecycle_test(
+            model=Material,
+            post_data={},
+            patch_data={},
+            api_suffix="student/",
+            should_be_ok=False,
+            foreign_obj=self.Create_material()
+        )
+
+
+class TeacherMaterialAPITest(MaterialTestMixin):
     def setUp(self):
         self.teacher = self.Login_teacher()
         self.__class__.associated_teacher = self.teacher

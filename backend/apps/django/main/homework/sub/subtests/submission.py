@@ -1,6 +1,9 @@
+import time
 from datetime import datetime, timedelta
 
 from apps.django.main.homework.mixins import SubmissionTestMixin
+from apps.django.main.homework.models import Submission
+from apps.django.utils.tests_mixins import GenericAPITestMixin
 
 
 class StorageTest(SubmissionTestMixin):
@@ -75,7 +78,7 @@ class SubmissionAPITest(SubmissionTestMixin):
         self.assertStatusOk(response.status_code)
 
 
-class StudentSubmissionAPITest(SubmissionTestMixin):
+class StudentSubmissionAPITest(SubmissionTestMixin, GenericAPITestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.__class__.associated_student = self.student
@@ -93,3 +96,35 @@ class StudentSubmissionAPITest(SubmissionTestMixin):
         
         response = self.client.post(f"/api/student/submission/{submission.id}/upload/")
         self.assertEqual(202, response.status_code)
+    
+    def test_can_access(self):
+        self.generic_access_test(
+            obj=self.Create_submission(),
+            api_suffix="student/"
+        )
+
+
+class TeacherSubmissionAPITest(SubmissionTestMixin, GenericAPITestMixin):
+    def setUp(self):
+        self.__class__.associated_teacher = self.Login_teacher()
+    
+    def test_can_access(self):
+        submission = self.Create_submission(
+            publish_datetime=datetime.now() + timedelta(seconds=3)
+        )
+        time.sleep(3)
+        
+        self.generic_access_test(
+            obj=submission,
+            api_suffix="teacher/"
+        )
+    
+    def test_can_not_do_lifecycle_methods(self):
+        self.generic_lifecycle_test(
+            model=Submission,
+            post_data={},
+            patch_data={},
+            api_suffix="teacher/",
+            should_be_ok=False,
+            foreign_obj=self.Create_submission()
+        )

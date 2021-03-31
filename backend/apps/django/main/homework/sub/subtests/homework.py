@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 
 from apps.django.main.homework.mixins.tests.homework import HomeworkTestMixin
 from apps.django.main.homework.models import Homework, UserHomeworkRelation
+from apps.django.utils.tests_mixins import GenericAPITestMixin
 from apps.utils import find_next_date_by_weekday
 
 
@@ -15,9 +16,19 @@ class HomeworkModelTest(HomeworkTestMixin):
             )
 
 
-class TeacherHomeworkAPITest(HomeworkTestMixin):
+class TeacherHomeworkAPITest(HomeworkTestMixin, GenericAPITestMixin):
     def setUp(self):
         self.__class__.associated_teacher = self.Login_teacher()
+    
+    def test_generic(self):
+        self.generic_elements_test(
+            model=Homework,
+            post_data=self.get_lesson_argument(),
+            patch_data={
+                "information": "Test"
+            },
+            api_suffix="teacher/"
+        )
     
     def test_can_create_public_homework(self):
         response = self.client.post("/api/teacher/homework/", {
