@@ -33,7 +33,7 @@ class TeacherCreateHomeworkSerializer(BaseHomeworkSerializer):
         ]
     
     lesson = LessonField()
-    private_to_student = StudentField(required=False)
+    private_to_student = StudentField(required=False, allow_null=True)
     
     def validate(self, validated_data):
         student = validated_data.get("private_to_student")

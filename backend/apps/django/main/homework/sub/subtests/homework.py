@@ -70,12 +70,20 @@ class TeacherHomeworkAPITest(HomeworkTestMixin):
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
     
-    def test_can_not_privatize_public_homework(self):
-        homework = self.Create_homework()
+    def test_can_not_change__private_to_student__once_created(self):
+        student = self.Create_student_user().student
+        homework = self.Create_homework(
+            lesson=self.Create_lesson(
+                course=self.Create_course(
+                    participants=[student]
+                )
+            )
+        )
         response = self.client.patch(f"/api/teacher/homework/{homework.id}/", {
-            "private_to_student": self.Create_student_user().id,
+            "private_to_student": student.id,
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
+        self.assertIsNone(homework.private_to_student, None)
 
 
 # TODO: Add more real cases tests!
