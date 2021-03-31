@@ -81,10 +81,7 @@ class StudentHomeworkViewSet(
 
 class TeacherHomeworkViewSet(
     DetailSerializerViewSetMixin,
-    viewsets.mixins.ListModelMixin,
-    viewsets.mixins.RetrieveModelMixin,
-    viewsets.mixins.CreateModelMixin,
-    viewsets.mixins.UpdateModelMixin,
+    viewsets.ModelViewSet,
 ):
     permission_classes = [AuthenticationAndActivePermission & IsTeacher]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
