@@ -17,7 +17,7 @@ class CourseViewSet(
     DetailSerializerViewSetMixin
 ):
     filter_backends = [SearchFilter]
-    search_fields = ["subject__name", "course_number", "teacher__last_name"]
+    search_fields = ["subject__name", "course_number", "teacher__user__first_name", "teacher__user__last_name"]
     model = Course
     detail_serializer = {
         STUDENT: StudentDetailCourseSerializer,
