@@ -41,19 +41,19 @@ regex = re.compile('<title>(.*?)</title>', re.IGNORECASE | re.DOTALL)
 def get_page_title_view(request: RequestType):
     serializer = GetPageTitleSerializer(data=request.GET)
     serializer.is_valid(raise_exception=True)
-    
+
     validated_data = serializer.validated_data
     url = validated_data["url"]
-    
+
     response = session.get(url)
-    
+
     if not (200 <= response.status_code < 300):
         return Response({
-            "detail": f"Server responded status code '{response.status_code}'.",
+            "detail": f"Server responded with status code '{response.status_code}'.",
             "status_code": response.status_code,
             "code": "blocked" if response.status_code == 429 else "failed"
         }, status=status.HTTP_502_BAD_GATEWAY)
-    
+
     try:
         html = response.text
         title = regex.search(html).group(1)
