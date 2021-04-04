@@ -58,3 +58,12 @@ class GetPageTitleTest(UserTestMixin):
             "url": "https://example.com"
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
+
+    @patch("apps.django.main.day.sub.subviews.api.get_page_title.requests.Session.get")
+    def test_cant_pass_not_listed_protocol(self, mock):
+        mock.return_value = self.invalid_status_code_mock
+
+        response = self.client.get("/api/data/get-page-title/", {
+            "url": "file://bbb-schulen.rlp.net"
+        }, content_type="application/json")
+        self.assertStatusNotOk(response.status_code)
