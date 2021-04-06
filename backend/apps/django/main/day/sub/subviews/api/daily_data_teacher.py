@@ -75,7 +75,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
     submissions = Submission.objects \
         .from_user(user) \
         .only("lesson", "lesson_date") \
-        .filter(lesson_in=user_lessons) \
+        .filter(lesson__in=user_lessons) \
         .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
 
     classbook_with_video_conferences = Classbook.objects \
@@ -84,7 +84,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
         .filter(video_conference_link__isnull=False) \
         .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
 
-    material_date_filter = Q(lesson_in=user_lessons, lesson_date=targeted_date) | \
+    material_date_filter = Q(lesson__in=user_lessons, lesson_date=targeted_date) | \
                            Q(publish_datetime__gte=start_date, publish_datetime__lte=end_date)
     materials = Material.objects \
         .from_user(user) \
@@ -124,35 +124,35 @@ def teacher_daily_data_view(request: RequestType):
             instance=elements["lessons"],
             many=True,
             context=serializer_context
-        ),
+        ).data,
         "modifications": TeacherDetailModificationSerializer(
             instance=elements["modifications"],
             many=True,
             context=serializer_context
-        ),
+        ).data,
         "homeworks": TeacherDetailHomeworkSerializer(
             instance=elements["homeworks"],
             many=True,
             context=serializer_context
-        ),
+        ).data,
         "submissions": TeacherDetailSubmissionSerializer(
             instance=elements["submissions"],
             many=True,
             context=serializer_context
-        ),
+        ).data,
         "classbook_with_video_conferences": TeacherDetailClassbookSerializer(
             instance=elements["classbook_with_video_conferences"],
             many=True,
             context=serializer_context,
-        ),
+        ).data,
         "materials": TeacherDetailMaterialSerializer(
             instance=elements["materials"],
             many=True,
             context=serializer_context
-        ),
+        ).data,
         "events": DetailEventSerializer(
             instance=elements["events"],
             many=True,
             context=serializer_context
-        )
+        ).data
     })

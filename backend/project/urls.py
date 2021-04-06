@@ -13,7 +13,7 @@ from apps.django.extra.poll import routers as poll_routers
 from apps.django.main.course import routers as course_routers
 from apps.django.main.day.views import (
     get_page_title_view, student_daily_data_view, student_lesson_view, student_week_view, teacher_lesson_view,
-    teacher_week_view,
+    teacher_week_view, teacher_daily_data_view,
 )
 from apps.django.main.event import routers as event_routers
 from apps.django.main.homework import routers as homework_routers
@@ -58,32 +58,33 @@ relation_patterns = build_patterns("user-relation", [
 urlpatterns = [
     # Static access
     path("private-media/", include(private_storage.urls)),
-    
+
     # API
     path("api/data/", include("rest_framework.urls")),
     path("api/data/get-page-title/", get_page_title_view),
     path("api/student/contacts/", contacts),
     # path("api/data/timetable/", timetable),
     # path("api/data/daily-data/", daily_data),
-    
+
     # Student
     path("api/student/daily-data/", student_daily_data_view),
     path("api/student/week/", student_week_view),
     path("api/student/lesson/", student_lesson_view),
     # Teacher
+    path("api/teacher/daily-data/", teacher_daily_data_view),
     path("api/teacher/week/", teacher_week_view),
     path("api/teacher/lesson/", teacher_lesson_view),
-    
+
     # Autocomplete
     path("api/autocomplete/homework/type/", HomeworkAutocompleteView.as_view()),
     # path("api/autocomplete/absence/reason/", AbsenceReasonAutocompleteView.as_view()),
-    
+
     # Auth
     path("api/auth/change-password/", PasswordChangeView.as_view()),
     path("api/auth/login/", LoginView.as_view()),
     path("api/auth/logout/", LogoutView.as_view()),
     path("api/auth/reset-password/", include("django_rest_passwordreset.urls", namespace="password_reset")),
-    
+
     path("admin/", admin.site.urls),
     path("", include("user_sessions.urls", "user_sessions")),
     path("api/fcm/devices/", FCMDeviceAuthorizedViewSet.as_view({"post": "create"}), name="create_fcm_device"),
