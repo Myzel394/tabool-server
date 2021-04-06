@@ -16,10 +16,104 @@ class HomeworkModelTest(HomeworkTestMixin):
             )
 
 
+class HomeworkSerializerTest(HomeworkTestMixin):
+    def setUp(self) -> None:
+        self.__class__.associated_teacher = self.Login_teacher()
+        self.lesson = self.Create_lesson()
+        self.homework = self.Create_homework(
+            due_date=find_next_date_by_weekday(date.today() - timedelta(days=14), self.lesson.weekday),
+            lesson=self.lesson,
+        )
+
+    def test_get_correct_amounts_two_different_objects(self):
+        UserHomeworkRelation.objects.create(
+            homework=self.homework,
+            completed=True,
+            user=self.Create_student_user()
+        )
+
+        UserHomeworkRelation.objects.create(
+            homework=self.homework,
+            ignored=True,
+            user=self.Create_student_user()
+        )
+
+        response = self.client.get(f"/api/teacher/homework/{self.homework.id}/")
+        self.assertStatusOk(response.status_code)
+
+        data = response.data
+
+        self.assertEqual(1, data["completed_amount"])
+        self.assertEqual(1, data["ignored_amount"])
+
+    def test_get_correct_amounts_one_object(self):
+        UserHomeworkRelation.objects.create(
+            homework=self.homework,
+            completed=True,
+            ignored=True,
+            user=self.Create_student_user()
+        )
+
+        response = self.client.get(f"/api/teacher/homework/{self.homework.id}/")
+        self.assertStatusOk(response.status_code)
+
+        data = response.data
+
+        self.assertEqual(1, data["completed_amount"])
+        self.assertEqual(1, data["ignored_amount"])
+
+    def test_get_correct_amounts_with_false_value(self):
+        UserHomeworkRelation.objects.create(
+            homework=self.homework,
+            completed=False,
+            ignored=True,
+            user=self.Create_student_user()
+        )
+
+        response = self.client.get(f"/api/teacher/homework/{self.homework.id}/")
+        self.assertStatusOk(response.status_code)
+
+        data = response.data
+
+        self.assertEqual(0, data["completed_amount"])
+        self.assertEqual(1, data["ignored_amount"])
+
+    def test_get_correct_amounts_with_two_objects_one_is_completely_false(self):
+        UserHomeworkRelation.objects.create(
+            homework=self.homework,
+            completed=False,
+            ignored=True,
+            user=self.Create_student_user()
+        )
+        UserHomeworkRelation.objects.create(
+            homework=self.homework,
+            completed=False,
+            ignored=False,
+            user=self.Create_student_user()
+        )
+
+        response = self.client.get(f"/api/teacher/homework/{self.homework.id}/")
+        self.assertStatusOk(response.status_code)
+
+        data = response.data
+
+        self.assertEqual(0, data["completed_amount"])
+        self.assertEqual(1, data["ignored_amount"])
+
+    def test_get_correct_amounts_no_objects(self):
+        response = self.client.get(f"/api/teacher/homework/{self.homework.id}/")
+        self.assertStatusOk(response.status_code)
+
+        data = response.data
+
+        self.assertEqual(0, data["completed_amount"])
+        self.assertEqual(0, data["ignored_amount"])
+
+
 class TeacherHomeworkAPITest(HomeworkTestMixin, GenericAPITestMixin):
     def setUp(self):
         self.__class__.associated_teacher = self.Login_teacher()
-    
+
     def test_generic(self):
         self.generic_elements_test(
             model=Homework,
@@ -29,21 +123,21 @@ class TeacherHomeworkAPITest(HomeworkTestMixin, GenericAPITestMixin):
             },
             api_suffix="teacher/"
         )
-    
+
     def test_can_create_public_homework(self):
         response = self.client.post("/api/teacher/homework/", {
             **self.get_lesson_argument(),
             "information": "Test"
         })
         self.assertStatusOk(response.status_code)
-    
+
     def test_can_not_create_public_homework_via_student_api(self):
         response = self.client.post("/api/student/homework/", {
             **self.get_lesson_argument(),
             "information": "Test"
         })
         self.assertStatusNotOk(response.status_code)
-    
+
     def test_can_create_private_homework(self):
         self.student = self.Create_student_user()
         lesson = self.Create_lesson(
@@ -51,36 +145,36 @@ class TeacherHomeworkAPITest(HomeworkTestMixin, GenericAPITestMixin):
                 participants=[self.student.student]
             )
         )
-        
+
         response = self.client.post("/api/teacher/homework/", {
             **self.get_lesson_argument(lesson),
             "information": "Test",
             "private_to_student": self.student.id
         })
         self.assertStatusOk(response.status_code)
-        
+
         homework = Homework.objects.all()[0]
-        
+
         self.assertEqual(self.student.student, homework.private_to_student)
-    
+
     def test_can_not_create_private_homework_with_incorrect_participant(self):
         lesson = self.Create_lesson()
         self.student = self.Create_student_user()
-        
+
         response = self.client.post("/api/teacher/homework/", {
             **self.get_lesson_argument(lesson),
             "information": "Test",
             "private_to_student": self.student.id
         })
         self.assertStatusNotOk(response.status_code)
-    
+
     def test_can_edit_homework(self):
         homework = self.Create_homework()
         response = self.client.patch(f"/api/teacher/homework/{homework.id}/", {
             "information": "Blaaaa",
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
-    
+
     def test_can_not_change__private_to_student__once_created(self):
         student = self.Create_student_user().student
         homework = self.Create_homework(
@@ -97,35 +191,34 @@ class TeacherHomeworkAPITest(HomeworkTestMixin, GenericAPITestMixin):
         self.assertIsNone(homework.private_to_student, None)
 
 
-# TODO: Add more real cases tests!
 class StudentHomeworkAPITest(HomeworkTestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.__class__.associated_student = self.student
-    
+
     def create_homework(self, student=None):
         student = student or self.student.student
-        
+
         lesson = self.Create_lesson(
             course=self.Create_course(
                 participants=[student]
             )
         )
-        
+
         homework = self.Create_homework(
             private_to_student=student,
             lesson=lesson,
         )
-        
+
         return homework
-    
+
     def test_can_create_private_homework(self):
         lesson = self.Create_lesson(
             course=self.Create_course(
                 participants=[self.student.student]
             )
         )
-        
+
         response = self.client.post("/api/student/homework/", {
             **self.get_lesson_argument(lesson),
             "information": "Test",
@@ -133,30 +226,30 @@ class StudentHomeworkAPITest(HomeworkTestMixin):
         })
         self.assertStatusOk(response.status_code)
         self.assertTrue(Homework.objects.all()[0].is_private)
-    
+
     def test_can_edit_private_homework(self):
         homework = self.create_homework()
-        
+
         response = self.client.patch(f"/api/student/homework/{homework.id}/", {
             "information": "Blaaaa",
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
-    
+
     def test_can_get_private_homework(self):
         homework = self.create_homework()
-        
+
         response = self.client.get(f"/api/student/homework/{homework.id}/", {
             "information": "Blaaaa",
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
-    
+
     def test_can_not_edit_public_homework(self):
         lesson = self.Create_lesson(
             course=self.Create_course(
                 participants=[self.student.student]
             )
         )
-        
+
         homework = self.Create_homework(
             private_to_student=None,
             lesson=lesson,
@@ -165,34 +258,34 @@ class StudentHomeworkAPITest(HomeworkTestMixin):
             "information": "Blaaaa",
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
-    
+
     def test_wrong_person_can_not_get_private(self):
         student = self.Create_student_user().student
         homework = self.create_homework(student)
-        
+
         response = self.client.get(f"/api/student/homework/{homework.id}/")
         self.assertStatusNotOk(response.status_code)
-    
+
     def test_wrong_person_can_not_edit_homework(self):
         student = self.Create_student_user().student
         homework = self.create_homework(student)
-        
+
         response = self.client.patch(f"/api/student/homework/{homework.id}/", {
             "information": "Blaaaa",
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
-    
+
     def test_get_list(self):
         response = self.client.get("/api/student/homework/")
         self.assertStatusOk(response.status_code)
-    
+
     def test_can_get_public_homework(self):
         lesson = self.Create_lesson(
             course=self.Create_course(
                 participants=[self.student.student]
             )
         )
-        
+
         homework = self.Create_homework(
             private_to_student=None,
             lesson=lesson,
@@ -205,9 +298,9 @@ class StudentHomeworkAPIInformationTest(HomeworkTestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.__class__.associated_student = self.student
-        
+
         self.lesson = self.Create_lesson()
-        
+
         self.latest_homework = self.Create_homework(
             due_date=find_next_date_by_weekday(date.today() + timedelta(days=7), self.lesson.weekday),
             lesson=self.lesson,
@@ -216,7 +309,7 @@ class StudentHomeworkAPIInformationTest(HomeworkTestMixin):
             due_date=find_next_date_by_weekday(date.today() - timedelta(days=14), self.lesson.weekday),
             lesson=self.lesson,
         )
-        
+
         self.private_homework = self.Create_homework(
             due_date=find_next_date_by_weekday(date.today(), self.lesson.weekday),
             lesson=self.lesson,
@@ -226,7 +319,7 @@ class StudentHomeworkAPIInformationTest(HomeworkTestMixin):
             lesson=self.lesson,
             type="Test",
         )
-        
+
         self.completed_homework = self.Create_homework(
             due_date=find_next_date_by_weekday(date.today() - timedelta(days=14), self.lesson.weekday),
             lesson=self.lesson,
@@ -236,7 +329,7 @@ class StudentHomeworkAPIInformationTest(HomeworkTestMixin):
             completed=True,
             user=self.student
         )
-        
+
         self.ignore_homework = self.Create_homework(
             due_date=find_next_date_by_weekday(date.today() - timedelta(days=14), self.lesson.weekday),
             lesson=self.lesson,
@@ -246,7 +339,7 @@ class StudentHomeworkAPIInformationTest(HomeworkTestMixin):
             ignored=True,
             user=self.student
         )
-    
+
     def test_get_information(self):
         response = self.client.get("/api/student/homework/homework-information/")
         self.assertStatusOk(response.status_code)
