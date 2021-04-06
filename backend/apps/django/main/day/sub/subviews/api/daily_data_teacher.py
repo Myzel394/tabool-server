@@ -54,13 +54,11 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
     weekday = targeted_date.weekday()
     user_lessons = Lesson.objects.from_user(user)
     date_lessons = user_lessons \
-        .only("weekday") \
         .filter(weekday=weekday)
 
     # Based on `date_lessons`
     modifications = Modification.objects \
         .from_user(user) \
-        .only("lesson", "lesson_date") \
         .filter(lesson__in=date_lessons, lesson_date=targeted_date)
 
     # Based on `max_future_days`
@@ -69,31 +67,30 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
                            Q(due_date__isnull=True, created_at__gte=start_date, created_at__lte=end_date)
     homeworks = Homework.objects \
         .from_user(user) \
-        .only("due_date", "lesson") \
         .filter(homework_date_filter)
 
     submissions = Submission.objects \
         .from_user(user) \
-        .only("lesson", "lesson_date") \
         .filter(lesson__in=user_lessons) \
         .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
 
-    classbook_with_video_conferences = Classbook.objects \
-        .from_user(user) \
-        .only("video_conference_link", "lesson_date") \
+    classbooks_for_user = Classbook.objects.from_user(user)
+
+    classbook_with_video_conferences = classbooks_for_user \
         .filter(video_conference_link__isnull=False) \
         .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
+
+    classbooks_for_lessons = classbooks_for_user \
+        .filter(lesson__in=date_lessons)
 
     material_date_filter = Q(lesson__in=user_lessons, lesson_date=targeted_date) | \
                            Q(publish_datetime__gte=start_date, publish_datetime__lte=end_date)
     materials = Material.objects \
         .from_user(user) \
-        .only("lesson", "lesson_date", "publish_datetime") \
         .filter(material_date_filter)
 
     events = Event.objects \
         .from_user(user) \
-        .only("start_datetime", "end_datetime") \
         .filter(start_datetime__gte=start_date, start_datetime__lte=end_date) \
         .filter(end_datetime__gte=start_date, end_datetime__lte=end_date)
 
@@ -103,6 +100,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
         "homeworks": homeworks,
         "submissions": submissions,
         "classbook_with_video_conferences": classbook_with_video_conferences,
+        "classbooks_for_lessons": classbooks_for_lessons,
         "materials": materials,
         "events": events
     }
@@ -144,6 +142,11 @@ def teacher_daily_data_view(request: RequestType):
             instance=elements["classbook_with_video_conferences"],
             many=True,
             context=serializer_context,
+        ).data,
+        "classbooks_for_lessons": TeacherDetailClassbookSerializer(
+            instance=elements["classbooks_for_lessons"],
+            many=True,
+            context=serializer_context
         ).data,
         "materials": TeacherDetailMaterialSerializer(
             instance=elements["materials"],
