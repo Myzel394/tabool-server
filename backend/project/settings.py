@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.postgres",
     "user_sessions",
-    
+
     "rest_framework",
     "django_common_utils.apps.Config",
     "simple_history",
@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "fcm_django",
     "django_rest_passwordreset",
-    
+
     "apps.django.authentication.user",
     "apps.django.authentication.otp",
     "apps.django.authentication.sessions.apps.SessionsConfig",
@@ -75,10 +75,10 @@ INSTALLED_APPS = [
     "apps.django.main.homework",
     "apps.django.main.event",
     "apps.django.main.day",
-    
+
     "apps.django.extra.news",
     "apps.django.extra.poll",
-    
+
     "apps.django.core",
 ]
 
@@ -93,7 +93,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    
+
     "simple_history.middleware.HistoryRequestMiddleware",
     "django_grip.GripMiddleware",
 ]
@@ -337,17 +337,17 @@ if DEBUG:
     SESSION_COOKIE_HTTPONLY = False
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_SAMESITE = "None"
-    
+
     CSRF_COOKIE_HTTPONLY = False
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_SAMESITE = "None"
-    
+
     CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.dummy.DummyCache",
         }
     }
-    
+
     CORS_ALLOWED_ORIGINS = [
         "http://127.0.0.1:8000",
         "http://127.0.0.1:3000",
