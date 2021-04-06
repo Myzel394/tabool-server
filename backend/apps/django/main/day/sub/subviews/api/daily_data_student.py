@@ -34,11 +34,11 @@ TEN_MINUTES_IN_SECONDS = 60 * 10
 def parse_serializer(data: dict, serializer_context: dict) -> tuple[date, int]:
     serializer = DailyDataViewSerializer(data=data, context=serializer_context)
     serializer.is_valid(raise_exception=True)
-    
+
     validated_data = serializer.validated_data
     targeted_date = validated_data["date"]
     max_future_days = validated_data["max_future_days"]
-    
+
     return targeted_date, max_future_days
 
 
@@ -46,7 +46,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
     start_date = datetime.combine(targeted_date, time.min)
     end_date = targeted_date + timedelta(days=max_future_days)
     end_date = datetime.combine(end_date, time.max)
-    
+
     timetable = Timetable.objects.current(user)
     user_lessons = timetable.lessons
     # Based on the courses we can fetch the other elements. If we would use `lessons`, we would only get elements
@@ -57,7 +57,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
     lessons = user_lessons \
         .only("weekday") \
         .filter(weekday=weekday)
-    
+
     # These are based on `lessons` we don't need to fetch any from the future.
     modifications = Modification.objects \
         .from_user(user) \
@@ -67,7 +67,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
         .from_user(user) \
         .only("lesson", "lesson_date") \
         .filter(lesson__in=lessons, lesson_date=targeted_date)
-    
+
     # These are based on `max_future_days`
     exams = Exam.objects \
         .from_user(user) \
@@ -79,7 +79,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
         .only("start_datetime", "end_datetime") \
         .filter(start_datetime__gte=start_date, start_datetime__lte=end_date) \
         .filter(end_datetime__gte=start_date, end_datetime__lte=end_date)
-    
+
     # These are based on both variables
     homework_not_completed_filter = Q(userhomeworkrelation__completed=False) | Q(userhomeworkrelation__isnull=True)
     homework_date_filter = Q(lesson__in=lessons, lesson_date=targeted_date) | \
@@ -87,7 +87,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
                            Q(due_date__isnull=True, created_at__gte=start_date, created_at__lte=end_date)
     homeworks = Homework.objects \
         .from_user(user) \
-        .only("due_date", "lesson") \
+        .only("due_date", "created_at", "lesson") \
         .filter(homework_date_filter) \
         .filter(homework_not_completed_filter) \
         .distinct()
@@ -96,7 +96,7 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
         .only("video_conference_link", "lesson_date") \
         .filter(video_conference_link__isnull=False) \
         .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
-    
+
     return {
         "lessons": lessons,
         "modifications": modifications,
@@ -119,7 +119,7 @@ def student_daily_data_view(request: RequestType):
     targeted_date, max_future_days = parse_serializer(request.GET, serializer_context)
     user = request.user
     elements = get_elements(user, targeted_date, max_future_days)
-    
+
     return Response({
         "lessons": StudentDetailLessonSerializer(
             instance=elements["lessons"],
