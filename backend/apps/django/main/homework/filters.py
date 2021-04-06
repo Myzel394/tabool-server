@@ -1,4 +1,6 @@
 # noinspection PyUnresolvedReferences
+from .sub.subfilters.classbook import *
+# noinspection PyUnresolvedReferences
 from .sub.subfilters.homework import *
 # noinspection PyUnresolvedReferences
 from .sub.subfilters.material import *
