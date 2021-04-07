@@ -16,15 +16,15 @@ __all__ = [
 
 class SubmissionTestMixin(MaterialTestMixin):
     @classmethod
-    def Create_submission(cls, **kwargs) -> Submission:
+    def Create_submission(cls, lesson=None, lesson_date=None, **kwargs) -> Submission:
         random_id = "".join(random.choices(string.ascii_letters + string.digits, k=5))
         filename = f"uploaded_file_at_{random_id}.txt"
-        
+
         if hasattr(cls, "associated_student"):
             student = getattr(cls, "associated_student").student
         else:
             student = cls.Create_student_user().student
-        
+
         return Submission.objects.create(
             **joinkwargs({
                 "name": lambda: lorem.text().split(" ")[0],
@@ -35,6 +35,6 @@ class SubmissionTestMixin(MaterialTestMixin):
                     "text/plain"
                 ),
                 "student": lambda: student,
-                **cls.Create_lesson_argument()
+                **cls.Create_lesson_argument(lesson=lesson, lesson_date=lesson_date)
             }, kwargs)
         )
