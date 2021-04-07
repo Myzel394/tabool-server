@@ -10,7 +10,6 @@ class ScoosoRequestAdmin(DefaultAdminMixin):
         "default": ["name", "attempts_required", "created_at", "response", "request_data"]
     }
     
-    list_filter = ["name"]
     list_display = ["name", "created_at"]
     date_hierarchy = "created_at"
     
