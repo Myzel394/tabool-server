@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from apps.django.main.event.models import Event, Modification
 from apps.django.main.event.sub.subserializers.event import DetailEventSerializer
 from apps.django.main.event.sub.subserializers.modification import TeacherDetailModificationSerializer
-from apps.django.main.homework.models import Homework, Submission, Classbook, Material
+from apps.django.main.homework.models import Classbook, Homework, Material, Submission
 from apps.django.main.homework.sub.subserializers.classbook import TeacherDetailClassbookSerializer
 from apps.django.main.homework.sub.subserializers.homework import TeacherDetailHomeworkSerializer
 from apps.django.main.homework.sub.subserializers.material import TeacherDetailMaterialSerializer
@@ -17,7 +17,7 @@ from apps.django.main.homework.sub.subserializers.submission import TeacherDetai
 from apps.django.main.timetable.models import Lesson
 from apps.django.main.timetable.sub.subserializers.lesson import TeacherDetailLessonSerializer
 from apps.django.utils.permissions import AuthenticationAndActivePermission, IsTeacher
-from ...subthrottles.daily_data import SustainedDailyDataViewThrottle, BurstDailyDataViewThrottle
+from ...subthrottles.daily_data import BurstDailyDataViewThrottle, SustainedDailyDataViewThrottle
 from ....serializers import DailyDataViewSerializer
 
 if TYPE_CHECKING:
@@ -31,11 +31,11 @@ __all__ = [
 def parse_serializer(data: dict, serializer_context: dict) -> tuple[date, int]:
     serializer = DailyDataViewSerializer(data=data, context=serializer_context)
     serializer.is_valid(raise_exception=True)
-
+    
     validated_data = serializer.validated_data
     targeted_date = validated_data["date"]
     max_future_days = validated_data["max_future_days"]
-
+    
     return targeted_date, max_future_days
 
 
@@ -49,18 +49,18 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
     start_date = datetime.combine(targeted_date, time.min)
     end_date = targeted_date + timedelta(days=max_future_days)
     end_date = datetime.combine(end_date, time.max)
-
+    
     # Only fetch lessons for this date
     weekday = targeted_date.weekday()
     user_lessons = Lesson.objects.from_user(user)
     date_lessons = user_lessons \
         .filter(weekday=weekday)
-
+    
     # Based on `date_lessons`
     modifications = Modification.objects \
         .from_user(user) \
         .filter(lesson__in=date_lessons, lesson_date=targeted_date)
-
+    
     # Based on `max_future_days`
     homework_date_filter = Q(lesson__in=user_lessons, lesson_date=targeted_date) | \
                            Q(due_date__gte=start_date, due_date__lte=end_date) | \
@@ -68,32 +68,33 @@ def get_elements(user: "User", targeted_date: date, max_future_days: int):
     homeworks = Homework.objects \
         .from_user(user) \
         .filter(homework_date_filter)
-
+    
     submissions = Submission.objects \
         .from_user(user) \
         .filter(lesson__in=user_lessons) \
         .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
-
+    
     classbooks_for_user = Classbook.objects.from_user(user)
-
+    
     classbook_with_video_conferences = classbooks_for_user \
         .filter(video_conference_link__isnull=False) \
-        .filter(lesson_date__gte=start_date, lesson_date__lte=end_date)
-
+        .filter(lesson_date__gte=start_date, lesson_date__lte=end_date) \
+        .exclude(video_conference_link="")
+    
     classbooks_for_lessons = classbooks_for_user \
         .filter(lesson__in=date_lessons)
-
+    
     material_date_filter = Q(lesson__in=user_lessons, lesson_date=targeted_date) | \
                            Q(publish_datetime__gte=start_date, publish_datetime__lte=end_date)
     materials = Material.objects \
         .from_user(user) \
         .filter(material_date_filter)
-
+    
     events = Event.objects \
         .from_user(user) \
         .filter(start_datetime__gte=start_date, start_datetime__lte=end_date) \
         .filter(end_datetime__gte=start_date, end_datetime__lte=end_date)
-
+    
     return {
         "lessons": date_lessons,
         "modifications": modifications,
@@ -116,7 +117,7 @@ def teacher_daily_data_view(request: RequestType):
     targeted_date, max_future_days = parse_serializer(request.GET, serializer_context)
     user = request.user
     elements = get_elements(user, targeted_date, max_future_days)
-
+    
     return Response({
         "lessons": TeacherDetailLessonSerializer(
             instance=elements["lessons"],
