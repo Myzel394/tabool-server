@@ -4,6 +4,8 @@ from typing import *
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from ...utils.time import get_now
+
 if TYPE_CHECKING:
     from .models import Homework
 
@@ -26,7 +28,7 @@ def validate_private_to_student(homework: "Homework") -> None:
 
 
 def only_future(value: "datetime") -> None:
-    if value and value < datetime.now():
+    if value and value <= get_now():
         raise ValidationError(
             _("Das Veröffentlichkeitsdatum muss in der Zukunft liegen")
         )
