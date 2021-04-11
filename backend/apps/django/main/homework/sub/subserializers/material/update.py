@@ -26,3 +26,4 @@ class UpdateMaterialSerializer(BaseMaterialSerializer):
             raise ValidationError(
                 _("Sobald das Material einmal angekündigt wurde, kann die Ankündigung nicht mehr verändert werden.")
             )
+        return value

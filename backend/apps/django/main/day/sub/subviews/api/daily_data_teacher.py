@@ -40,9 +40,9 @@ def parse_serializer(data: dict, serializer_context: dict) -> tuple[date, int]:
 
 
 # Timetable + Modifications
+# Video conferences
 # Homeworks
 # Submissions
-# Video conferences
 # Materials
 # Events
 def get_elements(user: "User", targeted_date: date, max_future_days: int):
