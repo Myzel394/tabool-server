@@ -283,8 +283,6 @@ login_procedure.txt
 venv
 postgres_data
 
-backend/.coverage
-
 
 # React build
 /backend/apps/frontend/templates/*
@@ -293,3 +291,4 @@ backend/.coverage
 static_root
 media
 backend/static_root
+./backend/static_root
