@@ -29,6 +29,7 @@ class User(AbstractUser, SimpleEmailConfirmationUserMixin, LifecycleModel):
         permissions = (
             ("change_user_permissions", _("Kann Benutzer-Berechtigungen verändern")),
         )
+        ordering = ("first_name", "last_name")
     
     student: "Student"
     teacher: "Teacher"
