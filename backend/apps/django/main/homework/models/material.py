@@ -193,4 +193,4 @@ class Material(RandomIDMixin, AddedAtMixin, LifecycleModel):
         # Normalize file ending
         name, extension = os.path.splitext(improved_name)
         
-        return f"{name}{extension.lower()}"
+        return f"{name}{extension.lower()}".rstrip(".")
