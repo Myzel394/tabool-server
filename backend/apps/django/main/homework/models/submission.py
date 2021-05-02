@@ -4,7 +4,7 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
-from django_lifecycle import AFTER_DELETE, BEFORE_SAVE, hook, LifecycleModel
+from django_lifecycle import BEFORE_DELETE, BEFORE_SAVE, hook, LifecycleModel
 from private_storage.fields import PrivateFileField
 
 from apps.django.authentication.user.public import *
@@ -65,7 +65,7 @@ class Submission(RandomIDMixin, LessonMixin, LifecycleModel, CreationDateMixin):
     def folder_name(self) -> str:
         return f"{self.lesson.course.folder_name}"
     
-    @hook(AFTER_DELETE)
+    @hook(BEFORE_DELETE)
     def _hook_delete_file(self):
         Path(self.file.path).unlink(missing_ok=True)
     

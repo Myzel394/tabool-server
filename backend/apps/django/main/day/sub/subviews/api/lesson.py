@@ -77,7 +77,10 @@ def student_lesson_view(request: RequestType):
     elements = get_elements(user, *lesson_args)
     
     return Response({
-        "classbook": StudentDetailClassbookSerializer(instance=elements["classbook"], context=serializer_context).data,
+        "classbook": StudentDetailClassbookSerializer(
+            instance=elements["classbook"],
+            context=serializer_context
+        ).data if elements["classbook"] else None,
         "materials": StudentDetailMaterialSerializer(
             instance=elements["materials"],
             many=True,
@@ -118,7 +121,10 @@ def teacher_lesson_view(request: RequestType):
     elements = get_elements(user, *lesson_args)
     
     return Response({
-        "classbook": TeacherDetailClassbookSerializer(instance=elements["classbook"], context=serializer_context).data,
+        "classbook": TeacherDetailClassbookSerializer(
+            instance=elements["classbook"],
+            context=serializer_context
+        ).data if elements["classbook"] else None,
         "materials": TeacherDetailMaterialSerializer(
             instance=elements["materials"],
             many=True,

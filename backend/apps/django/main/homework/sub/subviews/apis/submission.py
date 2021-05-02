@@ -5,6 +5,7 @@ from django_hint import RequestType
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_framework.response import Response
 
 from apps.django.authentication.user.constants import STUDENT, TEACHER
@@ -28,6 +29,7 @@ class SubmissionViewSet(
     DetailSerializerViewSetMixin,
     viewsets.ModelViewSet,
 ):
+    parser_classes = [MultiPartParser, JSONParser]
     permission_classes = [AuthenticationAndActivePermission & IsStudentElseReadOnly]
     
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
