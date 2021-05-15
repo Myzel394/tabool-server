@@ -150,7 +150,7 @@ tinycss2==1.0.2
 toml==0.10.1
 torrequest==0.1.0
 traitlets==5.0.5
-Twisted==20.3.0
+Twisted
 txaio==20.4.1
 typed-ast==1.4.2
 typing-extensions==3.7.4.3
