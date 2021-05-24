@@ -5,7 +5,7 @@ from typing import *
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_common_utils.libraries.models.mixins import CreationDateMixin, RandomIDMixin
-from django_lifecycle import AFTER_DELETE, BEFORE_CREATE, BEFORE_SAVE, BEFORE_UPDATE, hook
+from django_lifecycle import BEFORE_CREATE, BEFORE_DELETE, BEFORE_SAVE, BEFORE_UPDATE, hook
 from private_storage.fields import PrivateFileField
 
 from apps.django.main.timetable.mixins import LessonMixin
@@ -41,8 +41,6 @@ class Material(RandomIDMixin, LessonMixin, CreationDateMixin):
         verbose_name=_("Veröffentlichkeitsdatum"),
         help_text=_("Ab wann Schüler auf die Datei zugreifen können"),
         validators=[only_future],
-        blank=True,
-        null=True,
     )
     
     announce = models.BooleanField(
@@ -70,7 +68,7 @@ class Material(RandomIDMixin, LessonMixin, CreationDateMixin):
     def folder_name(self) -> str:
         return f"{self.lesson.course.folder_name}"
     
-    @hook(AFTER_DELETE)
+    @hook(BEFORE_DELETE)
     def _hook_delete_file(self):
         Path(self.file.path).unlink(missing_ok=True)
     
