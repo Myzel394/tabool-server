@@ -77,13 +77,13 @@ class Course(RandomIDMixin, LifecycleModel):
         else:
             prefix = str(class_number)
         
-        return f"{prefix}/{self.name}/{self.id}"
+        return f"{prefix}/{self.name}"
     
     def get_class_number(self) -> int:
         # Get a class number from a student
         for participant in self.participants.all():
-            if student := getattr(participant, "student", None):  # type: Student
-                return student.class_number
+            if hasattr(participant, "class_number"):
+                return participant.class_number
         
         raise TypeError("Course has no participants. Class number can't be detected.")
     
