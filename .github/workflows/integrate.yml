@@ -50,6 +50,6 @@ jobs:
 
     # Django
       - name: Run Migrations
-        run: python backend/manage.py migrate
+        run: python backend/manage.py migrate --settings project.test_settings
       - name: Run Test
         run: python backend/manage.py test ./backend/ --noinput --settings project.test_settings
