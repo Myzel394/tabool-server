@@ -4,7 +4,6 @@ from rest_framework.generics import get_object_or_404
 
 from apps.django.authentication.user.models import Teacher
 from apps.django.authentication.user.sub.subserializers.teacher import DetailTeacherSerializer
-from apps.django.utils.permissions import AuthenticationAndActivePermission, IsStudent
 
 __all__ = [
     "TeacherViewSet"
@@ -12,8 +11,6 @@ __all__ = [
 
 
 class TeacherViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [AuthenticationAndActivePermission & IsStudent]
-    
     filter_backends = [SearchFilter]
     search_fields = ["user__first_name", "user__last_name"]
     
