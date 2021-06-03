@@ -11,9 +11,7 @@ __all__ = [
 
 
 def cache_for_user(*func_args, **func_kwargs):
-    """
-    Cache for each user
-    """
+    """Caches on a per-user basis."""
     
     def _controller(func):
         @wraps(func)
