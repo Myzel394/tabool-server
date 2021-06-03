@@ -47,7 +47,7 @@ def get_page_title_view(request: RequestType):
 
     response = session.get(url)
 
-    if not (200 <= response.status_code < 300):
+    if not 200 <= response.status_code < 300:
         return Response({
             "detail": f"Server responded with status code '{response.status_code}'.",
             "status_code": response.status_code,

@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 def get_as_list(value) -> list:
     if type(value) is list:
         return value
-    elif isinstance(value, QuerySet):
+    if isinstance(value, QuerySet):
         return value
     return value
 
