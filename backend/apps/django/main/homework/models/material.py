@@ -58,7 +58,7 @@ class Material(RandomIDMixin, LessonMixin, CreationDateMixin):
     
     def can_user_access_file(self, user: "User") -> bool:
         if user.is_student:
-            if not self.publish_datetime < datetime.now():
+            if self.publish_datetime >= datetime.now():
                 return False
             
             return self.lesson.course.participants.only("id").filter(user__id=user.id).exists()
