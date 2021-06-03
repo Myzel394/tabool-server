@@ -56,7 +56,7 @@ class WritableIDField(serializers.Field):
                 self.fail("invalid_type", input=data)
             
             objs = []
-            
+    
             for single_data in data:
                 try:
                     obj = self.get_object(single_data, self.context["request"], self)
@@ -66,11 +66,10 @@ class WritableIDField(serializers.Field):
                     objs.append(obj)
             
             return objs
-        else:
-            try:
-                return self.get_object(data, self.context["request"], self)
-            except ObjectDoesNotExist:
-                self.fail("object_not_found", input=data)
+        try:
+            return self.get_object(data, self.context["request"], self)
+        except ObjectDoesNotExist:
+            self.fail("object_not_found", input=data)
 
 
 class WritableFromUserFieldMixin(WritableIDField, ABC):
@@ -131,7 +130,7 @@ class UserRelationField(serializers.SerializerMethodField):
     def get_default_value(self, model: StandardModelType):
         if type(self.default_value) is dict:
             return self.default_value
-        elif inspect.isfunction(self.default_value):
+        if inspect.isfunction(self.default_value):
             return self.default_value(model, self)
         
         raise TypeError(f"`default_value` can either be a dict or function!")
