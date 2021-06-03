@@ -93,7 +93,7 @@ class TeacherTimetableAPITest(LessonTestMixin):
         self.assertEqual(404, response.status_code)
     
     def test_get_current(self):
-        response = self.client.get(f"/api/teacher/timetable/current/")
+        response = self.client.get("/api/teacher/timetable/current/")
         self.assertStatusOk(response.status_code)
         
         lessons = Lesson.objects.all().from_user(self.teacher)

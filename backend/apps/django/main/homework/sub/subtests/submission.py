@@ -56,7 +56,7 @@ class SubmissionAPITest(SubmissionTestMixin):
         self.submission = self.Create_submission()
     
     def test_get(self):
-        response = self.client.get(f"/api/student/submission/")
+        response = self.client.get("/api/student/submission/")
         self.assertStatusOk(response.status_code)
     
     def test_cant_edit_publish_datetime_when_already_published(self):

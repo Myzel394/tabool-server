@@ -129,7 +129,7 @@ class UserRelationField(serializers.SerializerMethodField):
         if inspect.isfunction(self.default_value):
             return self.default_value(model, self)
         
-        raise TypeError(f"`default_value` can either be a dict or function!")
+        raise TypeError("`default_value` can either be a dict or function!")
     
     def to_representation(self, value):
         if obj := self.get_relation_object(value):
