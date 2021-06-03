@@ -30,7 +30,6 @@ class UserRelationViewSetMixin(
     
     def get_model_object(self) -> StandardModelType:
         """Gets the model (not relation model) via the key argument in kwargs"""
-        
         key = self.kwargs.get(self.kwargs_field_name)
         
         if key == "":
@@ -45,8 +44,6 @@ class UserRelationViewSetMixin(
     
     def get_relation_object(self, obj: StandardModelType) -> StandardModelType:
         """Gets the relation model from `obj`"""
-        
-        # Check if instance already exists
         field = self.relation_model_lookup or self.model.__name__.lower()
         user_field = self.relation_model_user_lookup
         model_data = {
