@@ -41,11 +41,11 @@ if settings.DEBUG:
     
     def create_user(confirm: bool = True, staff: bool = False):
         load_dotenv()
-        User = get_user_model()
+        User_model = get_user_model()
         
         password = "".join(random.choices(string.ascii_letters + string.digits, k=8))
         
-        user = User.objects.create_user(
+        user = User_model.objects.create_user(
             email=f"{names.get_first_name()}@gmail.com",
             password=password,
             first_name=names.get_first_name(),
