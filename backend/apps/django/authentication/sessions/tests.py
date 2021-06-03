@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 
-from django.test import TestCase
 from user_sessions.models import Session
 
 from apps.django.authentication.user.mixins import UserTestMixin
@@ -15,6 +14,8 @@ class SessionsTest(UserTestMixin):
             user=self.user,
             expire_date=datetime.now() + timedelta(days=10)
         )
-        session.sessionrelation
+        
+        # Ensure raises no error
+        print(session.sessionrelation)
 
 
