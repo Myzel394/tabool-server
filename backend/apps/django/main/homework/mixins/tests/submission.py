@@ -21,7 +21,7 @@ class SubmissionTestMixin(MaterialTestMixin):
         filename = f"uploaded_file_at_{random_id}.txt"
 
         if hasattr(cls, "associated_student"):
-            student = getattr(cls, "associated_student").student
+            student = cls.associated_student.student
         else:
             student = cls.Create_student_user().student
 
