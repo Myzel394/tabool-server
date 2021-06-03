@@ -10,11 +10,14 @@ from django_rest_passwordreset.signals import reset_password_token_created
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
     user = reset_password_token.user
+    params_encoded = urlencode({
+        "token": reset_password_token.key,
+        "email": user.email
+    })
+    path = "/app/auth/forgot-password/confirm"
+    
     password_reset_link = instance.request.build_absolute_uri(
-        f"/app/auth/forgot-password/confirm?" + urlencode({
-            "token": reset_password_token.key,
-            "email": user.email
-        })
+        f"{path}?{params_encoded}"
     )
     
     message = f"""
