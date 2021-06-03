@@ -264,10 +264,10 @@ DEFAULT_FROM_EMAIL = "testfrom@gmail.com"
 SERVER_EMAIL = "test@gmail.com"
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 EMAIL_HOST = os.getenv("EMAIL_HOST", "127.0.0.1")
-EMAIL_PORT = os.getenv("EMAIL_PORT", 1025)
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "1025"))
 EMAIL_SUBJECT_PREFIX = ""
-EMAIL_USE_TLS = bool(os.getenv("EMAIL_USE_TLS", False))
-EMAIL_USE_SSL = bool(os.getenv("EMAIL_USE_SSL", False))
+EMAIL_USE_TLS = bool(os.getenv("EMAIL_USE_TLS", "0"))
+EMAIL_USE_SSL = bool(os.getenv("EMAIL_USE_SSL", "0"))
 
 SIMPLE_EMAIL_CONFIRMATION_KEY_LENGTH = 40
 
