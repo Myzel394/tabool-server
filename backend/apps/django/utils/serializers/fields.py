@@ -1,6 +1,5 @@
 import inspect
 from abc import ABC, abstractmethod
-from typing import *
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Model
@@ -8,9 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from django_hint import *
 from rest_framework import serializers
 from rest_framework.fields import empty
-
-if TYPE_CHECKING:
-    pass
 
 __all__ = [
     "WritableIDField",
@@ -56,7 +52,7 @@ class WritableIDField(serializers.Field):
                 self.fail("invalid_type", input=data)
             
             objs = []
-    
+            
             for single_data in data:
                 try:
                     obj = self.get_object(single_data, self.context["request"], self)

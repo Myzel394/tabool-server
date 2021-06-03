@@ -1,11 +1,6 @@
-from typing import *
-
 from rest_framework import serializers
 
 from .base import BaseTeacherSerializer
-
-if TYPE_CHECKING:
-    pass
 
 __all__ = [
     "DetailTeacherSerializer"
