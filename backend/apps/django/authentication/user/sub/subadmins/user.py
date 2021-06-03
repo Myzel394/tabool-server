@@ -42,24 +42,24 @@ class UserAdmin(DefaultAdminMixin):
         return ["id", "confirmation_key", "last_login"]
     
     def save_model(self, request: RequestType, obj: User, form, change):
-        if not change:
-            # Automatically confirm email
-            obj._dont_send_confirmation_mail = True
-            response = super().save_model(request, obj, form, change)
-            delattr(obj, "_dont_send_confirmation_mail")
-            obj.confirm_email(obj.confirmation_key)
-            
-            # Set random password
-            password = "".join(
-                secrets.choice(string.ascii_letters + string.digits)
-                for _ in range(20)
-            )
-            obj.set_password(password)
-            obj.save()
-            
-            return response
-        else:
+        if change:
             return super().save_model(request, obj, form, change)
+        
+        # Automatically confirm email
+        obj._dont_send_confirmation_mail = True
+        response = super().save_model(request, obj, form, change)
+        delattr(obj, "_dont_send_confirmation_mail")
+        obj.confirm_email(obj.confirmation_key)
+        
+        # Set random password
+        password = "".join(
+            secrets.choice(string.ascii_letters + string.digits)
+            for _ in range(20)
+        )
+        obj.set_password(password)
+        obj.save()
+        
+        return response
     
     def get_user_type(self, instance: User):
         try:
