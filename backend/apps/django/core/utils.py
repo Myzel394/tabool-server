@@ -6,10 +6,7 @@ __all__ = [
 
 
 def remove_empty_folders(path: Path):
-    elements = {
-        element
-        for element in path.iterdir()
-    }
+    elements = set(path.iterdir())
     folders = {
         element
         for element in elements
