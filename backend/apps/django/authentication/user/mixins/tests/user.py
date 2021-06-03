@@ -84,7 +84,6 @@ class UserTestMixin(ClientTestMixin):
             user_type: Union[STUDENT, TEACHER] = STUDENT
     ) -> User:
         """Logs the client in and returns the user with which the client was logged in"""
-        
         if not user:
             if user_type == STUDENT:
                 user = self.Create_student_user()
