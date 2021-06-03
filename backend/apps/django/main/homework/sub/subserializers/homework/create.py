@@ -35,9 +35,9 @@ class TeacherCreateHomeworkSerializer(BaseHomeworkSerializer):
     lesson = LessonField()
     private_to_student = StudentField(required=False, allow_null=True)
     
-    def validate(self, validated_data):
-        student = validated_data.get("private_to_student")
-        lesson = validated_data["lesson"]
+    def validate(self, attrs):
+        student = attrs.get("private_to_student")
+        lesson = attrs["lesson"]
         
         if student:
             available_students = lesson.course.participants.all()
@@ -48,4 +48,4 @@ class TeacherCreateHomeworkSerializer(BaseHomeworkSerializer):
                         course=lesson.course.name
                     )})
         
-        return super().validate(validated_data)
+        return super().validate(attrs)
