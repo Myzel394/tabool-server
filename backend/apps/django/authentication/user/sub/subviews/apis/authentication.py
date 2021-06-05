@@ -32,7 +32,8 @@ class LoginView(views.APIView):
         )
         send_otp_message(request=self.request, user=user, otp=otp)
     
-    def delete_old_otps(self):
+    @staticmethod
+    def delete_old_otps():
         # Delete expired
         OTP.objects.only("expire_date").filter(expire_date=datetime.now()).delete()
     
@@ -76,7 +77,8 @@ class LoginView(views.APIView):
             "otp_key": _("Ungültiges OTP.")
         }
     
-    def is_ip_known(self, user: "User", ip_address: str) -> bool:
+    @staticmethod
+    def is_ip_known(user: "User", ip_address: str) -> bool:
         return KnownIp.objects.filter(
             associated_user=user,
             ip_address=ip_address,

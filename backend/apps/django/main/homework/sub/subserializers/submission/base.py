@@ -15,5 +15,6 @@ class BaseSubmissionSerializer(serializers.ModelSerializer):
 class SizeMixin(serializers.Serializer):
     size = serializers.SerializerMethodField()
     
-    def get_size(self, instance: Submission) -> int:
+    @staticmethod
+    def get_size(instance: Submission) -> int:
         return instance.file.size

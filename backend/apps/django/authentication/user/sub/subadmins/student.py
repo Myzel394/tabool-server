@@ -21,22 +21,26 @@ class StudentAdmin(DefaultAdminMixin):
     list_display = ["first_name", "last_name", "class_number", "main_teacher__str"]
     search_fields = ["user__first_name", "user__last_name", ]
     
-    def first_name(self, student: Student):
+    @staticmethod
+    def first_name(student: Student):
         return student.user.first_name
     
     first_name.short_description = field_verbose(User, "first_name")
     
-    def last_name(self, student: Student):
+    @staticmethod
+    def last_name(student: Student):
         return student.user.first_name
     
     last_name.short_description = field_verbose(User, "last_name")
     
-    def main_teacher__str(self, student: Student):
+    @staticmethod
+    def main_teacher__str(student: Student):
         if student.main_teacher:
             return student.main_teacher.short_name
         return None
     
-    def get_readonly_fields(self, request=None, obj=None) -> list:
+    @staticmethod
+    def get_readonly_fields(request=None, obj=None) -> list:
         base = ["id"]
         
         if obj:

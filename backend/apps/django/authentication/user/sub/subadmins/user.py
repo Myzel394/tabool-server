@@ -25,7 +25,8 @@ class UserAdmin(DefaultAdminMixin):
     readonly_fields = ["confirmation_key", "last_login", "first_name", "last_name", "email"]
     filter_horizontal = ["user_permissions"]
     
-    def has_change_permissions_permission(self, request: RequestType, obj: User) -> bool:
+    @staticmethod
+    def has_change_permissions_permission(request: RequestType, obj: User) -> bool:
         return request.user.has_perm("authentication.change_user_permissions") and obj != request.user
     
     def get_readonly_fields(self, request: RequestType, obj: Optional[User] = None) -> list:
@@ -41,7 +42,8 @@ class UserAdmin(DefaultAdminMixin):
             return readonly_list
         return ["id", "confirmation_key", "last_login"]
     
-    def save_model(self, request: RequestType, obj: User, form, change):
+    @staticmethod
+    def save_model(request: RequestType, obj: User, form, change):
         if change:
             super().save_model(request, obj, form, change)
         else:
@@ -59,7 +61,8 @@ class UserAdmin(DefaultAdminMixin):
             obj.set_password(password)
             obj.save()
     
-    def get_user_type(self, instance: User):
+    @staticmethod
+    def get_user_type(instance: User):
         try:
             return instance.user_type
         except TypeError:

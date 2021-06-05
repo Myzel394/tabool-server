@@ -23,6 +23,7 @@ class CourseAdmin(DefaultAdminMixin):
     autocomplete_fields = ["subject"]
     search_fields = ["subject__name"]
     
+    @staticmethod
     def class_number(self, instance: Course):
         try:
             return instance.get_class_number()
@@ -31,7 +32,8 @@ class CourseAdmin(DefaultAdminMixin):
     
     class_number.short_description = field_verbose(Student, "class_number")
     
-    def participants_count(self, instance: Course):
+    @staticmethod
+    def participants_count(instance: Course):
         return instance.participants.count()
     
     participants_count.short_description = _("Teilnehmeranzahl")

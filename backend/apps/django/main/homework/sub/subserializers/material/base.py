@@ -15,5 +15,6 @@ class BaseMaterialSerializer(serializers.ModelSerializer):
 class SizeMaterialMixin(serializers.Serializer):
     size = serializers.SerializerMethodField()
     
-    def get_size(self, instance: Material) -> int:
+    @staticmethod
+    def get_size(instance: Material) -> int:
         return instance.file.size

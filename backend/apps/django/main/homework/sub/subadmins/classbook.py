@@ -17,7 +17,8 @@ class ClassbookAdmin(DefaultAdminMixin):
     }
     list_display = ["__str__", "has_video_conference"]
     
-    def has_video_conference(self, instance: Classbook) -> bool:
+    @staticmethod
+    def has_video_conference(instance: Classbook) -> bool:
         return instance.video_conference_link != "" and instance.video_conference_link is not None
     
     has_video_conference.short_description = _("Videokonferenz")

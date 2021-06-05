@@ -23,7 +23,7 @@ class AutocompleteView(APIView, ABC, Generic[T]):
     model: StandardModelType
     user: "User"
     
-    def is_user_allowed(self, user: "User") -> bool:
+    def is_user_allowed(self, user: "User") -> bool:  # skipcq: PYL-R0201
         return True
     
     @abstractmethod
@@ -41,7 +41,7 @@ class AutocompleteView(APIView, ABC, Generic[T]):
     def validate_query(self, query: str) -> None:
         pass
     
-    def is_query_valid(self, query: str) -> bool:
+    def is_query_valid(self, query: str) -> bool:  # skipcq: PYL-R0201
         return query != ""
     
     def get(self, request: RequestType):

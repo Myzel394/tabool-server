@@ -21,17 +21,20 @@ class TeacherAdmin(DefaultAdminMixin):
     list_display = ["short_name", "first_name", "last_name"]
     search_fields = ["user__first_name", "user__last_name", "short_name"]
     
-    def first_name(self, teacher: Teacher):
+    @staticmethod
+    def first_name(teacher: Teacher):
         return teacher.user.first_name
     
     first_name.short_description = field_verbose(User, "first_name")
     
-    def last_name(self, teacher: Teacher):
+    @staticmethod
+    def last_name(teacher: Teacher):
         return teacher.user.first_name
     
     last_name.short_description = field_verbose(User, "last_name")
     
-    def get_readonly_fields(self, request=None, obj=None) -> list:
+    @staticmethod
+    def get_readonly_fields(request=None, obj=None) -> list:
         base = ["id"]
         
         if obj:

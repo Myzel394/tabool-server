@@ -19,7 +19,8 @@ class HomeworkAutocompleteTest(HomeworkTestMixin):
                 type=element
             )
     
-    def flat_text(self, result: list[dict]) -> list[str]:
+    @staticmethod
+    def flat_text(result: list[dict]) -> list[str]:
         return [
             element["text"]
             for element in result

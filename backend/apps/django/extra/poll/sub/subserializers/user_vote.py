@@ -14,5 +14,6 @@ class VoteSerializer(serializers.ModelSerializer):
     
     choices = serializers.SerializerMethodField()
     
-    def get_choices(self, instance: Vote):
+    @staticmethod
+    def get_choices(instance: Vote):
         return instance.choices.values_list("id", flat=True).distinct()

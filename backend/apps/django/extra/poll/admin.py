@@ -27,7 +27,8 @@ class PollAdmin(DefaultAdminMixin):
     filter_horizontal = ["targeted_user"]
     inlines = [ChoiceInline]
     
-    def results(self, instance: Poll):
+    @staticmethod
+    def results(instance: Poll):
         poll_results = get_results(instance=instance)
         
         message = ""

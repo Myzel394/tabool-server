@@ -16,7 +16,8 @@ class HomeworkAdmin(DefaultAdminMixin):
     autocomplete_fields = ["lesson"]
     search_fields = ["lesson__course__subject__name", ]
     
-    def is_private(self, instance: Homework) -> bool:
+    @staticmethod
+    def is_private(instance: Homework) -> bool:
         return instance.is_private
     
     is_private.boolean = True
