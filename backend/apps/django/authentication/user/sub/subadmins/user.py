@@ -46,7 +46,7 @@ class UserAdmin(DefaultAdminMixin):
             super().save_model(request, obj, form, change)
         else:
             # Automatically confirm email
-            obj._dont_send_confirmation_mail = True
+            obj._dont_send_confirmation_mail = True  # skipcq: PYL-W0212
             super().save_model(request, obj, form, change)
             delattr(obj, "_dont_send_confirmation_mail")
             obj.confirm_email(obj.confirmation_key)

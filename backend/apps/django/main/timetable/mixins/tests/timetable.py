@@ -17,7 +17,7 @@ class TimetableTestMixin(TestCase):
                 "end_date": lambda: date.today() + timedelta(days=365),
                 "name": lambda: "".join(
                     random.choice(string.ascii_letters)
-                    for _ in range(Timetable._meta.get_field("name").max_length)
+                    for _ in range(Timetable._meta.get_field("name").max_length)  # skipcq: PYL-W0212
                 )
             }, kwargs)
         )

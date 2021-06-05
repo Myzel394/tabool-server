@@ -15,10 +15,10 @@ class PollUserVoteSerializer(serializers.Serializer):
     poll = PollField()
     choices = ChoiceField(many=True)
     feedback = serializers.CharField(
-        max_length=Vote._meta.get_field("feedback").max_length,
+        max_length=Vote._meta.get_field("feedback").max_length,  # skipcq: PYL-W0212
         allow_blank=True,
         allow_null=True,
-        label=Vote._meta.get_field("feedback").max_length,
+        label=Vote._meta.get_field("feedback").max_length,  # skipcq: PYL-W0212
         required=False,
     )
     
