@@ -36,6 +36,3 @@ class ContactAPI(UserTestMixin):
         response = self.client.get("/api/student/contacts/")
         self.assertStatusOk(response.status_code)
         self.assertEqual(SECONDARY_CLASS_CONTACT_EMAIL, response.data["illness_report_email"])
-
-
-

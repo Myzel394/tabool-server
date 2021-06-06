@@ -17,5 +17,3 @@ class SessionsTest(UserTestMixin):
 
         # Ensure raises no error
         print(session.sessionrelation)
-
-
