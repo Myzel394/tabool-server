@@ -119,14 +119,14 @@ def send_otp_message(request: RequestType, user: "User", otp: "OTP"):
         else:
             message_parts.append("Ort: Unbekannt")
     # A general exception is used, to ensure that the user will at least get some information
-    except Exception:  # skipcq: FLK-W0703
+    except Exception:  # skipcq: PYL-W0703
         pass
 
     try:
         os, browser = httpagentparser.simple_detect(request["HTTP_USER_AGENT"])
 
         message_parts.append(f"Browser: {browser} auf einem {os} Gerät")
-    except Exception:  # skipcq: FLK-W0703
+    except Exception:  # skipcq: PYL-W0703
         pass
 
     message_information = "\n".join(message_parts)
