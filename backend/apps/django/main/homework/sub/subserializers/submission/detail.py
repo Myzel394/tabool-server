@@ -16,7 +16,7 @@ class StudentDetailSubmissionSerializer(BaseSubmissionSerializer, SubmissionSize
             "lesson", "lesson_date",
             "publish_datetime", "file", "name", "created_at", "size", "id"
         ]
-    
+
     lesson = StudentDetailLessonSerializer()
 
 
@@ -26,6 +26,6 @@ class TeacherDetailSubmissionSerializer(BaseSubmissionSerializer, SubmissionSize
             "lesson", "lesson_date",
             "file", "name", "student", "size", "id"
         ]
-    
+
     lesson = TeacherDetailLessonSerializer()
     student = DetailStudentSerializer()

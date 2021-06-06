@@ -18,12 +18,12 @@ class EventViewSet(
     viewsets.ModelViewSet
 ):
     permission_classes = [AuthenticationAndActivePermission & IsTeacherElseReadOnly]
-    
+
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = EventFilterSet
     search_fields = ["information", "title"]
     ordering_fields = ["start_datetime", "end_datetime", "title"]
-    
+
     detail_serializer = DetailEventSerializer
     serializer_action_map = {
         "create": CreateEventSerializer,
@@ -32,6 +32,6 @@ class EventViewSet(
         "retrieve": DetailEventSerializer,
         "list": DetailEventSerializer
     }
-    
+
     def get_queryset(self):
         return Event.objects.from_user(self.request.user)

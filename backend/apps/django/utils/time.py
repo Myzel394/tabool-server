@@ -9,5 +9,5 @@ __all__ = [
 
 def get_now() -> datetime:
     now = datetime.now() - timedelta(seconds=settings.NOW_THRESHOLD)
-    
+
     return now

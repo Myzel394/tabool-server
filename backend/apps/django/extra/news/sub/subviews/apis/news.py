@@ -11,7 +11,7 @@ __all__ = [
 
 class NewsViewSet(viewsets.mixins.ListModelMixin, RetrieveAllMixin):
     model = News
-    
+
     def get_serializer_class(self):
         if self.action == "list":
             return NewsListSerializer

@@ -16,10 +16,10 @@ class HomeworkTestMixin(LessonTestMixin):
     @classmethod
     def get_random_due_date(cls) -> datetime:
         weekdays = Lesson.objects.all().values_list("weekday", flat=True).distinct()
-        
+
         if len(weekdays) == 0:
             weekdays = [cls.Create_lesson().weekday]
-        
+
         return find_next_date_by_weekday(
             (datetime.now() + (
                 # Days
@@ -30,11 +30,11 @@ class HomeworkTestMixin(LessonTestMixin):
              ).date(),
             random.choice(weekdays)
         )
-    
+
     @classmethod
     def Create_homework(cls, **kwargs) -> Homework:
         lesson = kwargs.pop("lesson", None) or cls.Create_lesson()
-        
+
         return Homework.objects.create(
             **joinkwargs({
                 "due_date": lambda: find_next_date_by_weekday(date.today(), lesson.weekday),

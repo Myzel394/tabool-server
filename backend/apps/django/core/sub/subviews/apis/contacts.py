@@ -14,7 +14,7 @@ def contacts(request: RequestType):
     }
     main_teacher = request.user.student.main_teacher
     class_level = request.user.student.class_level
-    
+
     return Response({
         "illness_report_email": constants.CONTACT_MAIL_MAP[class_level],
         "main_teacher": DetailTeacherSerializer(instance=main_teacher, context=serializer_context).data,

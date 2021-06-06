@@ -31,12 +31,12 @@ class SubmissionViewSet(
 ):
     parser_classes = [MultiPartParser, JSONParser]
     permission_classes = [AuthenticationAndActivePermission & IsStudentElseReadOnly]
-    
+
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = SubmissionFilterSet
     ordering_fields = ["publish_datetime", "announce"]
     search_fields = ["name"]
-    
+
     detail_serializer = {
         STUDENT: StudentDetailSubmissionSerializer,
         TEACHER: TeacherDetailSubmissionSerializer
@@ -54,10 +54,10 @@ class SubmissionViewSet(
             "list": TeacherDetailSubmissionSerializer
         }
     }
-    
+
     def get_queryset(self):
         return Submission.objects.from_user(self.request.user)
-    
+
     @action(["POST"], detail=True)
     def upload(self, request: RequestType, pk):
         submission = self.get_object()
@@ -65,14 +65,14 @@ class SubmissionViewSet(
             "request": request
         }
         serializer = self.get_detail_serializer()
-        
+
         if submission.publish_datetime and submission.publish_datetime < datetime.now():
             serializer_instance = serializer(instance=submission, context=serializer_context)
             return Response(serializer_instance.data, status=status.HTTP_202_ACCEPTED)
-        
+
         submission.publish_datetime = datetime.now()
         submission.save()
-        
+
         serializer_instance = serializer(instance=submission, context=serializer_context)
-        
+
         return Response(serializer_instance.data)

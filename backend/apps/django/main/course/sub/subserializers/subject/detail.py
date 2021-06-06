@@ -19,7 +19,7 @@ class DetailSubjectSerializer(serializers.ModelSerializer):
         read_only = [
             "id", "user_relation"
         ]
-    
+
     user_relation = UserRelationField(
         UserSubjectRelationSerializer,
         default=lambda subject, _: {

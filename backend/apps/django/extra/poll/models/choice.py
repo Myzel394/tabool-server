@@ -26,24 +26,24 @@ class Choice(RandomIDMixin, LifecycleModel):
         verbose_name = CHOICE_NAME
         verbose_name_plural = CHOICE_NAME_PLURAL
         ordering = ("text",)
-    
+
     objects = ChoiceQuerySet.as_manager()
-    
+
     poll = models.ForeignKey(
         model_references.POLL,
         on_delete=models.CASCADE,
     )
-    
+
     text = models.CharField(
         max_length=24,
         verbose_name=_("Text")
     )
-    
+
     color = ColorField(
         verbose_name=_("Farbe"),
         blank=True,
     )
-    
+
     @hook(BEFORE_CREATE)
     def _hook_create_color_if_none(self):
         self.color = self.color or DEFAULT_COLOR_TEXT_MAPPING.get(self.text.lower()) or random_color()

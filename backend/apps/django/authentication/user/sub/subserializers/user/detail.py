@@ -28,16 +28,16 @@ class UserInformationSerializer(BaseUserSerializer):
             "preference", "first_name", "last_name", "email", "id", "user_type", "gender",
             "student", "teacher"
         ]
-    
+
     preference = DetailPreferenceSerializer()
     student = serializers.SerializerMethodField()
     teacher = serializers.SerializerMethodField()
-    
+
     @staticmethod
     def get_student(instance: "User") -> Optional[dict]:
         if instance.is_student:
             return UserStudentSerializer(instance=instance.student).data
-    
+
     @staticmethod
     def get_teacher(instance: "User") -> Optional[dict]:
         if instance.is_teacher:

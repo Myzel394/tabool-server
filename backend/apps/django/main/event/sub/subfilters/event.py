@@ -15,7 +15,7 @@ class EventFilterSet(filterset.FilterSet):
             "start_datetime": ["lte", "gte"],
             "end_datetime": ["exact"],
         }
-    
+
     room = filters.CharFilter(
         field_name="room__id",
         label=course_names.ROOM,

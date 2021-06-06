@@ -18,7 +18,7 @@ class StudentDetailModificationSerializer(BaseModificationSerializer):
             "lesson", "lesson_date",
             "new_room", "new_subject", "new_teacher", "information", "modification_type", "id"
         ]
-    
+
     new_room = DetailRoomSerializer()
     new_subject = DetailSubjectSerializer()
     new_teacher = DetailTeacherSerializer()
@@ -31,7 +31,7 @@ class TeacherDetailModificationSerializer(BaseModificationSerializer):
             "lesson", "lesson_date",
             "new_room", "new_subject", "new_teacher", "information", "created_at", "modification_type", "id"
         ]
-    
+
     new_room = DetailRoomSerializer()
     new_subject = DetailSubjectSerializer()
     new_teacher = DetailTeacherSerializer()

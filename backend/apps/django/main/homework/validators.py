@@ -16,10 +16,10 @@ __all__ = [
 
 def validate_private_to_student(homework: "Homework") -> None:
     student = homework.private_to_student
-    
+
     if student:
         available_students = homework.lesson.course.participants.all()
-        
+
         if student not in available_students:
             raise ValidationError({
                 "private_to_student": _("Dieser Benutzer ist kein Mitglied des Kurses {course}.").format(

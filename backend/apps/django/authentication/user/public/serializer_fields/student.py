@@ -8,10 +8,10 @@ __all__ = [
 
 class StudentField(WritableAllFieldMixin):
     model = User
-    
+
     def to_internal_value(self, data):
         value = super().to_internal_value(data)
-        
+
         if self.many:
             value = [
                 user.student
@@ -19,5 +19,5 @@ class StudentField(WritableAllFieldMixin):
             ]
         else:
             value = value.student
-        
+
         return value

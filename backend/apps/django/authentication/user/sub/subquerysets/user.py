@@ -16,7 +16,7 @@ class UserManager(BaseUserManager):
     @classmethod
     def normalize_email(cls, email: str) -> str:
         return email.lower()
-    
+
     def create_user(self, email: str, password: str, **extra_fields) -> "User":
         if not email:
             raise ValueError(_("Email nicht angegeben."))
@@ -25,17 +25,17 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.is_active = True
         user.save()
-        
+
         return user
-    
+
     def create_superuser(self, email: str, password: str, **extra_fields) -> "User":
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
-        
+
         if extra_fields.get("is_staff") is not True or extra_fields.get("is_superuser") is not True:
             raise ValueError(_("Superuser must have is_staff=True and is_superuser=True"))
-        
+
         return self.create_user(email, password, **extra_fields)
 
 

@@ -19,7 +19,7 @@ class MaterialTestMixin(LessonTestMixin):
         lesson = kwargs.pop("lesson", None) or cls.Create_lesson()
         random_id = "".join(random.choices(string.ascii_letters + string.digits, k=5))
         filename = f"uploaded_file_at_{random_id}.txt"
-        
+
         return Material.objects.create(
             **joinkwargs({
                 "name": lambda: lorem.text().split(" ")[0],

@@ -15,7 +15,7 @@ class SubmissionFilterSet(LessonFilterSetMixin):
         fields = {
             "publish_datetime": ["lte", "gte", "date__exact"]
         }
-    
+
     course = filters.CharFilter(
         field_name="lesson__course__id",
         label=course_names.COURSE

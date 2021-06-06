@@ -21,10 +21,10 @@ def validate_no_timetable_overlap(value: "Lesson"):
         )
         for lesson in lessons
     )
-    
+
     if overlaps_available:
         weekday_names = list(calendar.day_name)
-        
+
         raise ValidationError(
             _("Es gibt Überlappungen mit der Stunde am {weekday} in der {start_hour} - {end_hour}. Stunde.").format(
                 weekday=weekday_names[value.weekday],

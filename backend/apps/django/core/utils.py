@@ -15,8 +15,8 @@ def remove_empty_folders(path: Path):
     for folder in folders:
         if remove_empty_folders(folder):
             folder.rmdir()
-    
+
     remaining_folders_exists = [element.is_dir() for element in path.iterdir()]
     files_exists = any(element.is_file() for element in elements)
-    
+
     return not files_exists and not remaining_folders_exists

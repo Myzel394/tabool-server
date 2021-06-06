@@ -22,12 +22,12 @@ class ExamViewSet(
     viewsets.ModelViewSet
 ):
     permission_classes = [AuthenticationAndActivePermission & IsTeacherElseReadOnly]
-    
+
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ExamFilterSet
     search_fields = ["information", "title"]
     ordering_fields = ["date", "title"]
-    
+
     detail_serializer = {
         STUDENT: StudentDetailExamSerializer,
         TEACHER: TeacherDetailExamSerializer
@@ -45,6 +45,6 @@ class ExamViewSet(
             "list": TeacherListExamSerializer,
         }
     }
-    
+
     def get_queryset(self):
         return Exam.objects.from_user(self.request.user)

@@ -13,11 +13,11 @@ class SessionSerializer(serializers.ModelSerializer):
         fields = [
             "user_agent", "ip", "last_activity", "is_this", "id"
         ]
-        
+
     id = serializers.ReadOnlyField(source="sessionrelation.id")
     is_this = serializers.SerializerMethodField()
-    
+
     def get_is_this(self, instance: Session) -> bool:
         request_session: SessionStore = self.context["request"].session
-        
+
         return instance.session_key == request_session.session_key

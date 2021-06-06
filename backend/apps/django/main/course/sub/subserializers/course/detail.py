@@ -16,7 +16,7 @@ class StudentDetailCourseSerializer(BaseCourseSerializer, ParticipantsCountMixin
         fields = [
             "course_number", "participants_count", "subject", "teacher", "room", "weekdays", "id"
         ]
-    
+
     subject = DetailSubjectSerializer()
     teacher = DetailTeacherSerializer()
     room = DetailRoomSerializer()
@@ -27,7 +27,7 @@ class TeacherDetailCourseSerializer(BaseCourseSerializer, WeekdaysMixin):
         fields = [
             "course_number", "participants", "subject", "teacher", "room", "weekdays", "id"
         ]
-    
+
     subject = DetailSubjectSerializer()
     teacher = DetailTeacherSerializer()
     room = DetailRoomSerializer()

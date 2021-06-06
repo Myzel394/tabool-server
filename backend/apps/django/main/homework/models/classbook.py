@@ -21,9 +21,9 @@ class Classbook(RandomIDMixin, LessonMixin, HandlerMixin):
         unique_together = (
             ("lesson", "lesson_date")
         )
-    
+
     objects = ClassbookQuerySet.as_manager()
-    
+
     presence_content = models.TextField(
         verbose_name=_("Inhalt Präsenzunterricht"),
         blank=True,
@@ -34,16 +34,16 @@ class Classbook(RandomIDMixin, LessonMixin, HandlerMixin):
         blank=True,
         null=True,
     )
-    
+
     video_conference_link = models.URLField(
         max_length=1023,
         blank=True,
         null=True,
     )
-    
+
     def __str__(self):
         return str(self.lesson)
-    
+
     @staticmethod
     def handlers():
         return {

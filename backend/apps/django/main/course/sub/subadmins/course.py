@@ -22,18 +22,18 @@ class CourseAdmin(DefaultAdminMixin):
     filter_horizontal = ["participants"]
     autocomplete_fields = ["subject"]
     search_fields = ["subject__name"]
-    
+
     @staticmethod
     def class_number(instance: Course):
         try:
             return instance.get_class_number()
         except TypeError:
             return
-    
+
     class_number.short_description = field_verbose(Student, "class_number")
-    
+
     @staticmethod
     def participants_count(instance: Course):
         return instance.participants.count()
-    
+
     participants_count.short_description = _("Teilnehmeranzahl")

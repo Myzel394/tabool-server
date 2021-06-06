@@ -12,7 +12,7 @@ class ClassbookTestMixin(LessonTestMixin):
     @classmethod
     def Create_classbook(cls, **kwargs) -> Classbook:
         lesson = kwargs.pop("lesson", None) or cls.Create_lesson()
-        
+
         return Classbook.objects.create(
             **joinkwargs({
                 "presence_content": lorem.paragraph,

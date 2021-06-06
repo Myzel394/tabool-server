@@ -10,25 +10,25 @@ from .timetable import TimetableTestMixin
 
 class LessonTestMixin(TimetableTestMixin, CourseTestMixin):
     associated_timetable: Optional[Timetable]
-    
+
     @classmethod
     def Create_lesson_argument(cls, lesson: Optional[Lesson] = None, lesson_date: Optional[date] = None):
         lesson = lesson or cls.Create_lesson()
-        
+
         return {
             "lesson": lambda: lesson,
             "lesson_date": lambda: lesson_date or find_next_date_by_weekday(date.today(), lesson.weekday)
         }
-    
+
     @classmethod
     def get_lesson_argument(cls, lesson: Optional[Lesson] = None, lesson_date: Optional[date] = None) -> dict:
         lesson = lesson or cls.Create_lesson()
-        
+
         return {
             "lesson": lesson.id,
             "lesson_date": lesson_date or find_next_date_by_weekday(date.today(), lesson.weekday)
         }
-    
+
     @classmethod
     def Create_lesson(cls, **kwargs) -> Lesson:
         return Lesson.objects.create(
@@ -40,12 +40,12 @@ class LessonTestMixin(TimetableTestMixin, CourseTestMixin):
                 "end_hour": lambda: random.randint(5, 10),
             }, kwargs)
         )
-    
+
     @classmethod
     def Create_whole_timetable(cls, **kwargs) -> Timetable:
         timetable = cls.Create_timetable(**kwargs)
         cls.associated_timetable = timetable
-        
+
         for weekday in range(0, 4 + 1):
             for hour in range(1, 6, 2):
                 cls.Create_lesson(
@@ -54,5 +54,5 @@ class LessonTestMixin(TimetableTestMixin, CourseTestMixin):
                     start_hour=hour,
                     end_hour=hour,
                 )
-        
+
         return timetable

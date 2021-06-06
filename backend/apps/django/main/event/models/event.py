@@ -22,9 +22,9 @@ class Event(RandomIDMixin):
         verbose_name = model_names.EVENT
         verbose_name_plural = model_names.EVENT_PLURAL
         ordering = ("start_datetime", "title")
-    
+
     objects = EventQuerySet.as_manager()
-    
+
     room = models.ForeignKey(
         ROOM,
         on_delete=models.SET_NULL,
@@ -32,23 +32,23 @@ class Event(RandomIDMixin):
         blank=True,
         null=True,
     )  # type: Room
-    
+
     title = models.CharField(
         verbose_name=_("Titel"),
         max_length=31,
     )
-    
+
     information = models.CharField(
         blank=True,
         null=True,
         max_length=1023,
         verbose_name=_("Informationen")
     )
-    
+
     start_datetime = models.DateTimeField(
         verbose_name=_("Start"),
     )
-    
+
     end_datetime = models.DateTimeField(
         verbose_name=_("Ende"),
     )

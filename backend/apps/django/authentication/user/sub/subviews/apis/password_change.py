@@ -14,7 +14,7 @@ class PasswordChangeView(views.APIView):
     permission_classes = [
         IsAuthenticated
     ]
-    
+
     def post(self, request):
         serializer = PasswordChangerSerializer(data=request.data, context={
             "request": request,
@@ -22,11 +22,11 @@ class PasswordChangeView(views.APIView):
         serializer.is_valid(raise_exception=True)
         user = self.request.user
         validated_data = serializer.validated_data
-        
+
         new_password = validated_data["new_password"]
-        
+
         user.set_password(new_password)
         user.save()
         update_session_auth_hash(request, user)
-        
+
         return Response(status=status.HTTP_204_NO_CONTENT)

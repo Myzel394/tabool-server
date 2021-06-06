@@ -19,7 +19,7 @@ class StudentUpdateHomeworkSerializer(BaseHomeworkSerializer):
 
 class TeacherUpdateHomeworkSerializer(BaseHomeworkSerializer):
     instance: "Homework"
-    
+
     class Meta(BaseHomeworkSerializer.Meta):
         fields = [
             "due_date", "information", "type"

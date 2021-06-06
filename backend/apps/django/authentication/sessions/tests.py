@@ -14,7 +14,7 @@ class SessionsTest(UserTestMixin):
             user=self.user,
             expire_date=datetime.now() + timedelta(days=10)
         )
-        
+
         # Ensure raises no error
         print(session.sessionrelation)
 

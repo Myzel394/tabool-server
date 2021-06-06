@@ -16,7 +16,7 @@ class HomeworkFilterSet(LessonFilterSetMixin):
             "due_date": ["lte", "gte"],
             "type": ["exact"],
         }
-    
+
     course = filters.CharFilter(
         field_name="lesson__course__id",
         label=course_names.COURSE

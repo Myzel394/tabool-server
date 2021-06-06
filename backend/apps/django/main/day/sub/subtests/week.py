@@ -28,18 +28,18 @@ class WeekMixin(ClassbookTestMixin, MaterialTestMixin, EventTestMixin, Modificat
             date=self.date,
             course=self.lesson.course
         )
-    
+
     def as_student(self):
         self.lesson.course.participants.add(self.student.student)
-        
+
         self.Login_user(self.student)
-    
+
     def as_teacher(self):
         self.lesson.course.teacher = self.teacher.teacher
         self.lesson.course.save()
-        
+
         self.Login_user(self.teacher)
-    
+
     def assertContent(self, data):
         self.assertEqual(data["lessons"][0]["id"], self.lesson.id)
         self.assertEqual(data["materials"][0]["id"], self.material.id)
@@ -57,7 +57,7 @@ class StudentWeekViewAPITest(WeekMixin):
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
         self.assertContent(response.data)
-    
+
     def test_get_not_in_range(self):
         self.as_student()
         response = self.client.get("/api/student/week/", {
@@ -66,7 +66,7 @@ class StudentWeekViewAPITest(WeekMixin):
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
         self.assertEqual(0, sum(len(element) for element in response.data.values()))
-    
+
     def test_get_invalid_dates(self):
         self.as_student()
         response = self.client.get("/api/student/week/", {
@@ -74,7 +74,7 @@ class StudentWeekViewAPITest(WeekMixin):
             "end_date": self.date - timedelta(days=1)
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
-    
+
     def test_student_cant_access_teacher_endpoint(self):
         self.as_student()
         response = self.client.get("/api/teacher/week/", {
@@ -82,7 +82,7 @@ class StudentWeekViewAPITest(WeekMixin):
             "end_date": self.date + timedelta(days=1)
         }, content_type="application/json")
         self.assertEqual(403, response.status_code)
-    
+
     def test_date_autofill(self):
         self.as_student()
         response = self.client.get("/api/student/week/")
@@ -98,7 +98,7 @@ class TeacherWeekViewAPITest(WeekMixin):
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
         self.assertContent(response.data)
-    
+
     def test_get_not_in_range(self):
         self.as_teacher()
         response = self.client.get("/api/teacher/week/", {
@@ -107,7 +107,7 @@ class TeacherWeekViewAPITest(WeekMixin):
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
         self.assertEqual(0, sum(len(element) for element in response.data.values()))
-    
+
     def test_get_invalid_dates(self):
         self.as_teacher()
         response = self.client.get("/api/teacher/week/", {
@@ -115,7 +115,7 @@ class TeacherWeekViewAPITest(WeekMixin):
             "end_date": self.date - timedelta(days=1)
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
-    
+
     def test_teacher_cant_access_student_endpoint(self):
         self.as_teacher()
         response = self.client.get("/api/student/week/", {

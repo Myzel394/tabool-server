@@ -15,7 +15,7 @@ class BaseCourseSerializer(serializers.ModelSerializer):
 
 class ParticipantsCountMixin(serializers.ModelSerializer):
     participants_count = serializers.SerializerMethodField()
-    
+
     @staticmethod
     def get_participants_count(obj: Course) -> int:
         return obj.participants.all().count()
@@ -23,15 +23,15 @@ class ParticipantsCountMixin(serializers.ModelSerializer):
 
 class WeekdaysMixin(serializers.ModelSerializer):
     weekdays = serializers.SerializerMethodField()
-    
+
     def get_weekdays(self, obj: Course) -> list[int]:
         user = self.context["request"].user
-        
+
         if timetable := Timetable.objects.current(user):
             lessons = timetable.lessons
             course_lessons = lessons.only("course").filter(course=obj)
             weekdays = set(course_lessons.values_list("weekday", flat=True))
-            
+
             return list(weekdays)
-        
+
         return []

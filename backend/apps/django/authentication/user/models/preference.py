@@ -19,12 +19,12 @@ class Preference(IdMixin):
         verbose_name = model_names.PREFERENCE
         verbose_name_plural = model_names.PREFERENCE_PLURAL
         ordering = ("user",)
-    
+
     data = models.TextField(
         max_length=16384 - 1,
         default="{}"
     )  # type: str
-    
+
     user = models.OneToOneField(
         USER,
         on_delete=models.CASCADE,

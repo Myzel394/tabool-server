@@ -16,17 +16,17 @@ class ModificationFilterSet(LessonFilterSetMixin):
         fields = [
             "modification_type"
         ]
-    
+
     new_room = filters.CharFilter(
         field_name="new_room__id",
         label=course_names.ROOM,
     )
-    
+
     new_subject = filters.CharFilter(
         field_name="new_subject__id",
         label=course_names.SUBJECT,
     )
-    
+
     new_teacher = filters.CharFilter(
         field_name="new_teacher__id",
         label=auth_names.TEACHER,

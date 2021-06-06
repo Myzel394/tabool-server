@@ -22,11 +22,11 @@ class ModificationViewSet(
     viewsets.ModelViewSet
 ):
     permission_classes = [AuthenticationAndActivePermission & IsTeacherElseReadOnly]
-    
+
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = ModificationFilterSet
     search_fields = ["information"]
-    
+
     detail_serializer = {
         STUDENT: StudentDetailModificationSerializer,
         TEACHER: TeacherDetailModificationSerializer
@@ -44,6 +44,6 @@ class ModificationViewSet(
             "list": TeacherListModificationSerializer,
         },
     }
-    
+
     def get_queryset(self):
         return Modification.objects.from_user(self.request.user)

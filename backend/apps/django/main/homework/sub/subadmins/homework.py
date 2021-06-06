@@ -15,9 +15,9 @@ class HomeworkAdmin(DefaultAdminMixin):
     date_hierarchy = "due_date"
     autocomplete_fields = ["lesson"]
     search_fields = ["lesson__course__subject__name", ]
-    
+
     @staticmethod
     def is_private(instance: Homework) -> bool:
         return instance.is_private
-    
+
     is_private.boolean = True

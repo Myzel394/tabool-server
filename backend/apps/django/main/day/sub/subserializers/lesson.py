@@ -15,15 +15,15 @@ __all__ = [
 class LessonViewSerializer(ValidationSerializer):
     lesson = LessonField()
     lesson_date = serializers.DateField()
-    
+
     def validate(self, attrs):
         if attrs["lesson_date"].weekday() != (required_weekday := attrs["lesson"].weekday):
             weekdays = list(calendar.day_name)
-            
+
             raise ValidationError({
                 "lesson_date": _("Das Datum ist nicht gültig. Es muss ein {weekday} sein.").format(
                     weekday=weekdays[required_weekday]
                 )
             })
-        
+
         return super().validate(attrs)

@@ -20,22 +20,22 @@ class OTP(IdMixin, AssociatedUserMixin):
         verbose_name = model_names.OTP
         verbose_name_plural = model_names.OTP_PLURAL
         ordering = ("expire_date",)
-    
+
     TOKEN_LENGTH = 6
     CHOICES = string.ascii_letters + string.digits
-    
+
     token = models.CharField(
         max_length=TOKEN_LENGTH,
         verbose_name=_("Token")
     )
-    
+
     expire_date = models.DateTimeField(
         verbose_name=_("Ablaufdatum"),
     )
-    
+
     def is_valid(self, token: str) -> bool:
         return self.token == token
-    
+
     @hook(BEFORE_CREATE)
     def _hook_create(self):
         self.token = "".join(

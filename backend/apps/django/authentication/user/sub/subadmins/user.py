@@ -24,24 +24,24 @@ class UserAdmin(DefaultAdminMixin):
     list_filter = ["is_active", "is_staff", "gender"]
     readonly_fields = ["confirmation_key", "last_login", "first_name", "last_name", "email"]
     filter_horizontal = ["user_permissions"]
-    
+
     @staticmethod
     def has_change_permissions_permission(request: RequestType, obj: User) -> bool:
         return request.user.has_perm("authentication.change_user_permissions") and obj != request.user
-    
+
     def get_readonly_fields(self, request: RequestType, obj: Optional[User] = None) -> list:
         if obj:
             # Required readonly
             readonly_list = ["confirmation_key", "last_login", "first_name", "last_name", "email", "is_active", "id"]
-            
+
             can_change_permissions = self.has_change_permissions_permission(request, obj)
-            
+
             if not can_change_permissions or obj.has_perm("authentication.change_user_permissions"):
                 readonly_list += ["user_permissions", "is_staff"]
-            
+
             return readonly_list
         return ["id", "confirmation_key", "last_login"]
-    
+
     @staticmethod
     def save_model(request: RequestType, obj: User, form, change):
         if change:
@@ -52,7 +52,7 @@ class UserAdmin(DefaultAdminMixin):
             super().save_model(request, obj, form, change)
             delattr(obj, "_dont_send_confirmation_mail")
             obj.confirm_email(obj.confirmation_key)
-            
+
             # Set random password
             password = "".join(
                 secrets.choice(string.ascii_letters + string.digits)
@@ -60,7 +60,7 @@ class UserAdmin(DefaultAdminMixin):
             )
             obj.set_password(password)
             obj.save()
-    
+
     @staticmethod
     def get_user_type(instance: User):
         try:

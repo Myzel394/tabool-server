@@ -24,10 +24,10 @@ def is_user_authorized(user: "User") -> bool:
 
 def unauthorized_handler(exc, context):
     response = views.exception_handler(exc, context)
-    
+
     if isinstance(exc, (exceptions.AuthenticationFailed, exceptions.NotAuthenticated)):
         response.status_code = status.HTTP_401_UNAUTHORIZED
-    
+
     return response
 
 
@@ -50,7 +50,7 @@ class IsTeacherElseReadOnly(IsTeacher):
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
-        
+
         return super().has_permission(request, view)
 
 
@@ -58,5 +58,5 @@ class IsStudentElseReadOnly(IsStudent):
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
-        
+
         return super().has_permission(request, view)

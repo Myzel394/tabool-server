@@ -15,7 +15,7 @@ __all__ = [
 class AssociatedUserMixin(models.Model):
     class Meta:
         abstract = True
-    
+
     associated_user = models.ForeignKey(
         USER,
         on_delete=models.CASCADE,
@@ -26,7 +26,7 @@ class AssociatedUserMixin(models.Model):
 class UserModelRelationMixin(models.Model):
     class Meta:
         abstract = True
-    
+
     user = models.ForeignKey(
         USER,
         on_delete=models.CASCADE,
@@ -37,28 +37,28 @@ class UserModelRelationMixin(models.Model):
 class IdMixin(LifecycleModel):
     class Meta:
         abstract = True
-    
+
     ID_LENGTH = 8
-    
+
     id = models.CharField(
         max_length=ID_LENGTH,
         unique=True,
         primary_key=True
     )
-    
+
     def save(self, *args, **kwargs):
         if self.id is None or self.id == "":
             available_ids = set(self.__class__.objects.all().values_list("id", flat=True))
-            
+
             while True:
                 object_id = "".join(
                     secrets.choice(string.ascii_letters + string.digits)
                     for _ in range(self.ID_LENGTH)
                 )
-                
+
                 if object_id not in available_ids:
                     break
-            
+
             self.id = object_id
-        
+
         return super().save(*args, **kwargs)

@@ -22,10 +22,10 @@ class PollUserVoteSerializer(ValidationSerializer):
         label=Vote._meta.get_field("feedback").max_length,  # skipcq: PYL-W0212
         required=False,
     )
-    
+
     def validate(self, attrs):
         super().validate(attrs)
-        
+
         # Choices
         poll = attrs["poll"]
         choices = attrs["choices"]
@@ -33,7 +33,7 @@ class PollUserVoteSerializer(ValidationSerializer):
             choice.id
             for choice in choices
         ]
-        
+
         # Amount
         if not poll.min_vote_choices <= len(choices_ids) <= poll.max_vote_choices:
             raise ValidationError({
@@ -43,15 +43,15 @@ class PollUserVoteSerializer(ValidationSerializer):
                         max_choices=poll.max_vote_choices
                     )
             })
-        
+
         found_choices = Choice.objects.from_user(self.context["request"].user).filter(
             poll=poll,
             id__in=choices_ids
         )
-        
+
         if found_choices.count() != len(choices):
             raise ValidationError({
                 "choices": _("Diese Auswahlen sind nicht gültig.")
             })
-        
+
         return attrs

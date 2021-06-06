@@ -18,5 +18,5 @@ class LessonQuerySet(CustomQuerySetMixin.QuerySet):
         lessons = self \
             .only("course") \
             .filter(course__id__in=course_ids)
-        
+
         return lessons

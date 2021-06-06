@@ -12,10 +12,10 @@ class CourseTestMixin(RoomTestMixin, SubjectTestMixin, UserTestMixin):
     def Create_course(cls, **kwargs) -> Course:
         participants = kwargs.pop("participants", [])
         teacher = kwargs.pop("teacher", None)
-        
+
         if associated_teacher := getattr(cls, "associated_teacher", None):
             teacher = associated_teacher.teacher
-        
+
         course = Course.objects.create(
             **joinkwargs({
                 "teacher": lambda: teacher or cls.Create_teacher(),
@@ -27,8 +27,8 @@ class CourseTestMixin(RoomTestMixin, SubjectTestMixin, UserTestMixin):
         course.participants.add(
             *participants,
         )
-        
+
         if hasattr(cls, "associated_student"):
             course.participants.add(cls.associated_student.student)
-        
+
         return course

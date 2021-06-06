@@ -18,7 +18,7 @@ class BaseHomeworkSerializer(serializers.ModelSerializer):
 
 class TruncatedInformationSerializerMixin(ValidationSerializer):
     truncated_information = serializers.SerializerMethodField()
-    
+
     @staticmethod
     def get_truncated_information(instance: Homework) -> Optional[str]:
         if instance.information:

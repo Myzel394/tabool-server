@@ -12,5 +12,5 @@ class UpdatePreferenceSerializer(BasePreferenceSerializer):
         fields = [
             "data"
         ]
-    
+
     data = serializers.JSONField()

@@ -15,17 +15,17 @@ class CreateSubmissionSerializer(BaseSubmissionSerializer):
             "lesson", "lesson_date",
             "publish_datetime", "file", "name"
         ]
-    
+
     lesson = LessonField()
-    
+
     publish_datetime = serializers.DateTimeField(
         required=False,
         allow_null=True,
         validators=[only_future]
     )
-    
+
     # TODO: Add tests!
     def create(self, validated_data):
         validated_data["student"] = self.context["request"].user.student
-        
+
         return super().create(validated_data)

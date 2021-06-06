@@ -28,9 +28,9 @@ class Modification(RandomIDMixin, LessonMixin, CreationDateMixin):
         verbose_name = model_names.MODIFICATION
         verbose_name_plural = model_names.MODIFICATION_PLURAL
         ordering = ("lesson_date", "lesson__start_hour",)
-    
+
     objects = ModificationQuerySet.as_manager()
-    
+
     new_room = models.ForeignKey(
         ROOM,
         on_delete=models.SET_NULL,
@@ -38,7 +38,7 @@ class Modification(RandomIDMixin, LessonMixin, CreationDateMixin):
         blank=True,
         null=True,
     )  # type: Room
-    
+
     new_subject = models.ForeignKey(
         SUBJECT,
         on_delete=models.SET_NULL,
@@ -46,7 +46,7 @@ class Modification(RandomIDMixin, LessonMixin, CreationDateMixin):
         blank=True,
         null=True,
     )  # type: Subject
-    
+
     new_teacher = models.ForeignKey(
         TEACHER,
         on_delete=models.SET_NULL,
@@ -54,14 +54,14 @@ class Modification(RandomIDMixin, LessonMixin, CreationDateMixin):
         blank=True,
         null=True,
     )  # type: Teacher
-    
+
     information = models.TextField(
         verbose_name=_("Information"),
         blank=True,
         null=True,
         max_length=1023,
     )  # type: str
-    
+
     modification_type = models.CharField(
         choices=ModificationTypeOptions.choices,
         verbose_name=_("Typ"),

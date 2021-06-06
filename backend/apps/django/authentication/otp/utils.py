@@ -33,7 +33,7 @@ def haversine(lon1: float, lat1: float, lon2: float, lat2: float) -> float:  # p
     """
     # convert decimal degrees to radians
     lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
-    
+
     # haversine formula
     dlon = lon2 - lon1
     dlat = lat2 - lat1
@@ -46,10 +46,10 @@ def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:
     try:
         url = f"https://api.ipgeolocationapi.com/geolocate/{ip}"
         response = requests.get(url)
-        
+
         if 400 <= response.status_code < 600:
             return
-        
+
         data = response.json()
         geo_data = data["geo"]
         longitude = geo_data["longitude"]
@@ -72,49 +72,49 @@ def get_ip_location(ip: str) -> Optional[IPGeolocation]:
         # Fetch new location
         if location := fetch_location(ip):
             longitude, latitude, city = location
-            
+
             ip_location = IPGeolocation.objects.create(
                 longitude=longitude,
                 latitude=latitude,
                 ip_address=ip,
                 city=city
             )
-            
+
             return ip_location
     else:
         return ip_location
-    
+
     return
 
 
 def is_ip_geolocation_suspicious(ip: str) -> bool:
     if settings.DEBUG and ip == "127.0.0.1":
         return False
-    
+
     if ip_location := get_ip_location(ip):
         longitude = ip_location.longitude
         latitude = ip_location.latitude
-        
+
         radius = abs(haversine(longitude, latitude, *constants.VALID_LOGIN_LOCATION))
-        
+
         if radius <= constants.VALID_LOGIN_LOCATION_RADIUS:
             return False
-    
+
     return True
 
 
 def send_otp_message(request: RequestType, user: "User", otp: "OTP"):
     now = datetime.now()
     ip = get_client_ip(request)
-    
+
     # Create message
     message_parts = [
         f"Ip: {ip}"
     ]
-    
+
     try:
         ip_location = get_ip_location(ip)
-        
+
         if ip_location:
             message_parts.append(
                 f"Ort: {ip_location.city or '-'} ({ip_location.longitude} Long, {ip_location.latitude} Lat)"
@@ -124,16 +124,16 @@ def send_otp_message(request: RequestType, user: "User", otp: "OTP"):
     # A general exception is used, to ensure that the user will at least get some information
     except Exception:  # skipcq: FLK-E722
         pass
-    
+
     try:
         os, browser = httpagentparser.simple_detect(request["HTTP_USER_AGENT"])
-        
+
         message_parts.append(f"Browser: {browser} auf einem {os} Gerät")
     except:  # skipcq: FLK-E722
         pass
-    
+
     message_information = "\n".join(message_parts)
-    
+
     message = f"""
     Hi {user.first_name}!
 
@@ -146,7 +146,7 @@ def send_otp_message(request: RequestType, user: "User", otp: "OTP"):
     Informationen über die Anmeldung:
     {message_information}
     """
-    
+
     send_mail(
         "Neue Anmeldung. Hier dein Code.",
         message,

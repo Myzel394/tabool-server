@@ -11,5 +11,5 @@ class DetailEventSerializer(BaseEventSerializer):
         fields = [
             "room", "title", "start_datetime", "end_datetime", "information", "id"
         ]
-    
+
     room = DetailRoomSerializer()

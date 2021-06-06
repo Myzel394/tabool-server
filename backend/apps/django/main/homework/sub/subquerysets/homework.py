@@ -16,11 +16,11 @@ class HomeworkQuerySet(CustomQuerySetMixin.QuerySet):
         homeworks = self \
             .only("lesson") \
             .filter(lesson__in=lessons)
-        
+
         if user.is_student:
             homeworks = homeworks \
                 .only("private_to_student") \
                 .filter(Q(private_to_student=None) | Q(private_to_student=user.student)) \
                 .distinct()
-        
+
         return homeworks

@@ -14,8 +14,8 @@ class WeekdayChoices(models.IntegerChoices):
 
 class WeekdayField(models.PositiveSmallIntegerField):
     description = _("Feld für einen Wochentag")
-    
+
     def __init__(self, *args, **kwargs):
         kwargs["choices"] = kwargs.get("choices") or WeekdayChoices.choices
-        
+
         super().__init__(*args, **kwargs)

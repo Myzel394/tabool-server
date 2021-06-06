@@ -22,24 +22,24 @@ class UserSubjectRelation(RandomIDMixin, UserModelRelationMixin, LifecycleModel)
             ("subject", "user")
         )
         ordering = ("subject", "user")
-    
+
     subject = models.ForeignKey(
         SUBJECT,
         on_delete=models.CASCADE,
         verbose_name=model_names.SUBJECT
     )  # type: Subject
-    
+
     color = ColorField(
         verbose_name=_("Farbe"),
     )  # type: str
-    
+
     def __str__(self):
         return str(self.subject)
-    
+
     @property
     def default_color_for_name(self) -> str:
         return constants.SUBJECT_COLORS_MAPPING.get(self.subject.name.lower(), "#888")
-    
+
     @hook(BEFORE_CREATE)
     def _hook_set_color(self):
         self.color = self.color or self.default_color_for_name

@@ -28,12 +28,12 @@ class StudentHomeworkViewSet(
     viewsets.ModelViewSet,
 ):
     permission_classes = [AuthenticationAndActivePermission & IsStudent]
-    
+
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = HomeworkFilterSet
     search_fields = ["information"]
     ordering_fields = ["due_date"]
-    
+
     detail_serializer = StudentDetailHomeworkSerializer
     serializer_action_map = {
         "create": StudentCreateHomeworkSerializer,
@@ -42,21 +42,21 @@ class StudentHomeworkViewSet(
         "list": StudentListHomeworkSerializer,
         "retrieve": StudentDetailHomeworkSerializer
     }
-    
+
     def check_object_permissions(self, request: RequestType, obj: Homework) -> None:
         if request.method in SAFE_METHODS:
             return
-        
+
         if obj.private_to_student != request.user.student:
             raise PermissionDenied(_("Du kannst öffentliche Hausaufgaben nicht verändern."))
-    
+
     def get_queryset(self):
         return Homework.objects.from_user(self.request.user)
-    
+
     @action(methods=["GET"], detail=False, url_path="homework-information")
     def information(self, request: RequestType):
         homeworks = Homework.objects.from_user(request.user)
-        
+
         earliest_due_date = homeworks.earliest("due_date").due_date
         latest_due_date = homeworks.latest("due_date").due_date
         private_count = homeworks.only("private_to_student").filter(private_to_student=request.user.student).count()
@@ -68,7 +68,7 @@ class StudentHomeworkViewSet(
             .count()
         type_set = set(homeworks.values_list("type", flat=True))
         type_set.discard(None)
-        
+
         return Response({
             "due_date_min": earliest_due_date,
             "due_date_max": latest_due_date,
@@ -88,7 +88,7 @@ class TeacherHomeworkViewSet(
     filterset_class = HomeworkFilterSet
     search_fields = ["information"]
     ordering_fields = ["due_date"]
-    
+
     detail_serializer = TeacherDetailHomeworkSerializer
     serializer_action_map = {
         "create": TeacherCreateHomeworkSerializer,
@@ -97,6 +97,6 @@ class TeacherHomeworkViewSet(
         "list": TeacherListHomeworkSerializer,
         "retrieve": TeacherDetailHomeworkSerializer
     }
-    
+
     def get_queryset(self):
         return Homework.objects.from_user(self.request.user)

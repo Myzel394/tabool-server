@@ -22,9 +22,9 @@ class TimetableQuerySet(CustomQuerySetMixin.QuerySet):
             .values_list("timetable", flat=True) \
             .distinct()
         timetables = self.only("id").filter(id__in=timetable_ids)
-        
+
         return timetables
-    
+
     def current(self, user: "User") -> "Timetable":
         today = date.today()
         timetables = self \
@@ -32,5 +32,5 @@ class TimetableQuerySet(CustomQuerySetMixin.QuerySet):
             .only("start_date", "end_date") \
             .filter(start_date__lte=today, end_date__gte=today)
         current_timetable = timetables.first()
-        
+
         return current_timetable

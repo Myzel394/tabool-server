@@ -26,9 +26,9 @@ def send_notification(
         max_retry_time: int = 60
 ) -> None:
     users = get_as_list(users)
-    
+
     devices: FCMDeviceQuerySet = FCMDevice.objects.only("user").filter(user__in=users)
-    
+
     # Bulk not working
     for device in devices:
         device.send_message(

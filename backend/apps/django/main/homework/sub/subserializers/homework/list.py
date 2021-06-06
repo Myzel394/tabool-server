@@ -15,7 +15,7 @@ class StudentListHomeworkSerializer(BaseHomeworkSerializer, TruncatedInformation
             "lesson", "lesson_date",
             "due_date", "id", "truncated_information",
         ]
-    
+
     lesson = StudentDetailLessonSerializer()
 
 
@@ -25,5 +25,5 @@ class TeacherListHomeworkSerializer(BaseHomeworkSerializer, TruncatedInformation
             "lesson", "lesson_date",
             "due_date", "id", "truncated_information",
         ]
-    
+
     lesson = TeacherDetailLessonSerializer()

@@ -15,7 +15,7 @@ __all__ = [
 class DefaultAdminInlineMixin(BaseAdminMixinsMixin, admin.TabularInline):
     extra = 0
     min_num = 0
-    
+
     def get_section(self) -> Sections:
         return Sections([
             FieldsetList(

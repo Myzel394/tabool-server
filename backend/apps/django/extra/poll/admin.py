@@ -26,25 +26,25 @@ class PollAdmin(DefaultAdminMixin):
     date_hierarchy = "max_vote_date"
     filter_horizontal = ["targeted_user"]
     inlines = [ChoiceInline]
-    
+
     @staticmethod
     def results(instance: Poll):
         poll_results = get_results(instance=instance)
-        
+
         message = ""
-        
+
         for result in poll_results:
             try:
                 choice: Choice = Choice.objects.only("id").get(id=result["choice_id"])
             except ObjectDoesNotExist:
                 return _("Fehler")
-            
+
             value = result["percentage_value"]
-            
+
             message += f"{choice.text}: {value * 100}%\n"
-        
+
         message += f" ({instance.votes.count()} Stimmen)"
-        
+
         return message
-    
+
     results.short_description = _("Ergebnis")

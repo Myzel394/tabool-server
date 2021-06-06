@@ -26,6 +26,6 @@ class RoomViewSet(
         "retrieve": DetailRoomSerializer,
         "list": DetailRoomSerializer
     }
-    
+
     def get_queryset(self):
         return Room.objects.all()

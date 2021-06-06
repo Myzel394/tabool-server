@@ -12,7 +12,7 @@ class DetailTeacherSerializer(BaseTeacherSerializer):
         fields = [
             "first_name", "last_name", "short_name", "email", "gender", "id"
         ]
-    
+
     first_name = serializers.ReadOnlyField(source="user.first_name")
     last_name = serializers.ReadOnlyField(source="user.last_name")
     email = serializers.ReadOnlyField(source="user.email")

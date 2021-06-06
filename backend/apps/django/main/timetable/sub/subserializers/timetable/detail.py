@@ -11,5 +11,5 @@ class StudentDetailTimetableSerializer(BaseTimetableSerializer):
         fields = [
             "lessons", "id"
         ]
-    
+
     lessons = StudentDetailLessonSerializer(many=True)

@@ -16,7 +16,7 @@ class MaterialFilterSet(LessonFilterSetMixin):
             "announce": ["exact"],
             "publish_datetime": ["lte", "gte"],
         }
-    
+
     course = filters.CharFilter(
         field_name="lesson__course__id",
         label=course_names.COURSE

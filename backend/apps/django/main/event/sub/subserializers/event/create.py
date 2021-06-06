@@ -11,5 +11,5 @@ class CreateEventSerializer(BaseEventSerializer):
         fields = [
             "room", "title", "start_datetime", "end_datetime"
         ]
-    
+
     room = RoomField()

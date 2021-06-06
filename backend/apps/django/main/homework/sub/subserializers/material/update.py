@@ -15,12 +15,12 @@ __all__ = [
 
 class UpdateMaterialSerializer(BaseMaterialSerializer):
     instance: "Material"
-    
+
     class Meta(BaseMaterialSerializer.Meta):
         fields = [
             "publish_datetime", "announce",
         ]
-    
+
     def validate_announce(self, value: bool):
         if self.instance.announce and not value:
             raise ValidationError(

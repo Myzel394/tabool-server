@@ -16,5 +16,5 @@ __all__ = [
 class ModificationQuerySet(CustomQuerySetMixin.QuerySet):
     def from_user(self, user: "User") -> "ModificationQuerySet":
         lessons = Lesson.objects.from_user(user)
-        
+
         return self.filter(lesson__in=lessons)

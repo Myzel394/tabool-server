@@ -13,7 +13,7 @@ __all__ = [
 
 def send_email_verification(user: "User") -> None:
     url = "https://tabool.app/app/auth/registration/email/" + user.confirmation_key + "/"
-    
+
     message = f"""
     Hi {user.first_name}!
 
@@ -21,7 +21,7 @@ def send_email_verification(user: "User") -> None:
 
     {url}
     """
-    
+
     send_mail(
         "Bestätige deine E-Mail",
         message,

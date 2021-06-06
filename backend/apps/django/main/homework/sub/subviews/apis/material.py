@@ -22,12 +22,12 @@ class MaterialViewSet(
     viewsets.ModelViewSet,
 ):
     permission_classes = [AuthenticationAndActivePermission & IsTeacherElseReadOnly]
-    
+
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = MaterialFilterSet
     ordering_fields = ["created_at", "publish_datetime"]
     search_fields = ["name"]
-    
+
     detail_serializer = {
         STUDENT: StudentDetailMaterialSerializer,
         TEACHER: TeacherDetailMaterialSerializer,
@@ -45,6 +45,6 @@ class MaterialViewSet(
             "list": TeacherDetailMaterialSerializer
         }
     }
-    
+
     def get_queryset(self):
         return Material.objects.from_user(self.request.user)

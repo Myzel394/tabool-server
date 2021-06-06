@@ -27,33 +27,33 @@ class Lesson(RandomIDMixin, LifecycleModel):
         verbose_name = model_names.LESSON
         verbose_name_plural = model_names.LESSON_PLURAL
         ordering = ("weekday", "start_hour", "end_hour")
-    
+
     objects = LessonQuerySet.as_manager()
-    
+
     timetable = models.ForeignKey(
         TIMETABLE,
         on_delete=models.CASCADE,
         verbose_name=model_names.TIMETABLE
     )  # type: Timetable
-    
+
     course = models.ForeignKey(
         COURSE,
         on_delete=models.CASCADE,
         verbose_name=course_names.COURSE
     )  # type: Course
-    
+
     weekday = WeekdayField(
         verbose_name=_("Wochentag")
     )
-    
+
     start_hour = models.PositiveSmallIntegerField(
         verbose_name=_("Anfangsstunde")
     )
-    
+
     end_hour = models.PositiveSmallIntegerField(
         verbose_name=_("Endstunde")
     )
-    
+
     def __str__(self):
         return "{course_name}: {start_hour} - {end_hour} ({timetable})".format(
             course_name=self.course.name,
@@ -61,12 +61,12 @@ class Lesson(RandomIDMixin, LifecycleModel):
             end_hour=self.end_hour,
             timetable=self.timetable.name,
         )
-    
+
     def clean(self):
         validate_no_timetable_overlap(self)
-        
+
         return super().clean()
-    
+
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="timetable.id", has_changed=True)
     def _hook_full_clean(self):

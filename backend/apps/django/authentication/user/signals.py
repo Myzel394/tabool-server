@@ -15,11 +15,11 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         "email": user.email
     })
     path = "/app/auth/forgot-password/confirm"
-    
+
     password_reset_link = instance.request.build_absolute_uri(
         f"{path}?{params_encoded}"
     )
-    
+
     message = f"""
         Hallo {user.first_name}!
         
@@ -35,7 +35,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         Code auf gar keinen Fall weiter! Der Code (und der Link) sind für eine Stunde gültig.
     """.strip()
     message = textwrap.dedent(message)
-    
+
     send_mail(
         "Passwort zurücksetzen",
         message,

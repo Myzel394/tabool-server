@@ -17,11 +17,11 @@ class SubmissionQuerySet(CustomQuerySetMixin.QuerySet):
         qs = self \
             .only("lesson") \
             .filter(lesson__in=lessons)
-        
+
         if user.is_teacher:
             qs = qs \
                 .only("publish_datetime") \
                 .filter(publish_datetime__lte=datetime.now()) \
                 .distinct()
-        
+
         return qs

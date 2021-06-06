@@ -25,7 +25,7 @@ class PollTestMixin(TestCase):
     ) -> Poll:
         choices = choices or ["Ja", "Nein"]
         targeted_user = targeted_user or list(User.objects.all())
-        
+
         poll = Poll.objects.create(
             **joinkwargs(
                 {
@@ -35,12 +35,12 @@ class PollTestMixin(TestCase):
             )
         )
         poll.targeted_user.add(*targeted_user)
-        
+
         for choice_text in choices:
             Choice.objects.create(
                 poll=poll,
                 text=choice_text,
                 color=random_color()
             )
-        
+
         return poll

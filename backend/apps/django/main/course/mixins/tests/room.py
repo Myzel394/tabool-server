@@ -11,10 +11,10 @@ class RoomTestMixin(TestCase):
     def Create_room(**kwargs) -> Room:
         while True:
             place = str(random.randint(100, 999))
-            
+
             if not Room.objects.filter(place=place).exists():
                 break
-        
+
         return Room.objects.create(
             **joinkwargs(
                 {

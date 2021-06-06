@@ -20,26 +20,26 @@ class News(RandomIDMixin, HandlerMixin, EditCreationDateMixin, LifecycleModel):
         verbose_name = _("News")
         verbose_name_plural = _("News")
         ordering = ("-created_at", "-edited_at", "title")
-    
+
     title = models.CharField(
         max_length=127,
         verbose_name=_("Titel")
     )
-    
+
     html = BleachField(
         verbose_name=_("HTML"),
     )
-    
+
     author = models.ForeignKey(
         USER,
         on_delete=models.SET_NULL,
         blank=True,
         null=True
     )
-    
+
     def __str__(self):
         return self.title
-    
+
     @staticmethod
     def handlers():
         return {

@@ -12,5 +12,5 @@ class CreateClassbookSerializer(BaseClassbookSerializer):
             "lesson", "lesson_date",
             "presence_content", "online_content"
         ]
-    
+
     lesson = LessonField()

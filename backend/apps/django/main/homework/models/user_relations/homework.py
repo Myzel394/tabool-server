@@ -24,22 +24,22 @@ class UserHomeworkRelation(RandomIDMixin, UserModelRelationMixin):
             ("homework", "user")
         )
         ordering = ("homework", "user")
-    
+
     homework = models.ForeignKey(
         HOMEWORK,
         on_delete=models.CASCADE,
         verbose_name=model_names.HOMEWORK
     )  # type: Homework
-    
+
     completed = models.BooleanField(
         default=False,
         verbose_name=_("Erledigt")
     )  # type: bool
-    
+
     ignored = models.BooleanField(
         default=False,
         verbose_name=_("Ignorieren")
     )
-    
+
     def __str__(self):
         return str(self.homework)

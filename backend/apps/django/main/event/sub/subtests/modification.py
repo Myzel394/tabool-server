@@ -10,13 +10,13 @@ class StudentModificationAPITest(ModificationTestMixin, GenericAPITestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.__class__.associated_student = self.student
-    
+
     def test_access(self):
         self.generic_access_test(
             obj=self.Create_modification(),
             api_suffix="student/",
         )
-    
+
     def test_lifecycle(self):
         self.generic_lifecycle_test(
             model=Modification,
@@ -34,7 +34,7 @@ class TeacherModificationAPITest(ModificationTestMixin, GenericAPITestMixin):
     def setUp(self):
         self.teacher = self.Login_teacher()
         self.__class__.associated_teacher = self.teacher
-    
+
     def test_generic(self):
         self.generic_elements_test(
             model=Modification,

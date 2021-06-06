@@ -27,47 +27,47 @@ class Course(RandomIDMixin, LifecycleModel):
         verbose_name = model_names.COURSE
         verbose_name_plural = model_names.COURSE_PLURAL
         ordering = ("subject", "teacher", "course_number")
-    
+
     objects = CourseQuerySet.as_manager()
-    
+
     participants = models.ManyToManyField(
         STUDENT,
         verbose_name=_("Teilnehmer"),
     )
-    
+
     room = models.ForeignKey(
         ROOM,
         on_delete=models.CASCADE,
         verbose_name=model_names.ROOM
     )  # type: Room
-    
+
     subject = models.ForeignKey(
         SUBJECT,
         on_delete=models.CASCADE,
         verbose_name=model_names.SUBJECT
     )  # type: Subject
-    
+
     teacher = models.ForeignKey(
         TEACHER,
         on_delete=models.CASCADE,
         verbose_name=auth_names.TEACHER,
     )  # type: Teacher
-    
+
     course_number = models.PositiveSmallIntegerField(
         verbose_name=_("Kursnummer"),
         default=1
     )  # type: int
-    
+
     def __str__(self):
         return _("{course_name}: {teacher}").format(
             course_name=self.name,
             teacher=self.teacher or "-",
         )
-    
+
     @property
     def name(self) -> str:
         return f"{self.subject.name}{self.course_number}".lower()
-    
+
     @property
     def folder_name(self) -> str:
         try:
@@ -76,20 +76,20 @@ class Course(RandomIDMixin, LifecycleModel):
             prefix = "unknown_class_number"
         else:
             prefix = str(class_number)
-        
+
         return f"{prefix}/{self.name}"
-    
+
     def get_class_number(self) -> int:
         # Get a class number from a student
         for participant in self.participants.all():
             if hasattr(participant, "class_number"):
                 return participant.class_number
-        
+
         raise TypeError("Course has no participants. Class number can't be detected.")
-    
+
     @property
     def user_participants(self) -> QueryType[User]:
         user_ids = self.participants.all().values_list("user", flat=True).distinct()
         users = User.objects.only("id").filter(id__in=user_ids)
-        
+
         return users

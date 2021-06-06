@@ -7,13 +7,13 @@ class StudentClassbookAPITest(ClassbookTestMixin, GenericAPITestMixin):
     def setUp(self):
         self.student = self.Login_student()
         self.__class__.associated_student = self.student
-    
+
     def test_access(self):
         self.generic_access_test(
             obj=self.Create_classbook(),
             api_suffix="student/"
         )
-    
+
     def test_lifecycle(self):
         self.generic_lifecycle_test(
             model=Classbook,
@@ -30,7 +30,7 @@ class StudentClassbookAPITest(ClassbookTestMixin, GenericAPITestMixin):
 class TeacherClassbookAPITest(ClassbookTestMixin, GenericAPITestMixin):
     def setUp(self) -> None:
         self.__class__.associated_teacher = self.Login_teacher()
-    
+
     def test_generic(self):
         self.generic_elements_test(
             model=Classbook,

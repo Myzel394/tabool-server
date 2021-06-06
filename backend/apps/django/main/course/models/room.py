@@ -14,12 +14,12 @@ class Room(RandomIDMixin):
         verbose_name = model_names.ROOM
         verbose_name_plural = model_names.ROOM_PLURAL
         ordering = ("place",)
-    
+
     place = models.CharField(
         verbose_name=_("Ort"),
         max_length=15,
         unique=True
     )  # type: str
-    
+
     def __str__(self):
         return self.place

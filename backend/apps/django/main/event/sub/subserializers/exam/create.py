@@ -11,5 +11,5 @@ class CreateExamSerializer(BaseExamSerializer):
         fields = [
             "course", "date", "title", "information"
         ]
-    
+
     course = CourseField()

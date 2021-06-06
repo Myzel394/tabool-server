@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.postgres",
     "user_sessions",
-    
+
     "rest_framework",
     "django_common_utils.apps.Config",
     "simple_history",
@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "fcm_django",
     "django_rest_passwordreset",
-    
+
     "apps.django.authentication.user",
     "apps.django.authentication.otp",
     "apps.django.authentication.sessions.apps.SessionsConfig",
@@ -69,10 +69,10 @@ INSTALLED_APPS = [
     "apps.django.main.homework",
     "apps.django.main.event",
     "apps.django.main.day",
-    
+
     "apps.django.extra.news",
     "apps.django.extra.poll",
-    
+
     "apps.django.core",
 ]
 
@@ -87,7 +87,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    
+
     "simple_history.middleware.HistoryRequestMiddleware",
     "django_grip.GripMiddleware",
 ]

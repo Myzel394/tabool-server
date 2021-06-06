@@ -22,5 +22,5 @@ class NewsDetailSerializer(serializers.ModelSerializer):
         fields = [
             "title", "html", "author", "created_at", "edited_at", "id"
         ]
-    
+
     author = DetailUserSerializer()

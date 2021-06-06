@@ -18,22 +18,22 @@ __all__ = [
 
 class UpdateSubmissionSerializer(BaseSubmissionSerializer):
     instance: "Submission"
-    
+
     class Meta(BaseSubmissionSerializer.Meta):
         fields = [
             "publish_datetime",
         ]
-    
+
     publish_datetime = serializers.DateTimeField(
         required=False,
         allow_null=True,
         validators=[only_future]
     )
-    
+
     def validate_publish_datetime(self, value: datetime):
         if self.instance.publish_datetime and self.instance.publish_datetime <= datetime.now():
             raise ValidationError(
                 _("Diese Einsendung wurde bereits hochgeladen.")
             )
-        
+
         return value

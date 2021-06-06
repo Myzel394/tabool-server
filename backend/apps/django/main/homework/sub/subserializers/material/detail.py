@@ -15,7 +15,7 @@ class StudentDetailMaterialSerializer(BaseMaterialSerializer, MaterialSizeSerial
             "lesson", "lesson_date",
             "publish_datetime", "name", "file", "size", "id"
         ]
-    
+
     lesson = StudentDetailLessonSerializer()
 
 
@@ -25,5 +25,5 @@ class TeacherDetailMaterialSerializer(BaseMaterialSerializer, MaterialSizeSerial
             "lesson", "lesson_date",
             "publish_datetime", "announce", "name", "created_at", "file", "size", "id"
         ]
-    
+
     lesson = TeacherDetailLessonSerializer()

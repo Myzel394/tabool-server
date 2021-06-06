@@ -13,6 +13,6 @@ class UserViewSet(
     viewsets.mixins.RetrieveModelMixin,
 ):
     serializer_class = UserInformationSerializer
-    
+
     def get_queryset(self):
         return User.objects.only("id").filter(id=self.request.user.id)

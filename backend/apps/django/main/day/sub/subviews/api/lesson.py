@@ -37,23 +37,23 @@ ONE_HOUR_IN_SECONDS = 60 * 60
 def parse_serializer(data: dict, serializer_context: dict) -> tuple["Lesson", date]:
     serializer = LessonViewSerializer(data=data, context=serializer_context)
     serializer.is_valid(raise_exception=True)
-    
+
     validated_data = serializer.validated_data
     lesson = validated_data["lesson"]
     lesson_date = validated_data["lesson_date"]
-    
+
     return lesson, lesson_date
 
 
 def get_elements(user: "User", lesson: "Lesson", lesson_date: date) -> dict:
     lesson_args = lesson, lesson_date
-    
+
     classbook = get_via_referenced_lesson_date(Classbook.objects.from_user(user), *lesson_args)
     materials = get_via_referenced_lesson_date(Material.objects.from_user(user), many=True, *lesson_args)
     submissions = get_via_referenced_lesson_date(Submission.objects.from_user(user), many=True, *lesson_args)
     modifications = get_via_referenced_lesson_date(Modification.objects.from_user(user), many=True, *lesson_args)
     homeworks = get_via_referenced_lesson_date(Homework.objects.from_user(user), many=True, *lesson_args)
-    
+
     return {
         "lesson": lesson,
         "classbook": classbook,
@@ -75,7 +75,7 @@ def student_lesson_view(request: RequestType):
     lesson_args = parse_serializer(request.GET, serializer_context)
     user = request.user
     elements = get_elements(user, *lesson_args)
-    
+
     return Response({
         "classbook": StudentDetailClassbookSerializer(
             instance=elements["classbook"],
@@ -119,7 +119,7 @@ def teacher_lesson_view(request: RequestType):
     lesson_args = parse_serializer(request.GET, serializer_context)
     user = request.user
     elements = get_elements(user, *lesson_args)
-    
+
     return Response({
         "classbook": TeacherDetailClassbookSerializer(
             instance=elements["classbook"],

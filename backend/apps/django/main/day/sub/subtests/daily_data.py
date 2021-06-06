@@ -12,9 +12,9 @@ class DailyDataMixin(ExamTestMixin, HomeworkTestMixin, ClassbookTestMixin, Modif
     def random_lesson(self) -> tuple[Lesson, date]:
         lesson = random.choice(self.lessons)  # nosec
         targeted_date = find_next_date_by_weekday(date.today(), lesson.weekday)
-        
+
         return lesson, targeted_date
-    
+
     def setUp(self) -> None:
         self.teacher = self.Create_teacher_user()
         self.student = self.Create_student_user()
@@ -47,36 +47,36 @@ class StudentDailyDataAPITest(DailyDataMixin):
     def setUp(self) -> None:
         super().setUp()
         self.Login_user(self.student)
-    
+
     def test_get_invalid_date(self):
         targeted_date = find_next_date_by_weekday(date.today(), 6)
         response = self.client.get("/api/student/daily-data/", {
             "date": targeted_date,
         }, content_type="application/json")
         self.assertStatusNotOk(response.status_code)
-    
+
     def test_get_lesson(self):
         lesson, targeted_date = self.random_lesson
-        
+
         response = self.client.get("/api/student/daily-data/", {
             "date": targeted_date,
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
-        
+
         lesson_ids = [
             lesson["id"]
             for lesson in response.data["lessons"]
         ]
         self.assertIn(lesson.id, lesson_ids)
-    
+
     def test_get_homework(self):
         targeted_date = self.homework.lesson_date
-        
+
         response = self.client.get("/api/student/daily-data/", {
             "date": targeted_date,
         }, content_type="application/json")
         self.assertStatusOk(response.status_code)
-        
+
         homework_ids = [
             homework["id"]
             for homework in response.data["homeworks"]

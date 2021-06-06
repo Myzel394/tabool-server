@@ -13,7 +13,7 @@ class MaterialModelTest(MaterialTestMixin):
             self.Create_material(
                 publish_datetime=datetime.now() - timedelta(days=5)
             )
-    
+
     def test_autofill_name(self):
         material = self.Create_material(
             name=None
@@ -24,13 +24,13 @@ class MaterialModelTest(MaterialTestMixin):
 class StudentMaterialAPITest(MaterialTestMixin, GenericAPITestMixin):
     def setUp(self):
         self.__class__.associated_student = self.Login_student()
-    
+
     def test_can_access(self):
         self.generic_access_test(
             obj=self.Create_material(),
             api_suffix="student/"
         )
-    
+
     def test_can_not_do_lifecycle_methods(self):
         self.generic_lifecycle_test(
             model=Material,
@@ -46,7 +46,7 @@ class TeacherMaterialAPITest(MaterialTestMixin):
     def setUp(self):
         self.teacher = self.Login_teacher()
         self.__class__.associated_teacher = self.teacher
-    
+
     def test_can_not_change_announce_when_already_true(self):
         material = self.Create_material(
             announce=True

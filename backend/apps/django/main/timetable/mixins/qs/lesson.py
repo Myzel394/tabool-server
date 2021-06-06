@@ -24,14 +24,14 @@ def get_via_referenced_lesson_date(
         return qs \
             .only("lesson", "lesson_date") \
             .filter(lesson=lesson, lesson_date=lesson_date)
-    
+
     try:
         instance = qs \
             .only("lesson", "lesson_date") \
             .get(lesson=lesson, lesson_date=lesson_date)
     except ObjectDoesNotExist:
         return None
-    
+
     return instance
 
 
@@ -46,12 +46,12 @@ def get_via_referenced_lesson_date_range(
         return qs \
             .only("lesson_date", *kwargs.keys()) \
             .filter(lesson_date__gte=start_date, lesson_date__lte=end_date, **kwargs)
-    
+
     try:
         instance = qs \
             .only("lesson_date", *kwargs.keys()) \
             .get(lesson_date__gte=start_date, lesson_date__lte=end_date, **kwargs)
     except ObjectDoesNotExist:
         return None
-    
+
     return instance

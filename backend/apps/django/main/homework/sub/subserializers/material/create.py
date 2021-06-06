@@ -12,5 +12,5 @@ class CreateMaterialSerializer(BaseMaterialSerializer):
             "lesson", "lesson_date",
             "publish_datetime", "announce", "file", "name"
         ]
-    
+
     lesson = LessonField()

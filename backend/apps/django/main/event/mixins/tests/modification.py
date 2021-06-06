@@ -15,7 +15,7 @@ class ModificationTestMixin(LessonTestMixin):
     @classmethod
     def Create_modification(cls, **kwargs) -> Modification:
         lesson = kwargs.pop("lesson", None) or cls.Create_lesson()
-        
+
         return Modification.objects.create(
             **joinkwargs({
                 **cls.Create_lesson_argument(lesson, kwargs.pop("lesson_date", None)),

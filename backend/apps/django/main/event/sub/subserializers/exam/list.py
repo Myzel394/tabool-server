@@ -14,7 +14,7 @@ class StudentListExamSerializer(BaseExamSerializer):
         fields = [
             "course", "date", "title", "id"
         ]
-    
+
     course = StudentDetailCourseSerializer()
 
 
@@ -23,5 +23,5 @@ class TeacherListExamSerializer(BaseExamSerializer):
         fields = [
             "course", "date", "title", "id"
         ]
-    
+
     course = TeacherDetailCourseSerializer()

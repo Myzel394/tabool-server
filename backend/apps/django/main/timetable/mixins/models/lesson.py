@@ -19,7 +19,7 @@ def validate_lesson(instance: "LessonMixin"):
     valid_weekday = instance.lesson.weekday
     if instance.lesson_date.weekday() != valid_weekday:
         weekday_names = list(calendar.day_name)
-        
+
         raise ValidationError({
             "lesson_date": _("Das Datum für diesen Tag ist nicht gültig, es muss ein {weekday} sein.").format(
                 weekday=weekday_names[valid_weekday]
@@ -29,22 +29,22 @@ def validate_lesson(instance: "LessonMixin"):
 class LessonMixin(LifecycleModel):
     class Meta:
         abstract = True
-    
+
     lesson = models.ForeignKey(
         LESSON,
         verbose_name=model_names.LESSON,
         on_delete=models.CASCADE,
     )  # type: Lesson
-    
+
     lesson_date = models.DateField(
         verbose_name=_("Datum"),
     )
-    
+
     def clean(self):
         validate_lesson(self)
-        
+
         return super().clean()
-    
+
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when_any=["lesson", "lesson_date"], has_changed=True)
     def _hook_full_clean(self):

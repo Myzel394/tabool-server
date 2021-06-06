@@ -14,7 +14,7 @@ class CreateRoomSerializer(BaseRoomSerializer):
         fields = [
             "place"
         ]
-    
+
     place = serializers.CharField(
         # TODO: Make UniqueValidator as function!
         validators=[UniqueValidator(queryset=Room.objects.all())],

@@ -14,7 +14,7 @@ class StudentDetailLessonSerializer(BaseLessonSerializer):
         fields = [
             "course", "start_hour", "end_hour", "weekday", "id"
         ]
-    
+
     course = StudentDetailCourseSerializer()
 
 
@@ -23,5 +23,5 @@ class TeacherDetailLessonSerializer(BaseLessonSerializer):
         fields = [
             "course", "start_hour", "end_hour", "weekday", "id"
         ]
-    
+
     course = TeacherDetailCourseSerializer()

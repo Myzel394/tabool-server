@@ -35,11 +35,11 @@ TWO_HOURS_IN_SECONDS = 60 * 60 * 2
 def parse_serializer(data: dict, serializer_context: dict) -> tuple[date, date]:
     serializer = WeekViewSerializer(data=data, context=serializer_context)
     serializer.is_valid(raise_exception=True)
-    
+
     validated_data = serializer.validated_data
     start_date = validated_data["start_date"]
     end_date = validated_data["end_date"]
-    
+
     return start_date, end_date
 
 
@@ -48,13 +48,13 @@ def get_elements(user: "User", start_date: date, end_date: date) -> dict:
     end_weekday = end_date.weekday()
     start_weekday = 0 if start_weekday >= 6 else start_weekday
     weekdays = list(range(min(start_weekday, end_weekday), max(start_weekday, end_weekday) + 1))
-    
+
     timetable = Timetable.objects.current(user)
     user_lessons = timetable.lessons
     lessons = user_lessons \
         .only("weekday") \
         .filter(weekday__in=weekdays)
-    
+
     modifications = Modification.objects \
         .from_user(user) \
         .only("lesson_date", ) \
@@ -76,7 +76,7 @@ def get_elements(user: "User", start_date: date, end_date: date) -> dict:
         .only("start_datetime", "end_datetime") \
         .filter(start_datetime__gte=start_date, end_datetime__lte=end_date) \
         .distinct()
-    
+
     return {
         "lessons": lessons,
         "modifications": modifications,
@@ -98,7 +98,7 @@ def student_week_view(request: RequestType):
     start_date, end_date = parse_serializer(request.GET, serializer_context)
     user = request.user
     elements = get_elements(user, start_date=start_date, end_date=end_date)
-    
+
     return Response({
         "lessons": StudentDetailLessonSerializer(
             instance=elements["lessons"],
@@ -144,7 +144,7 @@ def teacher_week_view(request: RequestType):
     start_date, end_date = parse_serializer(request.GET, serializer_context)
     user = request.user
     elements = get_elements(user, start_date=start_date, end_date=end_date)
-    
+
     return Response({
         "lessons": TeacherDetailLessonSerializer(
             instance=elements["lessons"],

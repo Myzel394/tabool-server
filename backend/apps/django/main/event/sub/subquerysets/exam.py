@@ -16,5 +16,5 @@ __all__ = [
 class ExamQuerySet(CustomQuerySetMixin.QuerySet):
     def from_user(self, user: "User") -> "ExamQuerySet":
         courses = Course.objects.from_user(user)
-        
+
         return self.filter(course__in=courses)

@@ -27,7 +27,7 @@ class SubjectTestMixin(TestCase):
     @staticmethod
     def Create_subject(**kwargs) -> Subject:
         name = random.choice(SUBJECT_NAMES)
-        
+
         return Subject.objects.create(
             **joinkwargs({
                 "name": lambda: name,

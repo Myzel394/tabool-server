@@ -13,7 +13,7 @@ class UpdateModificationSerializer(BaseModificationSerializer):
         fields = [
             "new_room", "new_subject", "new_teacher", "information", "modification_type",
         ]
-    
+
     new_room = RoomField()
     new_subject = SubjectField()
     new_teacher = TeacherField()

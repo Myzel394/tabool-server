@@ -15,7 +15,7 @@ class StudentListModificationSerializer(BaseModificationSerializer):
             "lesson", "lesson_date",
             "modification_type", "id"
         ]
-    
+
     lesson = StudentDetailLessonSerializer()
 
 
@@ -25,5 +25,5 @@ class TeacherListModificationSerializer(BaseModificationSerializer):
             "lesson", "lesson_date",
             "modification_type", "id"
         ]
-    
+
     lesson = TeacherDetailLessonSerializer()

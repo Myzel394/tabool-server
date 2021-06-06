@@ -14,5 +14,5 @@ class UserStudentSerializer(serializers.ModelSerializer):
         fields = [
             "class_number", "main_teacher"
         ]
-    
+
     main_teacher = DetailTeacherSerializer()

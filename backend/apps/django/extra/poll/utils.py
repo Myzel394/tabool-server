@@ -30,7 +30,7 @@ def add_user_vote(poll: Poll, user: "User", choices: list["Choice"], feedback: s
 
 def get_results(instance: Poll, precision: int = 2):
     votes_amount = instance.votes.count()
-    
+
     return [
         {
             "choice_id": choice.id,

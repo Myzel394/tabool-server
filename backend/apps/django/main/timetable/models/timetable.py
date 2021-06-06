@@ -21,23 +21,23 @@ class Timetable(RandomIDMixin):
         verbose_name = model_names.TIMETABLE
         verbose_name_plural = model_names.TIMETABLE_PLURAL
         ordering = ("name",)
-    
+
     objects = TimetableQuerySet.as_manager()
-    
+
     start_date = models.DateField(
         verbose_name=_("Beginn des Schuljahres"),
     )
-    
+
     end_date = models.DateField(
         verbose_name=_("Ende des Schuljahres")
     )
-    
+
     name = models.CharField(
         verbose_name=_("Bezeichnung"),
         max_length=31,
         unique=True,
     )
-    
+
     @property
     def lessons(self) -> QueryType["Lesson"]:
         return self.lesson_set.all()

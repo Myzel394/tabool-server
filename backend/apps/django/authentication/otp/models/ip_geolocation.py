@@ -14,21 +14,21 @@ class IPGeolocation(IdMixin):
         verbose_name = model_names.IP_GEOLOCATION
         verbose_name_plural = model_names.IP_GEOLOCATION_PLURAL
         ordering = ("city", "ip_address")
-    
+
     ip_address = models.GenericIPAddressField(
         verbose_name=_("Ip-Adresse"),
     )
-    
+
     longitude = models.FloatField()
     latitude = models.FloatField()
-    
+
     city = models.CharField(
         verbose_name=_("Stadt"),
         max_length=511,
         blank=True,
         null=True
     )
-    
+
     # pragma: no cover
     @property
     def position(self) -> str:

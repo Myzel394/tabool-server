@@ -8,13 +8,13 @@ from apps.django.utils.tests_mixins import GenericAPITestMixin
 class StudentExamAPITest(ExamTestMixin, GenericAPITestMixin):
     def setUp(self):
         self.__class__.associated_student = self.Login_student()
-    
+
     def test_access(self):
         self.generic_access_test(
             obj=self.Create_exam(),
             api_suffix="student/",
         )
-    
+
     def test_lifecycle(self):
         self.generic_lifecycle_test(
             model=Exam,
@@ -35,7 +35,7 @@ class StudentExamAPITest(ExamTestMixin, GenericAPITestMixin):
 class TeacherExamAPITest(ExamTestMixin, GenericAPITestMixin):
     def setUp(self):
         self.__class__.associated_teacher = self.Login_teacher()
-    
+
     def test_generic(self):
         self.generic_elements_test(
             model=Exam,

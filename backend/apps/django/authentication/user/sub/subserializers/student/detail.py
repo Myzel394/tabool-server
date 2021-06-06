@@ -13,9 +13,9 @@ class DetailStudentSerializer(BaseStudentSerializer):
         fields = [
             "main_teacher", "class_number", "first_name", "last_name", "email", "gender", "id"
         ]
-    
+
     main_teacher = DetailTeacherSerializer()
-    
+
     first_name = serializers.ReadOnlyField(source="user.first_name")
     last_name = serializers.ReadOnlyField(source="user.last_name")
     email = serializers.ReadOnlyField(source="user.email")

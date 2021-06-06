@@ -18,11 +18,11 @@ class MaterialQuerySet(CustomQuerySetMixin.QuerySet):
         qs = self \
             .only("lesson") \
             .filter(lesson__in=lessons)
-        
+
         if user.is_student:
             qs = qs \
                 .only("publish_datetime", "announce") \
                 .filter(Q(publish_datetime__lte=datetime.now(), announce=False) | Q(announce=True)) \
                 .distinct()
-        
+
         return qs

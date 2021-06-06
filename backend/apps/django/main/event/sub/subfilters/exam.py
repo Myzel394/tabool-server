@@ -15,7 +15,7 @@ class ExamFilterSet(LessonFilterSetMixin):
         fields = {
             "date": ["lte", "gte"],
         }
-    
+
     course = filters.CharFilter(
         field_name="course__id",
         label=course_names.COURSE,

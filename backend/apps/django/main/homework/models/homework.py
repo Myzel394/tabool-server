@@ -32,9 +32,9 @@ class Homework(RandomIDMixin, CreationDateMixin, HandlerMixin, LessonMixin):
         permissions = (
             ("can_view_private_homework", _("Kann private Hausaufgaben sehen und bearbeiten")),
         )
-    
+
     objects = HomeworkQuerySet.as_manager()
-    
+
     private_to_student = models.ForeignKey(
         STUDENT,
         on_delete=models.CASCADE,
@@ -42,20 +42,20 @@ class Homework(RandomIDMixin, CreationDateMixin, HandlerMixin, LessonMixin):
         blank=True,
         null=True,
     )  # type: User
-    
+
     due_date = models.DateTimeField(
         verbose_name=_("Fälligkeitsdatum"),
         blank=True,
         null=True,
     )  # type: date
-    
+
     information = models.TextField(
         verbose_name=_("Informationen"),
         blank=True,
         null=True,
         max_length=1023,
     )  # type: str
-    
+
     type = models.CharField(
         max_length=127,
         verbose_name=_("Hausaufgaben-Typ"),
@@ -63,33 +63,33 @@ class Homework(RandomIDMixin, CreationDateMixin, HandlerMixin, LessonMixin):
         blank=True,
         null=True
     )  # type: str
-    
+
     def __str__(self):
         return "{lesson} bis {due_date} (Privat: {is_private})".format(
             lesson=str(self.lesson),
             due_date=self.due_date,
             is_private=self.is_private
         )
-    
+
     def clean(self):
         validate_private_to_student(self)
-        
+
         return super().clean()
-    
+
     @property
     def is_private(self) -> bool:
         return self.private_to_student is not None
-    
+
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE, when="due_date", has_changed=True)
     def _hook_full_clean(self):
         self.full_clean()
-    
+
     @hook(AFTER_CREATE)
     def _hook_send_event(self):
         if not self.is_private:
             push_homework_added(self)
-    
+
     @staticmethod
     def handlers():
         return {
