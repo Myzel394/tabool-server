@@ -3,12 +3,14 @@ from urllib.parse import ParseResult, urlparse
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from apps.django.utils.serializers import ValidationSerializer
+
 __all__ = [
     "GetPageTitleSerializer"
 ]
 
 
-class GetPageTitleSerializer(serializers.Serializer):
+class GetPageTitleSerializer(ValidationSerializer):
     ALLOWED_DOMAINS = {"bbb-schulen.rlp.net"}
     ALLOWED_PROTOCOLS = {"https"}
     

@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from apps.django.utils.serializers import ValidationSerializer
 from ...models import Choice, Vote
 from ...public.serializer_fields.choice import ChoiceField
 from ...public.serializer_fields.poll import PollField
@@ -11,7 +12,7 @@ __all__ = [
 ]
 
 
-class PollUserVoteSerializer(serializers.Serializer):
+class PollUserVoteSerializer(ValidationSerializer):
     poll = PollField()
     choices = ChoiceField(many=True)
     feedback = serializers.CharField(

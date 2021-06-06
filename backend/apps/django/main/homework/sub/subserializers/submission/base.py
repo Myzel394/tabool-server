@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from apps.django.utils.serializers import ValidationSerializer
 from ....models import Submission
 
 __all__ = [
-    "BaseSubmissionSerializer", "SizeMixin"
+    "BaseSubmissionSerializer", "SubmissionSizeSerializerMixin"
 ]
 
 
@@ -12,7 +13,7 @@ class BaseSubmissionSerializer(serializers.ModelSerializer):
         model = Submission
 
 
-class SizeMixin(serializers.Serializer):
+class SubmissionSizeSerializerMixin(ValidationSerializer):
     size = serializers.SerializerMethodField()
     
     @staticmethod

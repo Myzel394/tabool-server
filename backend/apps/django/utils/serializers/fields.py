@@ -41,7 +41,8 @@ class WritableIDField(serializers.Field):
         self.write_only = True
     
     def to_representation(self, value):
-        raise NotImplementedError("to_representation shouldn't be called")
+        name = self.__class__.__name__
+        raise NotImplementedError(f"`to_representation` shouldn't be called as `{name}` is writable only.")
     
     def to_internal_value(self, data):
         if data is empty:
@@ -77,6 +78,11 @@ class WritableFromUserFieldMixin(WritableIDField, ABC):
         return cls.model.objects.from_user(request.user).only(cls.lookup_field).get(**{
             cls.lookup_field: key
         })
+    
+    def to_representation(self, validated_data):
+        raise NotImplementedError(
+            "`to_representation` shouldn't be used as this Serializer is only used for validation."
+        )
 
 
 class WritableAllFieldMixin(WritableIDField, ABC):

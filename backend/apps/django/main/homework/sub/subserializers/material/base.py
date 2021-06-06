@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from apps.django.utils.serializers import ValidationSerializer
 from ....models import Material
 
 __all__ = [
-    "BaseMaterialSerializer", "SizeMaterialMixin"
+    "BaseMaterialSerializer", "MaterialSizeSerializerMixin"
 ]
 
 
@@ -12,7 +13,7 @@ class BaseMaterialSerializer(serializers.ModelSerializer):
         model = Material
 
 
-class SizeMaterialMixin(serializers.Serializer):
+class MaterialSizeSerializerMixin(ValidationSerializer):
     size = serializers.SerializerMethodField()
     
     @staticmethod

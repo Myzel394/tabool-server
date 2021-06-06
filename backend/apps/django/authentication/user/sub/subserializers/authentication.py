@@ -3,6 +3,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from apps.django.utils.serializers import ValidationSerializer
+
 __all__ = [
     "LoginSerializer"
 ]
@@ -10,7 +12,7 @@ __all__ = [
 User = get_user_model()
 
 
-class LoginSerializer(serializers.Serializer):
+class LoginSerializer(ValidationSerializer):
     email = serializers.EmailField()
     password = serializers.CharField()
     

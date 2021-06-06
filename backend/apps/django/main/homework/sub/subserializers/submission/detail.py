@@ -3,14 +3,14 @@ from apps.django.main.timetable.sub.subserializers.lesson import (
     StudentDetailLessonSerializer,
     TeacherDetailLessonSerializer,
 )
-from .base import BaseSubmissionSerializer, SizeMixin
+from .base import BaseSubmissionSerializer, SubmissionSizeSerializerMixin
 
 __all__ = [
     "StudentDetailSubmissionSerializer", "TeacherDetailSubmissionSerializer"
 ]
 
 
-class StudentDetailSubmissionSerializer(BaseSubmissionSerializer, SizeMixin):
+class StudentDetailSubmissionSerializer(BaseSubmissionSerializer, SubmissionSizeSerializerMixin):
     class Meta(BaseSubmissionSerializer.Meta):
         fields = [
             "lesson", "lesson_date",
@@ -20,7 +20,7 @@ class StudentDetailSubmissionSerializer(BaseSubmissionSerializer, SizeMixin):
     lesson = StudentDetailLessonSerializer()
 
 
-class TeacherDetailSubmissionSerializer(BaseSubmissionSerializer, SizeMixin):
+class TeacherDetailSubmissionSerializer(BaseSubmissionSerializer, SubmissionSizeSerializerMixin):
     class Meta(BaseSubmissionSerializer.Meta):
         fields = [
             "lesson", "lesson_date",

@@ -24,7 +24,7 @@ class CourseAdmin(DefaultAdminMixin):
     search_fields = ["subject__name"]
     
     @staticmethod
-    def class_number(self, instance: Course):
+    def class_number(instance: Course):
         try:
             return instance.get_class_number()
         except TypeError:

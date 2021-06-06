@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from apps.django.utils.serializers import ValidationSerializer
+
 User = get_user_model()
 
 __all__ = [
@@ -9,7 +11,7 @@ __all__ = [
 ]
 
 
-class PasswordChangerSerializer(serializers.Serializer):
+class PasswordChangerSerializer(ValidationSerializer):
     old_password = serializers.CharField()
     new_password = serializers.CharField()
     

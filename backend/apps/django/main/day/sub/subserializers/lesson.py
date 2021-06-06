@@ -5,13 +5,14 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.django.main.timetable.public.serializer_fields.lesson import LessonField
+from apps.django.utils.serializers import ValidationSerializer
 
 __all__ = [
     "LessonViewSerializer"
 ]
 
 
-class LessonViewSerializer(serializers.Serializer):
+class LessonViewSerializer(ValidationSerializer):
     lesson = LessonField()
     lesson_date = serializers.DateField()
     

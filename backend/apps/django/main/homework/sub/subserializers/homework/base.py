@@ -3,10 +3,11 @@ from typing import *
 from django_common_utils.libraries.utils import create_short
 from rest_framework import serializers
 
+from apps.django.utils.serializers import ValidationSerializer
 from ....models import Homework
 
 __all__ = [
-    "BaseHomeworkSerializer", "TruncatedInformationSerializer"
+    "BaseHomeworkSerializer", "TruncatedInformationSerializerMixin"
 ]
 
 
@@ -15,7 +16,7 @@ class BaseHomeworkSerializer(serializers.ModelSerializer):
         model = Homework
 
 
-class TruncatedInformationSerializer(serializers.Serializer):
+class TruncatedInformationSerializerMixin(ValidationSerializer):
     truncated_information = serializers.SerializerMethodField()
     
     @staticmethod

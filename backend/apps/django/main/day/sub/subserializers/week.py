@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from apps.django.utils.serializers import ValidationSerializer
 from ...utils import get_date
 
 __all__ = [
@@ -11,7 +12,7 @@ __all__ = [
 MAX_DAYS = 7 * 6  # 6 weeks
 
 
-class WeekViewSerializer(serializers.Serializer):
+class WeekViewSerializer(ValidationSerializer):
     start_date = serializers.DateField(
         default=get_date,
         label=_("Startdatum")
