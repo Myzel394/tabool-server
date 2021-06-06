@@ -12,5 +12,5 @@ __all__ = [
 
 # noinspection PyTypeChecker
 class EventQuerySet(CustomQuerySetMixin.QuerySet):
-    def from_user(self, user: "User") -> "EventQuerySet":
+    def from_user(self, user: "User") -> "EventQuerySet":  # skipcq: PYL-W0613
         return self

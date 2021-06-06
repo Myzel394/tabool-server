@@ -23,7 +23,7 @@ class AutocompleteView(APIView, ABC, Generic[T]):
     model: StandardModelType
     user: "User"
     
-    def is_user_allowed(self, user: "User") -> bool:  # skipcq: PYL-R0201
+    def is_user_allowed(self, user: "User") -> bool:  # skipcq: PYL-R0201, PYL-W0613
         return True
     
     @abstractmethod

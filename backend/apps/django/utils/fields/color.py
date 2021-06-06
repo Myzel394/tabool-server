@@ -60,7 +60,7 @@ class ColorField(models.CharField):
         
         return super().get_db_prep_save(value, connection)
     
-    def from_db_value(self, value, expression, connection) -> Optional[Color]:
+    def from_db_value(self, value, expression, connection) -> Optional[Color]:  # skipcq: PYL-W0613
         # Field is accessed in Python
         if value is None:
             return None
