@@ -2,7 +2,9 @@ version = 1
 
 test_patterns = [
     "subtests/**",
-    "tests.py"
+    "tests.py",
+    "mixins/tests/**",
+    "tests_mixins"
 ]
 
 exclude_patterns = ["migrations/**"]
