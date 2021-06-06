@@ -26,11 +26,11 @@ class WritableIDField(serializers.Field):
 
     def __init__(
             self,
+            *args,
             get_object: Optional[Callable] = None,
             lookup_field: str = "id",
             many: bool = False,
             detail: bool = False,
-            *args,
             **kwargs
     ):
         super().__init__(*args, **kwargs)
