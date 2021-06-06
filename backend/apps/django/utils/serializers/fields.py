@@ -1,5 +1,6 @@
+import abc
 import inspect
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Model
@@ -14,7 +15,7 @@ __all__ = [
 ]
 
 
-class WritableIDField(serializers.Field):
+class WritableIDField(serializers.Field, abc.ABC):
     default_error_messages = {
         "object_not_found": _("Das Objekt wurde nicht gefunden"),
         "invalid_type": _("Ungültiger Typ")
@@ -69,7 +70,7 @@ class WritableIDField(serializers.Field):
             self.fail("object_not_found", input=data)
 
 
-class WritableFromUserFieldMixin(WritableIDField, ABC):
+class WritableFromUserFieldMixin(WritableIDField, abc.ABC):
     model = Type[Model]
     lookup_field: str = "id"
 
@@ -80,7 +81,7 @@ class WritableFromUserFieldMixin(WritableIDField, ABC):
         })
 
 
-class WritableAllFieldMixin(WritableIDField, ABC):
+class WritableAllFieldMixin(WritableIDField, abc.ABC):
     model = Type[Model]
     lookup_field: str = "id"
 
