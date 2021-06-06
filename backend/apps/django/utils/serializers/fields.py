@@ -113,7 +113,7 @@ class UserRelationField(serializers.SerializerMethodField):
         self.default_value = default
         self.serializer = serializer
 
-    def get_relation_object(self, model_obj) -> Optional[StandardModelType]:
+    def get_relation_object(self, model_obj) -> Optional[StandardModelType]:  # skipcq: PYL-R1710
         model = self.parent.Meta.model
         relation_model = self.serializer.Meta.model
         field_name = model.__name__.lower()
@@ -125,7 +125,7 @@ class UserRelationField(serializers.SerializerMethodField):
                 field_name: model_obj
             })
         except ObjectDoesNotExist:
-            return  # skipcq: PYL-R1710
+            return
         else:
             return relation_obj
 

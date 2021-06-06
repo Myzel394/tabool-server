@@ -42,7 +42,7 @@ def haversine(lon1: float, lat1: float, lon2: float, lat2: float) -> float:  # p
     return c * EARTH_RADIUS_IN_KILOMETERS
 
 
-def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:
+def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:  # skipcq: PYL-R1710
     try:
         url = f"https://api.ipgeolocationapi.com/geolocate/{ip}"
         response = requests.get(url)
@@ -59,7 +59,7 @@ def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:
             ValueError,  # .json()
             KeyError,  # data
     ):
-        return  # skipcq: PYL-R1710
+        return
     else:
         return longitude, latitude, city
 
