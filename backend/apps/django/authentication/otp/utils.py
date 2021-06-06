@@ -135,11 +135,11 @@ def send_otp_message(request: RequestType, user: "User", otp: "OTP"):
     Hi {user.first_name}!
 
     Es gab eine neue Anmeldung gegen am {now.strftime('%d.%m.%Y %H:%M:%S')}.
-    
+
     Wenn diese Anmeldung von dir ist, gib diesen Code ein:
         {otp.token}
-        
-    
+
+
     Informationen über die Anmeldung:
     {message_information}
     """

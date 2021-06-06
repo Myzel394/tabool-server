@@ -22,15 +22,15 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 
     message = f"""
         Hallo {user.first_name}!
-        
+
         Wenn du dein Passwort zurücksetzen möchtest, klicke auf diesen Link:
-        
+
         {password_reset_link}
-        
+
         Alternativ kannst du auch diesen Code eingeben:
-        
+
         {reset_password_token.key}
-        
+
         Wenn du nicht beantragt hast, dein Passwort zurücksetzen, dann ignoriere diese E-Mail einfach und gib diesen
         Code auf gar keinen Fall weiter! Der Code (und der Link) sind für eine Stunde gültig.
     """.strip()

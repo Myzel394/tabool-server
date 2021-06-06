@@ -41,7 +41,7 @@ class LoginView(views.APIView):
         """
         Checks whether the user has confirmed the OTP. If no OTP available, a new one will be created.
         Deletes old OTPs
-        
+
         :return: Valid, payload
         """
         available_otps = OTP.objects \
