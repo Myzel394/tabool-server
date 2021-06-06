@@ -6,8 +6,10 @@ __all__ = [
 
 
 class ValidationSerializer(serializers.Serializer):
-    """A serializer class which should only be used for validation. It doesn't provide a `create` or a `update`
-    method."""
+    """
+    A serializer class which should only be used for validation. It doesn't provide a `create` or a `update`
+    method.
+    """
 
     def create(self, validated_data):
         name = self.__class__.__name__
