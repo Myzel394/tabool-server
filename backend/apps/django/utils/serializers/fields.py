@@ -1,6 +1,5 @@
 import abc
 import inspect
-from abc import abstractmethod
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Model
@@ -93,10 +92,6 @@ class WritableAllFieldMixin(WritableIDField, abc.ABC):
 
 
 class UserRelationField(serializers.SerializerMethodField):
-    @abstractmethod
-    def default(self, obj: StandardModelType):
-        raise NotImplementedError()
-
     def __init__(
             self,
             serializer: Type[serializers.Serializer],
