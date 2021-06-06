@@ -14,8 +14,4 @@ class BaseSubmissionSerializer(serializers.ModelSerializer):
 
 
 class SubmissionSizeSerializerMixin(ValidationSerializer):
-    size = serializers.SerializerMethodField()
-    
-    @staticmethod
-    def get_size(instance: Submission) -> int:
-        return instance.file.size
+    size = serializers.ReadOnlyField(source="file.size")

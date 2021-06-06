@@ -14,8 +14,4 @@ class BaseMaterialSerializer(serializers.ModelSerializer):
 
 
 class MaterialSizeSerializerMixin(ValidationSerializer):
-    size = serializers.SerializerMethodField()
-    
-    @staticmethod
-    def get_size(instance: Material) -> int:
-        return instance.file.size
+    size = serializers.ReadOnlyField(source="file.size")
