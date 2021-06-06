@@ -5,8 +5,10 @@ from typing import *
 import httpagentparser
 import requests
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django_hint import RequestType
+from requests import RequestException
 
 from apps.django.authentication.otp.models import IPGeolocation
 from apps.django.utils.request import get_client_ip
@@ -53,7 +55,11 @@ def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:
         longitude = geo_data["longitude"]
         latitude = geo_data["latitude"]
         city = data["name"]
-    except:
+    except (
+            RequestException,  # request
+            ValueError,  # .json()
+            KeyError,  # data
+    ):
         return None
     else:
         return longitude, latitude, city
@@ -62,7 +68,7 @@ def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:
 def get_ip_location(ip: str) -> Optional[IPGeolocation]:
     try:
         ip_location = IPGeolocation.objects.only("ip_address").get(ip_address=ip)
-    except IPGeolocation.DoesNotExist:
+    except ObjectDoesNotExist:
         # Fetch new location
         if location := fetch_location(ip):
             longitude, latitude, city = location
@@ -115,14 +121,15 @@ def send_otp_message(request: RequestType, user: "User", otp: "OTP"):
             )
         else:
             message_parts.append("Ort: Unbekannt")
-    except:
+    # A general exception is used, to ensure that the user will at least get some information
+    except Exception:  # skipcq: FLK-E722
         pass
     
     try:
         os, browser = httpagentparser.simple_detect(request["HTTP_USER_AGENT"])
         
         message_parts.append(f"Browser: {browser} auf einem {os} Gerät")
-    except:
+    except:  # skipcq: FLK-E722
         pass
     
     message_information = "\n".join(message_parts)
