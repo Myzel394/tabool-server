@@ -133,3 +133,10 @@ class UserRelationField(serializers.SerializerMethodField):
             return self.serializer(obj).data
 
         return self.get_default_value(value)
+
+    def to_internal_value(self, data):
+        name = self.__class__.__name__
+        raise NotImplementedError(
+            f"`to_internal_value` shouldn't be used as {name} is only used for serialization and not for "
+            "de-serialization."
+        )
