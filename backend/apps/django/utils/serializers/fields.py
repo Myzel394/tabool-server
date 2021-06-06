@@ -79,11 +79,6 @@ class WritableFromUserFieldMixin(WritableIDField, ABC):
             cls.lookup_field: key
         })
 
-    def to_representation(self, validated_data):
-        raise NotImplementedError(
-            "`to_representation` shouldn't be used as this Serializer is only used for validation."
-        )
-
 
 class WritableAllFieldMixin(WritableIDField, ABC):
     model = Type[Model]
