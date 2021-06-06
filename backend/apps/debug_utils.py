@@ -7,7 +7,9 @@ from apps.django.main.homework.mixins import ClassbookTestMixin, HomeworkTestMix
 
 if settings.DEBUG:
     from dotenv import load_dotenv
-    import random, string, names
+    import random
+    import string
+    import names
 
     # noinspection PyUnresolvedReferences
     from apps.django.authentication.user.models import *
