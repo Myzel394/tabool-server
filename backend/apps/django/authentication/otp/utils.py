@@ -47,8 +47,7 @@ def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:
         url = f"https://api.ipgeolocationapi.com/geolocate/{ip}"
         response = requests.get(url)
 
-        if 400 <= response.status_code < 600:
-            return
+        response.raise_for_status()
 
         data = response.json()
         geo_data = data["geo"]
@@ -60,7 +59,7 @@ def fetch_location(ip: str) -> Optional[tuple[str, str, str]]:
             ValueError,  # .json()
             KeyError,  # data
     ):
-        return None
+        return  # skipcq: PYL-R1710
     else:
         return longitude, latitude, city
 
@@ -83,8 +82,6 @@ def get_ip_location(ip: str) -> Optional[IPGeolocation]:
             return ip_location
     else:
         return ip_location
-
-    return
 
 
 def is_ip_geolocation_suspicious(ip: str) -> bool:

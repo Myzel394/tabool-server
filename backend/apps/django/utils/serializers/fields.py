@@ -125,7 +125,7 @@ class UserRelationField(serializers.SerializerMethodField):
                 field_name: model_obj
             })
         except ObjectDoesNotExist:
-            return
+            return  # skipcq: PYL-R1710
         else:
             return relation_obj
 

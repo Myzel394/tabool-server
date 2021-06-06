@@ -23,4 +23,3 @@ class TruncatedInformationSerializerMixin(ValidationSerializer):
     def get_truncated_information(instance: Homework) -> Optional[str]:
         if instance.information:
             return create_short(instance.information)
-        return

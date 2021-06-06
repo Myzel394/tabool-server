@@ -28,7 +28,7 @@ class CourseAdmin(DefaultAdminMixin):
         try:
             return instance.get_class_number()
         except TypeError:
-            return
+            pass
 
     class_number.short_description = field_verbose(Student, "class_number")
 
