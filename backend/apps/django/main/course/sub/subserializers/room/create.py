@@ -1,8 +1,7 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
 from .base import BaseRoomSerializer
-from ....models import Room
+from ....validators import does_room_exist
 
 __all__ = [
     "CreateRoomSerializer"
@@ -16,6 +15,5 @@ class CreateRoomSerializer(BaseRoomSerializer):
         ]
 
     place = serializers.CharField(
-        # TODO: Make UniqueValidator as function!
-        validators=[UniqueValidator(queryset=Room.objects.all())],
+        validators=[does_room_exist],
     )
