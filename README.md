@@ -9,7 +9,7 @@ Der Server besteht aus den Technologien:
 # Installation
 
 Zum Testen ist es am einfachsten [Docker](https://www.docker.com/) zu benutzen.
-Zum Entwickeln lohnt es sich mehr die benötigten Technologien manuell zu installieren.
+Zum Entwickeln lohnt es sich jedoch mehr die benötigten Technologien manuell zu installieren.
 
 ## Manuelle Installation
 
