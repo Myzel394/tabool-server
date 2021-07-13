@@ -1,10 +1,10 @@
 # Übersicht
 
 Der Server besteht aus den Technologien:
-[Python](https://www.python.org/)
-[Django](https://www.djangoproject.com/),
-[Django Rest Framework](https://www.django-rest-framework.org/)
-und [PostgreSQL](https://www.postgresql.org/).
+* [Python](https://www.python.org/)
+* [Django](https://www.djangoproject.com/)
+* [Django Rest Framework](https://www.django-rest-framework.org/)
+* [PostgreSQL](https://www.postgresql.org/)
 
 ## Installation
 
